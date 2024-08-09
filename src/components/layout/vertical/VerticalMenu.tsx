@@ -48,7 +48,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
 
-  const menuItems = verticalMenuData().filter(item => item.roles.includes('admin'));
+  const menuItems = verticalMenuData().filter(item => item.roles.includes('user'));
 
   return (
     // eslint-disable-next-line lines-around-comment

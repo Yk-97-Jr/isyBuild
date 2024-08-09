@@ -1,4 +1,4 @@
-import type { VerticalMenuDataType } from '@/types/menuTypes';
+import type {VerticalMenuDataType} from '@/types/menuTypes';
 
 // Define the menu data with roles
 const verticalMenuData = (): VerticalMenuDataType[] => [
@@ -7,6 +7,16 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
     href: '/dashboard',
     icon: 'tabler-smart-dashboard',
     roles: ['admin', 'user'],
+    permission: ['view dashboard'],
+    isSection: false,
+    children: []
+  },
+  {
+    label: 'Lots',
+    href: '/lots',
+    icon: 'tabler-smart-dashboard',
+    roles: ['admin', 'user'],
+    permission: ['view dashboard'],
     isSection: false,
     children: []
   },

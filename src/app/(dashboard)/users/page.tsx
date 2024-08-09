@@ -1,3 +1,5 @@
+import Users from "@views/Users";
+
 export default function Page() {
-  return <h1>users page!</h1>
+  return <Users/>
 }
