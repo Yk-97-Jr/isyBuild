@@ -6,11 +6,22 @@ info:
 paths:
   /admin-staff/:
     get:
-      operationId: admin_staff_list
-      description: Retrieve a list of all admin staff users.
+      operationId: admin_staff_retrieve
+      description: Retrieve a list of all admin staff users with pagination.
       summary: List all admin staff
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
       tags:
-      - admin-staff
+      - Admin Staff Management
       security:
       - jwtAuth: []
       responses:
@@ -18,11 +29,59 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AdminStaff'
+                $ref: '#/components/schemas/Paginated'
           description: ''
-        '401':
+  /admin-staff/{admin_user_id}/:
+    get:
+      operationId: admin_staff_retrieve_2
+      description: Fetches detailed information about an admin staff member by their
+        unique identifier.
+      summary: Retrieve Admin Staff Details
+      parameters:
+      - in: path
+        name: admin_user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Admin Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminStaff'
+          description: ''
+  /admin-staff/create/:
+    post:
+      operationId: admin_staff_create_create
+      description: Create a new admin staff member.
+      tags:
+      - Admin Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminStaffCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AdminStaffCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AdminStaffCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminStaff'
+          description: ''
+        '400':
           content:
             application/json:
               schema:
@@ -30,12 +89,95 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /admin-staff/update/{admin_user_id}/:
+    patch:
+      operationId: admin_staff_update_partial_update
+      description: Updates information for an existing admin staff member.
+      summary: Update Admin Staff Member
+      parameters:
+      - in: path
+        name: admin_user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Admin Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminStaffUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminStaffUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminStaffUpdate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminStaff'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /admin-users/delete/{admin_user_id}/:
+    delete:
+      operationId: admin_users_delete_destroy
+      description: Deletes an admin user by ID. Requires administrative privileges.
+      summary: Delete Admin User
+      parameters:
+      - in: path
+        name: admin_user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Admin Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: User deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: User not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
   /login/:
     post:
       operationId: login_create
       description: Login endpoint to obtain access and refresh tokens
       tags:
-      - login
+      - Authentication
       requestBody:
         content:
           application/json:
@@ -79,7 +221,7 @@ paths:
       operationId: logout_create
       description: Logout endpoint to blacklist refresh token
       tags:
-      - logout
+      - Authentication
       requestBody:
         content:
           application/json:
@@ -110,12 +252,132 @@ paths:
                   summary: Bad Request
                   description: Invalid request or token
           description: ''
+  /password-confirm/:
+    post:
+      operationId: password_confirm_create
+      description: Set a new password using the provided token and UID. The user must
+        submit the token received by email, along with their user ID and the new password.
+      tags:
+      - Password Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetNewPassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetNewPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SetNewPassword'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: Password has been successfully reset.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                description: Invalid input data, such as an invalid token or password
+                  criteria not met.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Invalid UID or token.
+          description: ''
+  /password-reset/:
+    post:
+      operationId: password_reset_create
+      description: Request a password reset link with redirect URI. The user will
+        receive an email with a link to reset their password if the email is registered
+        in the system.
+      tags:
+      - Password Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: Password reset link sent successfully if email is valid.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                description: Invalid input data.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Email not found in the system.
+          description: ''
+  /set-password/:
+    post:
+      operationId: set_password_create
+      description: Allows users to set a new password using a provided UID and token.
+        This endpoint is part of the password reset flow, typically accessed through
+        a link sent to the user's email.
+      tags:
+      - Password Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Setassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Setassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Setassword'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: Password has been successfully set.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                description: Request contains invalid data or validation errors.
+          description: ''
   /token_refresh/:
     post:
       operationId: token_refresh_create
       description: Endpoint to refresh access token
       tags:
-      - token_refresh
+      - Authentication
       requestBody:
         content:
           application/json:
@@ -153,6 +415,178 @@ paths:
                     detail: Token is invalid or expired
                   description: Invalid or expired token
           description: ''
+  /user/change-password/:
+    post:
+      operationId: user_change_password_create
+      description: Allows authenticated users to change their password by providing
+        the old and new passwords.
+      summary: Change Password
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /user/confirm-email-change/:
+    post:
+      operationId: user_confirm_email_change_create
+      description: Processes a request to confirm an email change through a provided
+        JWT token. The token should be sent as part of the request data.
+      summary: Confirm Email Change
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEmailChangeConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserEmailChangeConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserEmailChangeConfirm'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Email updated successfully.
+                  new_email:
+                    type: string
+                    example: user@example.com
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid token or other specific error message.
+          description: ''
+  /user/profile/:
+    get:
+      operationId: user_profile_retrieve
+      description: Returns the user's profile details.
+      summary: Get User Profile
+      tags:
+      - Authentication
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /user/request-change-email/:
+    post:
+      operationId: user_request_change_email_create
+      description: Allows authenticated users to request an email change. This sends
+        a confirmation link to the new email address.
+      summary: Request Email Change
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEmailChangeRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserEmailChangeRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserEmailChangeRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: Confirmation link sent to the new email.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                description: Invalid data provided or email already in use.
+          description: ''
+  /user/update/:
+    patch:
+      operationId: user_update_partial_update
+      description: Updates the user's profile details.
+      summary: Update User Profile
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
 components:
   schemas:
     AdminStaff:
@@ -168,6 +602,99 @@ components:
       required:
       - id
       - user
+    AdminStaffCreate:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreate'
+      required:
+      - user
+    Paginated:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdminStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PasswordResetRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        redirect_uri:
+          type: string
+      required:
+      - email
+      - redirect_uri
+    PatchedAdminStaffUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+        is_active:
+          type: boolean
+          title: Active
+    PatchedUserProfileUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+    SetNewPassword:
+      type: object
+      properties:
+        new_password:
+          type: string
+          writeOnly: true
+        uid:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          writeOnly: true
+      required:
+      - new_password
+      - token
+      - uid
+    Setassword:
+      type: object
+      properties:
+        new_password:
+          type: string
+          writeOnly: true
+        uid:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          writeOnly: true
+      required:
+      - new_password
+      - token
+      - uid
     TokenObtainPair:
       type: object
       properties:
@@ -225,6 +752,65 @@ components:
       required:
       - email
       - id
+    UserChangePassword:
+      type: object
+      properties:
+        old_password:
+          type: string
+        new_password:
+          type: string
+      required:
+      - new_password
+      - old_password
+    UserCreate:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+        is_active:
+          type: boolean
+          title: Active
+        redirect_uri:
+          type: string
+          format: uri
+          writeOnly: true
+      required:
+      - email
+      - first_name
+      - last_name
+      - redirect_uri
+    UserEmailChangeConfirm:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+      - token
+    UserEmailChangeRequest:
+      type: object
+      properties:
+        new_email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+        redirect_uri:
+          type: string
+          format: uri
+      required:
+      - new_email
+      - password
+      - redirect_uri
   securitySchemes:
     jwtAuth:
       type: http

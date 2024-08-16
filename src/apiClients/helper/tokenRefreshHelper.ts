@@ -5,7 +5,7 @@ export const refreshAccessToken = async (refreshToken: string) => {
     console.log("Requesting token refresh");
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ;
 
-    const response = await fetch(baseUrl, {
+    const response = await fetch(baseUrl + '/token_refresh/', {
       method: 'POST',
       body: JSON.stringify({refresh: refreshToken}), // Include the refresh token in the request body
       headers: {
