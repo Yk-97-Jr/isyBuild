@@ -35,6 +35,14 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
     roles: ['admin'],
     isSection: false,
     children: []
+  },
+  {
+    label: 'Users',
+    href: '/users/list',
+    icon: 'tabler-shield',
+    roles: ['user'],
+    isSection: false,
+    children: []
   }
 ];
 

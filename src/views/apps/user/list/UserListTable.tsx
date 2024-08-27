@@ -19,6 +19,7 @@ import {styled} from '@mui/material/styles'
 import TablePagination from '@mui/material/TablePagination'
 import type {TextFieldProps} from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
+import type {ButtonProps} from '@mui/material/Button'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -51,7 +52,7 @@ import type {ThemeColor} from '@core/types'
 import TableFilters from './TableFilters'
 import AddUserDrawer from './AddUserDrawer'
 import OptionMenu from '@core/components/option-menu'
-
+import UserDialog from '@components/dialogs/delete-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
 import CustomAvatar from '@core/components/mui/Avatar'
@@ -63,6 +64,7 @@ import {getLocalizedUrl} from '@/utils/i18n'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import type {UsersType} from "@/types/apps/usersType";
+import OpenDialogOnElementClick from "@components/dialogs/OpenDialogOnElementClick";
 
 
 declare module '@tanstack/table-core' {
@@ -132,20 +134,6 @@ const DebouncedInput = ({
   return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)}/>
 }
 
-// Vars
-const userRoleObj: UserRoleType = {
-  admin: {icon: 'tabler-crown', color: 'error'},
-  author: {icon: 'tabler-device-desktop', color: 'warning'},
-  editor: {icon: 'tabler-edit', color: 'info'},
-  maintainer: {icon: 'tabler-chart-pie', color: 'success'},
-  subscriber: {icon: 'tabler-user', color: 'primary'}
-}
-
-const userStatusObj: UserStatusType = {
-  active: 'success',
-  pending: 'warning',
-  inactive: 'secondary'
-}
 
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
@@ -155,101 +143,143 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
   const [addUserOpen, setAddUserOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState(...[tableData])
+  const [id, setId] = useState()
+  const [editValue, setEditValue] = useState<string>('')
+  const [open, setOpen] = useState(false)
   const [filteredData, setFilteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
+
+  // Vars
+  const buttonProps: ButtonProps = {
+    variant: 'contained',
+    children: 'Add User',
+    onClick: () => handleAddUser(),
+    className: 'max-sm:is-full',
+    startIcon: <i className='tabler-plus'/>
+  }
 
   // Hooks
   const {lang: locale} = useParams()
 
+  const handleEditUser = (data: string) => {
+    setOpen(true)
+    setEditValue(data)
+  }
+
+  const handleAddUser = () => {
+    setEditValue('')
+  }
+
+  const handleDeleteUser = (id: number) => {
+    setOpen(true)
+    setId(id)
+  }
+
+
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
-  () => [
-    {
-      id: 'select',
-      header: ({ table }) => (
-        <Checkbox
-          {...{
-            checked: table.getIsAllRowsSelected(),
-            indeterminate: table.getIsSomeRowsSelected(),
-            onChange: table.getToggleAllRowsSelectedHandler()
-          }}
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          {...{
-            checked: row.getIsSelected(),
-            disabled: !row.getCanSelect(),
-            indeterminate: row.getIsSomeSelected(),
-            onChange: row.getToggleSelectedHandler()
-          }}
-        />
-      )
-    },
-    columnHelper.accessor('fullName', {
-      header: 'User',
-      cell: ({ row }) => (
-        <div className='flex items-center gap-4'>
-          <div className='flex flex-col'>
-            <Typography color='text.primary' className='font-medium'>
-              {`${row.original.first_name} ${row.original.last_name}`}
-            </Typography>
-            <Typography variant='body2'>{row.original.email}</Typography>
-          </div>
-        </div>
-      )
-    }),
-    columnHelper.accessor('date_joined', {
-      header: 'Date Joined',
-      cell: ({ row }) => (
-        <Typography>{new Date(row.original.date_joined).toLocaleDateString()}</Typography>
-      )
-    }),
-    columnHelper.accessor('is_active', {
-      header: 'Active',
-      cell: ({ row }) => (
-        <Chip
-          variant='tonal'
-          label={row.original.is_active ? 'Active' : 'Inactive'}
-          color={row.original.is_active ? 'success' : 'secondary'}
-        />
-      )
-    }),
-    columnHelper.accessor('action', {
-      header: 'Action',
-      cell: ({ row }) => (
-        <div className='flex items-center'>
-          <IconButton onClick={() => setData(data?.filter(user => user.id !== row.original.id))}>
-            <i className='tabler-trash text-textSecondary' />
-          </IconButton>
-          <IconButton>
-            {/*<Link href={getLocalizedUrl('/apps/user/view', locale as Locale)} className='flex'>*/}
-            {/*  <i className='tabler-eye text-textSecondary' />*/}
-            {/*</Link>*/}
-          </IconButton>
-          <OptionMenu
-            iconButtonProps={{ size: 'medium' }}
-            iconClassName='text-textSecondary'
-            options={[
-              {
-                text: 'Download',
-                icon: 'tabler-download',
-                menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-              },
-              {
-                text: 'Edit',
-                icon: 'tabler-edit',
-                menuItemProps: { className: 'flex items-center gap-2 text-textSecondary' }
-              }
-            ]}
+    () => [
+      {
+        id: 'select',
+        header: ({table}) => (
+          <Checkbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler()
+            }}
           />
-        </div>
-      ),
-      enableSorting: false
-    })
-  ],
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  [data, filteredData]
-);
+        ),
+        cell: ({row}) => (
+          <Checkbox
+            {...{
+              checked: row.getIsSelected(),
+              disabled: !row.getCanSelect(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler()
+            }}
+          />
+        )
+      },
+      columnHelper.accessor('Nom', {
+        header: 'Nom',
+        cell: ({row}) => (
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {console.log(row)}
+                {`${row.original.user.first_name} ${row.original.user.last_name}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+      columnHelper.accessor('Email', {
+        header: 'Email',
+        cell: ({row}) => (
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.user.email}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+      columnHelper.accessor('date_joined', {
+        header: 'Date Joined',
+        cell: ({row}) => (
+          <Typography>{new Date(row.original.user.date_joined).toLocaleDateString()}</Typography>
+        )
+      }),
+      columnHelper.accessor('is_active', {
+        header: 'Active',
+        cell: ({row}) => (
+          <Chip
+            variant='tonal'
+            label={row.original.user.is_active ? 'Active' : 'Inactive'}
+            color={row.original.user.is_active ? 'success' : 'secondary'}
+          />
+        )
+      }),
+      columnHelper.accessor('action', {
+        header: 'Action',
+        cell: ({row}) => (
+          <div className='flex items-center'>
+            <IconButton onClick={() => handleDeleteUser(row.original.user.id)}>
+              <i className='tabler-trash text-textSecondary'/>
+            </IconButton>
+            <IconButton>
+              {/*<Link href={getLocalizedUrl('/apps/user/view', locale as Locale)} className='flex'>*/}
+              {/*  <i className='tabler-eye text-textSecondary' />*/}
+              {/*</Link>*/}
+            </IconButton>
+            <OptionMenu
+              iconButtonProps={{size: 'medium'}}
+              iconClassName='text-textSecondary'
+              options={[
+                {
+                  text: 'Modifier',
+                  icon: 'tabler-download',
+                  menuItemProps: {
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: () => handleEditUser(row.original.user),
+                  }
+                },
+                {
+                  text: 'Suspendre',
+                  icon: 'tabler-edit',
+                  menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
+                }
+              ]}
+            />
+          </div>
+        ),
+        enableSorting: false
+      })
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, filteredData]
+  );
 
   const table = useReactTable({
     data: filteredData as UsersType[],
@@ -313,22 +343,12 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
               placeholder='Search User'
               className='max-sm:is-full'
             />
-            <Button
-              color='secondary'
-              variant='tonal'
-              startIcon={<i className='tabler-upload'/>}
-              className='max-sm:is-full'
-            >
-              Export
-            </Button>
-            <Button
-              variant='contained'
-              startIcon={<i className='tabler-plus'/>}
-              onClick={() => setAddUserOpen(!addUserOpen)}
-              className='max-sm:is-full'
-            >
-              Add New User
-            </Button>
+            <OpenDialogOnElementClick
+              element={Button}
+              elementProps={buttonProps}
+              dialog={UserDialog}
+              dialogProps={{editValue}}
+            />
           </div>
         </div>
         <div className='overflow-x-auto'>
@@ -396,12 +416,13 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
           }}
         />
       </Card>
-      <AddUserDrawer
-        open={addUserOpen}
-        handleClose={() => setAddUserOpen(!addUserOpen)}
-        userData={data}
-        setData={setData}
-      />
+      {/*<AddUserDrawer*/}
+      {/*  open={addUserOpen}*/}
+      {/*  handleClose={() => setAddUserOpen(!addUserOpen)}*/}
+      {/*  userData={data}*/}
+      {/*  setData={setData}*/}
+      {/*/>*/}
+      <UserDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue} setEditValue={setEditValue}/>
     </>
   )
 }
