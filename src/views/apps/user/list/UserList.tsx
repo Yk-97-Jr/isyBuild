@@ -19,12 +19,15 @@ const UserList = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error fetching user data: {error.message}</div>;
   const users = data?.results || [];
+  const countRecords = data.count;
 
+  console.log("countRecords1" + countRecords)
 
-return (
+  return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <UserListTable tableData={users}/>
+        <UserListTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} tableData={users}
+                       countRecords={countRecords}/>
       </Grid>
     </Grid>
   );

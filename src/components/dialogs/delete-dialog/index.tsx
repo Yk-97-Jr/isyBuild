@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -7,12 +7,18 @@ import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
+import {CircularProgress, Snackbar} from '@mui/material';
 
 // Assuming CustomTextField and DialogCloseButton are components you already have
+import {useForm} from "react-hook-form";
+
 import CustomTextField from '@core/components/mui/TextField';
 import DialogCloseButton from '../DialogCloseButton';
-import {useAdminUsersDeleteDestroyMutation} from '@/services/IsyBuildApi';
+import {
+  useAdminUsersDeleteDestroyMutation,
+  useAdminStaffCreateCreateMutation,
+  useAdminStaffUpdatePartialUpdateMutation
+} from '@/services/IsyBuildApi';
 
 type UserDialogProps = {
   open: boolean;
@@ -20,6 +26,7 @@ type UserDialogProps = {
   id?: number;
   data?: string; // Optional: For editing, you might pass user data
   setData: (data: { firstName: string; lastName: string; email: string } | null) => void;
+  setEditValue: (data: { firstName: string; lastName: string; email: string } | null) => void;
 };
 
 type EditProps = {
@@ -28,19 +35,71 @@ type EditProps = {
     first_name: string;
     last_name: string;
     email: string;
+    id: number;
   };
 };
+type AddUserContentProps = {
+  handleClose: () => void;
+  setData: (data: any) => void;
+  userData: any[];
+};
 
-const AddUserContent = ({handleClose}: { handleClose: () => void }) => {
+type FormValidateType = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+};
+
+const AddUserContent = ({handleClose, setData, userData}: AddUserContentProps) => {
+  const {register, handleSubmit, reset} = useForm<FormValidateType>();
+  const [createUser, {isLoading, isSuccess}] = useAdminStaffCreateCreateMutation();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const onSubmit = async (data: FormValidateType) => {
+    try {
+      console.log(data);
+
+      const response = await createUser({
+        adminStaffCreate: {
+          user: {
+            first_name: data.firstName,
+            last_name: data.lastName,
+            email: data.email,
+            redirect_uri: "http://localhost:3001/users/list",
+            contact: data.phoneNumber,
+          },
+        },
+      }).unwrap();
+
+      // Handle successful response
+      setData([...(userData ?? []), response]);
+      setShowSuccessMessage(true);
+      handleClose();
+      reset();
+    } catch (err) {
+      console.error('Failed to create user:', err);
+    }
+  };
+
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <DialogContent className='overflow-visible pbs-0 sm:pli-16'>
         <CustomTextField
           fullWidth
-          label='User Name'
+          label='First Name'
           variant='outlined'
-          placeholder='Enter User Name'
+          placeholder='Enter First Name'
           className='mbe-2'
+          {...register('firstName')}
+        />
+        <CustomTextField
+          fullWidth
+          label='Last Name'
+          variant='outlined'
+          placeholder='Enter Last Name'
+          className='mbe-2'
+          {...register('lastName')}
         />
         <CustomTextField
           fullWidth
@@ -48,22 +107,71 @@ const AddUserContent = ({handleClose}: { handleClose: () => void }) => {
           variant='outlined'
           placeholder='Enter Email Address'
           className='mbe-2'
+          {...register('email')}
+        />
+        <CustomTextField
+          fullWidth
+          label='Phone Number'
+          variant='outlined'
+          placeholder='Enter Phone Number'
+          className='mbe-2'
+          {...register('phoneNumber')}
         />
       </DialogContent>
       <DialogActions
         className='flex max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
-        <Button type='submit' variant='contained' onClick={handleClose}>
-          Create User
+        <Button type='submit' variant='contained' disabled={isLoading}>
+          {isLoading ? <CircularProgress size={24}/> : 'Create User'}
         </Button>
         <Button onClick={handleClose} variant='tonal' color='secondary' className='max-sm:mis-0'>
           Discard
         </Button>
       </DialogActions>
-    </>
+      <Snackbar open={isSuccess} autoHideDuration={6000} onClose={() => setShowSuccessMessage(false)}>
+        <Alert onClose={() => setShowSuccessMessage(false)} severity="success" sx={{width: '100%'}}>
+          User created successfully!
+        </Alert>
+      </Snackbar>
+    </form>
   );
 };
 
 const EditUserContent = ({handleClose, editValue}: EditProps) => {
+  const [updateUser, {isLoading, isSuccess, isError}] = useAdminStaffUpdatePartialUpdateMutation();
+  const [formData, setFormData] = useState(editValue);
+
+  console.log('formData' + formData.id)
+  console.log('editValue' + editValue)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({...formData, [e.target.name]: e.target.value});
+  };
+
+  const handleSubmit = async () => {
+    try {
+      // Create the updated data object, mapping formData to the corresponding fields
+      const updatedData: PatchedAdminStaffUpdate = {
+        first_name: formData.first_name,
+        last_name: formData.last_name,
+        is_active: formData.is_active
+      };
+
+      // Perform the update operation
+      const response = await updateUser({
+        adminUserId: formData.id, // Ensure formData.id contains the user's ID
+        patchedAdminStaffUpdate: updatedData // Pass the updatedData object
+      }).unwrap();
+
+      handleClose();
+
+      if (response) {
+        console.log('User updated successfully');
+      }
+    } catch (error) {
+      console.error('Failed to update user:', error);
+    }
+  };
+
   return (
     <DialogContent className='overflow-visible pbs-0 sm:pli-16'>
       <div className='flex flex-col gap-4 mbe-2'>
@@ -71,7 +179,9 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
           <CustomTextField
             fullWidth
             size='small'
-            defaultValue={editValue.first_name}
+            name='first_name'
+            value={formData.first_name}
+            onChange={handleChange}
             variant='outlined'
             label='First Name'
             placeholder='Enter First Name'
@@ -79,7 +189,9 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
           <CustomTextField
             fullWidth
             size='small'
-            defaultValue={editValue.last_name}
+            name='last_name'
+            value={formData.last_name}
+            onChange={handleChange}
             variant='outlined'
             label='Last Name'
             placeholder='Enter Last Name'
@@ -88,16 +200,20 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
         <CustomTextField
           fullWidth
           size='small'
-          defaultValue={editValue.email}
+          name='email'
+          value={formData.email}
+          onChange={handleChange}
           variant='outlined'
           label='Email'
           placeholder='Enter Email'
         />
       </div>
       <div className='flex justify-end gap-4'>
-        <Button variant='contained' onClick={handleClose}>
-          Update
+        <Button variant='contained' onClick={handleSubmit} disabled={isLoading}>
+          {isLoading ? <CircularProgress size={24}/> : 'Update'}
         </Button>
+        {isError && <div className='text-red-500'>Failed to update user</div>}
+        {isSuccess && <div className='text-green-500'>User updated successfully</div>}
       </div>
     </DialogContent>
   );

@@ -138,7 +138,14 @@ const DebouncedInput = ({
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
+const UserListTable = ({tableData, page, setPage, pageSize, setPageSize, countRecords}: {
+  tableData?: UsersType[]
+  page: number
+  setPage: React.Dispatch<React.SetStateAction<number>>
+  pageSize: number
+  setPageSize: React.Dispatch<React.SetStateAction<number>>
+  countRecords: number
+}) => {
   // States
   const [addUserOpen, setAddUserOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
@@ -161,6 +168,8 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
   // Hooks
   const {lang: locale} = useParams()
 
+  console.log("countRecords" + countRecords)
+
   const handleEditUser = (data: string) => {
     setOpen(true)
     setEditValue(data)
@@ -173,6 +182,15 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
   const handleDeleteUser = (id: number) => {
     setOpen(true)
     setId(id)
+  }
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
+    setPage(newPage + 1) // Set page to newPage + 1 to match the 1-based index used in the API
+  }
+
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPageSize(Number(event.target.value))
+    setPage(1) // Reset to the first page when page size changes
   }
 
 
@@ -259,7 +277,7 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
               options={[
                 {
                   text: 'Modifier',
-                  icon: 'tabler-download',
+                  icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary',
                     onClick: () => handleEditUser(row.original.user),
@@ -267,7 +285,7 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
                 },
                 {
                   text: 'Suspendre',
-                  icon: 'tabler-edit',
+                  icon: 'tabler-download',
                   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
                 }
               ]}
@@ -407,13 +425,18 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
           </table>
         </div>
         <TablePagination
-          component={() => <TablePaginationComponent table={table}/>}
-          count={table.getFilteredRowModel().rows.length}
-          rowsPerPage={table.getState().pagination.pageSize}
-          page={table.getState().pagination.pageIndex}
-          onPageChange={(_, page) => {
-            table.setPageIndex(page)
-          }}
+          component={() => (
+            <TablePaginationComponent
+              totalRecords={countRecords}
+              pageSize={pageSize}
+              currentPage={page} // Pass the currentPage directly
+              onPageChange={(newPage) => setPage(newPage)}
+            />
+          )}
+          count={countRecords}
+          rowsPerPage={pageSize}
+          page={page - 1} // Convert to 0-based index for MUI TablePagination
+          onPageChange={handlePageChange}
         />
       </Card>
       {/*<AddUserDrawer*/}
@@ -422,7 +445,8 @@ const UserListTable = ({tableData}: { tableData?: UsersType[] }) => {
       {/*  userData={data}*/}
       {/*  setData={setData}*/}
       {/*/>*/}
-      <UserDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue} setEditValue={setEditValue}/>
+      <UserDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
+                  setEditValue={setEditValue}/>
     </>
   )
 }
