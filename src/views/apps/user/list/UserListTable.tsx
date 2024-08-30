@@ -3,20 +3,14 @@
 // React Imports
 import {useEffect, useState, useMemo} from 'react'
 
-// Next Imports
-import Link from 'next/link'
-import {useParams} from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton'
-import {styled} from '@mui/material/styles'
-import TablePagination from '@mui/material/TablePagination'
 import type {TextFieldProps} from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
 import type {ButtonProps} from '@mui/material/Button'
@@ -42,24 +36,12 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 // Type Imports
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-import type {Locale} from '@configs/i18n'
 
-
-import type {ThemeColor} from '@core/types'
-
-
-// Component Imports
-import TableFilters from './TableFilters'
-import AddUserDrawer from './AddUserDrawer'
 import OptionMenu from '@core/components/option-menu'
 import UserDialog from '@components/dialogs/delete-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
-import CustomAvatar from '@core/components/mui/Avatar'
 
-// Util Imports
-import {getInitials} from '@/utils/getInitials'
-import {getLocalizedUrl} from '@/utils/i18n'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
@@ -81,16 +63,6 @@ type UsersTypeWithAction = UsersType & {
   action?: string
 }
 
-type UserRoleType = {
-  [key: string]: { icon: string; color: string }
-}
-
-type UserStatusType = {
-  [key: string]: ThemeColor
-}
-
-// Styled Components
-const Icon = styled('i')({})
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -138,7 +110,7 @@ const DebouncedInput = ({
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const UserListTable = ({tableData, page, setPage, pageSize, setPageSize, countRecords}: {
+const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
   tableData?: UsersType[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -147,14 +119,15 @@ const UserListTable = ({tableData, page, setPage, pageSize, setPageSize, countRe
   countRecords: number
 }) => {
   // States
-  const [addUserOpen, setAddUserOpen] = useState(false)
   const [rowSelection, setRowSelection] = useState({})
-  const [data, setData] = useState(...[tableData])
+  const [data] = useState(...[tableData])
   const [id, setId] = useState()
   const [editValue, setEditValue] = useState<string>('')
   const [open, setOpen] = useState(false)
-  const [filteredData, setFilteredData] = useState(data)
+  const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
+
+  console.log("data" + data)
 
   // Vars
   const buttonProps: ButtonProps = {
@@ -165,8 +138,6 @@ const UserListTable = ({tableData, page, setPage, pageSize, setPageSize, countRe
     startIcon: <i className='tabler-plus'/>
   }
 
-  // Hooks
-  const {lang: locale} = useParams()
 
   console.log("countRecords" + countRecords)
 
@@ -182,15 +153,6 @@ const UserListTable = ({tableData, page, setPage, pageSize, setPageSize, countRe
   const handleDeleteUser = (id: number) => {
     setOpen(true)
     setId(id)
-  }
-
-  const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
-    setPage(newPage + 1) // Set page to newPage + 1 to match the 1-based index used in the API
-  }
-
-  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPageSize(Number(event.target.value))
-    setPage(1) // Reset to the first page when page size changes
   }
 
 
@@ -224,7 +186,6 @@ const UserListTable = ({tableData, page, setPage, pageSize, setPageSize, countRe
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {console.log(row)}
                 {`${row.original.user.first_name} ${row.original.user.last_name}`}
               </Typography>
             </div>
@@ -328,15 +289,6 @@ const UserListTable = ({tableData, page, setPage, pageSize, setPageSize, countRe
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-  const getAvatar = (params: Pick<UsersType, 'avatar' | 'fullName'>) => {
-    const {avatar, fullName} = params
-
-    if (avatar) {
-      return <CustomAvatar src={avatar} size={34}/>
-    } else {
-      return <CustomAvatar size={34}>{getInitials(fullName as string)}</CustomAvatar>
-    }
-  }
 
   return (
     <>
@@ -424,27 +376,17 @@ const UserListTable = ({tableData, page, setPage, pageSize, setPageSize, countRe
             )}
           </table>
         </div>
-        <TablePagination
-          component={() => (
-            <TablePaginationComponent
-              totalRecords={countRecords}
-              pageSize={pageSize}
-              currentPage={page} // Pass the currentPage directly
-              onPageChange={(newPage) => setPage(newPage)}
-            />
-          )}
-          count={countRecords}
-          rowsPerPage={pageSize}
-          page={page - 1} // Convert to 0-based index for MUI TablePagination
-          onPageChange={handlePageChange}
+
+        <TablePaginationComponent
+          totalRecords={countRecords}
+          pageSize={pageSize}
+          currentPage={page} // Pass the currentPage directly
+          onPageChange={(newPage) => {
+            setPage(newPage)
+          }}
         />
+
       </Card>
-      {/*<AddUserDrawer*/}
-      {/*  open={addUserOpen}*/}
-      {/*  handleClose={() => setAddUserOpen(!addUserOpen)}*/}
-      {/*  userData={data}*/}
-      {/*  setData={setData}*/}
-      {/*/>*/}
       <UserDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
                   setEditValue={setEditValue}/>
     </>

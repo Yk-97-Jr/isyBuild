@@ -36,6 +36,7 @@ type EditProps = {
     last_name: string;
     email: string;
     id: number;
+    is_active: boolean;
   };
 };
 type AddUserContentProps = {
@@ -54,7 +55,7 @@ type FormValidateType = {
 const AddUserContent = ({handleClose, setData, userData}: AddUserContentProps) => {
   const {register, handleSubmit, reset} = useForm<FormValidateType>();
   const [createUser, {isLoading, isSuccess}] = useAdminStaffCreateCreateMutation();
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [, setShowSuccessMessage] = useState(false);
 
   const onSubmit = async (data: FormValidateType) => {
     try {
@@ -150,7 +151,7 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
   const handleSubmit = async () => {
     try {
       // Create the updated data object, mapping formData to the corresponding fields
-      const updatedData: PatchedAdminStaffUpdate = {
+      const updatedData = {
         first_name: formData.first_name,
         last_name: formData.last_name,
         is_active: formData.is_active

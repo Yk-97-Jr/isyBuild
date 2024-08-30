@@ -1,4 +1,5 @@
 import { IsyBuildClient as api } from '../apiClients/IsyBuildClient'
+
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
     adminStaffRetrieve: build.query<AdminStaffRetrieveApiResponse, AdminStaffRetrieveApiArg>({
@@ -65,11 +66,15 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false
 })
+
 export { injectedRtkApi as pIsyBuildApi }
+
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedRead
 export type AdminStaffRetrieveApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }

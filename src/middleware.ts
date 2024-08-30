@@ -13,6 +13,11 @@ const accessRules = {
       path: '/dashboard',
       roles: ['admin', 'user'],
     },
+    {
+      path: '/users/list',
+      roles: ['admin'],
+    },
+
   ],
 };
 
@@ -41,5 +46,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin', '/dashboard', '/login', '/unauthorized'], // List of routes to apply middleware
+  matcher: ['/admin', '/dashboard', '/login', '/unauthorized','/users/list'], // List of routes to apply middleware
 };
