@@ -1,3 +1,4 @@
+import type {Dispatch, SetStateAction} from 'react';
 import React, {useState} from 'react';
 
 import Dialog from '@mui/material/Dialog';
@@ -19,30 +20,27 @@ import {
   useAdminStaffCreateCreateMutation,
   useAdminStaffUpdatePartialUpdateMutation
 } from '@/services/IsyBuildApi';
+import type {UsersType} from "@/types/apps/usersType";
 
 type UserDialogProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   id?: number;
+  setId: Dispatch<SetStateAction<number>>
   data?: string; // Optional: For editing, you might pass user data
-  setData: (data: { firstName: string; lastName: string; email: string } | null) => void;
-  setEditValue: (data: { firstName: string; lastName: string; email: string } | null) => void;
+  setEditValue: Dispatch<SetStateAction<UsersType | undefined>>
+  editValue?: UsersType; // Updated type
 };
 
 type EditProps = {
   handleClose: () => void;
-  editValue: {
-    first_name: string;
-    last_name: string;
-    email: string;
-    id: number;
-    is_active: boolean;
-  };
+  editValue: UsersType;
 };
 type AddUserContentProps = {
   handleClose: () => void;
-  setData: (data: any) => void;
-  userData: any[];
+
+  // setData: (data: any) => void;
+  // userData: any[];
 };
 
 type FormValidateType = {
@@ -52,7 +50,7 @@ type FormValidateType = {
   phoneNumber: string;
 };
 
-const AddUserContent = ({handleClose, setData, userData}: AddUserContentProps) => {
+const AddUserContent = ({handleClose}: AddUserContentProps) => {
   const {register, handleSubmit, reset} = useForm<FormValidateType>();
   const [createUser, {isLoading, isSuccess}] = useAdminStaffCreateCreateMutation();
   const [, setShowSuccessMessage] = useState(false);
@@ -61,20 +59,19 @@ const AddUserContent = ({handleClose, setData, userData}: AddUserContentProps) =
     try {
       console.log(data);
 
-      const response = await createUser({
+      await createUser({
         adminStaffCreate: {
           user: {
             first_name: data.firstName,
             last_name: data.lastName,
             email: data.email,
             redirect_uri: "http://localhost:3001/users/list",
-            contact: data.phoneNumber,
           },
         },
       }).unwrap();
 
       // Handle successful response
-      setData([...(userData ?? []), response]);
+      // setData([...(userData ?? []), response]);
       setShowSuccessMessage(true);
       handleClose();
       reset();
@@ -152,9 +149,9 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
     try {
       // Create the updated data object, mapping formData to the corresponding fields
       const updatedData = {
-        first_name: formData.first_name,
-        last_name: formData.last_name,
-        is_active: formData.is_active
+        first_name: formData.user.first_name,
+        last_name: formData.user.last_name,
+        is_active: formData.user.is_active
       };
 
       // Perform the update operation
@@ -181,7 +178,7 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
             fullWidth
             size='small'
             name='first_name'
-            value={formData.first_name}
+            value={formData.user.first_name}
             onChange={handleChange}
             variant='outlined'
             label='First Name'
@@ -191,7 +188,7 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
             fullWidth
             size='small'
             name='last_name'
-            value={formData.last_name}
+            value={formData.user.last_name}
             onChange={handleChange}
             variant='outlined'
             label='Last Name'
@@ -202,7 +199,7 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
           fullWidth
           size='small'
           name='email'
-          value={formData.email}
+          value={formData.user.email}
           onChange={handleChange}
           variant='outlined'
           label='Email'
@@ -264,7 +261,8 @@ const UserDialog = ({open, setOpen, id, editValue, setEditValue}: UserDialogProp
   const handleClose = () => {
     setOpen(false);
     console.log("aaaaaaaaaaaaaa")
-    setEditValue(null)
+
+    setEditValue(undefined)
   };
 
   console.log("editValue" + editValue)

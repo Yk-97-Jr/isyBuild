@@ -48,7 +48,7 @@ export const GenerateVerticalMenu = ({ menuData }: { menuData: VerticalMenuDataT
       if (subMenuItem.children) {
         const { children, icon, prefix, suffix, ...rest } = subMenuItem
 
-        const Icon = icon ? <i className={icon} /> : null
+        const Icon = typeof icon === 'string' ? <i className={icon} /> : icon;
 
         const subMenuPrefix: ReactNode =
           prefix && (prefix as ChipProps).label ? (
@@ -84,7 +84,7 @@ export const GenerateVerticalMenu = ({ menuData }: { menuData: VerticalMenuDataT
       // Localize the href
       const href = rest.href
 
-      const Icon = icon ? <i className={icon} /> : null
+      const Icon = typeof icon === 'string' ? <i className={icon} /> : icon;
 
       const menuItemPrefix: ReactNode =
         prefix && (prefix as ChipProps).label ? (

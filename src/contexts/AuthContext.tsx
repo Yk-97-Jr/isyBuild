@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import type {ReactNode} from 'react';
+import { createContext, useContext, useState, useEffect} from 'react';
+
 
 // Define the structure for the authenticated user, including permissions
 interface AuthUser {
@@ -12,10 +14,14 @@ interface AuthContextType {
   setUser: (user: AuthUser | null) => void;
 }
 
+interface AuthProviderProps {
+  children: ReactNode;
+};
+
 // Create context with extended type
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({children}: AuthProviderProps) => {
   const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
@@ -32,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{user, setUser}}>
       {children}
     </AuthContext.Provider>
   );
@@ -46,5 +52,5 @@ export const useAuth = () => {
   }
 
 
-return context;
+  return context;
 };

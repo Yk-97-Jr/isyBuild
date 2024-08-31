@@ -1,14 +1,13 @@
-// MUI Imports
-import { useTheme } from '@mui/material/styles'
+import {useTheme} from '@mui/material/styles'
 
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // Type Imports
-import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
+import type {VerticalMenuContextProps} from '@menu/components/vertical-menu/Menu'
 
 // Component Imports
-import { Menu, MenuItem } from '@menu/vertical-menu'
+import {Menu, MenuItem} from '@menu/vertical-menu'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -32,23 +31,24 @@ type Props = {
   scrollMenu: (container: any, isPerfectScrollbar: boolean) => void
 }
 
-const RenderExpandIcon = ({ open, transitionDuration }: RenderExpandIconProps) => (
+const RenderExpandIcon = ({open, transitionDuration}: RenderExpandIconProps) => (
   <StyledVerticalNavExpandIcon open={open} transitionDuration={transitionDuration}>
-    <i className='tabler-chevron-right' />
+    <i className='tabler-chevron-right'/>
   </StyledVerticalNavExpandIcon>
 )
 
-const VerticalMenu = ({ scrollMenu }: Props) => {
+const VerticalMenu = ({scrollMenu}: Props) => {
   // Hooks
   const theme = useTheme()
   const verticalNavOptions = useVerticalNav()
 
   // Vars
-  const { isBreakpointReached, transitionDuration } = verticalNavOptions
+  const {isBreakpointReached, transitionDuration} = verticalNavOptions
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
 
-  const menuItems = verticalMenuData().filter(item => item.roles.includes('user'));
+
+  const menuItems = verticalMenuData().filter(item => item.roles?.includes('user'));
 
   return (
     // eslint-disable-next-line lines-around-comment
@@ -56,28 +56,28 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
     <ScrollWrapper
       {...(isBreakpointReached
         ? {
-            className: 'bs-full overflow-y-auto overflow-x-hidden',
-            onScroll: container => scrollMenu(container, false)
-          }
+          className: 'bs-full overflow-y-auto overflow-x-hidden',
+          onScroll: container => scrollMenu(container, false)
+        }
         : {
-            options: { wheelPropagation: false, suppressScrollX: true },
-            onScrollY: container => scrollMenu(container, true)
-          })}
+          options: {wheelPropagation: false, suppressScrollX: true},
+          onScrollY: container => scrollMenu(container, true)
+        })}
     >
       {/* Incase you also want to scroll NavHeader to scroll with Vertical Menu, remove NavHeader from above and paste it below this comment */}
       {/* Vertical Menu */}
       <Menu
-        popoutMenuOffset={{ mainAxis: 23 }}
+        popoutMenuOffset={{mainAxis: 23}}
         menuItemStyles={menuItemStyles(verticalNavOptions, theme)}
-        renderExpandIcon={({ open }) => <RenderExpandIcon open={open} transitionDuration={transitionDuration} />}
-        renderExpandedMenuItemIcon={{ icon: <i className='tabler-circle text-xs' /> }}
+        renderExpandIcon={({open}) => <RenderExpandIcon open={open} transitionDuration={transitionDuration}/>}
+        renderExpandedMenuItemIcon={{icon: <i className='tabler-circle text-xs'/>}}
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
-         {menuItems.map((item, index) => (
-        <MenuItem key={index} href={item.href} icon={<i className={item.icon} />}>
-          {item.label}
-        </MenuItem>
-      ))}
+        {menuItems.map((item, index) => (
+          <MenuItem key={index} href={item.href} icon={<i className={`${item.icon}`}/>}>
+            {item.label}
+          </MenuItem>
+        ))}
       </Menu>
       {/* <Menu
         popoutMenuOffset={{ mainAxis: 23 }}

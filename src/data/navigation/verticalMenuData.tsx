@@ -5,18 +5,18 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
   {
     label: 'Dashboard',
     href: '/dashboard',
-    icon: 'tabler-smart-dashboard',
+    icon: 'tabler-smart-home',
     roles: ['admin', 'user'],
-    permission: ['view dashboard'],
+    permissions: ['view dashboard'],
     isSection: false,
     children: []
   },
   {
     label: 'Lots',
     href: '/lots',
-    icon: 'tabler-smart-dashboard',
+    icon: 'tabler-info-circle',
     roles: ['admin', 'user'],
-    permission: ['view dashboard'],
+    permissions: ['view dashboard'],
     isSection: false,
     children: []
   },

@@ -20,9 +20,10 @@ const UserList = () => {
   const {data, error, isLoading, isFetching} = useAdminStaffRetrieveQuery({page, pageSize});
 
   if (isLoading) return <div>Loading1111111111...</div>;
-  if (error) return <div>Error fetching user data: {error.message}</div>;
+  if (error) return <div>Error fetching user
+    data: {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}</div>;
   const users = data?.results || [];
-  const countRecords = data.count;
+  const countRecords = data?.count;
 
 
   console.log("countRecords1" + countRecords)
@@ -38,7 +39,8 @@ const UserList = () => {
                          countRecords={countRecords}/>
         </Grid>
       </Grid>
-  );
+  )
+    ;
 }
 
 export default UserList;

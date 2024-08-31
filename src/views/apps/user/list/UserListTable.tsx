@@ -36,7 +36,6 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 // Type Imports
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-
 import OptionMenu from '@core/components/option-menu'
 import UserDialog from '@components/dialogs/delete-dialog'
 
@@ -116,13 +115,13 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
   setPageSize: React.Dispatch<React.SetStateAction<number>>
-  countRecords: number
+  countRecords?: number
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [data] = useState(...[tableData])
-  const [id, setId] = useState()
-  const [editValue, setEditValue] = useState<string>('')
+  const [id, setId] = useState(0)
+  const [editValue, setEditValue] = useState<UsersType>()
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
@@ -133,7 +132,6 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
   const buttonProps: ButtonProps = {
     variant: 'contained',
     children: 'Add User',
-    onClick: () => handleAddUser(),
     className: 'max-sm:is-full',
     startIcon: <i className='tabler-plus'/>
   }
@@ -141,14 +139,11 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
 
   console.log("countRecords" + countRecords)
 
-  const handleEditUser = (data: string) => {
+  const handleEditUser = (user: UsersType) => {
     setOpen(true)
-    setEditValue(data)
+    setEditValue(user)
   }
 
-  const handleAddUser = () => {
-    setEditValue('')
-  }
 
   const handleDeleteUser = (id: number) => {
     setOpen(true)
@@ -180,7 +175,7 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
           />
         )
       },
-      columnHelper.accessor('Nom', {
+      columnHelper.accessor('user.first_name', {
         header: 'Nom',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -192,7 +187,7 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
           </div>
         )
       }),
-      columnHelper.accessor('Email', {
+      columnHelper.accessor('user.email', {
         header: 'Email',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -204,13 +199,15 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
           </div>
         )
       }),
-      columnHelper.accessor('date_joined', {
+      columnHelper.accessor('user.date_joined', {
         header: 'Date Joined',
         cell: ({row}) => (
-          <Typography>{new Date(row.original.user.date_joined).toLocaleDateString()}</Typography>
+          <Typography>{row.original.user.date_joined
+            ? new Date(row.original.user.date_joined).toLocaleDateString()
+            : 'Date not available'}</Typography>
         )
       }),
-      columnHelper.accessor('is_active', {
+      columnHelper.accessor('user.is_active', {
         header: 'Active',
         cell: ({row}) => (
           <Chip
@@ -241,7 +238,7 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
                   icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEditUser(row.original.user),
+                    onClick: () => handleEditUser(row.original),
                   }
                 },
                 {

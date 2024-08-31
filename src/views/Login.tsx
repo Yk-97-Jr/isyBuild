@@ -182,7 +182,8 @@ const LoginV2 = ({mode}: { mode: SystemMode }) => {
             <Button fullWidth variant='contained' type='submit' disabled={isLoading}>
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
-            {error && <Typography color='error'>Login failed: {error.message}</Typography>}
+            {error && <Typography color='error'>Login failed: Login
+              failed: {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}</Typography>}
             <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>New on our platform?</Typography>
               <Typography component={Link} color='primary'>
