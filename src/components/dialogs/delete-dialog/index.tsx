@@ -142,7 +142,16 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
   console.log('editValue' + editValue)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({...formData, [e.target.name]: e.target.value});
+    const {name, value} = e.target;
+
+    // Update the nested user object within formData
+    setFormData((prevState) => ({
+      ...prevState,
+      user: {
+        ...prevState.user,
+        [name]: value,
+      },
+    }));
   };
 
   const handleSubmit = async () => {
