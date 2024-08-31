@@ -1,7 +1,7 @@
 'use client'
 
 // components/UserList.js
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import Grid from '@mui/material/Grid';
 
@@ -17,7 +17,11 @@ const UserList = () => {
   console.log("page" + page)
 
   // Pass parameters to the query hook
-  const {data, error, isLoading, isFetching} = useAdminStaffRetrieveQuery({page, pageSize});
+  const {data, error, isLoading, isFetching, refetch} = useAdminStaffRetrieveQuery({page, pageSize});
+
+  useEffect(() => {
+    refetch();
+  }, [page, pageSize]);
 
   if (isLoading) return <div>Loading1111111111...</div>;
   if (error) return <div>Error fetching user
@@ -35,7 +39,7 @@ const UserList = () => {
     isFetching ? <div>Loading...</div> :
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <UserListTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} tableData={users}
+          <UserListTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} data={users}
                          countRecords={countRecords}/>
         </Grid>
       </Grid>

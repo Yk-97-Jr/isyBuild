@@ -109,8 +109,8 @@ const DebouncedInput = ({
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
-  tableData?: UsersType[]
+const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords}: {
+  data?: UsersType[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -119,14 +119,14 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
-  const [data] = useState(...[tableData])
   const [id, setId] = useState(0)
   const [editValue, setEditValue] = useState<UsersType>()
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
 
-  console.log("data" + data)
+  console.log("datalist" + data)
+  console.log("pagelist" + page)
 
   // Vars
   const buttonProps: ButtonProps = {
@@ -269,7 +269,7 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
     },
     initialState: {
       pagination: {
-        pageSize: 10
+        pageSize: pageSize
       }
     },
     enableRowSelection: true, //enable row selection for all rows
@@ -296,7 +296,7 @@ const UserListTable = ({tableData, page, setPage, pageSize, countRecords}: {
           <CustomTextField
             select
             value={table.getState().pagination.pageSize}
-            onChange={e => table.setPageSize(Number(e.target.value))}
+            onChange={e => setPageSize(Number(e.target.value))}
             className='max-sm:is-full sm:is-[70px]'
           >
             <MenuItem value='10'>10</MenuItem>
