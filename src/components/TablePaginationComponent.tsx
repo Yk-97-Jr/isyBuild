@@ -22,7 +22,7 @@ const TablePaginationComponent = ({
   return (
     <div className='flex justify-between items-center flex-wrap pli-6 border-bs bs-auto plb-[12.5px] gap-2'>
       <Typography color='text.disabled'>
-        {`Showing ${startRecord} to ${endRecord} of ${totalRecord} entries`}
+        {`Affichage ${startRecord} de ${endRecord} à ${totalRecord} entreés`}
       </Typography>
       <Pagination
         shape='rounded'

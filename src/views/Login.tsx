@@ -1,45 +1,44 @@
-'use client'
+'use client';
 
 // React Imports
-import {useState} from 'react'
+import { useState } from 'react';
 
 // Next Imports
-import {useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 // MUI Imports
-import useMediaQuery from '@mui/material/useMediaQuery'
-import {styled, useTheme} from '@mui/material/styles'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
-import Checkbox from '@mui/material/Checkbox'
-import Button from '@mui/material/Button'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Divider from '@mui/material/Divider'
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { styled, useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Button from '@mui/material/Button';
 
 // Third-party Imports
+import Cookies from 'js-cookie';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import classnames from 'classnames'
 
-// Type Imports
-import type {SystemMode} from '@core/types'
-
 // Component Imports
-import Link from '@components/Link'
-import Logo from '@components/layout/shared/Logo'
-import CustomTextField from '@core/components/mui/TextField'
+import Link from '@components/Link';
+import Logo from '@components/layout/shared/Logo';
+import CustomTextField from '@core/components/mui/TextField';
 
 // Config Imports
-import themeConfig from '@configs/themeConfig'
+import themeConfig from '@configs/themeConfig';
 
 // Hook Imports
-import {useImageVariant} from '@core/hooks/useImageVariant'
-import {useSettings} from '@core/hooks/useSettings'
+import { useImageVariant } from '@core/hooks/useImageVariant';
+import { useSettings } from '@core/hooks/useSettings';
 
 // Mutation Imports
-import {useLoginCreateMutation} from "@/services/IsyBuildApi"
+import { useLoginCreateMutation } from '@/services/IsyBuildApi';
+import { verifyToken } from '@/utils/verifyToken';
 
 // Styled Custom Components
-const LoginIllustration = styled('img')(({theme}) => ({
+const LoginIllustration = styled('img')(({ theme }) => ({
   zIndex: 2,
   blockSize: 'auto',
   maxBlockSize: 680,
@@ -51,7 +50,7 @@ const LoginIllustration = styled('img')(({theme}) => ({
   [theme.breakpoints.down('lg')]: {
     maxBlockSize: 450
   }
-}))
+}));
 
 const MaskImg = styled('img')({
   blockSize: 'auto',
@@ -60,156 +59,140 @@ const MaskImg = styled('img')({
   position: 'absolute',
   insetBlockEnd: 0,
   zIndex: -1
-})
+});
 
-const LoginV2 = ({mode}: { mode: SystemMode }) => {
+// Yup validation schema
+const schema = yup.object({
+  email: yup.string().email('Please enter a valid email').required('Email is required'),
+  password: yup.string().required('Password is required')
+}).required();
+
+const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
   // States
-  const [isPasswordShown, setIsPasswordShown] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  // Vars
-  const darkImg = '/images/pages/auth-mask-dark.png'
-  const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/illustrations/auth/v2-login-dark.png'
-  const lightIllustration = '/images/illustrations/auth/v2-login-light.png'
-  const borderedDarkIllustration = '/images/illustrations/auth/v2-login-dark-border.png'
-  const borderedLightIllustration = '/images/illustrations/auth/v2-login-light-border.png'
+  const [isPasswordShown, setIsPasswordShown] = useState(false);
 
   // Hooks
-  const router = useRouter()
-  const {settings} = useSettings()
-  const theme = useTheme()
-  const hidden = useMediaQuery(theme.breakpoints.down('md'))
-  const authBackground = useImageVariant(mode, lightImg, darkImg)
+  const router = useRouter();
+  const { settings } = useSettings();
+  const theme = useTheme();
+  const hidden = useMediaQuery(theme.breakpoints.down('md'));
+  const authBackground = useImageVariant(mode, '/images/pages/auth-mask-light.png', '/images/pages/auth-mask-dark.png');
 
   const characterIllustration = useImageVariant(
     mode,
-    lightIllustration,
-    darkIllustration,
-    borderedLightIllustration,
-    borderedDarkIllustration
-  )
+    '/images/illustrations/auth/v2-login-light.png',
+    '/images/illustrations/auth/v2-login-dark.png',
+    '/images/illustrations/auth/v2-login-light-border.png',
+    '/images/illustrations/auth/v2-login-dark-border.png'
+  );
 
-  const [login, {isLoading, error}] = useLoginCreateMutation()
+  // Login Mutation
+  const [login, { isLoading, error }] = useLoginCreateMutation();
 
-  const handleClickShowPassword = () => setIsPasswordShown(show => !show)
+  // React Hook Form with validation schema
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(schema)
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  // Show/Hide Password toggle
+  const handleClickShowPassword = () => setIsPasswordShown((show) => !show);
 
-    // Log email and password before sending the request
-    console.log('Email:', email)
-    console.log('Password:', password)
-
+  // Form Submission
+  const onSubmit = async (data: { email: string; password: string }) => {
     try {
-      const result = await login({tokenObtainPair: {email, password}}).unwrap()
+      const result = await login({ tokenObtainPair: data }).unwrap();
 
-      console.log('Login successful:', result)
+      const decodedAcessToken = verifyToken(result.access);
+      const decodedRefreshToken = verifyToken(result.refresh);
 
-      // Store the access and refresh tokens in local storage
-      localStorage.setItem('access_token', result.access) // Assuming the result has 'access' token
-      localStorage.setItem('refresh_token', result.refresh) // Assuming the result has 'refresh' token
+      // Get the expiration time from the decoded tokens
+      const accessExpiryDate = new Date(decodedAcessToken.exp * 1000);
+      const refreshExpiryDate = new Date(decodedRefreshToken.exp * 1000);
 
-      // Redirect to the home page or any other page after successful login
-      router.push('/')
+      // Set tokens in cookies with expiration dates
+      Cookies.set('access_token', result.access, { expires: accessExpiryDate });
+      Cookies.set('refresh_token', result.refresh, { expires: refreshExpiryDate });
+
+      // Redirect to the home page after successful login
+      router.push('/dashboard');
     } catch (err) {
-      console.error('Failed to login:', err)
+      console.error('Failed to login:', err);
     }
-  }
+  };
 
   return (
-    <div className='flex bs-full justify-center'>
+    <div className="flex bs-full justify-center">
       <div
         className={classnames(
           'flex bs-full items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
-          {'border-ie': settings.skin === 'bordered'}
+          { 'border-ie': settings.skin === 'bordered' }
         )}
       >
-        <LoginIllustration src={characterIllustration} alt='character-illustration'/>
+        <LoginIllustration src={characterIllustration} alt="character-illustration" />
         {!hidden && (
           <MaskImg
-            alt='mask'
+            alt="mask"
             src={authBackground}
-            className={classnames({'scale-x-[-1]': theme.direction === 'rtl'})}
+            className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
           />
         )}
       </div>
       <div
-        className='flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
-        <Link className='absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'>
-          <Logo/>
+        className="flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]"
+      >
+        <Link className="absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]">
+          <Logo />
         </Link>
-        <div
-          className='flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>
-          <div className='flex flex-col gap-1'>
-            <Typography variant='h4'>{`Welcome to ${themeConfig.templateName}! 👋🏻`}</Typography>
+        <div className="flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0">
+          <div className="flex flex-col gap-1">
+            <Typography variant="h4">{`Welcome to ${themeConfig.templateName}! 👋🏻`}</Typography>
             <Typography>Please sign-in to your account and start the adventure</Typography>
           </div>
-          <form noValidate autoComplete='off' onSubmit={handleSubmit} className='flex flex-col gap-5'>
+          <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
             <CustomTextField
               autoFocus
               fullWidth
-              label='Email or Username'
-              placeholder='Enter your email or username'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              label="Email"
+              placeholder="Enter your email"
+              {...register('email')}
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
             <CustomTextField
               fullWidth
-              label='Password'
-              placeholder='············'
-              id='outlined-adornment-password'
+              label="Password"
+              placeholder="············"
               type={isPasswordShown ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register('password')}
+              error={!!errors.password}
+              helperText={errors.password?.message}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position='end'>
-                    <IconButton edge='end' onClick={handleClickShowPassword} onMouseDown={(e) => e.preventDefault()}>
-                      <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'}/>
+                  <InputAdornment position="end">
+                    <IconButton edge="end" onClick={handleClickShowPassword} onMouseDown={(e) => e.preventDefault()}>
+                      <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
                     </IconButton>
                   </InputAdornment>
                 )
               }}
             />
-            <div className='flex justify-between items-center gap-x-3 gap-y-1 flex-wrap'>
-              <FormControlLabel control={<Checkbox/>} label='Remember me'/>
-              <Typography className='text-end' color='primary' component={Link}>
-                Forgot password?
-              </Typography>
-            </div>
-            <Button fullWidth variant='contained' type='submit' disabled={isLoading}>
+            <Button fullWidth variant="contained" type="submit" disabled={isLoading}>
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
-            {error && <Typography color='error'>Login failed: Login
-              failed: {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}</Typography>}
-            <div className='flex justify-center items-center flex-wrap gap-2'>
-              <Typography>New on our platform?</Typography>
-              <Typography component={Link} color='primary'>
-                Create an account
+            {error && (
+              <Typography color="error">
+                Login failed: {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
               </Typography>
-            </div>
-            <Divider className='gap-2 text-textPrimary'>or</Divider>
-            <div className='flex justify-center items-center gap-1.5'>
-              <IconButton className='text-facebook' size='small'>
-                <i className='tabler-brand-facebook-filled'/>
-              </IconButton>
-              <IconButton className='text-twitter' size='small'>
-                <i className='tabler-brand-twitter-filled'/>
-              </IconButton>
-              <IconButton className='text-textPrimary' size='small'>
-                <i className='tabler-brand-github-filled'/>
-              </IconButton>
-              <IconButton className='text-error' size='small'>
-                <i className='tabler-brand-google-filled'/>
-              </IconButton>
-            </div>
+            )}
           </form>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginV2
+export default LoginV2;

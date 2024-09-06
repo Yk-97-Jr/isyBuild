@@ -5,6 +5,10 @@ import React, {useEffect, useState} from 'react';
 
 import Grid from '@mui/material/Grid';
 
+import {CircularProgress} from "@mui/material";
+
+import Box from "@mui/material/Box";
+
 import UserListTable from './UserListTable';
 import {useAdminStaffRetrieveQuery} from '@/services/IsyBuildApi';
 
@@ -23,7 +27,12 @@ const UserList = () => {
     refetch();
   }, [page, pageSize]);
 
-  if (isLoading) return <div>Loading1111111111...</div>;
+  if (isLoading) return (
+    <Box display="flex" justifyContent="center" alignItems="flex-start" height="100vh">
+      <CircularProgress/>
+    </Box>
+
+  );
   if (error) return <div>Error fetching user
     data: {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}</div>;
   const users = data?.results || [];
@@ -36,11 +45,14 @@ const UserList = () => {
   console.log("isloading" + isLoading)
 
   return (
-    isFetching ? <div>Loading...</div> :
+    isFetching ? <Box display="flex" justifyContent="center" alignItems="flex-start" height="100vh">
+        <CircularProgress/>
+      </Box>
+      :
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <UserListTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} data={users}
-                         countRecords={countRecords}/>
+                         countRecords={countRecords} refetch={refetch}/>
         </Grid>
       </Grid>
   )

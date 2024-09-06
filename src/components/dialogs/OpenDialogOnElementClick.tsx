@@ -1,8 +1,8 @@
 'use client'
 
 // React Imports
-import { useState } from 'react'
-import type { ComponentType } from 'react'
+import {useState} from 'react'
+import type {ComponentType} from 'react'
 
 type OpenDialogOnElementClickProps = {
   element: ComponentType<any>
@@ -13,18 +13,19 @@ type OpenDialogOnElementClickProps = {
 
 const OpenDialogOnElementClick = (props: OpenDialogOnElementClickProps) => {
   // Props
-  const { element: Element, dialog: Dialog, elementProps, dialogProps } = props
+  const {element: Element, dialog: Dialog, elementProps, dialogProps} = props
 
   // States
   const [open, setOpen] = useState(false)
 
   // Extract onClick from elementProps
-  const { onClick: elementOnClick, ...restElementProps } = elementProps
+  const {onClick: elementOnClick, ...restElementProps} = elementProps
 
   // Handle onClick event
   const handleOnClick = (e: MouseEvent) => {
     elementOnClick && elementOnClick(e)
     setOpen(true)
+    dialogProps.setAddValue(true)
   }
 
   return (

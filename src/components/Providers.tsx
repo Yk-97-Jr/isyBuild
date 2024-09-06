@@ -5,10 +5,12 @@ import type {ChildrenType, Direction} from '@core/types'
 import {VerticalNavProvider} from '@menu/contexts/verticalNavContext'
 import {SettingsProvider} from '@core/contexts/settingsContext'
 import ThemeProvider from '@components/theme'
+import SnackBarContextProvider from "@/contexts/SnackBarContextProvider";
+import ReduxProvider from "@/store/ReduxProvider";
+
 
 // Util Imports
 import {getMode, getSettingsFromCookie, getSystemMode} from '@core/utils/serverHelpers'
-import ReduxProvider from "@/store/ReduxProvider";
 
 type Props = ChildrenType & {
   direction: Direction
@@ -27,7 +29,9 @@ const Providers = (props: Props) => {
     <VerticalNavProvider>
       <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
         <ThemeProvider direction={direction} systemMode={systemMode}>
-          <ReduxProvider>{children}</ReduxProvider>
+          <ReduxProvider>
+            <SnackBarContextProvider>{children}</SnackBarContextProvider>
+          </ReduxProvider>
         </ThemeProvider>
       </SettingsProvider>
     </VerticalNavProvider>

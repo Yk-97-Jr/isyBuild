@@ -1,20 +1,21 @@
 // apiClients/baseQueryWithReauth.ts
 
-import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type {BaseQueryFn, FetchArgs, FetchBaseQueryError} from '@reduxjs/toolkit/query';
 
-import { fetchBaseQuery } from '@reduxjs/toolkit/query';
+import {fetchBaseQuery} from '@reduxjs/toolkit/query';
+
+import Cookies from "js-cookie";
 
 import {refreshAccessToken} from "@/apiClients/helper/tokenRefreshHelper";
+import {verifyToken} from "@/utils/verifyToken";
 
 
-
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ;
-const baseQuery = fetchBaseQuery({ baseUrl: baseUrl });
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+const baseQuery = fetchBaseQuery({baseUrl: baseUrl});
 
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
   // Get the token from localStorage
-  const accessToken = localStorage.getItem('access_token');
+  const accessToken = Cookies.get('access_token');
 
   // If there's an access token, add it to the headers
   if (accessToken) {
@@ -30,7 +31,7 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
     console.log("refreeeeeesh")
 
     // Try to get a new token
-    const refreshToken = localStorage.getItem('refresh_token');
+    const refreshToken = Cookies.get('refresh_token');
 
     console.log(refreshToken)
 
@@ -41,12 +42,24 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
       console.log(refreshResult)
 
       if (refreshResult) {
-        // Store the new tokens in localStorage
-        localStorage.setItem('access_token', refreshResult.access);
-        localStorage.setItem('refresh_token', refreshResult.refresh);
+        const decodedAcessToken = verifyToken(refreshResult.access)
+        const decodedRefreshToken = verifyToken(refreshResult.access)
+
+        // Get the expiration time from the decoded token
+        const accessExpiryDate = new Date(decodedAcessToken.exp * 1000)
+        const refreshExpiryDate = new Date(decodedRefreshToken.exp * 1000)
+
+
+        // Set tokens in cookies with the expiration date based on the JWT exp
+        Cookies.set('access_token', refreshResult.access, {expires: accessExpiryDate})
+        Cookies.set('refresh_token', refreshResult.refresh, {expires: refreshExpiryDate})
+
 
         // Retry the initial query with the new token
-        const retryAccessToken = localStorage.getItem('access_token');
+        Cookies.get('access_token');
+        const retryAccessToken = Cookies.get('access_token');
+
+        ;
 
         if (retryAccessToken) {
           (args as any).headers = {

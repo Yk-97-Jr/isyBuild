@@ -9,7 +9,6 @@ import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
-import Checkbox from '@mui/material/Checkbox'
 import IconButton from '@mui/material/IconButton'
 import type {TextFieldProps} from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
@@ -37,7 +36,7 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import OptionMenu from '@core/components/option-menu'
-import UserDialog from '@components/dialogs/delete-dialog'
+import UserDialog from '../../../../components/dialogs/user-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
 
@@ -109,18 +108,20 @@ const DebouncedInput = ({
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords}: {
+const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords, refetch}: {
   data?: UsersType[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
   setPageSize: React.Dispatch<React.SetStateAction<number>>
   countRecords?: number
+  refetch: void
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [editValue, setEditValue] = useState<UsersType>()
+  const [addValue, setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
@@ -131,7 +132,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
   // Vars
   const buttonProps: ButtonProps = {
     variant: 'contained',
-    children: 'Add User',
+    children: 'Ajouter un Utilisateur',
     className: 'max-sm:is-full',
     startIcon: <i className='tabler-plus'/>
   }
@@ -153,28 +154,6 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
     () => [
-      {
-        id: 'select',
-        header: ({table}) => (
-          <Checkbox
-            {...{
-              checked: table.getIsAllRowsSelected(),
-              indeterminate: table.getIsSomeRowsSelected(),
-              onChange: table.getToggleAllRowsSelectedHandler()
-            }}
-          />
-        ),
-        cell: ({row}) => (
-          <Checkbox
-            {...{
-              checked: row.getIsSelected(),
-              disabled: !row.getCanSelect(),
-              indeterminate: row.getIsSomeSelected(),
-              onChange: row.getToggleSelectedHandler()
-            }}
-          />
-        )
-      },
       columnHelper.accessor('user.first_name', {
         header: 'Nom',
         cell: ({row}) => (
@@ -200,15 +179,35 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
         )
       }),
       columnHelper.accessor('user.date_joined', {
-        header: 'Date Joined',
+        header: `Date d'adhésion`,
         cell: ({row}) => (
           <Typography>{row.original.user.date_joined
             ? new Date(row.original.user.date_joined).toLocaleDateString()
             : 'Date not available'}</Typography>
         )
       }),
+      columnHelper.accessor('created_at', {
+        header: `Date de Creation`,
+        cell: ({row}) => (
+          <Typography>{row.original.created_at
+            ? new Date(row.original.created_at).toLocaleDateString()
+            : 'Date not available'}</Typography>
+        )
+      }),
+      columnHelper.accessor('created_by.first_name', {
+        header: 'Creé par',
+        cell: ({row}) => (
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
       columnHelper.accessor('user.is_active', {
-        header: 'Active',
+        header: 'Status',
         cell: ({row}) => (
           <Chip
             variant='tonal'
@@ -221,13 +220,8 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
         header: 'Action',
         cell: ({row}) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDeleteUser(row.original.user.id)}>
+            <IconButton onClick={() => handleDeleteUser(row.original.id)}>
               <i className='tabler-trash text-textSecondary'/>
-            </IconButton>
-            <IconButton>
-              {/*<Link href={getLocalizedUrl('/apps/user/view', locale as Locale)} className='flex'>*/}
-              {/*  <i className='tabler-eye text-textSecondary' />*/}
-              {/*</Link>*/}
             </IconButton>
             <OptionMenu
               iconButtonProps={{size: 'medium'}}
@@ -241,11 +235,12 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
                     onClick: () => handleEditUser(row.original),
                   }
                 },
-                {
-                  text: 'Suspendre',
-                  icon: 'tabler-download',
-                  menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
-                }
+
+                // {
+                //   text: 'Suspendre',
+                //   icon: 'tabler-download',
+                //   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
+                // }
               ]}
             />
           </div>
@@ -307,14 +302,14 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Search User'
+              placeholder='Rechercher un utilisateur'
               className='max-sm:is-full'
             />
             <OpenDialogOnElementClick
               element={Button}
               elementProps={buttonProps}
               dialog={UserDialog}
-              dialogProps={{editValue}}
+              dialogProps={{addValue, setAddValue}}
             />
           </div>
         </div>
@@ -385,7 +380,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
 
       </Card>
       <UserDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
-                  setEditValue={setEditValue}/>
+                  setEditValue={setEditValue} refetch={refetch}/>
     </>
   )
 }

@@ -1,6 +1,7 @@
-import type { NextRequest} from 'next/server';
-import { NextResponse } from 'next/server';
+import type {NextRequest} from 'next/server';
+import {NextResponse} from 'next/server';
 
+import {verifyToken} from "@/utils/verifyToken";
 
 // Define access rules directly in the TypeScript file
 const accessRules = {
@@ -17,34 +18,51 @@ const accessRules = {
       path: '/users/list',
       roles: ['admin'],
     },
-
   ],
 };
 
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
-  const userRole = 'admin'; // Extract user role from cookies
+  const {pathname} = req.nextUrl;
 
-  // Find the route rule based on the requested path
+  // Extract the token from cookies (assuming it's named 'auth_token')
+  const token = req.cookies.get('access_token');
+
+  console.log(token)
+
+  if (!token) {
+    // Redirect to login if no token is found
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+
+  const decodedToken = verifyToken(token.value);
+
+  if (!decodedToken) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+
+  console.log("decodedToken" + decodedToken.exp)
+
+  const currentTime = Math.floor(Date.now() / 1000); // current time in seconds
+
+  if (decodedToken.exp < currentTime) {
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+
+  const userRole = 'admin';
+
   const routeRule = accessRules.routes.find(rule => rule.path === pathname);
 
   if (routeRule) {
-    // Check if user role is available and authorized
-    if (!userRole) {
-      // Redirect to login page if not authenticated
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
-
-    // Check if the user role is allowed for this route
     if (!routeRule.roles.includes(userRole)) {
+      // need here to create view for unauthorized routes
       return NextResponse.redirect(new URL('/unauthorized', req.url));
     }
   }
 
-  // Allow request to proceed if no restrictions are met
   return NextResponse.next();
 }
 
+// Specify which routes this middleware should apply to
 export const config = {
-  matcher: ['/admin', '/dashboard', '/login', '/unauthorized','/users/list'], // List of routes to apply middleware
+  matcher: ['/admin', '/dashboard', '/users/list'], // List of routes to apply middleware
 };
