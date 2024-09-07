@@ -1,5 +1,6 @@
 // Type Imports
 
+
 export type UsersType = {
   id: number
   user: {
@@ -18,6 +19,6 @@ export type UsersType = {
     date_joined?: string
     is_active?: boolean
   }
-  created_at: number
-  created_by: number
+  created_at: string
+  updated_at: string
 }

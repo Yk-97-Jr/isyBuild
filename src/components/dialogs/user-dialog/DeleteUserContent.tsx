@@ -1,18 +1,21 @@
-import React from 'react';
+import React, {useContext} from 'react';
 
 import {Button, DialogActions, CircularProgress} from '@mui/material';
 
 import {useAdminUsersDeleteDestroyMutation} from '@/services/IsyBuildApi';
+import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
+import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 interface DeleteProps {
   handleClose: () => void;
-  id: string; // Ensure this matches the type for your user ID
-  setOpenSnackBar: (open: boolean) => void;
-  setInfoAlert: (alert: { severity: string; message: string }) => void;
+  handleCloseWithoutRefresh: () => void;
+  id: number; // Ensure this matches the type for your user ID
 }
 
-const DeleteUserContent = ({handleClose, id, setOpenSnackBar, setInfoAlert}: DeleteProps) => {
+const DeleteUserContent = ({handleClose, handleCloseWithoutRefresh, id}: DeleteProps) => {
   const [deleteUser, {isLoading, isSuccess}] = useAdminUsersDeleteDestroyMutation();
+  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
+
 
   const handleDelete = async () => {
     try {
@@ -44,7 +47,7 @@ const DeleteUserContent = ({handleClose, id, setOpenSnackBar, setInfoAlert}: Del
         {isLoading ? <CircularProgress size={24}/> : 'Delete User'}
       </Button>
       <Button
-        onClick={handleClose}
+        onClick={handleCloseWithoutRefresh}
         variant='tonal'
         color='secondary'
         className='max-sm:mis-0'

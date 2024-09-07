@@ -9,6 +9,7 @@ import {Button, CircularProgress, DialogActions, DialogContent} from '@mui/mater
 import CustomTextField from '@core/components/mui/TextField';
 import {useAdminStaffCreateCreateMutation} from '@/services/IsyBuildApi';
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
+import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 // Define the form validation schema using Yup
 const schema = yup.object({
@@ -20,6 +21,7 @@ const schema = yup.object({
 
 type AddUserContentProps = {
   handleClose: () => void;
+  handleCloseWithoutRefresh: () => void;
 
   // setData: (data: any) => void;
   // userData: any[];
@@ -27,13 +29,13 @@ type AddUserContentProps = {
 
 type FormValidateType = yup.InferType<typeof schema>;
 
-const AddUserContent = ({handleClose}: AddUserContentProps) => {
+const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContentProps) => {
   const {register, handleSubmit, reset, formState: {errors}} = useForm<FormValidateType>({
     resolver: yupResolver(schema),
   });
 
   const [createUser, {isLoading}] = useAdminStaffCreateCreateMutation();
-  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext)
+  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
 
   console.log("add user")
 
@@ -118,10 +120,10 @@ const AddUserContent = ({handleClose}: AddUserContentProps) => {
       </DialogContent>
       <DialogActions
         className='flex max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
-        <Button type='submit' variant='contained' disabled={isLoading}>
-          {isLoading ? <CircularProgress size={24}/> : 'Create User'}
-        </Button>
-        <Button onClick={handleClose} variant='tonal' color='secondary' className='max-sm:mis-0'>
+        <Button variant='contained' type='submit' disabled={isLoading}>
+            {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24}/> : 'Create User'}
+          </Button>
+        <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
           Discard
         </Button>
       </DialogActions>

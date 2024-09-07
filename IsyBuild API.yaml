@@ -172,6 +172,465 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
+  /clients/:
+    get:
+      operationId: clients_retrieve
+      description: Retrieve a list of all client with pagination.
+      summary: List all Client
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Client Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+          description: ''
+  /clients/{client_id}/:
+    get:
+      operationId: clients_retrieve_2
+      description: Fetches detailed information about an client member by their unique
+        identifier.
+      summary: Retrieve client Details
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+  /clients/{client_id}/contacts/:
+    get:
+      operationId: clients_contacts_retrieve
+      description: Retrieve a list of all contacts for a specific client with pagination.
+      summary: List all Contacts for a Client
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Contact Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+          description: ''
+  /clients/{client_id}/contacts/create/:
+    post:
+      operationId: clients_contacts_create_create
+      description: Create a new contact for a specific client.
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Contact Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContactCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ContactCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /clients/create/:
+    post:
+      operationId: clients_create_create
+      description: Create a new client .
+      tags:
+      - Client Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /clients/delete/{client_id}/:
+    delete:
+      operationId: clients_delete_destroy
+      description: Deletes an client by ID. Requires administrative privileges.
+      summary: Delete Client
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: client deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: client not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /clients/update/{client_id}/:
+    put:
+      operationId: clients_update_update
+      description: Updates information for an existing client .
+      summary: Update Client Member
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /contact-us/send-email/:
+    post:
+      operationId: contact_us_send_email_create
+      description: This endpoint allows users to send a contact us email with their
+        details.
+      summary: Send Contact Us Email
+      tags:
+      - contact-us
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactUsEmail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContactUsEmail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ContactUsEmail'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: Email sent successfully.
+        '400':
+          description: Invalid data or email not sent.
+  /contacts/{contact_id}/:
+    get:
+      operationId: contacts_retrieve
+      description: Fetches detailed information about an contact  by their unique
+        identifier.
+      summary: Retrieve contact Details
+      parameters:
+      - in: path
+        name: contact_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Contact Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+  /contacts/{contact_id}/delete/:
+    delete:
+      operationId: contacts_delete_destroy
+      description: Deletes an contact by ID. Requires administrative privileges.
+      summary: Delete Contact
+      parameters:
+      - in: path
+        name: contact_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Contact Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: contact deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: contact not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /contacts/{contact_id}/phone-numbers/:
+    get:
+      operationId: contacts_phone_numbers_retrieve
+      description: Retrieve a list of all phone numbers for a specific contact with
+        pagination.
+      summary: List all Phone Number for a contact
+      parameters:
+      - in: path
+        name: contact_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Contact Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+          description: ''
+  /contacts/{contact_id}/phone-numbers/create/:
+    post:
+      operationId: contacts_phone_numbers_create_create
+      description: Create a new phone number for a specific client.
+      parameters:
+      - in: path
+        name: contact_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Contact Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+            examples:
+              CreatePhoneNumber:
+                value:
+                  number: '1234567890'
+                  type: work
+                summary: Create Phone Number
+                description: Create a phone number with a type field restricted to
+                  predefined choices.
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneNumber'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /contacts/{contact_id}/update/:
+    put:
+      operationId: contacts_update_update
+      description: Updates information for an existing Contact .
+      summary: Update Contact details
+      parameters:
+      - in: path
+        name: contact_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Contact Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ContactCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ContactCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /login/:
     post:
       operationId: login_create
@@ -335,6 +794,121 @@ paths:
             application/json:
               schema:
                 description: Email not found in the system.
+          description: ''
+  /phone-numbers/{phone_number_id}/:
+    get:
+      operationId: phone_numbers_retrieve
+      description: Fetches detailed information about an Phone Number  by their unique
+        identifier.
+      summary: Retrieve Phone Number Details
+      parameters:
+      - in: path
+        name: phone_number_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Contact Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneNumber'
+          description: ''
+  /phone-numbers/{phone_number_id}/delete/:
+    delete:
+      operationId: phone_numbers_delete_destroy
+      description: Deletes an phone number by ID. Requires administrative privileges.
+      summary: Delete Phone number
+      parameters:
+      - in: path
+        name: phone_number_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Contact Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: phone number deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: phone number not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /phone-numbers/{phone_number_id}/update/:
+    put:
+      operationId: phone_numbers_update_update
+      description: Updates information for an existing Phone Number .
+      summary: Update Phone Number details
+      parameters:
+      - in: path
+        name: phone_number_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Contact Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+            examples:
+              CreatePhoneNumber:
+                value:
+                  number: '1234567890'
+                  type: work
+                summary: Create Phone Number
+                description: Create a phone number with a type field restricted to
+                  predefined choices.
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneNumber'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
           description: ''
   /set-password/:
     post:
@@ -589,6 +1163,101 @@ paths:
           description: ''
 components:
   schemas:
+    Address:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        street_number:
+          type: string
+          title: Numéro de la rue
+          maxLength: 10
+        street_name:
+          type: string
+          title: Nom de la rue
+          maxLength: 255
+        postal_code:
+          type: string
+          title: Code postal
+          maxLength: 5
+        city:
+          type: string
+          title: Ville
+          maxLength: 100
+        department:
+          type: string
+          nullable: true
+          title: Département
+          maxLength: 100
+        region:
+          type: string
+          nullable: true
+          title: Région
+          maxLength: 100
+        country:
+          type: string
+          title: Pays
+          maxLength: 100
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - city
+      - created_at
+      - created_by
+      - id
+      - postal_code
+      - street_name
+      - street_number
+      - updated_at
+    AddressCreate:
+      type: object
+      properties:
+        street_number:
+          type: string
+          title: Numéro de la rue
+          maxLength: 10
+        street_name:
+          type: string
+          title: Nom de la rue
+          maxLength: 255
+        postal_code:
+          type: string
+          title: Code postal
+          maxLength: 5
+        city:
+          type: string
+          title: Ville
+          maxLength: 100
+        department:
+          type: string
+          nullable: true
+          title: Département
+          maxLength: 100
+        region:
+          type: string
+          nullable: true
+          title: Région
+          maxLength: 100
+        country:
+          type: string
+          title: Pays
+          maxLength: 100
+      required:
+      - city
+      - postal_code
+      - street_name
+      - street_number
     AdminStaff:
       type: object
       properties:
@@ -599,8 +1268,23 @@ components:
           allOf:
           - $ref: '#/components/schemas/User'
           readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
       required:
+      - created_at
+      - created_by
       - id
+      - updated_at
       - user
     AdminStaffCreate:
       type: object
@@ -609,6 +1293,200 @@ components:
           $ref: '#/components/schemas/UserCreate'
       required:
       - user
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom de l'entreprise
+          maxLength: 255
+        siren_number:
+          type: string
+          title: Numéro SIREN
+          maxLength: 9
+        address:
+          $ref: '#/components/schemas/Address'
+        contact_email:
+          type: string
+          format: email
+          title: Email de contact
+          maxLength: 254
+        phone_number:
+          type: string
+          title: Numéro de téléphone
+          maxLength: 20
+        is_active:
+          type: boolean
+          title: Est actif
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address
+      - contact_email
+      - created_at
+      - created_by
+      - id
+      - name
+      - phone_number
+      - siren_number
+      - updated_at
+    ClientCreateUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Nom de l'entreprise
+          maxLength: 255
+        siren_number:
+          type: string
+          title: Numéro SIREN
+          maxLength: 9
+        address:
+          $ref: '#/components/schemas/AddressCreate'
+        contact_email:
+          type: string
+          format: email
+          title: Email de contact
+          maxLength: 254
+        phone_number:
+          type: string
+          title: Numéro de téléphone
+          maxLength: 20
+        is_active:
+          type: boolean
+          title: Est actif
+      required:
+      - address
+      - contact_email
+      - name
+      - phone_number
+      - siren_number
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          title: Prénom
+          maxLength: 100
+        last_name:
+          type: string
+          title: Nom
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        phone_numbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - email
+      - first_name
+      - id
+      - last_name
+      - phone_numbers
+      - updated_at
+    ContactCreateUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          title: Prénom
+          maxLength: 100
+        last_name:
+          type: string
+          title: Nom
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          maxLength: 254
+      required:
+      - email
+      - first_name
+      - last_name
+    ContactUsEmail:
+      type: object
+      properties:
+        nom:
+          type: string
+          maxLength: 100
+        prenom:
+          type: string
+          maxLength: 100
+        telephone:
+          type: string
+          maxLength: 15
+        email:
+          type: string
+          format: email
+        fonction:
+          type: string
+          maxLength: 100
+        entreprise:
+          type: string
+          maxLength: 100
+        message:
+          type: string
+      required:
+      - email
+      - entreprise
+      - fonction
+      - nom
+      - prenom
+      - telephone
+    CreatedBy:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+      required:
+      - email
+      - id
     Paginated:
       type: object
       properties:
@@ -663,6 +1541,48 @@ components:
         last_name:
           type: string
           maxLength: 30
+    PhoneNumber:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: string
+          title: Numéro de téléphone
+          maxLength: 20
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - number
+      - updated_at
+    PhoneNumberCreateUpdate:
+      type: object
+      properties:
+        number:
+          type: string
+          title: Numéro de téléphone
+          maxLength: 20
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+      required:
+      - number
+      - type
     SetNewPassword:
       type: object
       properties:
@@ -726,6 +1646,16 @@ components:
       required:
       - access
       - refresh
+    TypeEnum:
+      enum:
+      - work
+      - personal
+      - fax
+      type: string
+      description: |-
+        * `work` - Work
+        * `personal` - Personal
+        * `fax` - Fax
     User:
       type: object
       properties:
