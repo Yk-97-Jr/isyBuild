@@ -8,10 +8,11 @@ import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 interface DeleteProps {
   handleClose: () => void;
+  handleCloseWithoutRefresh: () => void;
   id: number; // Ensure this matches the type for your user ID
 }
 
-const DeleteUserContent = ({handleClose, id}: DeleteProps) => {
+const DeleteUserContent = ({handleClose, handleCloseWithoutRefresh, id}: DeleteProps) => {
   const [deleteUser, {isLoading, isSuccess}] = useAdminUsersDeleteDestroyMutation();
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
 
@@ -46,7 +47,7 @@ const DeleteUserContent = ({handleClose, id}: DeleteProps) => {
         {isLoading ? <CircularProgress size={24}/> : 'Delete User'}
       </Button>
       <Button
-        onClick={handleClose}
+        onClick={handleCloseWithoutRefresh}
         variant='tonal'
         color='secondary'
         className='max-sm:mis-0'

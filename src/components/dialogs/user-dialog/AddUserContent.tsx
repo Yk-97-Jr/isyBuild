@@ -21,6 +21,7 @@ const schema = yup.object({
 
 type AddUserContentProps = {
   handleClose: () => void;
+  handleCloseWithoutRefresh: () => void;
 
   // setData: (data: any) => void;
   // userData: any[];
@@ -28,7 +29,7 @@ type AddUserContentProps = {
 
 type FormValidateType = yup.InferType<typeof schema>;
 
-const AddUserContent = ({handleClose}: AddUserContentProps) => {
+const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContentProps) => {
   const {register, handleSubmit, reset, formState: {errors}} = useForm<FormValidateType>({
     resolver: yupResolver(schema),
   });
@@ -119,10 +120,10 @@ const AddUserContent = ({handleClose}: AddUserContentProps) => {
       </DialogContent>
       <DialogActions
         className='flex max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
-        <Button type='submit' variant='contained' disabled={isLoading}>
-          {isLoading ? <CircularProgress size={24}/> : 'Create User'}
-        </Button>
-        <Button onClick={handleClose} variant='tonal' color='secondary' className='max-sm:mis-0'>
+        <Button variant='contained' type='submit' disabled={isLoading}>
+            {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24}/> : 'Create User'}
+          </Button>
+        <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
           Discard
         </Button>
       </DialogActions>

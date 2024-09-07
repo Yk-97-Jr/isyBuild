@@ -22,10 +22,11 @@ type FormValidateType = yup.InferType<typeof schema>;
 
 interface EditProps {
   handleClose: () => void;
+  handleCloseWithoutRefresh: () => void;
   editValue: any; // Define this type according to your data structure
 }
 
-const EditUserContent = ({handleClose, editValue}: EditProps) => {
+const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: EditProps) => {
   const [updateUser, {isLoading}] = useAdminStaffUpdatePartialUpdateMutation();
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
 
@@ -113,9 +114,9 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
         </div>
         <div className='flex justify-end gap-4'>
           <Button variant='contained' type='submit' disabled={isLoading}>
-            {isLoading ? <CircularProgress size={24}/> : 'Update'}
+            {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24}/> : 'Update'}
           </Button>
-          <Button onClick={handleClose} variant='tonal' color='secondary'>
+          <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary'>
             Discard
           </Button>
         </div>

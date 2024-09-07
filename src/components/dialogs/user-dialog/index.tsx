@@ -53,6 +53,10 @@ const UserDialog = ({
     }
   };
 
+  const handleCloseWithoutRefresh = () => {
+    setOpen(false);
+  };
+
   const isDelete = id !== undefined && id !== 0 && !editValue;
   const isEdit = !!editValue;
 
@@ -75,8 +79,8 @@ const UserDialog = ({
       : AddUserContent;
 
   return (
-    <Dialog open={open} onClose={handleClose} sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}>
-      <DialogCloseButton onClick={handleClose} disableRipple>
+    <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}>
+      <DialogCloseButton onClick={handleCloseWithoutRefresh} disableRipple>
         <i className='tabler-x'/>
       </DialogCloseButton>
       <DialogTitle variant='h4' className='flex flex-col gap-2 text-center sm:pbs-16 sm:pbe-6 sm:pli-16'>
@@ -87,6 +91,7 @@ const UserDialog = ({
       </DialogTitle>
       <ContentComponent
         handleClose={handleClose}
+        handleCloseWithoutRefresh={handleCloseWithoutRefresh}
         id={id!}
         editValue={editValue!}
       />
