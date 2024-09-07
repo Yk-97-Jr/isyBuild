@@ -1,5 +1,5 @@
 import type {Dispatch, SetStateAction} from 'react';
-import React, {useContext} from 'react';
+import React from 'react';
 
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 
 import DialogCloseButton from '../DialogCloseButton';
 import type {UsersType} from "@/types/apps/usersType";
-import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import AddUserContent from "@components/dialogs/user-dialog/AddUserContent";
 import EditUserContent from "@components/dialogs/user-dialog/EditUserContent";
 import DeleteUserContent from "@components/dialogs/user-dialog/DeleteUserContent";
@@ -21,7 +20,8 @@ type UserDialogProps = {
   setId: Dispatch<SetStateAction<number>>
   setEditValue: Dispatch<SetStateAction<UsersType | undefined>>
   editValue?: UsersType; // Updated type
-  refetch?: void;
+  refetch?: () => void
+
 };
 
 
@@ -35,8 +35,8 @@ const UserDialog = ({
                       editValue,
                       setEditValue,
                       refetch
+
                     }: UserDialogProps) => {
-  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext)
 
 
   console.log('editValue' + editValue)
@@ -45,16 +45,15 @@ const UserDialog = ({
   const handleClose = () => {
     setOpen(false);
     setEditValue?.(undefined);
-    setId?.(undefined);
-    setAddValue?.(undefined);
-    console.log("refetch" + refetch)
+    setId?.(0);
+    setAddValue?.(false);
 
-    if (!addValue) {
-      refetch() // Return null if no condition is met
+    if (refetch) {
+      refetch();
     }
   };
 
-  const isDelete = !!id && !editValue;
+  const isDelete = id !== undefined && id !== 0 && !editValue;
   const isEdit = !!editValue;
 
   if (!isDelete && !isEdit && !addValue) {
@@ -90,8 +89,6 @@ const UserDialog = ({
         handleClose={handleClose}
         id={id!}
         editValue={editValue!}
-        setOpenSnackBar={setOpenSnackBar}
-        setInfoAlert={setInfoAlert}
       />
     </Dialog>
   );

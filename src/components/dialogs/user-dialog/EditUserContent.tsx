@@ -9,6 +9,7 @@ import {Button, CircularProgress, DialogContent, FormControlLabel, Switch} from 
 import CustomTextField from '@core/components/mui/TextField';
 import {useAdminStaffUpdatePartialUpdateMutation} from '@/services/IsyBuildApi';
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
+import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 // Define the form validation schema using Yup
 const schema = yup.object({
@@ -26,7 +27,7 @@ interface EditProps {
 
 const EditUserContent = ({handleClose, editValue}: EditProps) => {
   const [updateUser, {isLoading}] = useAdminStaffUpdatePartialUpdateMutation();
-  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext);
+  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
 
   const {register, handleSubmit, reset, formState: {errors}} = useForm<FormValidateType>({
     resolver: yupResolver(schema),
@@ -79,11 +80,10 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
           <div className='flex gap-4'>
             <CustomTextField
               fullWidth
-              size='small'
-              name='first_name'
-              label='First Name'
-              placeholder='Enter First Name'
-              variant='outlined'
+              size="small"
+              label="First Name"
+              placeholder="Enter First Name"
+              variant="outlined"
               {...register('first_name')}
               error={!!errors.first_name}
               helperText={errors.first_name?.message}
@@ -91,7 +91,6 @@ const EditUserContent = ({handleClose, editValue}: EditProps) => {
             <CustomTextField
               fullWidth
               size='small'
-              name='last_name'
               label='Last Name'
               placeholder='Enter Last Name'
               variant='outlined'

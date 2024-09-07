@@ -9,6 +9,7 @@ import {Button, CircularProgress, DialogActions, DialogContent} from '@mui/mater
 import CustomTextField from '@core/components/mui/TextField';
 import {useAdminStaffCreateCreateMutation} from '@/services/IsyBuildApi';
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
+import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 // Define the form validation schema using Yup
 const schema = yup.object({
@@ -33,7 +34,7 @@ const AddUserContent = ({handleClose}: AddUserContentProps) => {
   });
 
   const [createUser, {isLoading}] = useAdminStaffCreateCreateMutation();
-  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext)
+  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
 
   console.log("add user")
 

@@ -24,6 +24,76 @@ const injectedRtkApi = api.injectEndpoints({
     adminUsersDeleteDestroy: build.mutation<AdminUsersDeleteDestroyApiResponse, AdminUsersDeleteDestroyApiArg>({
       query: queryArg => ({ url: `/admin-users/delete/${queryArg.adminUserId}/`, method: 'DELETE' })
     }),
+    clientsRetrieve: build.query<ClientsRetrieveApiResponse, ClientsRetrieveApiArg>({
+      query: queryArg => ({ url: `/clients/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+    }),
+    clientsRetrieve2: build.query<ClientsRetrieve2ApiResponse, ClientsRetrieve2ApiArg>({
+      query: queryArg => ({ url: `/clients/${queryArg.clientId}/` })
+    }),
+    clientsContactsRetrieve: build.query<ClientsContactsRetrieveApiResponse, ClientsContactsRetrieveApiArg>({
+      query: queryArg => ({
+        url: `/clients/${queryArg.clientId}/contacts/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
+    clientsContactsCreateCreate: build.mutation<
+      ClientsContactsCreateCreateApiResponse,
+      ClientsContactsCreateCreateApiArg
+    >({
+      query: queryArg => ({
+        url: `/clients/${queryArg.clientId}/contacts/create/`,
+        method: 'POST',
+        body: queryArg.contactCreateUpdate
+      })
+    }),
+    clientsCreateCreate: build.mutation<ClientsCreateCreateApiResponse, ClientsCreateCreateApiArg>({
+      query: queryArg => ({ url: `/clients/create/`, method: 'POST', body: queryArg.clientCreateUpdate })
+    }),
+    clientsDeleteDestroy: build.mutation<ClientsDeleteDestroyApiResponse, ClientsDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/clients/delete/${queryArg.clientId}/`, method: 'DELETE' })
+    }),
+    clientsUpdateUpdate: build.mutation<ClientsUpdateUpdateApiResponse, ClientsUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/clients/update/${queryArg.clientId}/`,
+        method: 'PUT',
+        body: queryArg.clientCreateUpdate
+      })
+    }),
+    contactUsSendEmailCreate: build.mutation<ContactUsSendEmailCreateApiResponse, ContactUsSendEmailCreateApiArg>({
+      query: queryArg => ({ url: `/contact-us/send-email/`, method: 'POST', body: queryArg.contactUsEmail })
+    }),
+    contactsRetrieve: build.query<ContactsRetrieveApiResponse, ContactsRetrieveApiArg>({
+      query: queryArg => ({ url: `/contacts/${queryArg.contactId}/` })
+    }),
+    contactsDeleteDestroy: build.mutation<ContactsDeleteDestroyApiResponse, ContactsDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/contacts/${queryArg.contactId}/delete/`, method: 'DELETE' })
+    }),
+    contactsPhoneNumbersRetrieve: build.query<
+      ContactsPhoneNumbersRetrieveApiResponse,
+      ContactsPhoneNumbersRetrieveApiArg
+    >({
+      query: queryArg => ({
+        url: `/contacts/${queryArg.contactId}/phone-numbers/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
+    contactsPhoneNumbersCreateCreate: build.mutation<
+      ContactsPhoneNumbersCreateCreateApiResponse,
+      ContactsPhoneNumbersCreateCreateApiArg
+    >({
+      query: queryArg => ({
+        url: `/contacts/${queryArg.contactId}/phone-numbers/create/`,
+        method: 'POST',
+        body: queryArg.phoneNumberCreateUpdate
+      })
+    }),
+    contactsUpdateUpdate: build.mutation<ContactsUpdateUpdateApiResponse, ContactsUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/contacts/${queryArg.contactId}/update/`,
+        method: 'PUT',
+        body: queryArg.contactCreateUpdate
+      })
+    }),
     loginCreate: build.mutation<LoginCreateApiResponse, LoginCreateApiArg>({
       query: queryArg => ({ url: `/login/`, method: 'POST', body: queryArg.tokenObtainPair })
     }),
@@ -35,6 +105,19 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     passwordResetCreate: build.mutation<PasswordResetCreateApiResponse, PasswordResetCreateApiArg>({
       query: queryArg => ({ url: `/password-reset/`, method: 'POST', body: queryArg.passwordResetRequest })
+    }),
+    phoneNumbersRetrieve: build.query<PhoneNumbersRetrieveApiResponse, PhoneNumbersRetrieveApiArg>({
+      query: queryArg => ({ url: `/phone-numbers/${queryArg.phoneNumberId}/` })
+    }),
+    phoneNumbersDeleteDestroy: build.mutation<PhoneNumbersDeleteDestroyApiResponse, PhoneNumbersDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/phone-numbers/${queryArg.phoneNumberId}/delete/`, method: 'DELETE' })
+    }),
+    phoneNumbersUpdateUpdate: build.mutation<PhoneNumbersUpdateUpdateApiResponse, PhoneNumbersUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/phone-numbers/${queryArg.phoneNumberId}/update/`,
+        method: 'PUT',
+        body: queryArg.phoneNumberCreateUpdate
+      })
     }),
     setPasswordCreate: build.mutation<SetPasswordCreateApiResponse, SetPasswordCreateApiArg>({
       query: queryArg => ({ url: `/set-password/`, method: 'POST', body: queryArg.setassword })
@@ -68,7 +151,6 @@ const injectedRtkApi = api.injectEndpoints({
 })
 
 export { injectedRtkApi as pIsyBuildApi }
-
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedRead
 export type AdminStaffRetrieveApiArg = {
 
@@ -95,6 +177,79 @@ export type AdminUsersDeleteDestroyApiResponse = /** status 204  */ any
 export type AdminUsersDeleteDestroyApiArg = {
   adminUserId: number
 }
+export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type ClientsRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead
+export type ClientsRetrieve2ApiArg = {
+  clientId: number
+}
+export type ClientsContactsRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type ClientsContactsRetrieveApiArg = {
+  clientId: number
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type ClientsContactsCreateCreateApiResponse = /** status 201  */ ContactRead
+export type ClientsContactsCreateCreateApiArg = {
+  clientId: number
+  contactCreateUpdate: ContactCreateUpdate
+}
+export type ClientsCreateCreateApiResponse = /** status 201  */ ClientRead
+export type ClientsCreateCreateApiArg = {
+  clientCreateUpdate: ClientCreateUpdate
+}
+export type ClientsDeleteDestroyApiResponse = /** status 204  */ any
+export type ClientsDeleteDestroyApiArg = {
+  clientId: number
+}
+export type ClientsUpdateUpdateApiResponse = /** status 200  */ ClientRead
+export type ClientsUpdateUpdateApiArg = {
+  clientId: number
+  clientCreateUpdate: ClientCreateUpdate
+}
+export type ContactUsSendEmailCreateApiResponse = unknown
+export type ContactUsSendEmailCreateApiArg = {
+  contactUsEmail: ContactUsEmail
+}
+export type ContactsRetrieveApiResponse = /** status 200  */ ContactRead
+export type ContactsRetrieveApiArg = {
+  contactId: number
+}
+export type ContactsDeleteDestroyApiResponse = /** status 204  */ any
+export type ContactsDeleteDestroyApiArg = {
+  contactId: number
+}
+export type ContactsPhoneNumbersRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type ContactsPhoneNumbersRetrieveApiArg = {
+  contactId: number
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type ContactsPhoneNumbersCreateCreateApiResponse = /** status 201  */ PhoneNumberRead
+export type ContactsPhoneNumbersCreateCreateApiArg = {
+  contactId: number
+  phoneNumberCreateUpdate: PhoneNumberCreateUpdate
+}
+export type ContactsUpdateUpdateApiResponse = /** status 200  */ ContactRead
+export type ContactsUpdateUpdateApiArg = {
+  contactId: number
+  contactCreateUpdate: ContactCreateUpdate
+}
 export type LoginCreateApiResponse = /** status 200  */ {
   [key: string]: any
 }
@@ -112,6 +267,19 @@ export type PasswordConfirmCreateApiArg = {
 export type PasswordResetCreateApiResponse = /** status 200  */ any
 export type PasswordResetCreateApiArg = {
   passwordResetRequest: PasswordResetRequest
+}
+export type PhoneNumbersRetrieveApiResponse = /** status 200  */ PhoneNumberRead
+export type PhoneNumbersRetrieveApiArg = {
+  phoneNumberId: number
+}
+export type PhoneNumbersDeleteDestroyApiResponse = /** status 204  */ any
+export type PhoneNumbersDeleteDestroyApiArg = {
+  phoneNumberId: number
+}
+export type PhoneNumbersUpdateUpdateApiResponse = /** status 200  */ PhoneNumberRead
+export type PhoneNumbersUpdateUpdateApiArg = {
+  phoneNumberId: number
+  phoneNumberCreateUpdate: PhoneNumberCreateUpdate
 }
 export type SetPasswordCreateApiResponse = /** status 200  */ any
 export type SetPasswordCreateApiArg = {
@@ -162,9 +330,23 @@ export type UserRead = {
   date_joined?: string
   is_active?: boolean
 }
+export type CreatedBy = {
+  email: string
+  first_name?: string
+  last_name?: string
+}
+export type CreatedByRead = {
+  id: number
+  email: string
+  first_name?: string
+  last_name?: string
+}
 export type AdminStaffRead = {
   id: number
   user: UserRead
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
 }
 export type Paginated = {
   count: number
@@ -201,6 +383,111 @@ export type PatchedAdminStaffUpdate = {
   first_name?: string
   last_name?: string
   is_active?: boolean
+}
+export type Address = {
+  street_number: string
+  street_name: string
+  postal_code: string
+  city: string
+  department?: string | null
+  region?: string | null
+  country?: string
+}
+export type AddressRead = {
+  id: number
+  street_number: string
+  street_name: string
+  postal_code: string
+  city: string
+  department?: string | null
+  region?: string | null
+  country?: string
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type Client = {
+  name: string
+  siren_number: string
+  address: Address
+  contact_email: string
+  phone_number: string
+  is_active?: boolean
+}
+export type ClientRead = {
+  id: number
+  name: string
+  siren_number: string
+  address: AddressRead
+  contact_email: string
+  phone_number: string
+  is_active?: boolean
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type Contact = {
+  first_name: string
+  last_name: string
+  email: string
+}
+export type TypeEnum = 'work' | 'personal' | 'fax'
+export type PhoneNumber = {
+  number: string
+  type?: TypeEnum
+}
+export type PhoneNumberRead = {
+  id: number
+  number: string
+  type?: TypeEnum
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type ContactRead = {
+  id: number
+  first_name: string
+  last_name: string
+  email: string
+  phone_numbers: PhoneNumberRead[]
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type ContactCreateUpdate = {
+  first_name: string
+  last_name: string
+  email: string
+}
+export type AddressCreate = {
+  street_number: string
+  street_name: string
+  postal_code: string
+  city: string
+  department?: string | null
+  region?: string | null
+  country?: string
+}
+export type ClientCreateUpdate = {
+  name: string
+  siren_number: string
+  address: AddressCreate
+  contact_email: string
+  phone_number: string
+  is_active?: boolean
+}
+export type ContactUsEmail = {
+  nom: string
+  prenom: string
+  telephone: string
+  email: string
+  fonction: string
+  entreprise: string
+  message?: string
+}
+export type PhoneNumberCreateUpdate = {
+  number: string
+  type: TypeEnum
 }
 export type TokenObtainPair = {}
 export type TokenObtainPairRead = {
@@ -260,10 +547,26 @@ export const {
   useAdminStaffCreateCreateMutation,
   useAdminStaffUpdatePartialUpdateMutation,
   useAdminUsersDeleteDestroyMutation,
+  useClientsRetrieveQuery,
+  useClientsRetrieve2Query,
+  useClientsContactsRetrieveQuery,
+  useClientsContactsCreateCreateMutation,
+  useClientsCreateCreateMutation,
+  useClientsDeleteDestroyMutation,
+  useClientsUpdateUpdateMutation,
+  useContactUsSendEmailCreateMutation,
+  useContactsRetrieveQuery,
+  useContactsDeleteDestroyMutation,
+  useContactsPhoneNumbersRetrieveQuery,
+  useContactsPhoneNumbersCreateCreateMutation,
+  useContactsUpdateUpdateMutation,
   useLoginCreateMutation,
   useLogoutCreateMutation,
   usePasswordConfirmCreateMutation,
   usePasswordResetCreateMutation,
+  usePhoneNumbersRetrieveQuery,
+  usePhoneNumbersDeleteDestroyMutation,
+  usePhoneNumbersUpdateUpdateMutation,
   useSetPasswordCreateMutation,
   useTokenRefreshCreateMutation,
   useUserChangePasswordCreateMutation,

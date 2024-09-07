@@ -36,7 +36,7 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import OptionMenu from '@core/components/option-menu'
-import UserDialog from '../../../../components/dialogs/user-dialog'
+import UserDialog from '@components/dialogs/user-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
 
@@ -115,7 +115,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
   pageSize: number
   setPageSize: React.Dispatch<React.SetStateAction<number>>
   countRecords?: number
-  refetch: void
+  refetch: () => void
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -309,7 +309,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
               element={Button}
               elementProps={buttonProps}
               dialog={UserDialog}
-              dialogProps={{addValue, setAddValue}}
+              dialogProps={{addValue, setAddValue, refetch}}
             />
           </div>
         </div>
@@ -380,7 +380,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
 
       </Card>
       <UserDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
-                  setEditValue={setEditValue} refetch={refetch}/>
+                  setEditValue={setEditValue} setAddValue={setAddValue} refetch={refetch}/>
     </>
   )
 }
