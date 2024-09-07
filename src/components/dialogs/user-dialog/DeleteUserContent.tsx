@@ -44,7 +44,7 @@ const DeleteUserContent = ({handleClose, handleCloseWithoutRefresh, id}: DeleteP
         onClick={handleDelete}
         disabled={isLoading} // Disable the button while loading
       >
-        {isLoading ? <CircularProgress size={24}/> : 'Delete User'}
+        {isLoading ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Delete User'}
       </Button>
       <Button
         onClick={handleCloseWithoutRefresh}

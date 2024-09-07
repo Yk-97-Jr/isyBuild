@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import {useEffect, useState, useMemo} from 'react'
+import React, {useEffect, useState, useMemo} from 'react'
 
 
 // MUI Imports
@@ -33,6 +33,10 @@ import type {ColumnDef, FilterFn} from '@tanstack/react-table'
 import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
+import Box from "@mui/material/Box";
+
+import {CircularProgress} from "@mui/material";
+
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import OptionMenu from '@core/components/option-menu'
@@ -108,7 +112,7 @@ const DebouncedInput = ({
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
-const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords, refetch}: {
+const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords, isFetching, refetch}: {
   data?: UsersType[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -116,6 +120,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
   setPageSize: React.Dispatch<React.SetStateAction<number>>
   countRecords?: number
   refetch: () => void
+  isFetching: boolean
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -314,59 +319,63 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
           </div>
         </div>
         <div className='overflow-x-auto'>
-          <table className={tableStyles.table}>
-            <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <>
-                        <div
-                          className={classnames({
-                            'flex items-center': header.column.getIsSorted(),
-                            'cursor-pointer select-none': header.column.getCanSort()
-                          })}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: <i className='tabler-chevron-up text-xl'/>,
-                            desc: <i className='tabler-chevron-down text-xl'/>
-                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                        </div>
-                      </>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-            </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
-              <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  No data available
-                </td>
-              </tr>
-              </tbody>
-            ) : (
-              <tbody>
-              {table
-                .getRowModel()
-                .rows.slice(0, table.getState().pagination.pageSize)
-                .map(row => {
-                  return (
-                    <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      ))}
-                    </tr>
-                  )
-                })}
-              </tbody>
-            )}
-          </table>
+          {isFetching ? <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+              <CircularProgress/>
+            </Box>
+            :
+            <table className={tableStyles.table}>
+              <thead>
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <th key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <>
+                          <div
+                            className={classnames({
+                              'flex items-center': header.column.getIsSorted(),
+                              'cursor-pointer select-none': header.column.getCanSort()
+                            })}
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                            {{
+                              asc: <i className='tabler-chevron-up text-xl'/>,
+                              desc: <i className='tabler-chevron-down text-xl'/>
+                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                          </div>
+                        </>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+              </thead>
+              {table.getFilteredRowModel().rows.length === 0 ? (
+                <tbody>
+                <tr>
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    No data available
+                  </td>
+                </tr>
+                </tbody>
+              ) : (
+                <tbody>
+                {table
+                  .getRowModel()
+                  .rows.slice(0, table.getState().pagination.pageSize)
+                  .map(row => {
+                    return (
+                      <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
+                        {row.getVisibleCells().map(cell => (
+                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                        ))}
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              )}
+            </table>}
         </div>
 
         <TablePaginationComponent
