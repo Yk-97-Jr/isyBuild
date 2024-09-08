@@ -16,10 +16,10 @@ const baseQuery = fetchBaseQuery({baseUrl: baseUrl});
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
   // Identify the type of query or mutation
   const skipTokenRefreshFor = ['/login/']; // specify the login endpoints
-
+  const requestUrl = typeof args === 'string' ? args : args.url;
 
   // If the request URL matches the login endpoint, skip token handling
-  if (skipTokenRefreshFor.includes(args.url)) {
+  if (skipTokenRefreshFor.includes(requestUrl)) {
 
     return await baseQuery(args, api, extraOptions);
   }
