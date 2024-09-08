@@ -15,6 +15,7 @@ export default function SnackbarAlert() {
   // Wrapper function for Alert's onClose
   const handleAlertClose = (event: React.SyntheticEvent<Element, Event>) => {
     // Call Snackbar close handler with a default reason
+    console.log("closeeeeeeee")
     handleCloseSnackBar(event, 'clickaway');
   };
 

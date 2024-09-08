@@ -28,11 +28,13 @@ const SnackBarContextProvider = (props: SnackBarContextProviderProps) => {
   const [infoAlert, setInfoAlert] = useState<InfoAlertType>({severity: "error", message: "il y a un erreur"}); // Initialize with null
 
   const handleCloseSnackBar = (event: Event | SyntheticEvent<any, Event>, reason: SnackbarCloseReason) => {
+
+    setOpenSnackBar(false);
+
     if (reason === 'clickaway') {
       return;
     }
 
-    setOpenSnackBar(false);
   };
 
 
