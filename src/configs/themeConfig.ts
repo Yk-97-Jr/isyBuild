@@ -50,9 +50,9 @@ export type Config = {
 }
 
 const themeConfig: Config = {
-  templateName: 'Vuexy',
-  homePageUrl: '/dashboard',
-  settingsCookieName: 'vuexy-mui-next-demo-1',
+  templateName: 'Isybuild',
+  homePageUrl: '/home',
+  settingsCookieName: 'isybuild',
   mode: 'system', // 'system', 'light', 'dark'
   skin: 'default', // 'default', 'bordered'
   semiDark: false, // true, false
