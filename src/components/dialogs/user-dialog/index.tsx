@@ -1,4 +1,4 @@
-import type {Dispatch, SetStateAction} from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import React from 'react';
 
 import Dialog from '@mui/material/Dialog';
@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 
 import DialogCloseButton from '../DialogCloseButton';
-import type {UsersType} from "@/types/apps/usersType";
+import type { UsersType } from "@/types/apps/usersType";
 import AddUserContent from "@components/dialogs/user-dialog/AddUserContent";
 import EditUserContent from "@components/dialogs/user-dialog/EditUserContent";
 import DeleteUserContent from "@components/dialogs/user-dialog/DeleteUserContent";
@@ -16,31 +16,27 @@ type UserDialogProps = {
   setOpen: (open: boolean) => void;
   id?: number;
   addValue?: boolean;
-  setAddValue: Dispatch<SetStateAction<boolean>>
-  setId: Dispatch<SetStateAction<number>>
-  setEditValue: Dispatch<SetStateAction<UsersType | undefined>>
-  editValue?: UsersType; // Updated type
-  refetch?: () => void
-
+  setAddValue: Dispatch<SetStateAction<boolean>>;
+  setId: Dispatch<SetStateAction<number>>;
+  setEditValue: Dispatch<SetStateAction<UsersType | undefined>>;
+  editValue?: UsersType; // Type mis à jour
+  refetch?: () => void;
 };
 
-
 const UserDialog = ({
-                      open,
-                      setOpen,
-                      addValue,
-                      setAddValue,
-                      id,
-                      setId,
-                      editValue,
-                      setEditValue,
-                      refetch
+  open,
+  setOpen,
+  addValue,
+  setAddValue,
+  id,
+  setId,
+  editValue,
+  setEditValue,
+  refetch
+}: UserDialogProps) => {
 
-                    }: UserDialogProps) => {
-
-
-  console.log('editValue' + editValue)
-  console.log('id' + id)
+  console.log('editValue' + editValue);
+  console.log('id' + id);
 
   const handleClose = () => {
     setOpen(false);
@@ -61,16 +57,16 @@ const UserDialog = ({
   const isEdit = !!editValue;
 
   if (!isDelete && !isEdit && !addValue) {
-    return null; // Return null if no condition is met
+    return null; // Retourner null si aucune condition n'est remplie
   }
 
-  const dialogTitle = isDelete ? 'Delete User' : isEdit ? 'Edit User' : 'Add New User';
+  const dialogTitle = isDelete ? 'Supprimer l\'utilisateur' : isEdit ? 'Modifier l\'utilisateur' : 'Ajouter un nouvel utilisateur';
 
   const dialogDescription = isDelete
-    ? 'Are you sure you want to delete this user?'
+    ? 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?'
     : isEdit
-      ? 'Edit the user details below.'
-      : 'Fill in the details to create a new user.';
+      ? 'Modifiez les détails de l\'utilisateur ci-dessous.'
+      : 'Remplissez les détails pour créer un nouvel utilisateur.';
 
   const ContentComponent = isDelete
     ? DeleteUserContent
@@ -79,7 +75,7 @@ const UserDialog = ({
       : AddUserContent;
 
   return (
-    <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}>
+    <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>
       <DialogCloseButton onClick={handleCloseWithoutRefresh} disableRipple>
         <i className='tabler-x'/>
       </DialogCloseButton>
