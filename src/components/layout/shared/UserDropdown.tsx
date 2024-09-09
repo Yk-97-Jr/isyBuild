@@ -62,7 +62,7 @@ const UserDropdown = () => {
     Cookies.remove('refresh_token');
 
     // Redirect to login page
-    router.push('/login')
+    router.push('/home')
 
 
   }
