@@ -45,18 +45,17 @@ const UserList = () => {
   console.log("isloading" + isLoading)
 
   return (
-    isFetching ? <Box display="flex" justifyContent="center" alignItems="flex-start" height="100vh">
-        <CircularProgress/>
-      </Box>
+    isFetching ?
+      <UserListTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} data={users}
+                     countRecords={countRecords} isFetching={isFetching} refetch={refetch}/>
       :
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <UserListTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} data={users}
-                         countRecords={countRecords} refetch={refetch}/>
+                         countRecords={countRecords} isFetching={isFetching} refetch={refetch}/>
         </Grid>
       </Grid>
   )
-    ;
 }
 
 export default UserList;

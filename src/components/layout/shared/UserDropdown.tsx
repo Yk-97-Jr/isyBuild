@@ -25,7 +25,6 @@ import Cookies from "js-cookie";
 import {useSettings} from '@core/hooks/useSettings'
 
 
-
 const UserDropdown = () => {
   // States
   const [open, setOpen] = useState(false)
@@ -55,7 +54,7 @@ const UserDropdown = () => {
     setOpen(false)
   }
 
-  const handleUserLogout =  () => {
+  const handleUserLogout = () => {
 
 
     // Remove tokens from cookies
@@ -105,7 +104,7 @@ const UserDropdown = () => {
                     </div>
                   </div>
                   <Divider className='mlb-1'/>
-                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e,)}>
+                  <MenuItem className='mli-2 gap-3' onClick={e => handleDropdownClose(e, '/account-settings')}>
                     <i className='tabler-settings'/>
                     <Typography color='text.primary'>Paramétres</Typography>
                   </MenuItem>

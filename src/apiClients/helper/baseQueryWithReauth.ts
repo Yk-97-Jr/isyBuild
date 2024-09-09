@@ -14,10 +14,18 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 const baseQuery = fetchBaseQuery({baseUrl: baseUrl});
 
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
-  // Get the token from localStorage
+  // Identify the type of query or mutation
+  const skipTokenRefreshFor = ['/login/']; // specify the login endpoints
+  const requestUrl = typeof args === 'string' ? args : args.url;
+
+  // If the request URL matches the login endpoint, skip token handling
+  if (skipTokenRefreshFor.includes(requestUrl)) {
+
+    return await baseQuery(args, api, extraOptions);
+  }
+
   const accessToken = Cookies.get('access_token');
 
-  // If there's an access token, add it to the headers
   if (accessToken) {
     (args as any).headers = {
       ...(args as any).headers,
@@ -28,38 +36,22 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    console.log("refreeeeeesh")
-
-    // Try to get a new token
     const refreshToken = Cookies.get('refresh_token');
 
-    console.log(refreshToken)
-
     if (refreshToken) {
-      console.log(refreshToken)
-      const refreshResult = await refreshAccessToken(refreshToken)
-
-      console.log(refreshResult)
+      const refreshResult = await refreshAccessToken(refreshToken);
 
       if (refreshResult) {
-        const decodedAcessToken = verifyToken(refreshResult.access)
-        const decodedRefreshToken = verifyToken(refreshResult.access)
+        const decodedAccessToken = verifyToken(refreshResult.access);
+        const decodedRefreshToken = verifyToken(refreshResult.refresh);
 
-        // Get the expiration time from the decoded token
-        const accessExpiryDate = new Date(decodedAcessToken.exp * 1000)
-        const refreshExpiryDate = new Date(decodedRefreshToken.exp * 1000)
+        const accessExpiryDate = new Date(decodedAccessToken.exp * 1000);
+        const refreshExpiryDate = new Date(decodedRefreshToken.exp * 1000);
 
+        Cookies.set('access_token', refreshResult.access, {expires: accessExpiryDate});
+        Cookies.set('refresh_token', refreshResult.refresh, {expires: refreshExpiryDate});
 
-        // Set tokens in cookies with the expiration date based on the JWT exp
-        Cookies.set('access_token', refreshResult.access, {expires: accessExpiryDate})
-        Cookies.set('refresh_token', refreshResult.refresh, {expires: refreshExpiryDate})
-
-
-        // Retry the initial query with the new token
-        Cookies.get('access_token');
         const retryAccessToken = Cookies.get('access_token');
-
-        ;
 
         if (retryAccessToken) {
           (args as any).headers = {
@@ -70,14 +62,12 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 
         result = await baseQuery(args, api, extraOptions);
       } else {
-        // If refresh fails, remove tokens and redirect to login
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-
+        // Clear tokens and redirect to login
+        Cookies.remove('access_token');
+        Cookies.remove('refresh_token');
         window.location.href = '/login';
       }
     } else {
-      // If no refresh token is present, redirect to login
       window.location.href = '/login';
     }
   }
