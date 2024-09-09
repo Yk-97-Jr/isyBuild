@@ -18,7 +18,7 @@ import CustomTextField from '@core/components/mui/TextField'
  // Import the useAlert hook
 import { useIntersection } from '@/hooks/useIntersection'
 import frontCommonStyles from '@views/front-pages/styles.module.css'
-
+import {useContactUsSendEmailCreateMutation} from '@/services/IsyBuildApi';
 
 
 
@@ -34,7 +34,8 @@ const ContactUs = () => {
   const skipIntersection = useRef(true)
   const ref = useRef<null | HTMLDivElement>(null)
   const { updateIntersections } = useIntersection()
-
+  const [sendEmail] = useContactUsSendEmailCreateMutation();
+  
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -56,14 +57,14 @@ const ContactUs = () => {
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [open, setOpen] = useState(false);
+  const [open, setOpenSnackbar] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [severity, setSeverity] = useState<'success' | 'error'>('success');
 
   // Use the useAlert hook
 
   const handleSnackbarClose = () => {
-    setOpen(false);
+    setOpenSnackbar(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -123,22 +124,11 @@ const ContactUs = () => {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URI}/contact-us/send-email/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Échec de l\'envoi du message.');
-      }
-
+      await sendEmail({ contactUsEmail: formData }).unwrap();
+     
       setSeverity('success');
       setAlertMessage('Message envoyé avec succès!');
-      setOpen(true);
-
+      setOpenSnackbar(true);
       setFormData({
         nom: '',
         prenom: '',
@@ -149,13 +139,12 @@ const ContactUs = () => {
         message: '',
       });
     } catch (error) {
-      console.error('Erreur lors de la soumission du formulaire:', error);
       setSeverity('error');
       setAlertMessage('Une erreur s\'est produite lors de l\'envoi du message. Veuillez réessayer.');
-      setOpen(true);
-    } finally {
-      setIsSubmitting(false);
+      setOpenSnackbar(true);
     }
+
+    setIsSubmitting(false);
   }
 
   useEffect(() => {
