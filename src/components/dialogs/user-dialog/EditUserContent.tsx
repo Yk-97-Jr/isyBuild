@@ -56,7 +56,7 @@ const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: Ed
       };
 
       const response = await updateUser({
-        adminUserId: editValue.id, // Ensure editValue.id contains the user's ID
+        adminUserId: editValue.id, // Ensure editValue.id contains the users's ID
         patchedAdminStaffUpdate: updatedData, // Pass the updatedData object
       }).unwrap();
 
@@ -68,9 +68,9 @@ const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: Ed
         setInfoAlert({severity: "success", message: "User updated successfully"});
       }
     } catch (error) {
-      console.error('Failed to update user:', error);
+      console.error('Failed to update users:', error);
       setOpenSnackBar(true);
-      setInfoAlert({severity: "error", message: "Failed to update user"});
+      setInfoAlert({severity: "error", message: "Failed to update users"});
     }
   };
 

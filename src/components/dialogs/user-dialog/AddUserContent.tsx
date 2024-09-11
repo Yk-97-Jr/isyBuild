@@ -37,7 +37,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
   const [createUser, {isLoading}] = useAdminStaffCreateCreateMutation();
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
 
-  console.log("add user")
+  console.log("add users")
 
 
   const onSubmit: SubmitHandler<FormValidateType> = async (data) => {
@@ -66,7 +66,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
         setInfoAlert({severity: "error", message: "Bad request: Invalid input data"});
       } else {
         setOpenSnackBar(true);
-        setInfoAlert({severity: "error", message: "Failed to create user"});
+        setInfoAlert({severity: "error", message: "Failed to create users"});
       }
 
       // handleClose();

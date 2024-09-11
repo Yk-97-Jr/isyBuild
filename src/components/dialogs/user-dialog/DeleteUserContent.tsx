@@ -9,7 +9,7 @@ import type {SnackBarContextType} from "@/types/apps/snackbarType";
 interface DeleteProps {
   handleClose: () => void;
   handleCloseWithoutRefresh: () => void;
-  id: number; // Ensure this matches the type for your user ID
+  id: number; // Ensure this matches the type for your users ID
 }
 
 const DeleteUserContent = ({handleClose, handleCloseWithoutRefresh, id}: DeleteProps) => {
@@ -28,9 +28,9 @@ const DeleteUserContent = ({handleClose, handleCloseWithoutRefresh, id}: DeleteP
         setInfoAlert({severity: "success", message: "User deleted successfully"});
       }
     } catch (error) {
-      console.error('Failed to delete the user:', error);
+      console.error('Failed to delete the users:', error);
       setOpenSnackBar(true);
-      setInfoAlert({severity: "error", message: "Failed to delete the user"});
+      setInfoAlert({severity: "error", message: "Failed to delete the users"});
     }
   };
 

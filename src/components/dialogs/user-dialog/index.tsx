@@ -67,10 +67,10 @@ const UserDialog = ({
   const dialogTitle = isDelete ? 'Delete User' : isEdit ? 'Edit User' : 'Add New User';
 
   const dialogDescription = isDelete
-    ? 'Are you sure you want to delete this user?'
+    ? 'Are you sure you want to delete this users?'
     : isEdit
-      ? 'Edit the user details below.'
-      : 'Fill in the details to create a new user.';
+      ? 'Edit the users details below.'
+      : 'Fill in the details to create a new users.';
 
   const ContentComponent = isDelete
     ? DeleteUserContent

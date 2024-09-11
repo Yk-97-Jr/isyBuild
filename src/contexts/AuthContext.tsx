@@ -2,7 +2,7 @@ import type {ReactNode} from 'react';
 import { createContext, useContext, useState, useEffect} from 'react';
 
 
-// Define the structure for the authenticated user, including permissions
+// Define the structure for the authenticated users, including permissions
 interface AuthUser {
   role: string;
   permissions: string[];
@@ -25,9 +25,9 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
   const [user, setUser] = useState<AuthUser | null>(null);
 
   useEffect(() => {
-    // Fetch the authenticated user and their role and permissions
+    // Fetch the authenticated users and their role and permissions
     const fetchUser = async () => {
-      // Replace with your actual logic to fetch user data
+      // Replace with your actual logic to fetch users data
       const response = await fetch('/api/user');
       const data = await response.json();
 

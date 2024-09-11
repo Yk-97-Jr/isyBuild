@@ -2,7 +2,7 @@
 import React from 'react'
 
 // Component Imports
-import UserList from "@views/apps/user/list/UserList"
+import UserList from "@views/apps/users/list/UserList"
 
 
 const UserListApp = () => {

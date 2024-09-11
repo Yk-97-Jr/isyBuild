@@ -41,10 +41,10 @@ type Data = {
 }
 
 const AccountDetails = () => {
-  // Fetch user profile data using RTK query hook
+  // Fetch users profile data using RTK query hook
   const {data, error, isLoading} = useUserProfileRetrieveQuery()
 
-  // Mutation for updating user data
+  // Mutation for updating users data
   const [updateUser, {isLoading: isUpdating}] = useUserUpdatePartialUpdateMutation()
 
   // React Hook Form setup
@@ -73,7 +73,7 @@ const AccountDetails = () => {
     }
   }, [data, setValue])
 
-  // temporary for typing prb until we add it to user
+  // temporary for typing prb until we add it to users
   console.log(fileInput)
 
 
@@ -115,8 +115,8 @@ const AccountDetails = () => {
       setInfoAlert({severity: "success", message: "User updated successfully"});
     } catch (error) {
       setOpenSnackBar(true);
-      setInfoAlert({severity: "error", message: "Failed to update user"});
-      console.error('Failed to update user:', error)
+      setInfoAlert({severity: "error", message: "Failed to update users"});
+      console.error('Failed to update users:', error)
     }
   }
 

@@ -19,10 +19,10 @@
 //   const [status, setStatus] = useState<UsersType['status']>('')
 //
 //   useEffect(() => {
-//     const filteredData = tableData?.filter(user => {
-//       if (role && user.role !== role) return false
-//       if (plan && user.currentPlan !== plan) return false
-//       if (status && user.status !== status) return false
+//     const filteredData = tableData?.filter(users => {
+//       if (role && users.role !== role) return false
+//       if (plan && users.currentPlan !== plan) return false
+//       if (status && users.status !== status) return false
 //
 //       return true
 //     })
