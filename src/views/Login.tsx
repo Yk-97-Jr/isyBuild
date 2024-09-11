@@ -1,14 +1,14 @@
 'use client';
 
 // React Imports
-import { useState } from 'react';
+import {useState} from 'react';
 
 // Next Imports
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 
 // MUI Imports
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { styled, useTheme } from '@mui/material/styles';
+import {styled, useTheme} from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -16,8 +16,8 @@ import Button from '@mui/material/Button';
 
 // Third-party Imports
 import Cookies from 'js-cookie';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import classnames from 'classnames'
 
@@ -30,15 +30,15 @@ import CustomTextField from '@core/components/mui/TextField';
 import themeConfig from '@configs/themeConfig';
 
 // Hook Imports
-import { useImageVariant } from '@core/hooks/useImageVariant';
-import { useSettings } from '@core/hooks/useSettings';
+import {useImageVariant} from '@core/hooks/useImageVariant';
+import {useSettings} from '@core/hooks/useSettings';
 
 // Mutation Imports
-import { useLoginCreateMutation } from '@/services/IsyBuildApi';
-import { verifyToken } from '@/utils/verifyToken';
+import {useLoginCreateMutation} from '@/services/IsyBuildApi';
+import {verifyToken} from '@/utils/verifyToken';
 
 // Styled Custom Components
-const LoginIllustration = styled('img')(({ theme }) => ({
+const LoginIllustration = styled('img')(({theme}) => ({
   zIndex: 2,
   blockSize: 'auto',
   maxBlockSize: 680,
@@ -67,13 +67,13 @@ const schema = yup.object({
   password: yup.string().required('Password is required')
 }).required();
 
-const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
+const LoginV2 = ({mode}: { mode: 'light' | 'dark' }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
   // Hooks
   const router = useRouter();
-  const { settings } = useSettings();
+  const {settings} = useSettings();
   const theme = useTheme();
   const hidden = useMediaQuery(theme.breakpoints.down('md'));
   const authBackground = useImageVariant(mode, '/images/pages/auth-mask-light.png', '/images/pages/auth-mask-dark.png');
@@ -87,13 +87,13 @@ const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
   );
 
   // Login Mutation
-  const [login, { isLoading, error }] = useLoginCreateMutation();
+  const [login, {isLoading, error}] = useLoginCreateMutation();
 
   // React Hook Form with validation schema
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: {errors}
   } = useForm({
     resolver: yupResolver(schema)
   });
@@ -104,7 +104,7 @@ const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
   // Form Submission
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
-      const result = await login({ tokenObtainPair: data }).unwrap();
+      const result = await login({tokenObtainPair: data}).unwrap();
 
       const decodedAcessToken = verifyToken(result.access);
       const decodedRefreshToken = verifyToken(result.refresh);
@@ -114,8 +114,8 @@ const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
       const refreshExpiryDate = new Date(decodedRefreshToken.exp * 1000);
 
       // Set tokens in cookies with expiration dates
-      Cookies.set('access_token', result.access, { expires: accessExpiryDate });
-      Cookies.set('refresh_token', result.refresh, { expires: refreshExpiryDate });
+      Cookies.set('access_token', result.access, {expires: accessExpiryDate});
+      Cookies.set('refresh_token', result.refresh, {expires: refreshExpiryDate});
 
       // Redirect to the home page after successful login
       router.push('/dashboard');
@@ -129,15 +129,15 @@ const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
       <div
         className={classnames(
           'flex bs-full items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
-          { 'border-ie': settings.skin === 'bordered' }
+          {'border-ie': settings.skin === 'bordered'}
         )}
       >
-        <LoginIllustration src={characterIllustration} alt="character-illustration" />
+        <LoginIllustration src={characterIllustration} alt="character-illustration"/>
         {!hidden && (
           <MaskImg
             alt="mask"
             src={authBackground}
-            className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
+            className={classnames({'scale-x-[-1]': theme.direction === 'rtl'})}
           />
         )}
       </div>
@@ -145,9 +145,10 @@ const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
         className="flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]"
       >
         <Link className="absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]">
-          <Logo />
+          <Logo/>
         </Link>
-        <div className="flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0">
+        <div
+          className="flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0">
           <div className="flex flex-col gap-1">
             <Typography variant="h4">{`Welcome to ${themeConfig.templateName}! 👋🏻`}</Typography>
             <Typography>Please sign-in to your account and start the adventure</Typography>
@@ -174,12 +175,22 @@ const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton edge="end" onClick={handleClickShowPassword} onMouseDown={(e) => e.preventDefault()}>
-                      <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
+                      <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'}/>
                     </IconButton>
                   </InputAdornment>
                 )
               }}
             />
+            <div className='flex justify-between items-center gap-x-3 gap-y-1 flex-wrap'>
+              <Typography
+                className='text-end'
+                color='primary'
+                component={Link}
+                href={'/forgot-password'}
+              >
+                Mot de passe oublié?
+              </Typography>
+            </div>
             <Button fullWidth variant="contained" type="submit" disabled={isLoading}>
               {isLoading ? 'Logging in...' : 'Login'}
             </Button>
