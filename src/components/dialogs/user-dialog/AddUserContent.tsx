@@ -37,7 +37,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
   const [createUser, {isLoading}] = useAdminStaffCreateCreateMutation();
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
 
-  console.log("add user")
+  console.log("add users")
 
 
   const onSubmit: SubmitHandler<FormValidateType> = async (data) => {

@@ -212,7 +212,7 @@ const VerticalNav = (props: VerticalNavProps) => {
           {children}
         </StyledVerticalNavBgColorContainer>
 
-        {/* Display verticalNav background image if provided by user through props */}
+        {/* Display verticalNav background image if provided by users through props */}
         {backgroundImage && (
           // eslint-disable-next-line lines-around-comment
           /* VerticalNav Background Image */

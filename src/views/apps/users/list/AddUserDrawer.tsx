@@ -63,7 +63,7 @@
 //       // Ensure the data is wrapped as expected by the API
 //       const response = await createUser({
 //         adminStaffCreate: {
-//           user: {
+//           users: {
 //             first_name: data.firstName, // API expects snake_case for these fields
 //             last_name: data.lastName,
 //             email: data.email,
@@ -78,7 +78,7 @@
 //       resetForm()
 //     } catch (err) {
 //       // Handle error if needed
-//       console.error('Failed to create user:', err)
+//       console.error('Failed to create users:', err)
 //     }
 //   }
 //
@@ -175,7 +175,7 @@
 //               Cancel
 //             </Button>
 //           </div>
-//           {isError && <Typography color='error'>Failed to create user: {error.message}</Typography>}
+//           {isError && <Typography color='error'>Failed to create users: {error.message}</Typography>}
 //         </form>
 //       </div>
 //     </Drawer>
