@@ -11,9 +11,9 @@ import '@/app/globals.css'
 import '@assets/iconify-icons/generated-icons.css'
 
 export const metadata = {
-  title: 'Vuexy - MUI Next.js Admin dashboard Template',
+  title: 'Isybuild',
   description:
-    'Vuexy - MUI Next.js Admin dashboard Template - is the most developer friendly & highly customizable Admin dashboard Template based on MUI v5.'
+    'Isybuild'
 }
 
 const RootLayout = ({ children }: ChildrenType) => {

@@ -62,7 +62,7 @@ const UserDropdown = () => {
     Cookies.remove('refresh_token');
 
     // Redirect to login page
-    router.push('/login')
+    router.push('/home')
 
 
   }
@@ -100,7 +100,7 @@ const UserDropdown = () => {
                       <Typography className='font-medium' color='text.primary'>
                         John Doe
                       </Typography>
-                      <Typography variant='caption'>admin@vuexy.com</Typography>
+                      <Typography variant='caption'>admin@isybuild.com</Typography>
                     </div>
                   </div>
                   <Divider className='mlb-1'/>

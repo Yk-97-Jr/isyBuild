@@ -56,21 +56,21 @@ const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: Ed
       };
 
       const response = await updateUser({
-        adminUserId: editValue.id, // Ensure editValue.id contains the users's ID
-        patchedAdminStaffUpdate: updatedData, // Pass the updatedData object
+        adminUserId: editValue.id, // Assurez-vous que editValue.id contient l'identifiant de l'utilisateur
+        patchedAdminStaffUpdate: updatedData, // Passez l'objet updatedData
       }).unwrap();
 
       handleClose();
 
       if (response) {
-        console.log('User updated successfully');
+        console.log('Utilisateur mis à jour avec succès');
         setOpenSnackBar(true);
-        setInfoAlert({severity: "success", message: "User updated successfully"});
+        setInfoAlert({ severity: "success", message: "Utilisateur mis à jour avec succès" });
       }
     } catch (error) {
-      console.error('Failed to update users:', error);
+      console.error('Échec de la mise à jour de l\'utilisateur :', error);
       setOpenSnackBar(true);
-      setInfoAlert({severity: "error", message: "Failed to update users"});
+      setInfoAlert({ severity: "error", message: "Échec de la mise à jour de l'utilisateur" });
     }
   };
 
@@ -82,8 +82,8 @@ const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: Ed
             <CustomTextField
               fullWidth
               size="small"
-              label="First Name"
-              placeholder="Enter First Name"
+              label="Prénom"
+              placeholder="Entrez le prénom"
               variant="outlined"
               {...register('first_name')}
               error={!!errors.first_name}
@@ -92,8 +92,8 @@ const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: Ed
             <CustomTextField
               fullWidth
               size='small'
-              label='Last Name'
-              placeholder='Enter Last Name'
+              label='Nom'
+              placeholder='Entrez le nom'
               variant='outlined'
               {...register('last_name')}
               error={!!errors.last_name}
@@ -108,16 +108,16 @@ const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: Ed
                 defaultChecked={editValue?.user?.is_active || false}
               />
             }
-            label='Active'
+            label='Actif'
           />
           {errors.is_active && <div className='text-red-500'>{errors.is_active.message}</div>}
         </div>
         <div className='flex justify-end gap-4'>
           <Button variant='contained' type='submit' disabled={isLoading}>
-            {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24}/> : 'Update'}
+            {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Mettre à jour'}
           </Button>
           <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary'>
-            Discard
+            Annuler
           </Button>
         </div>
       </DialogContent>
