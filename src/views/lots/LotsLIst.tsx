@@ -9,22 +9,22 @@ import { CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import UserListTable from './UserListTable'
-import { useAdminStaffRetrieveQuery } from '@/services/IsyBuildApi'
+import LotsListTable from './LotsListTable'
+import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
 
-const UserList = () => {
+const LotsList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
 
-  console.log('page ' + page)
+  console.log('LOtspage ' + page)
 
   // Pass parameters to the query hook
-  const { data, error, isLoading, isFetching, refetch } = useAdminStaffRetrieveQuery({ page, pageSize })
+  const { data, error, isLoading, isFetching, refetch } = useLotsRetrieveQuery({ page, pageSize })
 
   useEffect(() => {
     refetch()
-  }, [page, pageSize])
+  }, [page, pageSize, refetch])
 
   if (isLoading)
     return (
@@ -48,7 +48,7 @@ const UserList = () => {
   console.log('isloading' + isLoading)
 
   return isFetching ? (
-    <UserListTable
+    <LotsListTable
       pageSize={pageSize}
       setPageSize={setPageSize}
       page={page}
@@ -61,7 +61,7 @@ const UserList = () => {
   ) : (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <UserListTable
+        <LotsListTable
           pageSize={pageSize}
           setPageSize={setPageSize}
           page={page}
@@ -76,4 +76,4 @@ const UserList = () => {
   )
 }
 
-export default UserList
+export default LotsList

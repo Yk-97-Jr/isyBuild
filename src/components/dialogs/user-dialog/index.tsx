@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import DialogCloseButton from '../DialogCloseButton';
 import type { UsersType } from "@/types/apps/usersType";
-import AddUserContent from "@components/dialogs/user-dialog/AddUserContent";
+import AddLotContent from "@components/dialogs/lot-dialog/AddLotContent";
 import EditUserContent from "@components/dialogs/user-dialog/EditUserContent";
 import DeleteUserContent from "@components/dialogs/user-dialog/DeleteUserContent";
 
@@ -72,7 +72,7 @@ const UserDialog = ({
     ? DeleteUserContent
     : isEdit
       ? EditUserContent
-      : AddUserContent;
+      : AddLotContent;
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>
