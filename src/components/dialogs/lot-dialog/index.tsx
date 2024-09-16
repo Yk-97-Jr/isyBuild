@@ -9,7 +9,7 @@ import DialogCloseButton from '../DialogCloseButton'
 import type { LotsType } from '@/types/apps/usersType'
 import AddLotContent from '@components/dialogs/lot-dialog/AddLotContent'
 import EditUserContent from '@components/dialogs/user-dialog/EditUserContent'
-import DeleteUserContent from '@components/dialogs/user-dialog/DeleteUserContent'
+import DeleteLotContent from '@components/dialogs/lot-dialog/DeleteLotContent'
 
 type LotsDialogProps = {
   open: boolean
@@ -59,19 +59,15 @@ const LotsDialog = ({
     return null // Retourner null si aucune condition n'est remplie
   }
 
-  const dialogTitle = isDelete
-    ? "Supprimer l'utilisateur"
-    : isEdit
-      ? "Modifier l'utilisateur"
-      : 'Ajouter un nouvel utilisateur'
+  const dialogTitle = isDelete ? 'Supprimer lots' : isEdit ? 'Modifier lots' : 'Ajouter un nouvel lots'
 
   const dialogDescription = isDelete
-    ? 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?'
+    ? 'Êtes-vous sûr de vouloir supprimer cet lots ?'
     : isEdit
-      ? "Modifiez les détails de l'utilisateur ci-dessous."
-      : 'Remplissez les détails pour créer un nouvel utilisateur.'
+      ? 'Modifiez les détails de le lots  ci-dessous.'
+      : 'Remplissez les détails pour créer un nouvel lots.'
 
-  const ContentComponent = isDelete ? DeleteUserContent : isEdit ? EditUserContent : AddLotContent
+  const ContentComponent = isDelete ? DeleteLotContent : isEdit ? EditUserContent : AddLotContent
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>

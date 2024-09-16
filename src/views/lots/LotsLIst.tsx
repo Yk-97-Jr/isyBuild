@@ -12,6 +12,7 @@ import Box from '@mui/material/Box'
 import LotsListTable from './LotsListTable'
 import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
 
+
 const LotsList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
@@ -39,13 +40,12 @@ const LotsList = () => {
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const users = data?.results || []
+  const lots = data?.results || []
   const countRecords = data?.count
 
-  console.log('countRecords1' + countRecords)
-  console.log('users' + users)
-  console.log('isFetching' + isFetching)
-  console.log('isloading' + isLoading)
+  console.log('Full Data:', data)
+  console.log('Lots:', lots)
+  console.log('Count of Records:', countRecords)
 
   return isFetching ? (
     <LotsListTable
@@ -53,7 +53,7 @@ const LotsList = () => {
       setPageSize={setPageSize}
       page={page}
       setPage={setPage}
-      data={users}
+      data={lots}
       countRecords={countRecords}
       isFetching={isFetching}
       refetch={refetch}
@@ -66,7 +66,7 @@ const LotsList = () => {
           setPageSize={setPageSize}
           page={page}
           setPage={setPage}
-          data={users}
+          data={lots}
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}

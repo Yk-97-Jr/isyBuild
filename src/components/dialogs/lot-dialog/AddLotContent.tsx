@@ -55,7 +55,7 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
       }).unwrap()
 
       setOpenSnackBar(true)
-      setInfoAlert({ severity: 'success', message: 'catégorie ajouté avec succès' })
+      setInfoAlert({ severity: 'success', message: 'lots ajouté avec succès' })
 
       handleClose()
       reset()
@@ -66,7 +66,7 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
         setInfoAlert({ severity: 'error', message: "Requête incorrecte : Données d'entrée invalides" })
       } else {
         setOpenSnackBar(true)
-        setInfoAlert({ severity: 'error', message: 'La création de la catégorie a échoué' })
+        setInfoAlert({ severity: 'error', message: 'La création de lots a échoué' })
       }
 
       // handleClose();
@@ -87,12 +87,12 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
           helperText={errors.firstName?.message}
         />
         <CustomTextField
-          fullWidth
+        fullWidth
           label='description'
           variant='outlined'
           multiline
           placeholder='Entrez votre description'
-          id='textarea-outlined-static'
+          id='textarea-outlined'
           className='mbe-2'
           {...register('description')}
           error={!!errors.description}
@@ -101,7 +101,7 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
       </DialogContent>
       <DialogActions className='flex max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
         <Button variant='contained' type='submit' disabled={isLoading}>
-          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Créer Utilisateur'}
+          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Créer lots'}
         </Button>
         <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
           Abandonner

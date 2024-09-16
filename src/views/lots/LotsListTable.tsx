@@ -44,9 +44,8 @@ import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type { LotsType , UsersType} from '@/types/apps/usersType'
+import type { LotsType, UsersType } from '@/types/apps/usersType'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
-
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -109,6 +108,7 @@ const columnHelper = createColumnHelper<LotsTypeWithAction>()
 
 const LotsListTable = ({
   data,
+
   page,
   setPage,
   setPageSize,
@@ -135,18 +135,13 @@ const LotsListTable = ({
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
 
-  console.log('datalist' + data)
-  console.log('pagelist' + page)
-
   // Vars
   const buttonProps: ButtonProps = {
     variant: 'contained',
-    children: 'Ajouter un catégorie',
+    children: 'Ajouter un lot',
     className: 'max-sm:is-full',
     startIcon: <i className='tabler-plus' />
   }
-
-  console.log('countRecords' + countRecords)
 
   const handleEditUser = (user: LotsType) => {
     setOpen(true)
@@ -179,7 +174,31 @@ const LotsListTable = ({
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.description}`}
+                {`${row.original.description}`.length > 50
+                  ? `${row.original.description.substring(0, 50)}...`
+                  : `${row.original.description}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+
+      columnHelper.accessor('created_at', {
+        header: `Date de Creation`,
+        cell: ({ row }) => (
+          <Typography>
+            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
+          </Typography>
+        )
+      }),
+
+      columnHelper.accessor('created_by.first_name', {
+        header: 'Creé par',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
               </Typography>
             </div>
           </div>
@@ -248,8 +267,6 @@ const LotsListTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -265,7 +282,7 @@ const LotsListTable = ({
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher un lots'
               className='max-sm:is-full'
             />
             <OpenDialogOnElementClick

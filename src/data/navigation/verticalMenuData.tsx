@@ -20,7 +20,7 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
     children: []
   },
   {
-    label: 'catégorie',
+    label: 'lots',
     href: '/lots',
     icon: 'tabler-category',
     roles: ['user'],
