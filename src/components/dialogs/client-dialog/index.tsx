@@ -5,11 +5,15 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 
+import AddClientContent from "@components/dialogs/client-dialog/AddClientContent";
+
+import EditClientContent from "@components/dialogs/client-dialog/EditClientContent";
+
 import DialogCloseButton from '../DialogCloseButton';
-import type {UsersType} from "@/types/apps/usersType";
-import AddUserContent from "@components/dialogs/user-dialog/AddUserContent";
-import EditUserContent from "@components/dialogs/user-dialog/EditUserContent";
-import DeleteUserContent from "@components/dialogs/user-dialog/DeleteUserContent";
+import type {ClientsType} from "@/types/apps/clientsType";
+
+
+import DeleteClientContent from "@components/dialogs/user-dialog/DeleteUserContent";
 
 type UserDialogProps = {
   open: boolean;
@@ -18,14 +22,14 @@ type UserDialogProps = {
   addValue?: boolean;
   setAddValue: Dispatch<SetStateAction<boolean>>
   setId: Dispatch<SetStateAction<number>>
-  setEditValue: Dispatch<SetStateAction<UsersType | undefined>>
-  editValue?: UsersType; // Updated type
+  setEditValue: Dispatch<SetStateAction<ClientsType | undefined>>
+  editValue?: ClientsType; // Updated type
   refetch?: () => void
 
 };
 
 
-const UserDialog = ({
+const ClientDialog = ({
                       open,
                       setOpen,
                       addValue,
@@ -55,9 +59,6 @@ const UserDialog = ({
 
   const handleCloseWithoutRefresh = () => {
     setOpen(false);
-    setEditValue?.(undefined);
-    setId?.(0);
-    setAddValue?.(false);
   };
 
   const isDelete = id !== undefined && id !== 0 && !editValue;
@@ -67,7 +68,7 @@ const UserDialog = ({
     return null; // Return null if no condition is met
   }
 
-  const dialogTitle = isDelete ? 'Delete User' : isEdit ? 'Edit User' : 'Add New User';
+  const dialogTitle = isDelete ? 'Delete Client' : isEdit ? 'Edit Client' : 'Add New Client';
 
   const dialogDescription = isDelete
     ? 'Are you sure you want to delete this users?'
@@ -76,10 +77,10 @@ const UserDialog = ({
       : 'Fill in the details to create a new users.';
 
   const ContentComponent = isDelete
-    ? DeleteUserContent
+    ? DeleteClientContent
     : isEdit
-      ? EditUserContent
-      : AddUserContent;
+      ? EditClientContent
+      : AddClientContent;
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}>
@@ -102,4 +103,4 @@ const UserDialog = ({
   );
 };
 
-export default UserDialog;
+export default ClientDialog;

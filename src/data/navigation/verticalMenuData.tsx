@@ -14,6 +14,14 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
   {
     label: 'Utilisateurs',
     href: '/users/list',
+    icon: 'tabler-user',
+    roles: ['user'],
+    isSection: false,
+    children: []
+  },
+  {
+    label: 'Clients',
+    href: '/clients/list',
     icon: 'tabler-users',
     roles: ['user'],
     isSection: false,

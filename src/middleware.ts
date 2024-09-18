@@ -42,11 +42,11 @@ export function middleware(req: NextRequest) {
 
   console.log("decodedToken" + decodedToken.exp)
 
-  const currentTime = Math.floor(Date.now() / 1000); // current time in seconds
-
-  if (decodedToken.exp < currentTime) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
+  // const currentTime = Math.floor(Date.now() / 1000); // current time in seconds
+  //
+  // if (decodedToken.exp < currentTime) {
+  //   return NextResponse.redirect(new URL('/login', req.url));
+  // }
 
   const userRole = 'admin';
 
