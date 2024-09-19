@@ -1,36 +1,35 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 
-import {Button, DialogActions, CircularProgress} from '@mui/material';
+import { Button, DialogActions, CircularProgress } from '@mui/material';
 
-import {useAdminUsersDeleteDestroyMutation} from '@/services/IsyBuildApi';
-import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
-import type {SnackBarContextType} from "@/types/apps/snackbarType";
+import { useAdminUsersDeleteDestroyMutation } from '@/services/IsyBuildApi';
+import { SnackBarContext } from "@/contexts/SnackBarContextProvider";
+import type { SnackBarContextType } from "@/types/apps/snackbarType";
 
 interface DeleteProps {
   handleClose: () => void;
   handleCloseWithoutRefresh: () => void;
-  id: number; // Ensure this matches the type for your users ID
+  id: number; // Assurez-vous que cela correspond au type de votre identifiant utilisateur
 }
 
-const DeleteUserContent = ({handleClose, handleCloseWithoutRefresh, id}: DeleteProps) => {
-  const [deleteUser, {isLoading, isSuccess}] = useAdminUsersDeleteDestroyMutation();
-  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
-
+const DeleteUserContent = ({ handleClose, handleCloseWithoutRefresh, id }: DeleteProps) => {
+  const [deleteUser, { isLoading, isSuccess }] = useAdminUsersDeleteDestroyMutation();
+  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType;
 
   const handleDelete = async () => {
     try {
-      await deleteUser({adminUserId: id}).unwrap(); // Pass the adminUserId to the mutation
+      await deleteUser({ adminUserId: id }).unwrap(); // Passez l'identifiant de l'utilisateur à la mutation
       handleClose();
 
       if (isSuccess) {
-        console.log('User deleted successfully');
+        console.log('Utilisateur supprimé avec succès');
         setOpenSnackBar(true);
-        setInfoAlert({severity: "success", message: "User deleted successfully"});
+        setInfoAlert({ severity: "success", message: "Utilisateur supprimé avec succès" });
       }
     } catch (error) {
-      console.error('Failed to delete the users:', error);
+      console.error('Échec de la suppression de l\'utilisateur :', error);
       setOpenSnackBar(true);
-      setInfoAlert({severity: "error", message: "Failed to delete the users"});
+      setInfoAlert({ severity: "error", message: "Échec de la suppression de l'utilisateur" });
     }
   };
 
@@ -42,9 +41,9 @@ const DeleteUserContent = ({handleClose, handleCloseWithoutRefresh, id}: DeleteP
         variant='contained'
         color='error'
         onClick={handleDelete}
-        disabled={isLoading} // Disable the button while loading
+        disabled={isLoading} // Désactive le bouton pendant le chargement
       >
-        {isLoading ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Delete User'}
+        {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Supprimer l\'utilisateur'}
       </Button>
       <Button
         onClick={handleCloseWithoutRefresh}
@@ -52,7 +51,7 @@ const DeleteUserContent = ({handleClose, handleCloseWithoutRefresh, id}: DeleteP
         color='secondary'
         className='max-sm:mis-0'
       >
-        Cancel
+        Annuler
       </Button>
     </DialogActions>
   );

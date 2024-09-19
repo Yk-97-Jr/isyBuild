@@ -55,24 +55,23 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
       }).unwrap();
 
       setOpenSnackBar(true);
-      setInfoAlert({severity: "success", message: "User added successfully"});
+      setInfoAlert({severity: "success", message: "Utilisateur ajouté avec succès"});
 
       handleClose();
       reset();
     } catch (err: any) {
-      // Check if the error has a status and is a 400 error
+      // Vérifiez si l'erreur a un statut et est une erreur 400
       if (err.status === 400) {
         setOpenSnackBar(true);
-        setInfoAlert({severity: "error", message: "Bad request: Invalid input data"});
+        setInfoAlert({ severity: "error", message: "Requête incorrecte : Données d'entrée invalides" });
       } else {
         setOpenSnackBar(true);
-        setInfoAlert({severity: "error", message: "Failed to create users"});
+        setInfoAlert({ severity: "error", message: "Échec de la création de l'utilisateur" });
       }
 
       // handleClose();
     }
   };
-
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -81,7 +80,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
           fullWidth
           label='Prénom'
           variant='outlined'
-          placeholder='Enter First Name'
+          placeholder='Entrez le prénom'
           className='mbe-2'
           {...register('firstName')}
           error={!!errors.firstName}
@@ -91,7 +90,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
           fullWidth
           label='Nom'
           variant='outlined'
-          placeholder='Enter Last Name'
+          placeholder='Entrez le nom'
           className='mbe-2'
           {...register('lastName')}
           error={!!errors.lastName}
@@ -99,9 +98,9 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
         />
         <CustomTextField
           fullWidth
-          label='Email Address'
+          label='Adresse Email'
           variant='outlined'
-          placeholder='Enter Email Address'
+         placeholder="Entrez l'adresse email"
           className='mbe-2'
           {...register('email')}
           error={!!errors.email}
@@ -109,9 +108,9 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
         />
         <CustomTextField
           fullWidth
-          label='Phone Number'
+          label='Numéro de Téléphone'
           variant='outlined'
-          placeholder='Enter Phone Number'
+          placeholder='Entrez le numéro de téléphone'
           className='mbe-2'
           {...register('phoneNumber')}
           error={!!errors.phoneNumber}
@@ -121,10 +120,10 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
       <DialogActions
         className='flex max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
         <Button variant='contained' type='submit' disabled={isLoading}>
-            {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24}/> : 'Create User'}
-          </Button>
+          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Créer Utilisateur'}
+        </Button>
         <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
-          Discard
+          Abandonner
         </Button>
       </DialogActions>
     </form>

@@ -159,7 +159,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('users.first_name', {
+      columnHelper.accessor('user.first_name', {
         header: 'Nom',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -171,7 +171,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
           </div>
         )
       }),
-      columnHelper.accessor('users.email', {
+      columnHelper.accessor('user.email', {
         header: 'Email',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -183,7 +183,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
           </div>
         )
       }),
-      columnHelper.accessor('users.date_joined', {
+      columnHelper.accessor('user.date_joined', {
         header: `Date d'adhésion`,
         cell: ({row}) => (
           <Typography>{row.original.user.date_joined
@@ -211,7 +211,7 @@ const UserListTable = ({data, page, setPage, setPageSize, pageSize, countRecords
           </div>
         )
       }),
-      columnHelper.accessor('users.is_active', {
+      columnHelper.accessor('user.is_active', {
         header: 'Status',
         cell: ({row}) => (
           <Chip
