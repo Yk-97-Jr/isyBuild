@@ -42,11 +42,10 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
   const [createLot, { isLoading }] = useLotsCreateCreateMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
-  console.log('add users')
+
 
   const onSubmit: SubmitHandler<FormValidateType> = async data => {
     try {
-      console.log(data)
       await createLot({
         lotCreateUpdate: {
           name: data.firstName,
@@ -55,7 +54,7 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
       }).unwrap()
 
       setOpenSnackBar(true)
-      setInfoAlert({ severity: 'success', message: 'lots ajouté avec succès' })
+      setInfoAlert({ severity: 'success', message: 'lot ajouté avec succès' })
 
       handleClose()
       reset()
@@ -66,7 +65,7 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
         setInfoAlert({ severity: 'error', message: "Requête incorrecte : Données d'entrée invalides" })
       } else {
         setOpenSnackBar(true)
-        setInfoAlert({ severity: 'error', message: 'La création de lots a échoué' })
+        setInfoAlert({ severity: 'error', message: 'La création de lot a échoué' })
       }
 
       // handleClose();

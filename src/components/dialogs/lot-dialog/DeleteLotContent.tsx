@@ -24,12 +24,12 @@ const DeleteLotContent = ({ handleClose, handleCloseWithoutRefresh, id }: Delete
       if (isSuccess) {
         console.log('lots supprimé avec succès')
         setOpenSnackBar(true)
-        setInfoAlert({ severity: 'success', message: 'lots supprimé avec succès' })
+        setInfoAlert({ severity: 'success', message: 'lot supprimé avec succès' })
       }
     } catch (error) {
-      console.error('Échec de la suppression de lots :', error)
+      console.error('Échec de la suppression de lot :', error)
       setOpenSnackBar(true)
-      setInfoAlert({ severity: 'error', message: 'Échec de la suppression de lots' })
+      setInfoAlert({ severity: 'error', message: 'Échec de la suppression de lot' })
     }
   }
 

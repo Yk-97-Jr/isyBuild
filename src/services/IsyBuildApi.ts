@@ -562,7 +562,7 @@ export type LotRead = {
   updated_at: string
 }
 export type LotCreateUpdate = {
-  name: string
+  name: string 
   description?: string | null
 }
 export type SetNewPassword = {}

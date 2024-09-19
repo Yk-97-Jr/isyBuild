@@ -48,6 +48,7 @@ import tableStyles from '@core/styles/table.module.css'
 import type { UsersType } from '@/types/apps/usersType'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
 
+
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>

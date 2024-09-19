@@ -26,6 +26,10 @@ export type LotsType = {
   id: number
   name: string
   description: string
+  client: {
+    id: number,
+  name: string 
+  }
 
   created_by: {
     id: number
@@ -35,4 +39,12 @@ export type LotsType = {
   }
   created_at: string
   updated_at: string
+}
+export type ClientType = {
+  name: string
+  siren_number: string
+  address: string
+  contact_email: string
+  phone_number: string
+  is_active?: boolean
 }
