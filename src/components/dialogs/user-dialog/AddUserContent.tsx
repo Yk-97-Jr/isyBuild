@@ -41,6 +41,8 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
 
 
   const onSubmit: SubmitHandler<FormValidateType> = async (data) => {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || ""
+
     try {
       console.log(data);
       await createUser({
@@ -49,7 +51,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
             first_name: data.firstName,
             last_name: data.lastName,
             email: data.email,
-            redirect_uri: "http://localhost:3001/users/list",
+            redirect_uri: {appUrl} + '/set-password',
           },
         },
       }).unwrap();
@@ -63,10 +65,10 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
       // Vérifiez si l'erreur a un statut et est une erreur 400
       if (err.status === 400) {
         setOpenSnackBar(true);
-        setInfoAlert({ severity: "error", message: "Requête incorrecte : Données d'entrée invalides" });
+        setInfoAlert({severity: "error", message: "Requête incorrecte : Données d'entrée invalides"});
       } else {
         setOpenSnackBar(true);
-        setInfoAlert({ severity: "error", message: "Échec de la création de l'utilisateur" });
+        setInfoAlert({severity: "error", message: "Échec de la création de l'utilisateur"});
       }
 
       // handleClose();
@@ -100,7 +102,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
           fullWidth
           label='Adresse Email'
           variant='outlined'
-         placeholder="Entrez l'adresse email"
+          placeholder="Entrez l'adresse email"
           className='mbe-2'
           {...register('email')}
           error={!!errors.email}
@@ -120,7 +122,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
       <DialogActions
         className='flex max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
         <Button variant='contained' type='submit' disabled={isLoading}>
-          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Créer Utilisateur'}
+          {isLoading ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Créer Utilisateur'}
         </Button>
         <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
           Abandonner
