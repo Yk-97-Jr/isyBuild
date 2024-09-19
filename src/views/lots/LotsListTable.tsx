@@ -7,7 +7,6 @@ import React, { useEffect, useState, useMemo } from 'react'
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import type { TextFieldProps } from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
@@ -39,13 +38,13 @@ import { CircularProgress } from '@mui/material'
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import OptionMenu from '@core/components/option-menu'
-import UserDialog from '@components/dialogs/user-dialog'
+import LotsDialog from '@components/dialogs/lot-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type { UsersType } from '@/types/apps/usersType'
+import type { LotsType, UsersType } from '@/types/apps/usersType'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
 
 declare module '@tanstack/table-core' {
@@ -58,7 +57,7 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type UsersTypeWithAction = UsersType & {
+type LotsTypeWithAction = LotsType & {
   action?: string
 }
 
@@ -105,10 +104,11 @@ const DebouncedInput = ({
 }
 
 // Column Definitions
-const columnHelper = createColumnHelper<UsersTypeWithAction>()
+const columnHelper = createColumnHelper<LotsTypeWithAction>()
 
-const UserListTable = ({
+const LotsListTable = ({
   data,
+
   page,
   setPage,
   setPageSize,
@@ -129,26 +129,21 @@ const UserListTable = ({
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
-  const [editValue, setEditValue] = useState<UsersType>()
+  const [editValue, setEditValue] = useState<LotsType>()
   const [addValue, setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
 
-  console.log('datalist' + data)
-  console.log('pagelist' + page)
-
   // Vars
   const buttonProps: ButtonProps = {
     variant: 'contained',
-    children: 'Ajouter un Utilisateur',
+    children: 'Ajouter un lot',
     className: 'max-sm:is-full',
     startIcon: <i className='tabler-plus' />
   }
 
-  console.log('countRecords' + countRecords)
-
-  const handleEditUser = (user: UsersType) => {
+  const handleEditUser = (user: LotsType) => {
     setOpen(true)
     setEditValue(user)
   }
@@ -158,42 +153,36 @@ const UserListTable = ({
     setId(id)
   }
 
-  const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
+  const columns = useMemo<ColumnDef<LotsTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('user.first_name', {
+      columnHelper.accessor('name', {
         header: 'Nom',
         cell: ({ row }) => (
-          <div className='flex items-center gap-1'>
+          <div className='flex items-center gap-4 '>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.user.first_name} ${row.original.user.last_name}`}
+                {`${row.original.name} `}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('user.email', {
-        header: 'Email',
+
+      columnHelper.accessor('description', {
+        header: 'description',
         cell: ({ row }) => (
-          <div className='flex items-center gap-1'>
+          <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.user.email}`}
+                {`${row.original.description}`.length > 50
+                  ? `${row.original.description.substring(0, 50)}...`
+                  : `${row.original.description}`}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('user.date_joined', {
-        header: `Date d'adhésion`,
-        cell: ({ row }) => (
-          <Typography>
-            {row.original.user.date_joined
-              ? new Date(row.original.user.date_joined).toLocaleDateString()
-              : 'Date not available'}
-          </Typography>
-        )
-      }),
+
       columnHelper.accessor('created_at', {
         header: `Date de Creation`,
         cell: ({ row }) => (
@@ -202,10 +191,11 @@ const UserListTable = ({
           </Typography>
         )
       }),
+
       columnHelper.accessor('created_by.first_name', {
         header: 'Creé par',
         cell: ({ row }) => (
-          <div className='flex items-center gap-1'>
+          <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
                 {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
@@ -214,22 +204,13 @@ const UserListTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('user.is_active', {
-        header: 'Status',
-        cell: ({ row }) => (
-          <Chip
-            variant='tonal'
-            label={row.original.user.is_active ? 'Active' : 'Inactive'}
-            color={row.original.user.is_active ? 'success' : 'secondary'}
-          />
-        )
-      }),
+
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({ row }) => (
           <div className='flex items-center'>
             <IconButton onClick={() => handleDeleteUser(row.original.id)}>
-              <i className='tabler-trash text-textSecondary' />
+              <i className='tabler-trash  text-textSecondary' />
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
@@ -239,16 +220,10 @@ const UserListTable = ({
                   text: 'Modifier',
                   icon: 'tabler-edit',
                   menuItemProps: {
-                    className: 'flex items-center gap-1 text-textSecondary',
+                    className: 'flex items-center gap-2  text-textSecondary',
                     onClick: () => handleEditUser(row.original)
                   }
                 }
-
-                // {
-                //   text: 'Suspendre',
-                //   icon: 'tabler-download',
-                //   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
-                // }
               ]}
             />
           </div>
@@ -292,8 +267,6 @@ const UserListTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -309,13 +282,13 @@ const UserListTable = ({
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher un lots'
               className='max-sm:is-full'
             />
             <OpenDialogOnElementClick
               element={Button}
               elementProps={buttonProps}
-              dialog={UserDialog}
+              dialog={LotsDialog}
               dialogProps={{ addValue, setAddValue, refetch }}
             />
           </div>
@@ -391,7 +364,7 @@ const UserListTable = ({
           }}
         />
       </Card>
-      <UserDialog
+      <LotsDialog
         open={open}
         setOpen={setOpen}
         id={id}
@@ -405,4 +378,4 @@ const UserListTable = ({
   )
 }
 
-export default UserListTable
+export default LotsListTable

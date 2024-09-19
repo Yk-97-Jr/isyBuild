@@ -88,7 +88,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
         />
         <CustomTextField
           fullWidth
-          label='Nom'
+          label='Nom '
           variant='outlined'
           placeholder='Entrez le nom'
           className='mbe-2'

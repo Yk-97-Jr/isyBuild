@@ -100,6 +100,21 @@ const injectedRtkApi = api.injectEndpoints({
     logoutCreate: build.mutation<LogoutCreateApiResponse, LogoutCreateApiArg>({
       query: queryArg => ({ url: `/logout/`, method: 'POST', body: queryArg.tokenRefresh })
     }),
+    lotsRetrieve: build.query<LotsRetrieveApiResponse, LotsRetrieveApiArg>({
+      query: queryArg => ({ url: `/lots/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+    }),
+    lotsRetrieve2: build.query<LotsRetrieve2ApiResponse, LotsRetrieve2ApiArg>({
+      query: queryArg => ({ url: `/lots/${queryArg.lotId}/` })
+    }),
+    lotsCreateCreate: build.mutation<LotsCreateCreateApiResponse, LotsCreateCreateApiArg>({
+      query: queryArg => ({ url: `/lots/create/`, method: 'POST', body: queryArg.lotCreateUpdate })
+    }),
+    lotsDeleteDestroy: build.mutation<LotsDeleteDestroyApiResponse, LotsDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/lots/delete/${queryArg.lotId}/`, method: 'DELETE' })
+    }),
+    lotsUpdateUpdate: build.mutation<LotsUpdateUpdateApiResponse, LotsUpdateUpdateApiArg>({
+      query: queryArg => ({ url: `/lots/update/${queryArg.lotId}/`, method: 'PUT', body: queryArg.lotCreateUpdate })
+    }),
     passwordConfirmCreate: build.mutation<PasswordConfirmCreateApiResponse, PasswordConfirmCreateApiArg>({
       query: queryArg => ({ url: `/password-confirm/`, method: 'POST', body: queryArg.setNewPassword })
     }),
@@ -184,6 +199,7 @@ export type ClientsRetrieveApiArg = {
   page?: number
 
   /** Number of results per page */
+
   pageSize?: number
 }
 export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead
@@ -235,6 +251,7 @@ export type ContactsPhoneNumbersRetrieveApiArg = {
   contactId: number
 
   /** Page number of the results to fetch */
+
   page?: number
 
   /** Number of results per page */
@@ -259,6 +276,32 @@ export type LoginCreateApiArg = {
 export type LogoutCreateApiResponse = /** status 205 No response body */ void
 export type LogoutCreateApiArg = {
   tokenRefresh: TokenRefresh
+}
+export type LotsRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type LotsRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type LotsRetrieve2ApiResponse = /** status 200  */ LotRead
+export type LotsRetrieve2ApiArg = {
+  lotId: number
+}
+export type LotsCreateCreateApiResponse = /** status 201  */ LotRead
+export type LotsCreateCreateApiArg = {
+  lotCreateUpdate: LotCreateUpdate
+}
+export type LotsDeleteDestroyApiResponse = /** status 204  */ any
+export type LotsDeleteDestroyApiArg = {
+  lotId: number
+}
+export type LotsUpdateUpdateApiResponse = /** status 200  */ LotRead
+export type LotsUpdateUpdateApiArg = {
+  lotId: number
+  lotCreateUpdate: LotCreateUpdate
 }
 export type PasswordConfirmCreateApiResponse = /** status 200  */ any
 export type PasswordConfirmCreateApiArg = {
@@ -505,6 +548,23 @@ export type TokenRefreshRead = {
   access: string
   refresh: string
 }
+export type Lot = {
+  name: string
+  description?: string | null
+}
+export type LotRead = {
+  id: number
+  name: string
+  description?: string | null
+  client: ClientRead
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type LotCreateUpdate = {
+  name: string
+  description?: string | null
+}
 export type SetNewPassword = {}
 export type SetNewPasswordWrite = {
   new_password: string
@@ -562,6 +622,11 @@ export const {
   useContactsUpdateUpdateMutation,
   useLoginCreateMutation,
   useLogoutCreateMutation,
+  useLotsRetrieveQuery,
+  useLotsRetrieve2Query,
+  useLotsCreateCreateMutation,
+  useLotsDeleteDestroyMutation,
+  useLotsUpdateUpdateMutation,
   usePasswordConfirmCreateMutation,
   usePasswordResetCreateMutation,
   usePhoneNumbersRetrieveQuery,

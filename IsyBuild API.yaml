@@ -711,6 +711,175 @@ paths:
                   summary: Bad Request
                   description: Invalid request or token
           description: ''
+  /lots/:
+    get:
+      operationId: lots_retrieve
+      description: Retrieve a list of all Lots with pagination.
+      summary: List all Lot
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Lot Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+          description: ''
+  /lots/{lot_id}/:
+    get:
+      operationId: lots_retrieve_2
+      description: Fetches detailed information about an lot member by their unique
+        identifier.
+      summary: Retrieve lot Details
+      parameters:
+      - in: path
+        name: lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Lot Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lot'
+          description: ''
+  /lots/create/:
+    post:
+      operationId: lots_create_create
+      description: Create a new lot .
+      tags:
+      - Lot Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lot'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /lots/delete/{lot_id}/:
+    delete:
+      operationId: lots_delete_destroy
+      description: Deletes an Lot by ID. Requires administrative privileges.
+      summary: Delete Lot
+      parameters:
+      - in: path
+        name: lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Lot Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: lot deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: lot not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /lots/update/{lot_id}/:
+    put:
+      operationId: lots_update_update
+      description: Updates information for an existing lot .
+      summary: Update Lot
+      parameters:
+      - in: path
+        name: lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Lot Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lot'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /password-confirm/:
     post:
       operationId: password_confirm_create
@@ -1487,6 +1656,54 @@ components:
       required:
       - email
       - id
+    Lot:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        client:
+          allOf:
+          - $ref: '#/components/schemas/Client'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - client
+      - created_at
+      - created_by
+      - id
+      - name
+      - updated_at
+    LotCreateUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - name
     Paginated:
       type: object
       properties:
