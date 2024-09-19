@@ -106,15 +106,13 @@ const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
     try {
       const result = await login({tokenObtainPair: data}).unwrap();
 
-      const decodedAcessToken = verifyToken(result.access);
       const decodedRefreshToken = verifyToken(result.refresh);
 
       // Obtenir l'heure d'expiration des tokens décodés
-      const accessExpiryDate = new Date(decodedAcessToken.exp * 1000);
       const refreshExpiryDate = new Date(decodedRefreshToken.exp * 1000);
 
       // Définir les tokens dans les cookies avec les dates d'expiration
-      Cookies.set('access_token', result.access, { expires: accessExpiryDate });
+      Cookies.set('access_token', result.access, );
       Cookies.set('refresh_token', result.refresh, { expires: refreshExpiryDate });
 
       // Rediriger vers la page d'accueil après une connexion réussie
