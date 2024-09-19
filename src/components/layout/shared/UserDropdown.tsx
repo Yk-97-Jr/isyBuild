@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import {useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import type {MouseEvent} from 'react'
 
 // Next Imports
@@ -22,7 +22,10 @@ import Button from '@mui/material/Button'
 // Hook Imports
 import Cookies from "js-cookie";
 
+import {CircularProgress} from "@mui/material";
+
 import {useSettings} from '@core/hooks/useSettings'
+import {useLogoutCreateMutation} from "@/services/IsyBuildApi";
 
 
 const UserDropdown = () => {
@@ -34,6 +37,7 @@ const UserDropdown = () => {
 
   // Hooks
   const router = useRouter()
+  const [logout, {isLoading}] = useLogoutCreateMutation();
 
   const {settings} = useSettings()
 
@@ -54,18 +58,32 @@ const UserDropdown = () => {
     setOpen(false)
   }
 
-  const handleUserLogout = () => {
+  const handleUserLogout = async () => {
+    const refresh_token = Cookies.get('refresh_token')
 
+    try {
+      // Call the mutation to log out the user
+      await logout(
+        {
+          tokenRefresh: {
+            refresh: refresh_token
+          }
+        }
+      ).unwrap();
 
-    // Remove tokens from cookies
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
+      // Remove tokens from cookies after successful logout
+      Cookies.remove('access_token');
+      Cookies.remove('refresh_token');
 
-    // Redirect to login page
-    router.push('/home')
+      // Redirect to login page
+      router.push('/login');
 
+    } catch (error) {
+      console.error('Logout failed:', error);
 
-  }
+      // Handle any error case if needed
+    }
+  };
 
   return (
     <>
@@ -115,11 +133,11 @@ const UserDropdown = () => {
                       variant='contained'
                       color='error'
                       size='small'
-                      endIcon={<i className='tabler-logout'/>}
+                      disabled={isLoading} // Désactive le bouton pendant le chargement
                       onClick={handleUserLogout}
                       sx={{'& .MuiButton-endIcon': {marginInlineStart: 1.5}}}
                     >
-                      Déconnexion
+                      {isLoading ? <CircularProgress sx={{color: 'white'}} size={14}/> : 'Déconnexion'}
                     </Button>
                   </div>
                 </MenuList>
