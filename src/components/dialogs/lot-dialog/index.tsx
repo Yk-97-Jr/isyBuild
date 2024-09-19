@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography'
 import DialogCloseButton from '../DialogCloseButton'
 import type { LotsType } from '@/types/apps/usersType'
 import AddLotContent from '@components/dialogs/lot-dialog/AddLotContent'
-import EditUserContent from '@components/dialogs/user-dialog/EditUserContent'
+import EditLotContent from '@components/dialogs/lot-dialog/EditLotContent'
 import DeleteLotContent from '@components/dialogs/lot-dialog/DeleteLotContent'
 
 type LotsDialogProps = {
@@ -34,9 +34,6 @@ const LotsDialog = ({
   setEditValue,
   refetch
 }: LotsDialogProps) => {
-  console.log('editValue' + editValue)
-  console.log('id' + id)
-
   const handleClose = () => {
     setOpen(false)
     setEditValue?.(undefined)
@@ -67,7 +64,7 @@ const LotsDialog = ({
       ? 'Modifiez les détails de le lots  ci-dessous.'
       : 'Remplissez les détails pour créer un nouvel lots.'
 
-  const ContentComponent = isDelete ? DeleteLotContent : isEdit ? EditUserContent : AddLotContent
+  const ContentComponent = isDelete ? DeleteLotContent : isEdit ? EditLotContent : AddLotContent
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>

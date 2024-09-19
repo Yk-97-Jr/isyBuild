@@ -60,15 +60,18 @@ const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: Ed
         patchedAdminStaffUpdate: updatedData, // Passez l'objet updatedData
       }).unwrap();
 
+
+
+
       handleClose();
 
       if (response) {
-        console.log('Utilisateur mis à jour avec succès');
+
         setOpenSnackBar(true);
-        setInfoAlert({ severity: "success", message: "Utilisateur mis à jour avec succès" });
+
       }
     } catch (error) {
-      console.error('Échec de la mise à jour de l\'utilisateur :', error);
+
       setOpenSnackBar(true);
       setInfoAlert({ severity: "error", message: "Échec de la mise à jour de l'utilisateur" });
     }

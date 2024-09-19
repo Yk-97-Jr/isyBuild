@@ -44,8 +44,9 @@ import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type { LotsType, UsersType } from '@/types/apps/usersType'
+import type { LotsType } from '@/types/apps/usersType'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
+import type { AdminStaffRead } from '@/services/IsyBuildApi'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -117,7 +118,7 @@ const LotsListTable = ({
   isFetching,
   refetch
 }: {
-  data?: UsersType[]
+  data?: AdminStaffRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -162,6 +163,18 @@ const LotsListTable = ({
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
                 {`${row.original.name} `}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+      columnHelper.accessor('client', {
+        header: 'Client',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {row.original?.client?.name ?? ''}
               </Typography>
             </div>
           </div>
@@ -236,7 +249,7 @@ const LotsListTable = ({
   )
 
   const table = useReactTable({
-    data: filteredData as UsersType[],
+    data: filteredData as AdminStaffRead[],
     columns,
     filterFns: {
       fuzzy: fuzzyFilter

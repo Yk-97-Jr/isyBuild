@@ -12,7 +12,6 @@ import Box from '@mui/material/Box'
 import LotsListTable from './LotsListTable'
 import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
 
-
 const LotsList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
@@ -43,9 +42,9 @@ const LotsList = () => {
   const lots = data?.results || []
   const countRecords = data?.count
 
-  console.log('Full Data:', data)
-  console.log('Lots:', lots)
-  console.log('Count of Records:', countRecords)
+  console.log('*********')
+  console.log(data?.results)
+  console.log('*********')
 
   return isFetching ? (
     <LotsListTable
