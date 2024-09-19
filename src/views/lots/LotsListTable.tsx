@@ -46,7 +46,8 @@ import CustomTextField from '@core/components/mui/TextField'
 import tableStyles from '@core/styles/table.module.css'
 import type { LotsType } from '@/types/apps/usersType'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
-import type { AdminStaffRead } from '@/services/IsyBuildApi'
+import type { AdminStaffRead, LotRead } from '@/services/IsyBuildApi'
+import Chip from '@/@core/components/mui/Chip'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -58,9 +59,10 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type LotsTypeWithAction = LotsType & {
-  action?: string
-}
+type LotsTypeWithAction = LotsType &
+  LotRead & {
+    action?: string
+  }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -144,12 +146,12 @@ const LotsListTable = ({
     startIcon: <i className='tabler-plus' />
   }
 
-  const handleEditUser = (user: LotsType) => {
+  const handleEditLot = (Lot: LotsType) => {
     setOpen(true)
-    setEditValue(user)
+    setEditValue(Lot)
   }
 
-  const handleDeleteUser = (id: number) => {
+  const handleDeleteLot = (id: number) => {
     setOpen(true)
     setId(id)
   }
@@ -168,16 +170,14 @@ const LotsListTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('client', {
-        header: 'Client',
+      columnHelper.accessor('client.name', {
+        header: 'client',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original?.client?.name ?? ''}
-              </Typography>
-            </div>
-          </div>
+          <Chip
+            variant='tonal'
+            label={row.original?.client?.name ? row.original?.client?.name : 'Default'}
+            
+          />
         )
       }),
 
@@ -222,7 +222,7 @@ const LotsListTable = ({
         header: 'Action',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDeleteUser(row.original.id)}>
+            <IconButton onClick={() => handleDeleteLot(row.original.id)}>
               <i className='tabler-trash  text-textSecondary' />
             </IconButton>
             <OptionMenu
@@ -234,7 +234,7 @@ const LotsListTable = ({
                   icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-2  text-textSecondary',
-                    onClick: () => handleEditUser(row.original)
+                    onClick: () => handleEditLot(row.original)
                   }
                 }
               ]}

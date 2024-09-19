@@ -26,10 +26,6 @@ export type LotsType = {
   id: number
   name: string
   description: string
-  client: {
-    id: number,
-  name: string 
-  }
 
   created_by: {
     id: number
