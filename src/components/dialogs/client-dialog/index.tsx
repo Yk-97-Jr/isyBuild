@@ -5,9 +5,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 
-import AddClientContent from "@components/dialogs/client-dialog/AddClientContent";
-
-import EditClientContent from "@components/dialogs/client-dialog/EditClientContent";
 
 import DialogCloseButton from '../DialogCloseButton';
 import type {ClientsType} from "@/types/apps/clientsType";
@@ -30,17 +27,17 @@ type UserDialogProps = {
 
 
 const ClientDialog = ({
-                      open,
-                      setOpen,
-                      addValue,
-                      setAddValue,
-                      id,
-                      setId,
-                      editValue,
-                      setEditValue,
-                      refetch
+                        open,
+                        setOpen,
+                        addValue,
+                        setAddValue,
+                        id,
+                        setId,
+                        editValue,
+                        setEditValue,
+                        refetch
 
-                    }: UserDialogProps) => {
+                      }: UserDialogProps) => {
 
 
   console.log('editValue' + editValue)
@@ -78,9 +75,7 @@ const ClientDialog = ({
 
   const ContentComponent = isDelete
     ? DeleteClientContent
-    : isEdit
-      ? EditClientContent
-      : AddClientContent;
+    : null
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}>
