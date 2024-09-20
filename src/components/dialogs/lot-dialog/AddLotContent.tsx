@@ -42,8 +42,6 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
   const [createLot, { isLoading }] = useLotsCreateCreateMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
-
-
   const onSubmit: SubmitHandler<FormValidateType> = async data => {
     try {
       await createLot({
@@ -86,10 +84,11 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
           helperText={errors.firstName?.message}
         />
         <CustomTextField
-        fullWidth
+          fullWidth
           label='description'
           variant='outlined'
           multiline
+          rows={3}
           placeholder='Entrez votre description'
           id='textarea-outlined'
           className='mbe-2'

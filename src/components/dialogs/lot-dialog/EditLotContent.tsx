@@ -80,8 +80,7 @@ const EditLotContent = ({ handleClose, handleCloseWithoutRefresh, editValue }: E
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DialogContent className='overflow-visible pbs-0 sm:pli-16'>
-        <div className='flex flex-col gap-4 mbe-2'>
-          <div className='flex gap-4'>
+
             <CustomTextField
               fullWidth
               label='Nom '
@@ -97,6 +96,7 @@ const EditLotContent = ({ handleClose, handleCloseWithoutRefresh, editValue }: E
               label='description'
               variant='outlined'
               multiline
+              rows={3}
               placeholder='Entrez votre description'
               id='textarea-outlined'
               className='mbe-4'
@@ -104,13 +104,12 @@ const EditLotContent = ({ handleClose, handleCloseWithoutRefresh, editValue }: E
               error={!!errors.description}
               helperText={errors.description?.message}
             />
-          </div>
-        </div>
-        <div className='flex justify-end gap-4'>
+
+        <div className='flex gap-4 max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
           <Button variant='contained' type='submit' disabled={isLoading}>
             {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Mettre à jour'}
           </Button>
-          <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary'>
+          <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
             Annuler
           </Button>
         </div>
