@@ -170,14 +170,16 @@ const LotsListTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('client.name', {
+      columnHelper.accessor('name', {
         header: 'client',
         cell: ({ row }) => (
-          <Chip
-            variant='tonal'
-            label={row.original?.client?.name ? row.original?.client?.name : 'Default'}
-            
-          />
+          <>
+            {row.original?.client?.name ? (
+              <span>{row.original?.client?.name}</span>
+            ) : (
+              <Chip variant='tonal' label={'Default'} color='default' className='px-5 text-base' />
+            )}
+          </>
         )
       }),
 
