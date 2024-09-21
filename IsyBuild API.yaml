@@ -64,13 +64,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AdminStaffCreate'
+              $ref: '#/components/schemas/AdminStaffCreateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/AdminStaffCreate'
+              $ref: '#/components/schemas/AdminStaffCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/AdminStaffCreate'
+              $ref: '#/components/schemas/AdminStaffCreateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -106,13 +106,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedAdminStaffUpdate'
+              $ref: '#/components/schemas/PatchedAdminStaffUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedAdminStaffUpdate'
+              $ref: '#/components/schemas/PatchedAdminStaffUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedAdminStaffUpdate'
+              $ref: '#/components/schemas/PatchedAdminStaffUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -222,11 +222,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Client'
           description: ''
-  /clients/{client_id}/contacts/:
+  /clients/{client_id}/staff/:
     get:
-      operationId: clients_contacts_retrieve
-      description: Retrieve a list of all contacts for a specific client with pagination.
-      summary: List all Contacts for a Client
+      operationId: clients_staff_retrieve_2
+      description: Retrieve a list of all client staff users with pagination.
+      summary: List all Client staff
       parameters:
       - in: path
         name: client_id
@@ -244,7 +244,7 @@ paths:
           type: integer
         description: Number of results per page
       tags:
-      - Contact Management
+      - Client Staff Management
       security:
       - jwtAuth: []
       responses:
@@ -254,10 +254,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Paginated'
           description: ''
-  /clients/{client_id}/contacts/create/:
+  /clients/{client_id}/staff/create/:
     post:
-      operationId: clients_contacts_create_create
-      description: Create a new contact for a specific client.
+      operationId: clients_staff_create_create
+      description: Create a new client staff member.
       parameters:
       - in: path
         name: client_id
@@ -265,18 +265,18 @@ paths:
           type: integer
         required: true
       tags:
-      - Contact Management
+      - Client Staff Management
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ContactCreateUpdate'
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ContactCreateUpdate'
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ContactCreateUpdate'
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -285,7 +285,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/ClientStaff'
           description: ''
         '400':
           content:
@@ -305,13 +305,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClientCreateUpdate'
+              $ref: '#/components/schemas/ClientCreateUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ClientCreateUpdate'
+              $ref: '#/components/schemas/ClientCreateUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ClientCreateUpdate'
+              $ref: '#/components/schemas/ClientCreateUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -364,6 +364,113 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
+  /clients/staff/{client_staff_id}/:
+    get:
+      operationId: clients_staff_retrieve
+      description: Fetches detailed information about an  client staff member by their
+        unique identifier.
+      summary: Retrieve  Client Staff Details
+      parameters:
+      - in: path
+        name: client_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientStaff'
+          description: ''
+  /clients/staff/{client_staff_id}/delete/:
+    delete:
+      operationId: clients_staff_delete_destroy
+      description: Deletes an client user by ID. Requires administrative privileges.
+      summary: Delete Client Staff
+      parameters:
+      - in: path
+        name: client_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: User deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: User not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /clients/staff/{client_staff_id}/update/:
+    put:
+      operationId: clients_staff_update_update
+      description: Updates information for an existing  client staff member.
+      summary: Update  Client Staff Member
+      parameters:
+      - in: path
+        name: client_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientStaffUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientStaffUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientStaffUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientStaff'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /clients/update/{client_id}/:
     put:
       operationId: clients_update_update
@@ -381,13 +488,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ClientCreateUpdate'
+              $ref: '#/components/schemas/ClientCreateUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ClientCreateUpdate'
+              $ref: '#/components/schemas/ClientCreateUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ClientCreateUpdate'
+              $ref: '#/components/schemas/ClientCreateUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -426,13 +533,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ContactUsEmail'
+              $ref: '#/components/schemas/ContactUsEmailRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ContactUsEmail'
+              $ref: '#/components/schemas/ContactUsEmailRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ContactUsEmail'
+              $ref: '#/components/schemas/ContactUsEmailRequest'
         required: true
       security:
       - jwtAuth: []
@@ -548,7 +655,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+              $ref: '#/components/schemas/PhoneNumberCreateUpdateRequest'
             examples:
               CreatePhoneNumber:
                 value:
@@ -559,10 +666,10 @@ paths:
                   predefined choices.
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+              $ref: '#/components/schemas/PhoneNumberCreateUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+              $ref: '#/components/schemas/PhoneNumberCreateUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -598,13 +705,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ContactCreateUpdate'
+              $ref: '#/components/schemas/ContactCreateUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ContactCreateUpdate'
+              $ref: '#/components/schemas/ContactCreateUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ContactCreateUpdate'
+              $ref: '#/components/schemas/ContactCreateUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -641,13 +748,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/TokenObtainPairRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/TokenObtainPairRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenObtainPair'
+              $ref: '#/components/schemas/TokenObtainPairRequest'
         required: true
       responses:
         '200':
@@ -685,13 +792,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
         required: true
       security:
       - jwtAuth: []
@@ -711,6 +818,175 @@ paths:
                   summary: Bad Request
                   description: Invalid request or token
           description: ''
+  /lots/:
+    get:
+      operationId: lots_retrieve
+      description: Retrieve a list of all Lots with pagination.
+      summary: List all Lot
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Lot Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+          description: ''
+  /lots/{lot_id}/:
+    get:
+      operationId: lots_retrieve_2
+      description: Fetches detailed information about an lot member by their unique
+        identifier.
+      summary: Retrieve lot Details
+      parameters:
+      - in: path
+        name: lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Lot Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lot'
+          description: ''
+  /lots/create/:
+    post:
+      operationId: lots_create_create
+      description: Create a new lot .
+      tags:
+      - Lot Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lot'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /lots/delete/{lot_id}/:
+    delete:
+      operationId: lots_delete_destroy
+      description: Deletes an Lot by ID. Requires administrative privileges.
+      summary: Delete Lot
+      parameters:
+      - in: path
+        name: lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Lot Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: lot deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: lot not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /lots/update/{lot_id}/:
+    put:
+      operationId: lots_update_update
+      description: Updates information for an existing lot .
+      summary: Update Lot
+      parameters:
+      - in: path
+        name: lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Lot Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LotCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lot'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /password-confirm/:
     post:
       operationId: password_confirm_create
@@ -722,13 +998,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SetNewPassword'
+              $ref: '#/components/schemas/SetNewPasswordRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/SetNewPassword'
+              $ref: '#/components/schemas/SetNewPasswordRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/SetNewPassword'
+              $ref: '#/components/schemas/SetNewPasswordRequest'
         required: true
       security:
       - jwtAuth: []
@@ -765,13 +1041,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PasswordResetRequest'
+              $ref: '#/components/schemas/PasswordResetRequestRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PasswordResetRequest'
+              $ref: '#/components/schemas/PasswordResetRequestRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PasswordResetRequest'
+              $ref: '#/components/schemas/PasswordResetRequestRequest'
         required: true
       security:
       - jwtAuth: []
@@ -869,7 +1145,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+              $ref: '#/components/schemas/PhoneNumberCreateUpdateRequest'
             examples:
               CreatePhoneNumber:
                 value:
@@ -880,10 +1156,10 @@ paths:
                   predefined choices.
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+              $ref: '#/components/schemas/PhoneNumberCreateUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PhoneNumberCreateUpdate'
+              $ref: '#/components/schemas/PhoneNumberCreateUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -922,13 +1198,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Setassword'
+              $ref: '#/components/schemas/SetasswordRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Setassword'
+              $ref: '#/components/schemas/SetasswordRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Setassword'
+              $ref: '#/components/schemas/SetasswordRequest'
         required: true
       security:
       - jwtAuth: []
@@ -946,6 +1222,354 @@ paths:
               schema:
                 description: Request contains invalid data or validation errors.
           description: ''
+  /subcontractors/:
+    get:
+      operationId: subcontractors_retrieve
+      description: Retrieve a list of all Subcontractors with pagination.
+      summary: List all Subcontractor
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+          description: ''
+  /subcontractors/{subcontractor_id}/:
+    get:
+      operationId: subcontractors_retrieve_2
+      description: Fetches detailed information about an Subcontractor member by their
+        unique identifier.
+      summary: Retrieve Subcontractor Details
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+  /subcontractors/{subcontractor_id}/staff/:
+    get:
+      operationId: subcontractors_staff_retrieve_2
+      description: Retrieve a list of all subcontractor staff users with pagination.
+      summary: List all Subcontractor staff
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginated'
+          description: ''
+  /subcontractors/{subcontractor_id}/staff/create/:
+    post:
+      operationId: subcontractors_staff_create_create
+      description: Create a new subcontractor staff member.
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcontractorStaff'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/create/:
+    post:
+      operationId: subcontractors_create_create
+      description: Create a new Subcontractor .
+      tags:
+      - Subcontractor Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/delete/{subcontractor_id}/:
+    delete:
+      operationId: subcontractors_delete_destroy
+      description: Deletes an Subcontractor by ID. Requires administrative privileges.
+      summary: Delete Subcontractor
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: Subcontractor deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Subcontractor not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /subcontractors/staff/{subcontractor_staff_id}/:
+    get:
+      operationId: subcontractors_staff_retrieve
+      description: Fetches detailed information about an subcontractor staff member
+        by their unique identifier.
+      summary: Retrieve Subcontractor Staff Details
+      parameters:
+      - in: path
+        name: subcontractor_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcontractorStaff'
+          description: ''
+  /subcontractors/staff/{subcontractor_staff_id}/delete/:
+    delete:
+      operationId: subcontractors_staff_delete_destroy
+      description: Deletes an subcontractor user by ID. Requires administrative privileges.
+      summary: Delete Subcontractor Staff
+      parameters:
+      - in: path
+        name: subcontractor_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: User deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: User not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /subcontractors/staff/{subcontractor_staff_id}/update/:
+    patch:
+      operationId: subcontractors_staff_update_partial_update
+      description: Updates information for an existing  subcontractor staff member.
+      summary: Update  Subcontractor Staff Member
+      parameters:
+      - in: path
+        name: subcontractor_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubcontractorStaffUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubcontractorStaffUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubcontractorStaffUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcontractorStaff'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/update/{subcontractor_id}/:
+    put:
+      operationId: subcontractors_update_update
+      description: Updates information for an existing Subcontractor .
+      summary: Update Subcontractor
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /token_refresh/:
     post:
       operationId: token_refresh_create
@@ -956,13 +1580,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/TokenRefresh'
+              $ref: '#/components/schemas/TokenRefreshRequest'
         required: true
       responses:
         '200':
@@ -996,18 +1620,18 @@ paths:
         the old and new passwords.
       summary: Change Password
       tags:
-      - Authentication
+      - User Profile
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserChangePassword'
+              $ref: '#/components/schemas/UserChangePasswordRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserChangePassword'
+              $ref: '#/components/schemas/UserChangePasswordRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserChangePassword'
+              $ref: '#/components/schemas/UserChangePasswordRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1035,18 +1659,18 @@ paths:
         JWT token. The token should be sent as part of the request data.
       summary: Confirm Email Change
       tags:
-      - Authentication
+      - User Profile
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserEmailChangeConfirm'
+              $ref: '#/components/schemas/UserEmailChangeConfirmRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserEmailChangeConfirm'
+              $ref: '#/components/schemas/UserEmailChangeConfirmRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserEmailChangeConfirm'
+              $ref: '#/components/schemas/UserEmailChangeConfirmRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1081,7 +1705,7 @@ paths:
       description: Returns the user's profile details.
       summary: Get User Profile
       tags:
-      - Authentication
+      - User Profile
       security:
       - jwtAuth: []
       responses:
@@ -1098,18 +1722,18 @@ paths:
         a confirmation link to the new email address.
       summary: Request Email Change
       tags:
-      - Authentication
+      - User Profile
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserEmailChangeRequest'
+              $ref: '#/components/schemas/UserEmailChangeRequestRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/UserEmailChangeRequest'
+              $ref: '#/components/schemas/UserEmailChangeRequestRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserEmailChangeRequest'
+              $ref: '#/components/schemas/UserEmailChangeRequestRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1132,18 +1756,18 @@ paths:
       description: Updates the user's profile details.
       summary: Update User Profile
       tags:
-      - Authentication
+      - User Profile
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+              $ref: '#/components/schemas/PatchedUserProfileUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+              $ref: '#/components/schemas/PatchedUserProfileUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedUserProfileUpdate'
+              $ref: '#/components/schemas/PatchedUserProfileUpdateRequest'
       security:
       - jwtAuth: []
       responses:
@@ -1160,6 +1784,32 @@ paths:
                 type: object
                 additionalProperties: {}
                 description: Unspecified response body
+          description: ''
+  /user/update-avatar/:
+    post:
+      operationId: user_update_avatar_create
+      description: Upload or update the user's avatar.
+      tags:
+      - User Profile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AvatarUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Success:
+                  value:
+                    message: Avatar updated successfully!
+                  description: Successfully updated the avatar
           description: ''
 components:
   schemas:
@@ -1220,23 +1870,27 @@ components:
       - street_name
       - street_number
       - updated_at
-    AddressCreate:
+    AddressCreateRequest:
       type: object
       properties:
         street_number:
           type: string
+          minLength: 1
           title: Numéro de la rue
           maxLength: 10
         street_name:
           type: string
+          minLength: 1
           title: Nom de la rue
           maxLength: 255
         postal_code:
           type: string
+          minLength: 1
           title: Code postal
           maxLength: 5
         city:
           type: string
+          minLength: 1
           title: Ville
           maxLength: 100
         department:
@@ -1251,6 +1905,7 @@ components:
           maxLength: 100
         country:
           type: string
+          minLength: 1
           title: Pays
           maxLength: 100
       required:
@@ -1286,13 +1941,21 @@ components:
       - id
       - updated_at
       - user
-    AdminStaffCreate:
+    AdminStaffCreateRequest:
       type: object
       properties:
         user:
-          $ref: '#/components/schemas/UserCreate'
+          $ref: '#/components/schemas/UserCreateRequest'
       required:
       - user
+    AvatarUpdateRequest:
+      type: object
+      properties:
+        avatar:
+          type: string
+          format: binary
+      required:
+      - avatar
     Client:
       type: object
       properties:
@@ -1343,26 +2006,30 @@ components:
       - phone_number
       - siren_number
       - updated_at
-    ClientCreateUpdate:
+    ClientCreateUpdateRequest:
       type: object
       properties:
         name:
           type: string
+          minLength: 1
           title: Nom de l'entreprise
           maxLength: 255
         siren_number:
           type: string
+          minLength: 1
           title: Numéro SIREN
           maxLength: 9
         address:
-          $ref: '#/components/schemas/AddressCreate'
+          $ref: '#/components/schemas/AddressCreateRequest'
         contact_email:
           type: string
           format: email
+          minLength: 1
           title: Email de contact
           maxLength: 254
         phone_number:
           type: string
+          minLength: 1
           title: Numéro de téléphone
           maxLength: 20
         is_active:
@@ -1374,6 +2041,48 @@ components:
       - name
       - phone_number
       - siren_number
+    ClientStaff:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - updated_at
+      - user
+    ClientStaffCreateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreateRequest'
+      required:
+      - user
+    ClientStaffUpdateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserUpdateRequest'
+      required:
+      - user
     Contact:
       type: object
       properties:
@@ -1418,45 +2127,54 @@ components:
       - last_name
       - phone_numbers
       - updated_at
-    ContactCreateUpdate:
+    ContactCreateUpdateRequest:
       type: object
       properties:
         first_name:
           type: string
+          minLength: 1
           title: Prénom
           maxLength: 100
         last_name:
           type: string
+          minLength: 1
           title: Nom
           maxLength: 100
         email:
           type: string
           format: email
+          minLength: 1
           maxLength: 254
       required:
       - email
       - first_name
       - last_name
-    ContactUsEmail:
+    ContactUsEmailRequest:
       type: object
       properties:
         nom:
           type: string
+          minLength: 1
           maxLength: 100
         prenom:
           type: string
+          minLength: 1
           maxLength: 100
         telephone:
           type: string
+          minLength: 1
           maxLength: 15
         email:
           type: string
           format: email
+          minLength: 1
         fonction:
           type: string
+          minLength: 1
           maxLength: 100
         entreprise:
           type: string
+          minLength: 1
           maxLength: 100
         message:
           type: string
@@ -1473,6 +2191,10 @@ components:
         id:
           type: integer
           readOnly: true
+        avatar:
+          type: string
+          format: uri
+          nullable: true
         email:
           type: string
           format: email
@@ -1487,6 +2209,67 @@ components:
       required:
       - email
       - id
+    Lot:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        client:
+          allOf:
+          - $ref: '#/components/schemas/Client'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - client
+      - created_at
+      - created_by
+      - id
+      - name
+      - updated_at
+    LotCreateUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - name
+    LotSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - id
+      - name
     Paginated:
       type: object
       properties:
@@ -1509,18 +2292,20 @@ components:
       - next
       - previous
       - results
-    PasswordResetRequest:
+    PasswordResetRequestRequest:
       type: object
       properties:
         email:
           type: string
           format: email
+          minLength: 1
         redirect_uri:
           type: string
+          minLength: 1
       required:
       - email
       - redirect_uri
-    PatchedAdminStaffUpdate:
+    PatchedAdminStaffUpdateRequest:
       type: object
       properties:
         first_name:
@@ -1532,7 +2317,12 @@ components:
         is_active:
           type: boolean
           title: Active
-    PatchedUserProfileUpdate:
+    PatchedSubcontractorStaffUpdateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserUpdateRequest'
+    PatchedUserProfileUpdateRequest:
       type: object
       properties:
         first_name:
@@ -1571,11 +2361,12 @@ components:
       - id
       - number
       - updated_at
-    PhoneNumberCreateUpdate:
+    PhoneNumberCreateUpdateRequest:
       type: object
       properties:
         number:
           type: string
+          minLength: 1
           title: Numéro de téléphone
           maxLength: 20
         type:
@@ -1583,68 +2374,250 @@ components:
       required:
       - number
       - type
-    SetNewPassword:
+    SetNewPasswordRequest:
       type: object
       properties:
         new_password:
           type: string
           writeOnly: true
+          minLength: 1
         uid:
           type: string
           writeOnly: true
+          minLength: 1
         token:
           type: string
           writeOnly: true
+          minLength: 1
       required:
       - new_password
       - token
       - uid
-    Setassword:
+    SetasswordRequest:
       type: object
       properties:
         new_password:
           type: string
           writeOnly: true
+          minLength: 1
         uid:
           type: string
           writeOnly: true
+          minLength: 1
         token:
           type: string
           writeOnly: true
+          minLength: 1
       required:
       - new_password
       - token
       - uid
-    TokenObtainPair:
+    Subcontractor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom de l'entreprise
+          maxLength: 255
+        siren_number:
+          type: string
+          title: Numéro SIREN
+          maxLength: 9
+        address:
+          $ref: '#/components/schemas/Address'
+        contact_email:
+          type: string
+          format: email
+          title: Email de contact
+          maxLength: 254
+        clients:
+          type: array
+          items:
+            $ref: '#/components/schemas/Client'
+          readOnly: true
+        phone_number:
+          type: string
+          title: Numéro de téléphone
+          maxLength: 20
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        is_active:
+          type: boolean
+          title: Est actif
+        lots:
+          type: array
+          items:
+            $ref: '#/components/schemas/LotSimple'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address
+      - clients
+      - contact_email
+      - created_at
+      - created_by
+      - id
+      - lots
+      - name
+      - owner
+      - phone_number
+      - siren_number
+      - updated_at
+    SubcontractorCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom de l'entreprise
+          maxLength: 255
+        siren_number:
+          type: string
+          minLength: 1
+          title: Numéro SIREN
+          maxLength: 9
+        address:
+          $ref: '#/components/schemas/AddressCreateRequest'
+        contact_email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email de contact
+          maxLength: 254
+        phone_number:
+          type: string
+          minLength: 1
+          title: Numéro de téléphone
+          maxLength: 20
+        is_active:
+          type: boolean
+          title: Est actif
+        lots_ids:
+          type: array
+          items:
+            type: integer
+          nullable: true
+        client_id:
+          type: integer
+          nullable: true
+      required:
+      - address
+      - contact_email
+      - name
+      - phone_number
+      - siren_number
+    SubcontractorStaff:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - updated_at
+      - user
+    SubcontractorStaffCreateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreateRequest'
+      required:
+      - user
+    SubcontractorUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Nom de l'entreprise
+          maxLength: 255
+        siren_number:
+          type: string
+          minLength: 1
+          title: Numéro SIREN
+          maxLength: 9
+        address:
+          $ref: '#/components/schemas/AddressCreateRequest'
+        contact_email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email de contact
+          maxLength: 254
+        phone_number:
+          type: string
+          minLength: 1
+          title: Numéro de téléphone
+          maxLength: 20
+        is_active:
+          type: boolean
+          title: Est actif
+        lots_ids:
+          type: array
+          items:
+            type: integer
+          nullable: true
+      required:
+      - address
+      - contact_email
+      - name
+      - phone_number
+      - siren_number
+    TokenObtainPairRequest:
       type: object
       properties:
         email:
           type: string
           writeOnly: true
+          minLength: 1
         password:
           type: string
           writeOnly: true
-        access:
-          type: string
-          readOnly: true
-        refresh:
-          type: string
-          readOnly: true
+          minLength: 1
       required:
-      - access
       - email
       - password
-      - refresh
-    TokenRefresh:
+    TokenRefreshRequest:
       type: object
       properties:
-        access:
-          type: string
-          readOnly: true
         refresh:
           type: string
+          minLength: 1
       required:
-      - access
       - refresh
     TypeEnum:
       enum:
@@ -1662,6 +2635,9 @@ components:
         id:
           type: integer
           readOnly: true
+        avatar:
+          type: string
+          format: uri
         email:
           type: string
           format: email
@@ -1679,25 +2655,33 @@ components:
         is_active:
           type: boolean
           title: Active
+        role:
+          type: string
+          readOnly: true
       required:
+      - avatar
       - email
       - id
-    UserChangePassword:
+      - role
+    UserChangePasswordRequest:
       type: object
       properties:
         old_password:
           type: string
+          minLength: 1
         new_password:
           type: string
+          minLength: 1
       required:
       - new_password
       - old_password
-    UserCreate:
+    UserCreateRequest:
       type: object
       properties:
         email:
           type: string
           format: email
+          minLength: 1
           title: Email address
           maxLength: 254
         first_name:
@@ -1713,34 +2697,54 @@ components:
           type: string
           format: uri
           writeOnly: true
+          minLength: 1
       required:
       - email
       - first_name
       - last_name
       - redirect_uri
-    UserEmailChangeConfirm:
+    UserEmailChangeConfirmRequest:
       type: object
       properties:
         token:
           type: string
+          minLength: 1
       required:
       - token
-    UserEmailChangeRequest:
+    UserEmailChangeRequestRequest:
       type: object
       properties:
         new_email:
           type: string
           format: email
+          minLength: 1
         password:
           type: string
           writeOnly: true
+          minLength: 1
         redirect_uri:
           type: string
           format: uri
+          minLength: 1
       required:
       - new_email
       - password
       - redirect_uri
+    UserUpdateRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+        is_active:
+          type: boolean
+          title: Active
+      required:
+      - first_name
+      - last_name
   securitySchemes:
     jwtAuth:
       type: http

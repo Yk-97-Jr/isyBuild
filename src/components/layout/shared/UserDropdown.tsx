@@ -61,6 +61,13 @@ const UserDropdown = () => {
   const handleUserLogout = async () => {
     const refresh_token = Cookies.get('refresh_token')
 
+    if (!refresh_token) {
+      console.warn('No refresh token found, redirecting to login');
+      router.push('/login');
+
+return;
+    }
+
     try {
       // Call the mutation to log out the user
       await logout(

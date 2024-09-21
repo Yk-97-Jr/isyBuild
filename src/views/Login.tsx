@@ -104,7 +104,8 @@ const LoginV2 = ({ mode }: { mode: 'light' | 'dark' }) => {
   // Soumission du formulaire
   const onSubmit = async (data: { email: string; password: string }) => {
     try {
-      const result = await login({tokenObtainPair: data}).unwrap();
+
+      const result = await login({tokenObtainPairRequest: data}).unwrap();
 
       const decodedRefreshToken = verifyToken(result.refresh);
 

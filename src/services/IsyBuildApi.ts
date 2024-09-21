@@ -9,7 +9,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/admin-staff/${queryArg.adminUserId}/` })
     }),
     adminStaffCreateCreate: build.mutation<AdminStaffCreateCreateApiResponse, AdminStaffCreateCreateApiArg>({
-      query: queryArg => ({ url: `/admin-staff/create/`, method: 'POST', body: queryArg.adminStaffCreate })
+      query: queryArg => ({ url: `/admin-staff/create/`, method: 'POST', body: queryArg.adminStaffCreateRequest })
     }),
     adminStaffUpdatePartialUpdate: build.mutation<
       AdminStaffUpdatePartialUpdateApiResponse,
@@ -18,7 +18,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({
         url: `/admin-staff/update/${queryArg.adminUserId}/`,
         method: 'PATCH',
-        body: queryArg.patchedAdminStaffUpdate
+        body: queryArg.patchedAdminStaffUpdateRequest
       })
     }),
     adminUsersDeleteDestroy: build.mutation<AdminUsersDeleteDestroyApiResponse, AdminUsersDeleteDestroyApiArg>({
@@ -30,37 +30,47 @@ const injectedRtkApi = api.injectEndpoints({
     clientsRetrieve2: build.query<ClientsRetrieve2ApiResponse, ClientsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/clients/${queryArg.clientId}/` })
     }),
-    clientsContactsRetrieve: build.query<ClientsContactsRetrieveApiResponse, ClientsContactsRetrieveApiArg>({
+    clientsStaffRetrieve2: build.query<ClientsStaffRetrieve2ApiResponse, ClientsStaffRetrieve2ApiArg>({
       query: queryArg => ({
-        url: `/clients/${queryArg.clientId}/contacts/`,
+        url: `/clients/${queryArg.clientId}/staff/`,
         params: { page: queryArg.page, page_size: queryArg.pageSize }
       })
     }),
-    clientsContactsCreateCreate: build.mutation<
-      ClientsContactsCreateCreateApiResponse,
-      ClientsContactsCreateCreateApiArg
-    >({
+    clientsStaffCreateCreate: build.mutation<ClientsStaffCreateCreateApiResponse, ClientsStaffCreateCreateApiArg>({
       query: queryArg => ({
-        url: `/clients/${queryArg.clientId}/contacts/create/`,
+        url: `/clients/${queryArg.clientId}/staff/create/`,
         method: 'POST',
-        body: queryArg.contactCreateUpdate
+        body: queryArg.clientStaffCreateRequest
       })
     }),
     clientsCreateCreate: build.mutation<ClientsCreateCreateApiResponse, ClientsCreateCreateApiArg>({
-      query: queryArg => ({ url: `/clients/create/`, method: 'POST', body: queryArg.clientCreateUpdate })
+      query: queryArg => ({ url: `/clients/create/`, method: 'POST', body: queryArg.clientCreateUpdateRequest })
     }),
     clientsDeleteDestroy: build.mutation<ClientsDeleteDestroyApiResponse, ClientsDeleteDestroyApiArg>({
       query: queryArg => ({ url: `/clients/delete/${queryArg.clientId}/`, method: 'DELETE' })
+    }),
+    clientsStaffRetrieve: build.query<ClientsStaffRetrieveApiResponse, ClientsStaffRetrieveApiArg>({
+      query: queryArg => ({ url: `/clients/staff/${queryArg.clientStaffId}/` })
+    }),
+    clientsStaffDeleteDestroy: build.mutation<ClientsStaffDeleteDestroyApiResponse, ClientsStaffDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/clients/staff/${queryArg.clientStaffId}/delete/`, method: 'DELETE' })
+    }),
+    clientsStaffUpdateUpdate: build.mutation<ClientsStaffUpdateUpdateApiResponse, ClientsStaffUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/clients/staff/${queryArg.clientStaffId}/update/`,
+        method: 'PUT',
+        body: queryArg.clientStaffUpdateRequest
+      })
     }),
     clientsUpdateUpdate: build.mutation<ClientsUpdateUpdateApiResponse, ClientsUpdateUpdateApiArg>({
       query: queryArg => ({
         url: `/clients/update/${queryArg.clientId}/`,
         method: 'PUT',
-        body: queryArg.clientCreateUpdate
+        body: queryArg.clientCreateUpdateRequest
       })
     }),
     contactUsSendEmailCreate: build.mutation<ContactUsSendEmailCreateApiResponse, ContactUsSendEmailCreateApiArg>({
-      query: queryArg => ({ url: `/contact-us/send-email/`, method: 'POST', body: queryArg.contactUsEmail })
+      query: queryArg => ({ url: `/contact-us/send-email/`, method: 'POST', body: queryArg.contactUsEmailRequest })
     }),
     contactsRetrieve: build.query<ContactsRetrieveApiResponse, ContactsRetrieveApiArg>({
       query: queryArg => ({ url: `/contacts/${queryArg.contactId}/` })
@@ -84,27 +94,46 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({
         url: `/contacts/${queryArg.contactId}/phone-numbers/create/`,
         method: 'POST',
-        body: queryArg.phoneNumberCreateUpdate
+        body: queryArg.phoneNumberCreateUpdateRequest
       })
     }),
     contactsUpdateUpdate: build.mutation<ContactsUpdateUpdateApiResponse, ContactsUpdateUpdateApiArg>({
       query: queryArg => ({
         url: `/contacts/${queryArg.contactId}/update/`,
         method: 'PUT',
-        body: queryArg.contactCreateUpdate
+        body: queryArg.contactCreateUpdateRequest
       })
     }),
     loginCreate: build.mutation<LoginCreateApiResponse, LoginCreateApiArg>({
-      query: queryArg => ({ url: `/login/`, method: 'POST', body: queryArg.tokenObtainPair })
+      query: queryArg => ({ url: `/login/`, method: 'POST', body: queryArg.tokenObtainPairRequest })
     }),
     logoutCreate: build.mutation<LogoutCreateApiResponse, LogoutCreateApiArg>({
-      query: queryArg => ({ url: `/logout/`, method: 'POST', body: queryArg.tokenRefresh })
+      query: queryArg => ({ url: `/logout/`, method: 'POST', body: queryArg.tokenRefreshRequest })
+    }),
+    lotsRetrieve: build.query<LotsRetrieveApiResponse, LotsRetrieveApiArg>({
+      query: queryArg => ({ url: `/lots/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+    }),
+    lotsRetrieve2: build.query<LotsRetrieve2ApiResponse, LotsRetrieve2ApiArg>({
+      query: queryArg => ({ url: `/lots/${queryArg.lotId}/` })
+    }),
+    lotsCreateCreate: build.mutation<LotsCreateCreateApiResponse, LotsCreateCreateApiArg>({
+      query: queryArg => ({ url: `/lots/create/`, method: 'POST', body: queryArg.lotCreateUpdateRequest })
+    }),
+    lotsDeleteDestroy: build.mutation<LotsDeleteDestroyApiResponse, LotsDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/lots/delete/${queryArg.lotId}/`, method: 'DELETE' })
+    }),
+    lotsUpdateUpdate: build.mutation<LotsUpdateUpdateApiResponse, LotsUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/lots/update/${queryArg.lotId}/`,
+        method: 'PUT',
+        body: queryArg.lotCreateUpdateRequest
+      })
     }),
     passwordConfirmCreate: build.mutation<PasswordConfirmCreateApiResponse, PasswordConfirmCreateApiArg>({
-      query: queryArg => ({ url: `/password-confirm/`, method: 'POST', body: queryArg.setNewPassword })
+      query: queryArg => ({ url: `/password-confirm/`, method: 'POST', body: queryArg.setNewPasswordRequest })
     }),
     passwordResetCreate: build.mutation<PasswordResetCreateApiResponse, PasswordResetCreateApiArg>({
-      query: queryArg => ({ url: `/password-reset/`, method: 'POST', body: queryArg.passwordResetRequest })
+      query: queryArg => ({ url: `/password-reset/`, method: 'POST', body: queryArg.passwordResetRequestRequest })
     }),
     phoneNumbersRetrieve: build.query<PhoneNumbersRetrieveApiResponse, PhoneNumbersRetrieveApiArg>({
       query: queryArg => ({ url: `/phone-numbers/${queryArg.phoneNumberId}/` })
@@ -116,23 +145,97 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({
         url: `/phone-numbers/${queryArg.phoneNumberId}/update/`,
         method: 'PUT',
-        body: queryArg.phoneNumberCreateUpdate
+        body: queryArg.phoneNumberCreateUpdateRequest
       })
     }),
     setPasswordCreate: build.mutation<SetPasswordCreateApiResponse, SetPasswordCreateApiArg>({
-      query: queryArg => ({ url: `/set-password/`, method: 'POST', body: queryArg.setassword })
+      query: queryArg => ({ url: `/set-password/`, method: 'POST', body: queryArg.setasswordRequest })
     }),
+    subcontractorsRetrieve: build.query<SubcontractorsRetrieveApiResponse, SubcontractorsRetrieveApiArg>({
+      query: queryArg => ({ url: `/subcontractors/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+    }),
+    subcontractorsRetrieve2: build.query<SubcontractorsRetrieve2ApiResponse, SubcontractorsRetrieve2ApiArg>({
+      query: queryArg => ({ url: `/subcontractors/${queryArg.subcontractorId}/` })
+    }),
+    subcontractorsStaffRetrieve2: build.query<
+      SubcontractorsStaffRetrieve2ApiResponse,
+      SubcontractorsStaffRetrieve2ApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/${queryArg.subcontractorId}/staff/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
+    subcontractorsStaffCreateCreate: build.mutation<
+      SubcontractorsStaffCreateCreateApiResponse,
+      SubcontractorsStaffCreateCreateApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/${queryArg.subcontractorId}/staff/create/`,
+        method: 'POST',
+        body: queryArg.subcontractorStaffCreateRequest
+      })
+    }),
+    subcontractorsCreateCreate: build.mutation<SubcontractorsCreateCreateApiResponse, SubcontractorsCreateCreateApiArg>(
+      {
+        query: queryArg => ({
+          url: `/subcontractors/create/`,
+          method: 'POST',
+          body: queryArg.subcontractorCreateRequest
+        })
+      }
+    ),
+    subcontractorsDeleteDestroy: build.mutation<
+      SubcontractorsDeleteDestroyApiResponse,
+      SubcontractorsDeleteDestroyApiArg
+    >({
+      query: queryArg => ({ url: `/subcontractors/delete/${queryArg.subcontractorId}/`, method: 'DELETE' })
+    }),
+    subcontractorsStaffRetrieve: build.query<SubcontractorsStaffRetrieveApiResponse, SubcontractorsStaffRetrieveApiArg>(
+      {
+        query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
+      }
+    ),
+    subcontractorsStaffDeleteDestroy: build.mutation<
+      SubcontractorsStaffDeleteDestroyApiResponse,
+      SubcontractorsStaffDeleteDestroyApiArg
+    >({
+      query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/delete/`, method: 'DELETE' })
+    }),
+    subcontractorsStaffUpdatePartialUpdate: build.mutation<
+      SubcontractorsStaffUpdatePartialUpdateApiResponse,
+      SubcontractorsStaffUpdatePartialUpdateApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/update/`,
+        method: 'PATCH',
+        body: queryArg.patchedSubcontractorStaffUpdateRequest
+      })
+    }),
+    subcontractorsUpdateUpdate: build.mutation<SubcontractorsUpdateUpdateApiResponse, SubcontractorsUpdateUpdateApiArg>(
+      {
+        query: queryArg => ({
+          url: `/subcontractors/update/${queryArg.subcontractorId}/`,
+          method: 'PUT',
+          body: queryArg.subcontractorUpdateRequest
+        })
+      }
+    ),
     tokenRefreshCreate: build.mutation<TokenRefreshCreateApiResponse, TokenRefreshCreateApiArg>({
-      query: queryArg => ({ url: `/token_refresh/`, method: 'POST', body: queryArg.tokenRefresh })
+      query: queryArg => ({ url: `/token_refresh/`, method: 'POST', body: queryArg.tokenRefreshRequest })
     }),
     userChangePasswordCreate: build.mutation<UserChangePasswordCreateApiResponse, UserChangePasswordCreateApiArg>({
-      query: queryArg => ({ url: `/user/change-password/`, method: 'POST', body: queryArg.userChangePassword })
+      query: queryArg => ({ url: `/user/change-password/`, method: 'POST', body: queryArg.userChangePasswordRequest })
     }),
     userConfirmEmailChangeCreate: build.mutation<
       UserConfirmEmailChangeCreateApiResponse,
       UserConfirmEmailChangeCreateApiArg
     >({
-      query: queryArg => ({ url: `/user/confirm-email-change/`, method: 'POST', body: queryArg.userEmailChangeConfirm })
+      query: queryArg => ({
+        url: `/user/confirm-email-change/`,
+        method: 'POST',
+        body: queryArg.userEmailChangeConfirmRequest
+      })
     }),
     userProfileRetrieve: build.query<UserProfileRetrieveApiResponse, UserProfileRetrieveApiArg>({
       query: () => ({ url: `/user/profile/` })
@@ -141,10 +244,17 @@ const injectedRtkApi = api.injectEndpoints({
       UserRequestChangeEmailCreateApiResponse,
       UserRequestChangeEmailCreateApiArg
     >({
-      query: queryArg => ({ url: `/user/request-change-email/`, method: 'POST', body: queryArg.userEmailChangeRequest })
+      query: queryArg => ({
+        url: `/user/request-change-email/`,
+        method: 'POST',
+        body: queryArg.userEmailChangeRequestRequest
+      })
     }),
     userUpdatePartialUpdate: build.mutation<UserUpdatePartialUpdateApiResponse, UserUpdatePartialUpdateApiArg>({
-      query: queryArg => ({ url: `/user/update/`, method: 'PATCH', body: queryArg.patchedUserProfileUpdate })
+      query: queryArg => ({ url: `/user/update/`, method: 'PATCH', body: queryArg.patchedUserProfileUpdateRequest })
+    }),
+    userUpdateAvatarCreate: build.mutation<UserUpdateAvatarCreateApiResponse, UserUpdateAvatarCreateApiArg>({
+      query: queryArg => ({ url: `/user/update-avatar/`, method: 'POST', body: queryArg.avatarUpdateRequest })
     })
   }),
   overrideExisting: false
@@ -166,12 +276,12 @@ export type AdminStaffRetrieve2ApiArg = {
 }
 export type AdminStaffCreateCreateApiResponse = /** status 201  */ AdminStaffRead
 export type AdminStaffCreateCreateApiArg = {
-  adminStaffCreate: AdminStaffCreateWrite
+  adminStaffCreateRequest: AdminStaffCreateRequestWrite
 }
 export type AdminStaffUpdatePartialUpdateApiResponse = /** status 200  */ AdminStaffRead
 export type AdminStaffUpdatePartialUpdateApiArg = {
   adminUserId: number
-  patchedAdminStaffUpdate: PatchedAdminStaffUpdate
+  patchedAdminStaffUpdateRequest: PatchedAdminStaffUpdateRequest
 }
 export type AdminUsersDeleteDestroyApiResponse = /** status 204  */ any
 export type AdminUsersDeleteDestroyApiArg = {
@@ -190,8 +300,8 @@ export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead
 export type ClientsRetrieve2ApiArg = {
   clientId: number
 }
-export type ClientsContactsRetrieveApiResponse = /** status 200  */ PaginatedRead
-export type ClientsContactsRetrieveApiArg = {
+export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedRead
+export type ClientsStaffRetrieve2ApiArg = {
   clientId: number
 
   /** Page number of the results to fetch */
@@ -200,27 +310,40 @@ export type ClientsContactsRetrieveApiArg = {
   /** Number of results per page */
   pageSize?: number
 }
-export type ClientsContactsCreateCreateApiResponse = /** status 201  */ ContactRead
-export type ClientsContactsCreateCreateApiArg = {
+export type ClientsStaffCreateCreateApiResponse = /** status 201  */ ClientStaffRead
+export type ClientsStaffCreateCreateApiArg = {
   clientId: number
-  contactCreateUpdate: ContactCreateUpdate
+  clientStaffCreateRequest: ClientStaffCreateRequestWrite
 }
 export type ClientsCreateCreateApiResponse = /** status 201  */ ClientRead
 export type ClientsCreateCreateApiArg = {
-  clientCreateUpdate: ClientCreateUpdate
+  clientCreateUpdateRequest: ClientCreateUpdateRequest
 }
 export type ClientsDeleteDestroyApiResponse = /** status 204  */ any
 export type ClientsDeleteDestroyApiArg = {
   clientId: number
 }
+export type ClientsStaffRetrieveApiResponse = /** status 200  */ ClientStaffRead
+export type ClientsStaffRetrieveApiArg = {
+  clientStaffId: number
+}
+export type ClientsStaffDeleteDestroyApiResponse = /** status 204  */ any
+export type ClientsStaffDeleteDestroyApiArg = {
+  clientStaffId: number
+}
+export type ClientsStaffUpdateUpdateApiResponse = /** status 200  */ ClientStaffRead
+export type ClientsStaffUpdateUpdateApiArg = {
+  clientStaffId: number
+  clientStaffUpdateRequest: ClientStaffUpdateRequest
+}
 export type ClientsUpdateUpdateApiResponse = /** status 200  */ ClientRead
 export type ClientsUpdateUpdateApiArg = {
   clientId: number
-  clientCreateUpdate: ClientCreateUpdate
+  clientCreateUpdateRequest: ClientCreateUpdateRequest
 }
 export type ContactUsSendEmailCreateApiResponse = unknown
 export type ContactUsSendEmailCreateApiArg = {
-  contactUsEmail: ContactUsEmail
+  contactUsEmailRequest: ContactUsEmailRequest
 }
 export type ContactsRetrieveApiResponse = /** status 200  */ ContactRead
 export type ContactsRetrieveApiArg = {
@@ -243,30 +366,56 @@ export type ContactsPhoneNumbersRetrieveApiArg = {
 export type ContactsPhoneNumbersCreateCreateApiResponse = /** status 201  */ PhoneNumberRead
 export type ContactsPhoneNumbersCreateCreateApiArg = {
   contactId: number
-  phoneNumberCreateUpdate: PhoneNumberCreateUpdate
+  phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
 export type ContactsUpdateUpdateApiResponse = /** status 200  */ ContactRead
 export type ContactsUpdateUpdateApiArg = {
   contactId: number
-  contactCreateUpdate: ContactCreateUpdate
+  contactCreateUpdateRequest: ContactCreateUpdateRequest
 }
 export type LoginCreateApiResponse = /** status 200  */ {
   [key: string]: any
 }
 export type LoginCreateApiArg = {
-  tokenObtainPair: TokenObtainPairWrite
+  tokenObtainPairRequest: TokenObtainPairRequestWrite
 }
 export type LogoutCreateApiResponse = /** status 205 No response body */ void
 export type LogoutCreateApiArg = {
-  tokenRefresh: TokenRefresh
+  tokenRefreshRequest: TokenRefreshRequest
+}
+export type LotsRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type LotsRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type LotsRetrieve2ApiResponse = /** status 200  */ LotRead
+export type LotsRetrieve2ApiArg = {
+  lotId: number
+}
+export type LotsCreateCreateApiResponse = /** status 201  */ LotRead
+export type LotsCreateCreateApiArg = {
+  lotCreateUpdateRequest: LotCreateUpdateRequest
+}
+export type LotsDeleteDestroyApiResponse = /** status 204  */ any
+export type LotsDeleteDestroyApiArg = {
+  lotId: number
+}
+export type LotsUpdateUpdateApiResponse = /** status 200  */ LotRead
+export type LotsUpdateUpdateApiArg = {
+  lotId: number
+  lotCreateUpdateRequest: LotCreateUpdateRequest
 }
 export type PasswordConfirmCreateApiResponse = /** status 200  */ any
 export type PasswordConfirmCreateApiArg = {
-  setNewPassword: SetNewPasswordWrite
+  setNewPasswordRequest: SetNewPasswordRequestWrite
 }
 export type PasswordResetCreateApiResponse = /** status 200  */ any
 export type PasswordResetCreateApiArg = {
-  passwordResetRequest: PasswordResetRequest
+  passwordResetRequestRequest: PasswordResetRequestRequest
 }
 export type PhoneNumbersRetrieveApiResponse = /** status 200  */ PhoneNumberRead
 export type PhoneNumbersRetrieveApiArg = {
@@ -279,43 +428,102 @@ export type PhoneNumbersDeleteDestroyApiArg = {
 export type PhoneNumbersUpdateUpdateApiResponse = /** status 200  */ PhoneNumberRead
 export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
-  phoneNumberCreateUpdate: PhoneNumberCreateUpdate
+  phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
 export type SetPasswordCreateApiResponse = /** status 200  */ any
 export type SetPasswordCreateApiArg = {
-  setassword: SetasswordWrite
+  setasswordRequest: SetasswordRequestWrite
+}
+export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type SubcontractorsRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ SubcontractorRead
+export type SubcontractorsRetrieve2ApiArg = {
+  subcontractorId: number
+}
+export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedRead
+export type SubcontractorsStaffRetrieve2ApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+  subcontractorId: number
+}
+export type SubcontractorsStaffCreateCreateApiResponse = /** status 201  */ SubcontractorStaffRead
+export type SubcontractorsStaffCreateCreateApiArg = {
+  subcontractorId: number
+  subcontractorStaffCreateRequest: SubcontractorStaffCreateRequestWrite
+}
+export type SubcontractorsCreateCreateApiResponse = /** status 201  */ SubcontractorRead
+export type SubcontractorsCreateCreateApiArg = {
+  subcontractorCreateRequest: SubcontractorCreateRequest
+}
+export type SubcontractorsDeleteDestroyApiResponse = /** status 204  */ any
+export type SubcontractorsDeleteDestroyApiArg = {
+  subcontractorId: number
+}
+export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ SubcontractorStaffRead
+export type SubcontractorsStaffRetrieveApiArg = {
+  subcontractorStaffId: number
+}
+export type SubcontractorsStaffDeleteDestroyApiResponse = /** status 204  */ any
+export type SubcontractorsStaffDeleteDestroyApiArg = {
+  subcontractorStaffId: number
+}
+export type SubcontractorsStaffUpdatePartialUpdateApiResponse = /** status 200  */ SubcontractorStaffRead
+export type SubcontractorsStaffUpdatePartialUpdateApiArg = {
+  subcontractorStaffId: number
+  patchedSubcontractorStaffUpdateRequest: PatchedSubcontractorStaffUpdateRequest
+}
+export type SubcontractorsUpdateUpdateApiResponse = /** status 200  */ SubcontractorRead
+export type SubcontractorsUpdateUpdateApiArg = {
+  subcontractorId: number
+  subcontractorUpdateRequest: SubcontractorUpdateRequest
 }
 export type TokenRefreshCreateApiResponse = /** status 200  */ {
   [key: string]: any
 }
 export type TokenRefreshCreateApiArg = {
-  tokenRefresh: TokenRefresh
+  tokenRefreshRequest: TokenRefreshRequest
 }
 export type UserChangePasswordCreateApiResponse = /** status 200  */ {
   [key: string]: any
 }
 export type UserChangePasswordCreateApiArg = {
-  userChangePassword: UserChangePassword
+  userChangePasswordRequest: UserChangePasswordRequest
 }
 export type UserConfirmEmailChangeCreateApiResponse = /** status 200  */ {
   message?: string
   new_email?: string
 }
 export type UserConfirmEmailChangeCreateApiArg = {
-  userEmailChangeConfirm: UserEmailChangeConfirm
+  userEmailChangeConfirmRequest: UserEmailChangeConfirmRequest
 }
 export type UserProfileRetrieveApiResponse = /** status 200  */ UserRead
 export type UserProfileRetrieveApiArg = void
 export type UserRequestChangeEmailCreateApiResponse = /** status 200  */ any
 export type UserRequestChangeEmailCreateApiArg = {
-  userEmailChangeRequest: UserEmailChangeRequestWrite
+  userEmailChangeRequestRequest: UserEmailChangeRequestRequestWrite
 }
 export type UserUpdatePartialUpdateApiResponse = /** status 200  */ UserRead
 export type UserUpdatePartialUpdateApiArg = {
-  patchedUserProfileUpdate: PatchedUserProfileUpdate
+  patchedUserProfileUpdateRequest: PatchedUserProfileUpdateRequest
+}
+export type UserUpdateAvatarCreateApiResponse = /** status 200  */ UserRead
+export type UserUpdateAvatarCreateApiArg = {
+  avatarUpdateRequest: AvatarUpdateRequest
 }
 export type AdminStaff = {}
 export type User = {
+  avatar: string
   email: string
   first_name?: string
   last_name?: string
@@ -324,19 +532,23 @@ export type User = {
 }
 export type UserRead = {
   id: number
+  avatar: string
   email: string
   first_name?: string
   last_name?: string
   date_joined?: string
   is_active?: boolean
+  role: string
 }
 export type CreatedBy = {
+  avatar?: string | null
   email: string
   first_name?: string
   last_name?: string
 }
 export type CreatedByRead = {
   id: number
+  avatar?: string | null
   email: string
   first_name?: string
   last_name?: string
@@ -360,26 +572,26 @@ export type PaginatedRead = {
   previous: string | null
   results: AdminStaffRead[]
 }
-export type UserCreate = {
+export type UserCreateRequest = {
   email: string
   first_name: string
   last_name: string
   is_active?: boolean
 }
-export type UserCreateWrite = {
+export type UserCreateRequestWrite = {
   email: string
   first_name: string
   last_name: string
   is_active?: boolean
   redirect_uri: string
 }
-export type AdminStaffCreate = {
-  user: UserCreate
+export type AdminStaffCreateRequest = {
+  user: UserCreateRequest
 }
-export type AdminStaffCreateWrite = {
-  user: UserCreateWrite
+export type AdminStaffCreateRequestWrite = {
+  user: UserCreateRequestWrite
 }
-export type PatchedAdminStaffUpdate = {
+export type PatchedAdminStaffUpdateRequest = {
   first_name?: string
   last_name?: string
   is_active?: boolean
@@ -426,6 +638,54 @@ export type ClientRead = {
   created_at: string
   updated_at: string
 }
+export type ClientStaff = {}
+export type ClientStaffRead = {
+  id: number
+  user: UserRead
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type ClientStaffCreateRequest = {
+  user: UserCreateRequest
+}
+export type ClientStaffCreateRequestWrite = {
+  user: UserCreateRequestWrite
+}
+export type AddressCreateRequest = {
+  street_number: string
+  street_name: string
+  postal_code: string
+  city: string
+  department?: string | null
+  region?: string | null
+  country?: string
+}
+export type ClientCreateUpdateRequest = {
+  name: string
+  siren_number: string
+  address: AddressCreateRequest
+  contact_email: string
+  phone_number: string
+  is_active?: boolean
+}
+export type UserUpdateRequest = {
+  first_name: string
+  last_name: string
+  is_active?: boolean
+}
+export type ClientStaffUpdateRequest = {
+  user: UserUpdateRequest
+}
+export type ContactUsEmailRequest = {
+  nom: string
+  prenom: string
+  telephone: string
+  email: string
+  fonction: string
+  entreprise: string
+  message?: string
+}
 export type Contact = {
   first_name: string
   last_name: string
@@ -454,92 +714,144 @@ export type ContactRead = {
   created_at: string
   updated_at: string
 }
-export type ContactCreateUpdate = {
+export type PhoneNumberCreateUpdateRequest = {
+  number: string
+  type: TypeEnum
+}
+export type ContactCreateUpdateRequest = {
   first_name: string
   last_name: string
   email: string
 }
-export type AddressCreate = {
-  street_number: string
-  street_name: string
-  postal_code: string
-  city: string
-  department?: string | null
-  region?: string | null
-  country?: string
+export type TokenObtainPairRequest = {}
+export type TokenObtainPairRequestWrite = {
+  email: string
+  password: string
 }
-export type ClientCreateUpdate = {
+export type TokenRefreshRequest = {
+  refresh: string
+}
+export type Lot = {
+  name: string
+  description?: string | null
+}
+export type LotRead = {
+  id: number
+  name: string
+  description?: string | null
+  client: ClientRead
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type LotCreateUpdateRequest = {
+  name: string
+  description?: string | null
+}
+export type SetNewPasswordRequest = {}
+export type SetNewPasswordRequestWrite = {
+  new_password: string
+  uid: string
+  token: string
+}
+export type PasswordResetRequestRequest = {
+  email: string
+  redirect_uri: string
+}
+export type SetasswordRequest = {}
+export type SetasswordRequestWrite = {
+  new_password: string
+  uid: string
+  token: string
+}
+export type Subcontractor = {
   name: string
   siren_number: string
-  address: AddressCreate
+  address: Address
   contact_email: string
   phone_number: string
   is_active?: boolean
 }
-export type ContactUsEmail = {
-  nom: string
-  prenom: string
-  telephone: string
-  email: string
-  fonction: string
-  entreprise: string
-  message?: string
+export type LotSimple = {
+  name: string
 }
-export type PhoneNumberCreateUpdate = {
-  number: string
-  type: TypeEnum
+export type LotSimpleRead = {
+  id: number
+  name: string
 }
-export type TokenObtainPair = {}
-export type TokenObtainPairRead = {
-  access: string
-  refresh: string
+export type SubcontractorRead = {
+  id: number
+  name: string
+  siren_number: string
+  address: AddressRead
+  contact_email: string
+  clients: ClientRead[]
+  phone_number: string
+  owner: CreatedByRead
+  is_active?: boolean
+  lots: LotSimpleRead[]
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
 }
-export type TokenObtainPairWrite = {
-  email: string
-  password: string
+export type SubcontractorStaff = {}
+export type SubcontractorStaffRead = {
+  id: number
+  user: UserRead
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
 }
-export type TokenRefresh = {
-  refresh: string
+export type SubcontractorStaffCreateRequest = {
+  user: UserCreateRequest
 }
-export type TokenRefreshRead = {
-  access: string
-  refresh: string
+export type SubcontractorStaffCreateRequestWrite = {
+  user: UserCreateRequestWrite
 }
-export type SetNewPassword = {}
-export type SetNewPasswordWrite = {
-  new_password: string
-  uid: string
-  token: string
+export type SubcontractorCreateRequest = {
+  name: string
+  siren_number: string
+  address: AddressCreateRequest
+  contact_email: string
+  phone_number: string
+  is_active?: boolean
+  lots_ids?: number[] | null
+  client_id?: number | null
 }
-export type PasswordResetRequest = {
-  email: string
-  redirect_uri: string
+export type PatchedSubcontractorStaffUpdateRequest = {
+  user?: UserUpdateRequest
 }
-export type Setassword = {}
-export type SetasswordWrite = {
-  new_password: string
-  uid: string
-  token: string
+export type SubcontractorUpdateRequest = {
+  name: string
+  siren_number: string
+  address: AddressCreateRequest
+  contact_email: string
+  phone_number: string
+  is_active?: boolean
+  lots_ids?: number[] | null
 }
-export type UserChangePassword = {
+export type UserChangePasswordRequest = {
   old_password: string
   new_password: string
 }
-export type UserEmailChangeConfirm = {
+export type UserEmailChangeConfirmRequest = {
   token: string
 }
-export type UserEmailChangeRequest = {
+export type UserEmailChangeRequestRequest = {
   new_email: string
   redirect_uri: string
 }
-export type UserEmailChangeRequestWrite = {
+export type UserEmailChangeRequestRequestWrite = {
   new_email: string
   password: string
   redirect_uri: string
 }
-export type PatchedUserProfileUpdate = {
+export type PatchedUserProfileUpdateRequest = {
   first_name?: string
   last_name?: string
+}
+export type AvatarUpdateRequest = {
+  avatar: Blob
 }
 export const {
   useAdminStaffRetrieveQuery,
@@ -549,10 +861,13 @@ export const {
   useAdminUsersDeleteDestroyMutation,
   useClientsRetrieveQuery,
   useClientsRetrieve2Query,
-  useClientsContactsRetrieveQuery,
-  useClientsContactsCreateCreateMutation,
+  useClientsStaffRetrieve2Query,
+  useClientsStaffCreateCreateMutation,
   useClientsCreateCreateMutation,
   useClientsDeleteDestroyMutation,
+  useClientsStaffRetrieveQuery,
+  useClientsStaffDeleteDestroyMutation,
+  useClientsStaffUpdateUpdateMutation,
   useClientsUpdateUpdateMutation,
   useContactUsSendEmailCreateMutation,
   useContactsRetrieveQuery,
@@ -562,16 +877,32 @@ export const {
   useContactsUpdateUpdateMutation,
   useLoginCreateMutation,
   useLogoutCreateMutation,
+  useLotsRetrieveQuery,
+  useLotsRetrieve2Query,
+  useLotsCreateCreateMutation,
+  useLotsDeleteDestroyMutation,
+  useLotsUpdateUpdateMutation,
   usePasswordConfirmCreateMutation,
   usePasswordResetCreateMutation,
   usePhoneNumbersRetrieveQuery,
   usePhoneNumbersDeleteDestroyMutation,
   usePhoneNumbersUpdateUpdateMutation,
   useSetPasswordCreateMutation,
+  useSubcontractorsRetrieveQuery,
+  useSubcontractorsRetrieve2Query,
+  useSubcontractorsStaffRetrieve2Query,
+  useSubcontractorsStaffCreateCreateMutation,
+  useSubcontractorsCreateCreateMutation,
+  useSubcontractorsDeleteDestroyMutation,
+  useSubcontractorsStaffRetrieveQuery,
+  useSubcontractorsStaffDeleteDestroyMutation,
+  useSubcontractorsStaffUpdatePartialUpdateMutation,
+  useSubcontractorsUpdateUpdateMutation,
   useTokenRefreshCreateMutation,
   useUserChangePasswordCreateMutation,
   useUserConfirmEmailChangeCreateMutation,
   useUserProfileRetrieveQuery,
   useUserRequestChangeEmailCreateMutation,
-  useUserUpdatePartialUpdateMutation
+  useUserUpdatePartialUpdateMutation,
+  useUserUpdateAvatarCreateMutation
 } = injectedRtkApi

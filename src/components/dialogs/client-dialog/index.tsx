@@ -73,9 +73,8 @@ const ClientDialog = ({
       ? 'Edit the users details below.'
       : 'Fill in the details to create a new users.';
 
-  const ContentComponent = isDelete
-    ? DeleteClientContent
-    : null
+  // removing for now the logic to have multipe dialogs
+  const ContentComponent = DeleteClientContent
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}>
@@ -92,7 +91,8 @@ const ClientDialog = ({
         handleClose={handleClose}
         handleCloseWithoutRefresh={handleCloseWithoutRefresh}
         id={id!}
-        editValue={editValue!}
+
+        // editValue={editValue!}
       />
     </Dialog>
   );
