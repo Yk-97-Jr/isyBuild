@@ -4,7 +4,7 @@ import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Button, CircularProgress, DialogContent } from '@mui/material'
+import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/material'
 
 import CustomTextField from '@core/components/mui/TextField'
 import { useLotsUpdateUpdateMutation } from '@/services/IsyBuildApi'
@@ -80,39 +80,38 @@ const EditLotContent = ({ handleClose, handleCloseWithoutRefresh, editValue }: E
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DialogContent className='overflow-visible pbs-0 sm:pli-16'>
+        <CustomTextField
+          fullWidth
+          label='Nom '
+          variant='outlined'
+          placeholder='Entrez le nom'
+          className='mbe-4'
+          {...register('name')}
+          error={!!errors.name}
+          helperText={errors.name?.message}
+        />
+        <CustomTextField
+          fullWidth
+          label='description'
+          variant='outlined'
+          multiline
+          rows={3}
+          placeholder='Entrez votre description'
+          id='textarea-outlined'
+          className='mbe-4'
+          {...register('description')}
+          error={!!errors.description}
+          helperText={errors.description?.message}
+        />
 
-            <CustomTextField
-              fullWidth
-              label='Nom '
-              variant='outlined'
-              placeholder='Entrez le nom'
-              className='mbe-4'
-              {...register('name')}
-              error={!!errors.name}
-              helperText={errors.name?.message}
-            />
-            <CustomTextField
-              fullWidth
-              label='description'
-              variant='outlined'
-              multiline
-              rows={3}
-              placeholder='Entrez votre description'
-              id='textarea-outlined'
-              className='mbe-4'
-              {...register('description')}
-              error={!!errors.description}
-              helperText={errors.description?.message}
-            />
-
-        <div className='flex gap-4 max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
+        <DialogActions className='flex max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>
           <Button variant='contained' type='submit' disabled={isLoading}>
             {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Mettre à jour'}
           </Button>
           <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
-            Annuler
+            Abandonner
           </Button>
-        </div>
+        </DialogActions>
       </DialogContent>
     </form>
   )

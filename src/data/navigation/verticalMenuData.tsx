@@ -26,6 +26,14 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
     roles: ['user'],
     isSection: false,
     children: []
+  },
+  {
+    label: 'entreprise',
+    href: '/company',
+    icon: 'tabler-building-community',
+    roles: ['user'],
+    isSection: false,
+    children: []
   }
 ]
 

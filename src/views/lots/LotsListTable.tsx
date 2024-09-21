@@ -160,16 +160,24 @@ const LotsListTable = ({
     () => [
       columnHelper.accessor('name', {
         header: 'Nom',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4 '>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name} `}
-              </Typography>
+        cell: ({ row }) => {
+          const name = row.original.name
+
+          // Break the name after 20 characters if it's too long
+          const displayName = name.length > 50 ? name.substring(0, 50) + '\n' + name.substring(50) : name
+
+          return (
+            <div className='flex items-center gap-4 '>
+              <div className='flex flex-col'>
+                <Typography color='text.primary' className='font-medium whitespace-pre-wrap break-words'>
+                  {`${displayName} `}
+                </Typography>
+              </div>
             </div>
-          </div>
-        )
+          )
+        }
       }),
+
       columnHelper.accessor('name', {
         header: 'client',
         cell: ({ row }) => (
@@ -177,7 +185,7 @@ const LotsListTable = ({
             {row.original?.client?.name ? (
               <span>{row.original?.client?.name}</span>
             ) : (
-              <Chip variant='tonal' label={'Default'} color='default' className='px-5 text-base' />
+              <Chip variant='tonal' label={'Default'} color='secondary' className='px-2' />
             )}
           </>
         )
