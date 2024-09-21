@@ -9,22 +9,22 @@ import { CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import UserListTable from './UserListTable'
-import { useAdminStaffRetrieveQuery } from '@/services/IsyBuildApi'
+import LotsListTable from './LotsListTable'
+import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
 
-const UserList = () => {
+const LotsList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
 
-  console.log('page ' + page)
+  console.log('LOtspage ' + page)
 
   // Pass parameters to the query hook
-  const { data, error, isLoading, isFetching, refetch } = useAdminStaffRetrieveQuery({ page, pageSize })
+  const { data, error, isLoading, isFetching, refetch } = useLotsRetrieveQuery({ page, pageSize })
 
   useEffect(() => {
     refetch()
-  }, [page, pageSize])
+  }, [page, pageSize, refetch])
 
   if (isLoading)
     return (
@@ -39,21 +39,20 @@ const UserList = () => {
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const users = data?.results || []
+  const lots = data?.results || []
   const countRecords = data?.count
 
-  console.log('countRecords1' + countRecords)
-  console.log('users' + users)
-  console.log('isFetching' + isFetching)
-  console.log('isloading' + isLoading)
+  console.log('*********')
+  console.log(data?.results)
+  console.log('*********')
 
   return isFetching ? (
-    <UserListTable
+    <LotsListTable
       pageSize={pageSize}
       setPageSize={setPageSize}
       page={page}
       setPage={setPage}
-      data={users}
+      data={lots}
       countRecords={countRecords}
       isFetching={isFetching}
       refetch={refetch}
@@ -61,12 +60,12 @@ const UserList = () => {
   ) : (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <UserListTable
+        <LotsListTable
           pageSize={pageSize}
           setPageSize={setPageSize}
           page={page}
           setPage={setPage}
-          data={users}
+          data={lots}
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
@@ -76,4 +75,4 @@ const UserList = () => {
   )
 }
 
-export default UserList
+export default LotsList

@@ -1,4 +1,4 @@
-import type {VerticalMenuDataType} from '@/types/menuTypes';
+import type { VerticalMenuDataType } from '@/types/menuTypes'
 
 // Define the menu data with roles
 const verticalMenuData = (): VerticalMenuDataType[] => [
@@ -26,7 +26,15 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
     roles: ['user'],
     isSection: false,
     children: []
+  },
+  {
+    label: 'lots',
+    href: '/lots',
+    icon: 'tabler-category',
+    roles: ['user'],
+    isSection: false,
+    children: []
   }
-];
+]
 
-export default verticalMenuData;
+export default verticalMenuData

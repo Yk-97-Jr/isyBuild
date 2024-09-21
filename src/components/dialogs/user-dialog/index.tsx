@@ -5,9 +5,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 
+import AddUserContent from "@components/dialogs/user-dialog/AddUserContent";
+
 import DialogCloseButton from '../DialogCloseButton';
 import type { UsersType } from "@/types/apps/usersType";
-import AddUserContent from "@components/dialogs/user-dialog/AddUserContent";
 import EditUserContent from "@components/dialogs/user-dialog/EditUserContent";
 import DeleteUserContent from "@components/dialogs/user-dialog/DeleteUserContent";
 
