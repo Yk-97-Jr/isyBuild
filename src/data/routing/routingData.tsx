@@ -1,17 +1,23 @@
-// Define access rules directly in the TypeScript file
-const accessRules = {
-  routes: [
+// Type Imports
+import type { rountingDataType } from '@/types/menuTypes'
+
+const rountingData = (): rountingDataType[] =>  [
     {
-      path: '/admin',
+      path: 'role/admin',
       roles: ['admin'],
     },
     {
-      path: '/dashboard',
+      path: 'role/dashboard',
       roles: ['admin', 'user'],
     },
     {
-      path: '/users/list',
+      path: 'role/users/list',
       roles: ['admin'],
     },
-  ],
-};
+  ]
+
+export default rountingData
+
+
+
+
