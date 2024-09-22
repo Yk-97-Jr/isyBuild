@@ -75,3 +75,9 @@ export type HorizontalSubMenuDataType = Omit<HorizontalSubMenuProps, 'children' 
   suffix?: ReactNode | ChipProps
 }
 export type HorizontalMenuDataType = HorizontalMenuItemDataType | HorizontalSubMenuDataType
+
+// routing data
+export type rountingDataType = {
+  path: string;  // URL path
+  roles: string[];  // List of roles that can access this path
+};
