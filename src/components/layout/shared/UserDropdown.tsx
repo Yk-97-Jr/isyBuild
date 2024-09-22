@@ -18,15 +18,14 @@ import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
+import { CircularProgress } from '@mui/material'
 
 // Hook Imports
 import Cookies from "js-cookie";
 
-import {CircularProgress} from "@mui/material";
-
-import {useSettings} from '@core/hooks/useSettings'
-import {useLogoutCreateMutation} from "@/services/IsyBuildApi";
-
+import { useSettings } from '@core/hooks/useSettings'
+import { useLogoutCreateMutation } from "@/services/IsyBuildApi"
+import {useAuth} from "@/contexts/AuthContext";
 
 const UserDropdown = () => {
   // States
@@ -38,13 +37,14 @@ const UserDropdown = () => {
   // Hooks
   const router = useRouter()
   const [logout, {isLoading}] = useLogoutCreateMutation();
+  const { settings } = useSettings()
 
-  const {settings} = useSettings()
+  // Get user data from the context
+  const { user } = useAuth()
 
   const handleDropdownOpen = () => {
     !open ? setOpen(true) : setOpen(false)
   }
-
 
   const handleDropdownClose = (event?: MouseEvent<HTMLLIElement> | (MouseEvent | TouchEvent), url?: string) => {
     if (url) {
@@ -72,7 +72,7 @@ return;
       // Call the mutation to log out the user
       await logout(
         {
-          tokenRefresh: {
+          tokenRefreshRequest: {
             refresh: refresh_token
           }
         }
@@ -96,7 +96,7 @@ return;
     <>
       <Avatar
         ref={anchorRef}
-        alt='John Doe'
+        alt={user?.first_name || 'User Avatar'}
         src='/images/avatars/1.png'
         onClick={handleDropdownOpen}
         className='cursor-pointer bs-[38px] is-[38px]'
@@ -120,12 +120,14 @@ return;
               <ClickAwayListener onClickAway={e => handleDropdownClose(e as MouseEvent | TouchEvent)}>
                 <MenuList>
                   <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
-                    <Avatar alt='John Doe' src='/images/avatars/1.png'/>
+                    <Avatar alt={user?.first_name || 'User Avatar'} src='/images/avatars/1.png'/>
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
-                        John Doe
+                        {user?.first_name || 'John Doe'}
                       </Typography>
-                      <Typography variant='caption'>admin@isybuild.com</Typography>
+                      <Typography variant='caption'>
+                        {user?.email || 'admin@isybuild.com'}
+                      </Typography>
                     </div>
                   </div>
                   <Divider className='mlb-1'/>

@@ -18,6 +18,8 @@ import {useForm} from 'react-hook-form'
 import * as Yup from 'yup'
 import {yupResolver} from '@hookform/resolvers/yup'
 
+import Cookies from "js-cookie";
+
 import {
   useUserProfileRetrieveQuery,
   useUserUpdatePartialUpdateMutation
@@ -25,6 +27,9 @@ import {
 import CustomTextField from '@core/components/mui/TextField'
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
+
+
+import {useAuth} from "@/contexts/AuthContext";
 
 // Validation Schema using Yup
 const validationSchema = Yup.object().shape({
@@ -45,7 +50,7 @@ const AccountDetails = () => {
   const {data, error, isLoading} = useUserProfileRetrieveQuery()
 
   // Mutation for updating users data
-  const [updateUser, {isLoading: isUpdating}] = useUserUpdatePartialUpdateMutation()
+  const [updateUser, {result, isLoading: isUpdating}] = useUserUpdatePartialUpdateMutation()
 
   // React Hook Form setup
   const {
@@ -61,6 +66,8 @@ const AccountDetails = () => {
   const [fileInput, setFileInput] = useState<string>('')
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
+
+  const {setUser} = useAuth(); // Get setUser from AuthContext
 
 
   // Load the data into form state when available
@@ -99,26 +106,35 @@ const AccountDetails = () => {
   }
 
   // Handle form submission
+  // Handle form submission
   const onSubmit = async (formData: Data) => {
     try {
-      await updateUser({
+      // Unwrap the result of the mutation to get the actual response
+      const updatedUser = await updateUser({
         patchedUserProfileUpdate: {
           first_name: formData.firstName,
           last_name: formData.lastName,
 
           // email: formData.email,
           // profile_image: fileInput // Include profile image if updated
-
         }
-      })
+      }).unwrap();
+
+      // set the updated data in cookies
+      Cookies.set('user', JSON.stringify(updatedUser));
+
+      // Set the user data in context
+      setUser(updatedUser);
+
       setOpenSnackBar(true);
-      setInfoAlert({severity: "success", message: "User updated successfully"});
+      setInfoAlert({severity: 'success', message: 'User updated successfully'});
     } catch (error) {
       setOpenSnackBar(true);
-      setInfoAlert({severity: "error", message: "Failed to update users"});
-      console.error('Failed to update users:', error)
+      setInfoAlert({severity: 'error', message: 'Failed to update users'});
+      console.error('Failed to update users:', error);
     }
-  }
+  };
+
 
   if (isLoading) {
     return (

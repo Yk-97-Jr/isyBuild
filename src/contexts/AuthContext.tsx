@@ -1,56 +1,69 @@
+'use client'
+
 import type {ReactNode} from 'react';
-import { createContext, useContext, useState, useEffect} from 'react';
+import {createContext, useContext, useEffect, useState} from 'react';
 
+import Cookies from "js-cookie";
 
-// Define the structure for the authenticated users, including permissions
+// Define the structure for the authenticated user
 interface AuthUser {
+  id: number;
+  email: string;
+  first_name: string | null;
+  last_name: string | null;
+  date_joined: string;
+  is_active: boolean;
   role: string;
-  permissions: string[];
 }
 
-// Define the context type including permissions
+// Define the context type including user and setters
 interface AuthContextType {
   user: AuthUser | null;
   setUser: (user: AuthUser | null) => void;
+  clearUser: () => void;
 }
 
 interface AuthProviderProps {
   children: ReactNode;
-};
+}
 
-// Create context with extended type
+// Create context with the AuthContextType
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({children}: AuthProviderProps) => {
   const [user, setUser] = useState<AuthUser | null>(null);
 
+
   useEffect(() => {
-    // Fetch the authenticated users and their role and permissions
-    const fetchUser = async () => {
-      // Replace with your actual logic to fetch users data
-      const response = await fetch('/api/user');
-      const data = await response.json();
+    const storedUser = Cookies.get('user'); // If you store user info in cookies
 
-      setUser(data); // Ensure data includes role and permissions
-    };
-
-    fetchUser();
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
+  // Clear user when logging out
+  console.log("user" + user)
+
+  const clearUser = () => {
+    setUser(null);
+  };
+
+
   return (
-    <AuthContext.Provider value={{user, setUser}}>
+    <AuthContext.Provider value={{user, setUser, clearUser}}>
       {children}
     </AuthContext.Provider>
   );
 };
 
+// Hook to use the AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-
 
   return context;
 };
