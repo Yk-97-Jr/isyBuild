@@ -36,9 +36,6 @@ const UserDialog = ({
   refetch
 }: UserDialogProps) => {
 
-  console.log('editValue' + editValue);
-  console.log('id' + id);
-
   const handleClose = () => {
     setOpen(false);
     setEditValue?.(undefined);

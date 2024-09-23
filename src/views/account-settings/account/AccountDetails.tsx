@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import React, {useState, useEffect, useContext} from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid'
@@ -10,21 +10,17 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
-import Box from "@mui/material/Box";
-
+import Box from '@mui/material/Box'
 
 // React Hook Form & Yup
-import {useForm} from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
-import {yupResolver} from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-import {
-  useUserProfileRetrieveQuery,
-  useUserUpdatePartialUpdateMutation
-} from '@/services/IsyBuildApi'
+import { useUserProfileRetrieveQuery, useUserUpdatePartialUpdateMutation } from '@/services/IsyBuildApi'
 import CustomTextField from '@core/components/mui/TextField'
-import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
-import type {SnackBarContextType} from "@/types/apps/snackbarType";
+import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
+import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
 // Validation Schema using Yup
 const validationSchema = Yup.object().shape({
@@ -42,17 +38,17 @@ type Data = {
 
 const AccountDetails = () => {
   // Fetch users profile data using RTK query hook
-  const {data, error, isLoading} = useUserProfileRetrieveQuery()
+  const { data, error, isLoading } = useUserProfileRetrieveQuery()
 
   // Mutation for updating users data
-  const [updateUser, {isLoading: isUpdating}] = useUserUpdatePartialUpdateMutation()
+  const [updateUser, { isLoading: isUpdating }] = useUserUpdatePartialUpdateMutation()
 
   // React Hook Form setup
   const {
     register,
     handleSubmit,
     setValue,
-    formState: {errors}
+    formState: { errors }
   } = useForm<Data>({
     resolver: yupResolver(validationSchema)
   })
@@ -60,8 +56,7 @@ const AccountDetails = () => {
   // State for profile image
   const [fileInput, setFileInput] = useState<string>('')
   const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
-  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
-
+  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
   // Load the data into form state when available
   useEffect(() => {
@@ -76,11 +71,10 @@ const AccountDetails = () => {
   // temporary for typing prb until we add it to users
   console.log(fileInput)
 
-
   // Handle profile image change
   const handleFileInputChange = (file: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader()
-    const {files} = file.target
+    const { files } = file.target
 
     if (files && files.length !== 0) {
       reader.onload = () => setImgSrc(reader.result as string)
@@ -104,26 +98,25 @@ const AccountDetails = () => {
       await updateUser({
         patchedUserProfileUpdate: {
           first_name: formData.firstName,
-          last_name: formData.lastName,
+          last_name: formData.lastName
 
           // email: formData.email,
           // profile_image: fileInput // Include profile image if updated
-
         }
       })
-      setOpenSnackBar(true);
-      setInfoAlert({severity: "success", message: "User updated successfully"});
+      setOpenSnackBar(true)
+      setInfoAlert({ severity: 'success', message: 'User updated successfully' })
     } catch (error) {
-      setOpenSnackBar(true);
-      setInfoAlert({severity: "error", message: "Failed to update users"});
+      setOpenSnackBar(true)
+      setInfoAlert({ severity: 'error', message: 'Failed to update users' })
       console.error('Failed to update users:', error)
     }
   }
 
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-        <CircularProgress/>
+      <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
+        <CircularProgress />
       </Box>
     )
   }
@@ -137,7 +130,7 @@ const AccountDetails = () => {
       <CardContent className='mbe-4'>
         <div className='flex max-sm:flex-col items-center gap-6'>
           {/* Display profile image */}
-          <img height={100} width={100} className='rounded' src={imgSrc} alt='Profile'/>
+          <img height={100} width={100} className='rounded' src={imgSrc} alt='Profile' />
           <div className='flex flex-grow flex-col gap-4'>
             <div className='flex flex-col sm:flex-row gap-4'>
               {/* Upload new photo button */}
@@ -184,16 +177,16 @@ const AccountDetails = () => {
             </Grid>
             <Grid item xs={12} className='flex gap-4 flex-wrap'>
               <Button variant='contained' type='submit' disabled={isUpdating}>
-                {isUpdating ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Save Changes'}
+                {isUpdating ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Save Changes'}
               </Button>
               <Button
                 variant='tonal'
                 type='reset'
                 color='secondary'
                 onClick={() => {
-                  setValue('firstName', data?.first_name || '');
-                  setValue('lastName', data?.last_name || '');
-                  setValue('email', data?.email || '');
+                  setValue('firstName', data?.first_name || '')
+                  setValue('lastName', data?.last_name || '')
+                  setValue('email', data?.email || '')
 
                   // setImgSrc(data?.profile_image || '/images/avatars/1.png');
                 }}

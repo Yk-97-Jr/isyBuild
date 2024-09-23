@@ -60,7 +60,7 @@ const EditLotContent = ({ handleClose, handleCloseWithoutRefresh, editValue }: E
 
       const response = await updateLots({
         lotId: editValue.id, // Assurez-vous que editValue.id contient l'identifiant de l'utilisateur
-        lotCreateUpdate: updatedData // Passez l'objet updatedData
+        lotCreateUpdateRequest: updatedData // Passez l'objet updatedData
       }).unwrap()
 
       handleClose()

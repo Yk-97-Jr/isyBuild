@@ -2,7 +2,7 @@
 import React from 'react'
 
 // Component Imports
-import LotsList from '@views/lots/LotsLIst'
+import LotsList from '@/views/apps/lots/LotsLIst'
 
 const LotsListApp = () => {
   return <LotsList />

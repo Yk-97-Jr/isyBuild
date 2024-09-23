@@ -17,8 +17,6 @@ const LotsList = () => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
 
-  console.log('LOtspage ' + page)
-
   // Pass parameters to the query hook
   const { data, error, isLoading, isFetching, refetch } = useLotsRetrieveQuery({ page, pageSize })
 
@@ -43,6 +41,7 @@ const LotsList = () => {
   const countRecords = data?.count
 
   console.log('*********')
+  console.log(data)
   console.log(data?.results)
   console.log('*********')
 
