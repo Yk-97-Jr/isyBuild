@@ -148,6 +148,25 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.phoneNumberCreateUpdateRequest
       })
     }),
+    projectsRetrieve: build.query<ProjectsRetrieveApiResponse, ProjectsRetrieveApiArg>({
+      query: queryArg => ({ url: `/projects/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+    }),
+    projectsRetrieve2: build.query<ProjectsRetrieve2ApiResponse, ProjectsRetrieve2ApiArg>({
+      query: queryArg => ({ url: `/projects/${queryArg.projectId}/` })
+    }),
+    projectsCreateCreate: build.mutation<ProjectsCreateCreateApiResponse, ProjectsCreateCreateApiArg>({
+      query: queryArg => ({ url: `/projects/create/`, method: 'POST', body: queryArg.projectCreateRequest })
+    }),
+    projectsDeleteDestroy: build.mutation<ProjectsDeleteDestroyApiResponse, ProjectsDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/projects/delete/${queryArg.projectId}/`, method: 'DELETE' })
+    }),
+    projectsUpdateUpdate: build.mutation<ProjectsUpdateUpdateApiResponse, ProjectsUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/projects/update/${queryArg.projectId}/`,
+        method: 'PUT',
+        body: queryArg.projectUpdateRequest
+      })
+    }),
     setPasswordCreate: build.mutation<SetPasswordCreateApiResponse, SetPasswordCreateApiArg>({
       query: queryArg => ({ url: `/set-password/`, method: 'POST', body: queryArg.setasswordRequest })
     }),
@@ -261,7 +280,7 @@ const injectedRtkApi = api.injectEndpoints({
 })
 
 export { injectedRtkApi as pIsyBuildApi }
-export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -287,7 +306,7 @@ export type AdminUsersDeleteDestroyApiResponse = /** status 204  */ any
 export type AdminUsersDeleteDestroyApiArg = {
   adminUserId: number
 }
-export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedClientRead
 export type ClientsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -300,7 +319,7 @@ export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead
 export type ClientsRetrieve2ApiArg = {
   clientId: number
 }
-export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedRead
+export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedClientStaffRead
 export type ClientsStaffRetrieve2ApiArg = {
   clientId: number
 
@@ -353,7 +372,7 @@ export type ContactsDeleteDestroyApiResponse = /** status 204  */ any
 export type ContactsDeleteDestroyApiArg = {
   contactId: number
 }
-export type ContactsPhoneNumbersRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type ContactsPhoneNumbersRetrieveApiResponse = /** status 200  */ PaginatedPhoneNumberRead
 export type ContactsPhoneNumbersRetrieveApiArg = {
   contactId: number
 
@@ -383,7 +402,7 @@ export type LogoutCreateApiResponse = /** status 205 No response body */ void
 export type LogoutCreateApiArg = {
   tokenRefreshRequest: TokenRefreshRequest
 }
-export type LotsRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead
 export type LotsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -430,11 +449,37 @@ export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
+export type ProjectsRetrieveApiResponse = /** status 200  */ PaginatedProjectRead
+export type ProjectsRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type ProjectsRetrieve2ApiResponse = /** status 200  */ ProjectRead
+export type ProjectsRetrieve2ApiArg = {
+  projectId: number
+}
+export type ProjectsCreateCreateApiResponse = /** status 201  */ ProjectRead
+export type ProjectsCreateCreateApiArg = {
+  projectCreateRequest: ProjectCreateRequest
+}
+export type ProjectsDeleteDestroyApiResponse = /** status 204  */ any
+export type ProjectsDeleteDestroyApiArg = {
+  projectId: number
+}
+export type ProjectsUpdateUpdateApiResponse = /** status 200  */ ProjectRead
+export type ProjectsUpdateUpdateApiArg = {
+  projectId: number
+  projectUpdateRequest: ProjectUpdateRequest
+}
 export type SetPasswordCreateApiResponse = /** status 200  */ any
 export type SetPasswordCreateApiArg = {
   setasswordRequest: SetasswordRequestWrite
 }
-export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedRead
+export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubcontractortRead
 export type SubcontractorsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -447,7 +492,7 @@ export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ Subcontracto
 export type SubcontractorsRetrieve2ApiArg = {
   subcontractorId: number
 }
-export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedRead
+export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
 export type SubcontractorsStaffRetrieve2ApiArg = {
 
   /** Page number of the results to fetch */
@@ -560,13 +605,13 @@ export type AdminStaffRead = {
   created_at: string
   updated_at: string
 }
-export type Paginated = {
+export type PaginatedAdminStaff = {
   count: number
   next: string | null
   previous: string | null
   results: AdminStaff[]
 }
-export type PaginatedRead = {
+export type PaginatedAdminStaffRead = {
   count: number
   next: string | null
   previous: string | null
@@ -638,6 +683,18 @@ export type ClientRead = {
   created_at: string
   updated_at: string
 }
+export type PaginatedClient = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Client[]
+}
+export type PaginatedClientRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ClientRead[]
+}
 export type ClientStaff = {}
 export type ClientStaffRead = {
   id: number
@@ -645,6 +702,18 @@ export type ClientStaffRead = {
   created_by: CreatedByRead
   created_at: string
   updated_at: string
+}
+export type PaginatedClientStaff = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ClientStaff[]
+}
+export type PaginatedClientStaffRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ClientStaffRead[]
 }
 export type ClientStaffCreateRequest = {
   user: UserCreateRequest
@@ -714,6 +783,18 @@ export type ContactRead = {
   created_at: string
   updated_at: string
 }
+export type PaginatedPhoneNumber = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: PhoneNumber[]
+}
+export type PaginatedPhoneNumberRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: PhoneNumberRead[]
+}
 export type PhoneNumberCreateUpdateRequest = {
   number: string
   type: TypeEnum
@@ -744,6 +825,18 @@ export type LotRead = {
   created_at: string
   updated_at: string
 }
+export type PaginatedLot = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Lot[]
+}
+export type PaginatedLotRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: LotRead[]
+}
 export type LotCreateUpdateRequest = {
   name: string
   description?: string | null
@@ -757,6 +850,83 @@ export type SetNewPasswordRequestWrite = {
 export type PasswordResetRequestRequest = {
   email: string
   redirect_uri: string
+}
+export type StatusEnum = 'draft' | 'pending' | 'in_progress' | 'completed' | 'on_hold' | 'canceled'
+export type RiskLevelEnum = 'low' | 'medium' | 'high' | 'critical'
+export type Project = {
+  code: string
+  name: string
+  description?: string
+  status?: StatusEnum
+  start_date?: string | null
+  estimated_completion_date?: string | null
+  percentage_complete?: string
+  budget?: string
+  actual_cost?: string
+  cost_variance?: string
+  risk_level?: RiskLevelEnum
+}
+export type MapCoordinate = {
+  latitude: string
+  longitude: string
+}
+export type ProjectRead = {
+  id: number
+  code: string
+  name: string
+  description?: string
+  client: ClientRead
+  status?: StatusEnum
+  start_date?: string | null
+  estimated_completion_date?: string | null
+  map_coordinate: MapCoordinate
+  percentage_complete?: string
+  budget?: string
+  actual_cost?: string
+  cost_variance?: string
+  risk_level?: RiskLevelEnum
+  manager: ClientStaffRead
+  staff: ClientStaffRead[]
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type PaginatedProject = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Project[]
+}
+export type PaginatedProjectRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectRead[]
+}
+export type MapCoordinateCreateOrUpdateRequest = {
+  latitude: string
+  longitude: string
+}
+export type ProjectCreateRequest = {
+  code: string
+  name: string
+  description?: string
+  client_id?: number | null
+  start_date?: string | null
+  budget?: string
+  address?: AddressCreateRequest
+  map_coordinate?: MapCoordinateCreateOrUpdateRequest
+  notes?: string
+}
+export type ProjectUpdateRequest = {
+  code: string
+  name: string
+  description?: string
+  start_date?: string | null
+  budget?: string
+  address: AddressCreateRequest
+  map_coordinate: MapCoordinateCreateOrUpdateRequest
+  notes?: string
 }
 export type SetasswordRequest = {}
 export type SetasswordRequestWrite = {
@@ -794,6 +964,18 @@ export type SubcontractorRead = {
   created_at: string
   updated_at: string
 }
+export type PaginatedSubcontractort = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Subcontractor[]
+}
+export type PaginatedSubcontractortRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: SubcontractorRead[]
+}
 export type SubcontractorStaff = {}
 export type SubcontractorStaffRead = {
   id: number
@@ -801,6 +983,18 @@ export type SubcontractorStaffRead = {
   created_by: CreatedByRead
   created_at: string
   updated_at: string
+}
+export type PaginatedSubcontractorStaff = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: SubcontractorStaff[]
+}
+export type PaginatedSubcontractorStaffRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: SubcontractorStaffRead[]
 }
 export type SubcontractorStaffCreateRequest = {
   user: UserCreateRequest
@@ -887,6 +1081,11 @@ export const {
   usePhoneNumbersRetrieveQuery,
   usePhoneNumbersDeleteDestroyMutation,
   usePhoneNumbersUpdateUpdateMutation,
+  useProjectsRetrieveQuery,
+  useProjectsRetrieve2Query,
+  useProjectsCreateCreateMutation,
+  useProjectsDeleteDestroyMutation,
+  useProjectsUpdateUpdateMutation,
   useSetPasswordCreateMutation,
   useSubcontractorsRetrieveQuery,
   useSubcontractorsRetrieve2Query,

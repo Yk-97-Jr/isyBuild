@@ -7,7 +7,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Tableau de bord',
     href: '/role/dashboard',  // Use role as a placeholder
     icon: 'tabler-smart-home',
-    roles: ['admin', 'user'],
+    roles: ['admin', 'client'],
     permissions: ['view dashboard'],
     isSection: false,
     children: []
@@ -24,7 +24,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Clients',
     href: '/role/clients/list',  // Use role as a placeholder
     icon: 'tabler-users',
-    roles: ['user'],  // Only for 'user'
+    roles: ['client','admin'],  // Only for 'user'
     isSection: false,
     children: []
   },
@@ -32,7 +32,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Lots',
     href: '/role/lots',  // Use role as a placeholder
     icon: 'tabler-category',
-    roles: ['user'],  // Only for 'user'
+    roles: ['client','admin'],  // Only for 'client'
     isSection: false,
     children: []
   }

@@ -29,7 +29,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Paginated'
+                $ref: '#/components/schemas/PaginatedAdminStaff'
           description: ''
   /admin-staff/{admin_user_id}/:
     get:
@@ -197,7 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Paginated'
+                $ref: '#/components/schemas/PaginatedClient'
           description: ''
   /clients/{client_id}/:
     get:
@@ -252,7 +252,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Paginated'
+                $ref: '#/components/schemas/PaginatedClientStaff'
           description: ''
   /clients/{client_id}/staff/create/:
     post:
@@ -637,7 +637,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Paginated'
+                $ref: '#/components/schemas/PaginatedPhoneNumber'
           description: ''
   /contacts/{contact_id}/phone-numbers/create/:
     post:
@@ -843,7 +843,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Paginated'
+                $ref: '#/components/schemas/PaginatedLot'
           description: ''
   /lots/{lot_id}/:
     get:
@@ -1186,6 +1186,175 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /projects/:
+    get:
+      operationId: projects_retrieve
+      description: Retrieve a list of all Projects with pagination.
+      summary: List all Project
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProject'
+          description: ''
+  /projects/{project_id}/:
+    get:
+      operationId: projects_retrieve_2
+      description: Fetches detailed information about an project member by their unique
+        identifier.
+      summary: Retrieve project Details
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+  /projects/create/:
+    post:
+      operationId: projects_create_create
+      description: Create a new project .
+      tags:
+      - Project Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /projects/delete/{project_id}/:
+    delete:
+      operationId: projects_delete_destroy
+      description: Deletes an Project by ID. Requires administrative privileges.
+      summary: Delete Project
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: project deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: project not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /projects/update/{project_id}/:
+    put:
+      operationId: projects_update_update
+      description: Updates information for an existing project .
+      summary: Update Project
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /set-password/:
     post:
       operationId: set_password_create
@@ -1247,7 +1416,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Paginated'
+                $ref: '#/components/schemas/PaginatedSubcontractort'
           description: ''
   /subcontractors/{subcontractor_id}/:
     get:
@@ -1302,7 +1471,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Paginated'
+                $ref: '#/components/schemas/PaginatedSubcontractorStaff'
           description: ''
   /subcontractors/{subcontractor_id}/staff/create/:
     post:
@@ -2270,7 +2439,35 @@ components:
       required:
       - id
       - name
-    Paginated:
+    MapCoordinate:
+      type: object
+      properties:
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+      required:
+      - latitude
+      - longitude
+    MapCoordinateCreateOrUpdateRequest:
+      type: object
+      properties:
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+      required:
+      - latitude
+      - longitude
+    PaginatedAdminStaff:
       type: object
       properties:
         count:
@@ -2287,6 +2484,160 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AdminStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedClient:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Client'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedClientStaff:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedLot:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lot'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedPhoneNumber:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedProject:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Project'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedSubcontractorStaff:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubcontractorStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedSubcontractort:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subcontractor'
       required:
       - count
       - next
@@ -2374,6 +2725,165 @@ components:
       required:
       - number
       - type
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 50
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        client:
+          allOf:
+          - $ref: '#/components/schemas/Client'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusEnum'
+        start_date:
+          type: string
+          format: date
+          nullable: true
+        estimated_completion_date:
+          type: string
+          format: date
+          nullable: true
+        map_coordinate:
+          allOf:
+          - $ref: '#/components/schemas/MapCoordinate'
+          readOnly: true
+        percentage_complete:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        budget:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        actual_cost:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        cost_variance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        risk_level:
+          $ref: '#/components/schemas/RiskLevelEnum'
+        manager:
+          allOf:
+          - $ref: '#/components/schemas/ClientStaff'
+          readOnly: true
+        staff:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientStaff'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - client
+      - code
+      - created_at
+      - created_by
+      - id
+      - manager
+      - map_coordinate
+      - name
+      - staff
+      - updated_at
+    ProjectCreateRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 50
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+        client_id:
+          type: integer
+          nullable: true
+        start_date:
+          type: string
+          format: date
+          nullable: true
+        budget:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        address:
+          $ref: '#/components/schemas/AddressCreateRequest'
+        map_coordinate:
+          $ref: '#/components/schemas/MapCoordinateCreateOrUpdateRequest'
+        notes:
+          type: string
+      required:
+      - code
+      - name
+    ProjectUpdateRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          maxLength: 50
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date
+          nullable: true
+        budget:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        address:
+          $ref: '#/components/schemas/AddressCreateRequest'
+        map_coordinate:
+          $ref: '#/components/schemas/MapCoordinateCreateOrUpdateRequest'
+        notes:
+          type: string
+      required:
+      - address
+      - code
+      - map_coordinate
+      - name
+    RiskLevelEnum:
+      enum:
+      - low
+      - medium
+      - high
+      - critical
+      type: string
+      description: |-
+        * `low` - Low
+        * `medium` - Medium
+        * `high` - High
+        * `critical` - Critical
     SetNewPasswordRequest:
       type: object
       properties:
@@ -2412,6 +2922,22 @@ components:
       - new_password
       - token
       - uid
+    StatusEnum:
+      enum:
+      - draft
+      - pending
+      - in_progress
+      - completed
+      - on_hold
+      - canceled
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `pending` - Pending
+        * `in_progress` - In Progress
+        * `completed` - Completed
+        * `on_hold` - On Hold
+        * `canceled` - Canceled
     Subcontractor:
       type: object
       properties:

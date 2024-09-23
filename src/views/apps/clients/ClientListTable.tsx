@@ -51,6 +51,8 @@ import OpenDialogOnElementClick from "@components/dialogs/OpenDialogOnElementCli
 import type {ClientsType} from "@/types/apps/clientsType";
 import ClientDialog from "@components/dialogs/client-dialog";
 
+import type {ClientRead} from "@/services/IsyBuildApi";
+
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -62,7 +64,7 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ClientTypeWithAction = ClientsType & {
+type ClientTypeWithAction = ClientRead & {
   action?: string
 }
 
@@ -114,7 +116,7 @@ const DebouncedInput = ({
 const columnHelper = createColumnHelper<ClientTypeWithAction>()
 
 const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecords, isFetching, refetch}: {
-  data?: ClientsType[]
+  data?: ClientRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -126,7 +128,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
-  const [editValue, setEditValue] = useState<ClientsType>()
+  const [editValue, setEditValue] = useState<ClientRead>()
   const [addValue, setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
@@ -152,7 +154,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
   }
 
 
-  const handleDeleteUser = (id: number) => {
+  const handleDeleteClient = (id: number) => {
     setOpen(true)
     setId(id)
   }
@@ -160,36 +162,62 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
 
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('users.first_name', {
+      columnHelper.accessor('clients.name', {
         header: 'Nom',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.user.first_name} ${row.original.user.last_name}`}
+                {`${row.original.name}`}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('users.email', {
+      columnHelper.accessor('clients.siren_number', {
+        header: 'Siren',
+        cell: ({row}) => (
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.siren_number}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+      columnHelper.accessor('clients.contact_email', {
         header: 'Email',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.user.email}`}
+                {`${row.original.contact_email}`}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('users.date_joined', {
-        header: `Date d'adhésion`,
+      columnHelper.accessor('clients.phone_number', {
+        header: 'Numéro de Telephone',
         cell: ({row}) => (
-          <Typography>{row.original.user.date_joined
-            ? new Date(row.original.user.date_joined).toLocaleDateString()
-            : 'Date not available'}</Typography>
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.phone_number}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+      columnHelper.accessor('clients.is_active', {
+        header: 'Status',
+        cell: ({row}) => (
+          <Chip
+            variant='tonal'
+            label={row.original.is_active ? 'Active' : 'Inactive'}
+            color={row.original.is_active ? 'success' : 'secondary'}
+          />
         )
       }),
       columnHelper.accessor('created_at', {
@@ -200,33 +228,13 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
             : 'Date not available'}</Typography>
         )
       }),
-      columnHelper.accessor('created_by.first_name', {
-        header: 'Creé par',
-        cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('users.is_active', {
-        header: 'Status',
-        cell: ({row}) => (
-          <Chip
-            variant='tonal'
-            label={row.original.user.is_active ? 'Active' : 'Inactive'}
-            color={row.original.user.is_active ? 'success' : 'secondary'}
-          />
-        )
-      }),
+
+
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({row}) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDeleteUser(row.original.id)}>
+            <IconButton onClick={() => handleDeleteClient(row.original.id)}>
               <i className='tabler-trash text-textSecondary'/>
             </IconButton>
             <OptionMenu
@@ -259,7 +267,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
   );
 
   const table = useReactTable({
-    data: filteredData as ClientsType[],
+    data: filteredData as ClientRead[],
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -389,7 +397,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
         />
 
       </Card>
-      <UserDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
+      <ClientDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
                   setEditValue={setEditValue} setAddValue={setAddValue} refetch={refetch}/>
     </>
   )
