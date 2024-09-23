@@ -34,6 +34,14 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
     roles: ['user'],
     isSection: false,
     children: []
+  },
+  {
+    label: 'Projects',
+    href: '/Projects',
+    icon: 'tabler-clipboard-list',
+    roles: ['user','admin'],
+    isSection: false,
+    children: []
   }
 ]
 
