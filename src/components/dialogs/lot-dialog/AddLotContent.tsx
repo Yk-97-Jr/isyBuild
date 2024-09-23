@@ -45,7 +45,7 @@ const AddLotContent = ({ handleClose, handleCloseWithoutRefresh }: AddLotContent
   const onSubmit: SubmitHandler<FormValidateType> = async data => {
     try {
       await createLot({
-        lotCreateUpdate: {
+        lotCreateUpdateRequest: {
           name: data.firstName,
           description: data.description
         }

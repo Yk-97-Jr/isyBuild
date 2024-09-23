@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 
 import { Button, DialogActions, CircularProgress } from '@mui/material'
 
-import { useAdminUsersDeleteDestroyMutation } from '@/services/IsyBuildApi'
+import { useSubcontractorsDeleteDestroyMutation } from '@/services/IsyBuildApi'
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
@@ -12,24 +12,24 @@ interface DeleteProps {
   id: number // Assurez-vous que cela correspond au type de votre identifiant utilisateur
 }
 
-const DeleteUserContent = ({ handleClose, handleCloseWithoutRefresh, id }: DeleteProps) => {
-  const [deleteUser, { isLoading, isSuccess }] = useAdminUsersDeleteDestroyMutation()
+const DeleteCompanyContent = ({ handleClose, handleCloseWithoutRefresh, id }: DeleteProps) => {
+  const [deleteCompany, { isLoading, isSuccess }] = useSubcontractorsDeleteDestroyMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
   const handleDelete = async () => {
     try {
-      await deleteUser({ adminUserId: id }).unwrap() // Passez l'identifiant de l'utilisateur à la mutation
+      await deleteCompany({ subcontractorId: id }).unwrap() // Passez l'identifiant de l'utilisateur à la mutation
       handleClose()
 
       if (isSuccess) {
-        console.log('Utilisateur supprimé avec succès')
+        console.log('Utilisateur subcontractor avec succès')
         setOpenSnackBar(true)
-        setInfoAlert({ severity: 'success', message: 'Utilisateur supprimé avec succès' })
+        setInfoAlert({ severity: 'success', message: 'Utilisateur subcontractor avec succès' })
       }
     } catch (error) {
-      console.error("Échec de la suppression de l'utilisateur :", error)
+      console.error('Échec de la suppression de subcontractor :', error)
       setOpenSnackBar(true)
-      setInfoAlert({ severity: 'error', message: "Échec de la suppression de l'utilisateur" })
+      setInfoAlert({ severity: 'error', message: 'Échec de la suppression de subcontractor' })
     }
   }
 
@@ -50,4 +50,4 @@ const DeleteUserContent = ({ handleClose, handleCloseWithoutRefresh, id }: Delet
   )
 }
 
-export default DeleteUserContent
+export default DeleteCompanyContent

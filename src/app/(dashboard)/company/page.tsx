@@ -1,11 +1,10 @@
-import React from 'react'
+// Component Imports
+import CompanyList from '@/views/apps/company/companyList'
 
-const CompanyTable = () => {
-  return (
-    <div className='flex justify-center items-center '>
-      <h1>this is the entreprise page</h1>
-    </div>
-  )
+const CompanyApp = async () => {
+  // Vars
+
+  return <CompanyList />
 }
 
-export default CompanyTable
+export default CompanyApp
