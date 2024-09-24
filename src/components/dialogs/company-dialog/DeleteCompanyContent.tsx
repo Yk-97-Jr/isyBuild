@@ -22,7 +22,6 @@ const DeleteCompanyContent = ({ handleClose, handleCloseWithoutRefresh, id }: De
       handleClose()
 
       if (isSuccess) {
-        console.log('Utilisateur subcontractor avec succès')
         setOpenSnackBar(true)
         setInfoAlert({ severity: 'success', message: 'Utilisateur subcontractor avec succès' })
       }
@@ -41,7 +40,7 @@ const DeleteCompanyContent = ({ handleClose, handleCloseWithoutRefresh, id }: De
         onClick={handleDelete}
         disabled={isLoading} // Désactive le bouton pendant le chargement
       >
-        {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : "Supprimer l'utilisateur"}
+        {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Supprimer entreprise'}
       </Button>
       <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
         Annuler

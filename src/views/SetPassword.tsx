@@ -108,7 +108,7 @@ const SetPassword = ({ mode }: { mode: SystemMode }) => {
   const onSubmit: SubmitHandler<FormValues> = async data => {
     try {
       await setPassword({
-        setNewPassword: {
+        setNewPasswordRequest: {
           new_password: data.password,
           uid: uid as string, // Extracted uid from URL
           token: token as string // Extracted token from URL

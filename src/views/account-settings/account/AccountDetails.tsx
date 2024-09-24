@@ -96,7 +96,7 @@ const AccountDetails = () => {
   const onSubmit = async (formData: Data) => {
     try {
       await updateUser({
-        patchedUserProfileUpdate: {
+        patchedUserProfileUpdateRequest: {
           first_name: formData.firstName,
           last_name: formData.lastName
 
