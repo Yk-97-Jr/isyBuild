@@ -36,8 +36,8 @@ const CompanyDialog = ({ open, setOpen, id, setId, refetch }: CompanyDialogProps
     return null // Return null if the condition for delete is not met
   }
 
-  const dialogTitle = "Supprimer l'utilisateur"
-  const dialogDescription = 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?'
+  const dialogTitle = 'Supprimer entreprise'
+  const dialogDescription = 'Êtes-vous sûr de vouloir supprimer cet entreprise ?'
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>

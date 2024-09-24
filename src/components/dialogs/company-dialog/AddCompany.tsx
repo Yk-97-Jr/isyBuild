@@ -2,16 +2,19 @@
 
 // React Imports
 import { useState } from 'react'
-import type { ComponentType } from 'react'
+import type { ComponentType, MouseEvent, TouchEvent } from 'react'
+
+import Link from 'next/link'
 
 type AddCompanyProps = {
   element: ComponentType<any>
   elementProps?: any
+  url?: string // Optional URL prop to navigate onClick
 }
 
 const AddCompany = (props: AddCompanyProps) => {
   // Props
-  const { element: Element, elementProps } = props
+  const { element: Element, elementProps, url } = props
 
   // States
   const [, setOpen] = useState(false)
@@ -20,15 +23,25 @@ const AddCompany = (props: AddCompanyProps) => {
   const { onClick: elementOnClick, ...restElementProps } = elementProps
 
   // Handle onClick event
-  const handleOnClick = (e: MouseEvent) => {
-    elementOnClick && elementOnClick(e)
+  const handleOnClick = (e: MouseEvent | TouchEvent) => {
+    // Call the element's onClick if it exists
+    if (elementOnClick) {
+      elementOnClick(e)
+    }
+
+    // Open state (if needed)
     setOpen(true)
   }
 
   return (
     <>
-      {/* Receive element component as prop and we will pass onclick event which changes state to open */}
-      <Element onClick={handleOnClick} {...restElementProps} />
+      {url ? (
+        <Link href={url} passHref>
+          <Element onClick={handleOnClick} {...restElementProps} />
+        </Link>
+      ) : (
+        <Element onClick={handleOnClick} {...restElementProps} />
+      )}
     </>
   )
 }

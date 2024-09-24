@@ -118,7 +118,7 @@ const ContactUs = () => {
     setIsSubmitting(true)
 
     try {
-      await sendEmail({ contactUsEmail: formData }).unwrap()
+      await sendEmail({ contactUsEmailRequest: formData }).unwrap()
 
       setSeverity('success')
       setAlertMessage('Message envoyé avec succès!')

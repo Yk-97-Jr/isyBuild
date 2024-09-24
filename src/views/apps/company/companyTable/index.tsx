@@ -4,6 +4,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
 
 // MUI Imports
+
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
@@ -134,9 +135,6 @@ const CompanyTable = ({
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
-
-  console.log('datalist' + data)
-  console.log('pagelist' + page)
 
   // Vars
   const buttonProps: ButtonProps = {
@@ -333,7 +331,7 @@ const CompanyTable = ({
               placeholder='Rechercher un company'
               className='max-sm:is-full'
             />
-            <AddCompany element={Button} elementProps={buttonProps} />
+            <AddCompany element={Button} elementProps={buttonProps} url='/company/new' />
           </div>
         </div>
         <div className='overflow-x-auto'>
