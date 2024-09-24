@@ -8,9 +8,9 @@ import Typography from '@mui/material/Typography';
 
 import DialogCloseButton from '../DialogCloseButton';
 import type {ClientsType} from "@/types/apps/clientsType";
+import DeleteClientContent from "@components/dialogs/client-dialog/DeleteClientContent";
 
 
-import DeleteClientContent from "@components/dialogs/user-dialog/DeleteUserContent";
 
 type UserDialogProps = {
   open: boolean;

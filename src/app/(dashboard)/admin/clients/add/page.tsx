@@ -5,10 +5,10 @@ import React from 'react'
 import ClientList from "@views/apps/clients/ClientList"
 
 
-const ClientListApp = () => {
+const UserListApp = () => {
 
 
   return <ClientList/>
 }
 
-export default ClientListApp
+export default UserListApp

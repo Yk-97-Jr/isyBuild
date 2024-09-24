@@ -40,7 +40,6 @@ import {CircularProgress} from "@mui/material";
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import OptionMenu from '@core/components/option-menu'
-import UserDialog from '@components/dialogs/user-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
 
@@ -324,7 +323,9 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
               elementProps={buttonProps}
               dialog={ClientDialog}
               dialogProps={{addValue, setAddValue, refetch}}
+              redirectTo="/clients/add" // This will redirect to the specified page instead of opening a dialog
             />
+
           </div>
         </div>
         <div className='overflow-x-auto'>
@@ -398,7 +399,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
 
       </Card>
       <ClientDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
-                  setEditValue={setEditValue} setAddValue={setAddValue} refetch={refetch}/>
+                    setEditValue={setEditValue} setAddValue={setAddValue} refetch={refetch}/>
     </>
   )
 }

@@ -44,7 +44,7 @@ const DeleteClientContent = ({handleClose, handleCloseWithoutRefresh, id}: Delet
         onClick={handleDelete}
         disabled={isLoading} // Disable the button while loading
       >
-        {isLoading ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Delete User'}
+        {isLoading ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Supprimer Client'}
       </Button>
       <Button
         onClick={handleCloseWithoutRefresh}
@@ -52,7 +52,7 @@ const DeleteClientContent = ({handleClose, handleCloseWithoutRefresh, id}: Delet
         color='secondary'
         className='max-sm:mis-0'
       >
-        Cancel
+        Annuler
       </Button>
     </DialogActions>
   );
