@@ -50,7 +50,7 @@ const AccountDetails = () => {
   const {data, error, isLoading} = useUserProfileRetrieveQuery()
 
   // Mutation for updating users data
-  const [updateUser, {result, isLoading: isUpdating}] = useUserUpdatePartialUpdateMutation()
+  const [updateUser, {isLoading: isUpdating}] = useUserUpdatePartialUpdateMutation()
 
   // React Hook Form setup
   const {
