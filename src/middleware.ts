@@ -9,6 +9,8 @@ export function middleware(req: NextRequest) {
 
   // Get the access token from the cookies
   const token = req.cookies.get('access_token');
+  const userCookie = req.cookies.get('user')
+  const user = userCookie ? JSON.parse(userCookie.value) : null;
 
   // If no token is found, redirect to the login page
   if (!token) {
@@ -24,7 +26,10 @@ export function middleware(req: NextRequest) {
   }
 
   // Extract the user's role from the decoded token (replace 'role' with actual token property)
-  const userRole = 'admin' || 'guest'; // Default to 'guest' if no role is found
+  const userRole = user?.role; // Default to 'admin' if no role is available
+
+  console.log("userRole" + userRole)
+
 
   // Replace {role} in the path dynamically
   const updatedRountingData = rountingData().map(rule => ({
@@ -35,8 +40,10 @@ export function middleware(req: NextRequest) {
   // Check if the current path matches any of the route rules
   const routeRule = updatedRountingData.find(rule => pathname === `/${rule.path}`);
 
+  console.log(routeRule)
+
   // If the route exists but the user doesn't have access, redirect to unauthorized page
-  if (routeRule && !routeRule.roles.includes(userRole)) {
+  if (routeRule ? !routeRule.roles.includes(userRole) : true) {
     return NextResponse.redirect(new URL('/unauthorized', req.url));
   }
 

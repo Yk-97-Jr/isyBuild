@@ -27,17 +27,18 @@ const Providers = (props: Props) => {
   const systemMode = getSystemMode()
 
   return (
-    <VerticalNavProvider>
-      <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
-        <ThemeProvider direction={direction} systemMode={systemMode}>
-          <ReduxProvider>
-            <AuthProvider>
+    <AuthProvider>
+      <ReduxProvider>
+        <VerticalNavProvider>
+          <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
+            <ThemeProvider direction={direction} systemMode={systemMode}>
               <SnackBarContextProvider>{children}</SnackBarContextProvider>
-            </AuthProvider>
-          </ReduxProvider>
-        </ThemeProvider>
-      </SettingsProvider>
-    </VerticalNavProvider>
+            </ThemeProvider>
+          </SettingsProvider>
+        </VerticalNavProvider>
+      </ReduxProvider>
+    </AuthProvider>
+
   )
 }
 

@@ -1,11 +1,10 @@
 'use client'
 
-import type {ReactNode} from 'react';
-import {createContext, useContext, useEffect, useState} from 'react';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 
-// Define the structure for the authenticated user
 interface AuthUser {
   id: number;
   email: string;
@@ -16,7 +15,6 @@ interface AuthUser {
   role: string;
 }
 
-// Define the context type including user and setters
 interface AuthContextType {
   user: AuthUser | null;
   setUser: (user: AuthUser | null) => void;
@@ -27,37 +25,34 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-// Create context with the AuthContextType
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({children}: AuthProviderProps) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<AuthUser | null>(null);
 
-
   useEffect(() => {
-    const storedUser = Cookies.get('user'); // If you store user info in cookies
+    const storedUser = Cookies.get('user');
+
 
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+      }
     }
   }, []);
-
-  // Clear user when logging out
-  console.log("user" + user)
 
   const clearUser = () => {
     setUser(null);
   };
 
-
   return (
-    <AuthContext.Provider value={{user, setUser, clearUser}}>
+    <AuthContext.Provider value={{ user, setUser, clearUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Hook to use the AuthContext
 export const useAuth = () => {
   const context = useContext(AuthContext);
 

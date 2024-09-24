@@ -21,6 +21,7 @@ import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
 
 // Import Component
 import verticalMenuData from "@/data/navigation/verticalMenuData";
+import {useAuth} from "@/contexts/AuthContext";
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -47,8 +48,11 @@ const VerticalMenu = ({scrollMenu}: Props) => {
 
   const ScrollWrapper = isBreakpointReached ? 'div' : PerfectScrollbar
 
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
 
-  const menuItems = verticalMenuData();
+
+  const menuItems = verticalMenuData(userRole);
 
   return (
     // eslint-disable-next-line lines-around-comment

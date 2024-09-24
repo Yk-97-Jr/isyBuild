@@ -1,5 +1,4 @@
-import type { VerticalMenuDataType } from '@/types/menuTypes'
-import { useAuth } from '@/contexts/AuthContext' // Assuming AuthContext holds the user role information
+import type { VerticalMenuDataType } from '@/types/menuTypes';
 
 // Define the menu data with dynamic role placeholder in the href
 const allMenuData = (): VerticalMenuDataType[] => [
@@ -24,7 +23,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Clients',
     href: '/role/clients/list',  // Use role as a placeholder
     icon: 'tabler-users',
-    roles: ['client','admin'],  // Only for 'user'
+    roles: ['client', 'admin'],  // For both 'client' and 'admin'
     isSection: false,
     children: []
   },
@@ -32,25 +31,21 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Lots',
     href: '/role/lots',  // Use role as a placeholder
     icon: 'tabler-category',
-    roles: ['client','admin'],  // Only for 'client'
+    roles: ['client', 'admin'],  // For both 'client' and 'admin'
     isSection: false,
     children: []
   }
-]
+];
 
-// Function to get menu items based on user role and replace role in href
-const verticalMenuData = (): VerticalMenuDataType[] => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { user } = useAuth(); // Assuming the user's role is in the Auth context
+// Function to get menu items based on user role and replace 'role' in href
+const verticalMenuData = (userRole: string): VerticalMenuDataType[] => {
+  // Filter menu items based on the user's role and replace 'role' in href
 
-  const userRole = user?.role || 'admin'; // Default to 'guest' if no role is available
-
-  // Filter menu items based on the user's role and replace role in href
   return allMenuData()
     .filter(item => item.roles?.includes(userRole)) // Filter by user role
     .map(item => ({
       ...item,
-      href: item.href?.replace('role', userRole), // Replace role in href with the actual role
+      href: item.href?.replace('role', userRole), // Replace 'role' in href with the actual role
     }));
 }
 
