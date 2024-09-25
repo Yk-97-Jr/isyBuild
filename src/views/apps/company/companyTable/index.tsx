@@ -331,7 +331,7 @@ const CompanyTable = ({
               placeholder='Rechercher un company'
               className='max-sm:is-full'
             />
-            <AddCompany element={Button} elementProps={buttonProps} url='/company/new' />
+            <AddCompany element={Button} elementProps={buttonProps} url='/company/add' />
           </div>
         </div>
         <div className='overflow-x-auto'>
