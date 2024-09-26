@@ -28,7 +28,7 @@ export function middleware(req: NextRequest) {
   // Extract the user's role from the decoded token (replace 'role' with actual token property)
   const userRole = user?.role; // Default to 'admin' if no role is available
 
-  console.log("userRole" + userRole)
+
 
 
   // Replace {role} in the path dynamically
@@ -57,5 +57,6 @@ export const config = {
     '/:role/admin',// Matches /admin paths for any role
     '/:role/dashboard',
     '/:role/users/list',
+    '/:role/lots',
   ],
 };

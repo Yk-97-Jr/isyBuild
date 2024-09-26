@@ -44,7 +44,6 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || ""
 
     try {
-      console.log(data);
       await createUser({
         adminStaffCreate: {
           user: {
