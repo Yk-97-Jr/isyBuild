@@ -12,9 +12,9 @@ const ClientAddHeader = () => {
       </div>
       <div className='flex flex-wrap max-sm:flex-col gap-4'>
         <Button variant='tonal' color='secondary'>
-          Discard
+          Annuler
         </Button>
-        <Button variant='contained'>Publish Product</Button>
+        <Button variant='contained'>Ajouter un client</Button>
       </div>
     </div>
   )
