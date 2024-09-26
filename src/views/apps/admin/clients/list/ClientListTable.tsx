@@ -4,6 +4,8 @@
 import React, {useEffect, useState, useMemo} from 'react'
 
 
+import {useRouter} from 'next/navigation';
+
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
@@ -47,6 +49,8 @@ import tableStyles from '@core/styles/table.module.css'
 import ClientDialog from "@components/dialogs/client-dialog";
 
 import type {ClientRead} from "@/services/IsyBuildApi";
+
+import {useAuth} from "@/contexts/AuthContext";
 
 
 declare module '@tanstack/table-core' {
@@ -127,12 +131,10 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
 
-  console.log("datalist" + data)
-  console.log("pagelist" + page)
-
-
-  console.log("countRecords" + countRecords)
 
   const handleEditClient = (client: ClientRead) => {
     setOpen(true)
@@ -143,6 +145,11 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
   const handleDeleteClient = (id: number) => {
     setOpen(true)
     setId(id)
+  }
+
+  const handleAddClient = () => {
+    router.push(`/${userRole}/clients/add`);
+
   }
 
 
@@ -309,8 +316,9 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
               variant='contained'
               className='max-sm=is-full'
               startIcon={<i className='tabler-plus'/>}
+              onClick={handleAddClient}
             >
-              Ajouter un Client
+              Ajouter Client
             </Button>
 
           </div>
@@ -386,7 +394,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
 
       </Card>
       <ClientDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
-                    setEditValue={setEditValue}  refetch={refetch}/>
+                    setEditValue={setEditValue} refetch={refetch}/>
     </>
   )
 }
