@@ -47,7 +47,7 @@ import tableStyles from '@core/styles/table.module.css'
 import type { LotsType } from '@/types/apps/usersType'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
 import type { AdminStaffRead, LotRead } from '@/services/IsyBuildApi'
-import Chip from '@/@core/components/mui/Chip'
+import Chip from '@core/components/mui/Chip'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {

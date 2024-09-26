@@ -2,7 +2,7 @@
 import React from 'react'
 
 // Component Imports
-import ClientList from "@views/apps/clients/ClientList"
+import ClientList from "@views/apps/admin/clients/ClientList"
 
 
 const ClientListApp = () => {

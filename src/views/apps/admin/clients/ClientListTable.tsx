@@ -4,7 +4,6 @@
 import React, {useEffect, useState, useMemo} from 'react'
 
 
-// MUI Imports
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
@@ -12,7 +11,6 @@ import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import type {TextFieldProps} from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
-import type {ButtonProps} from '@mui/material/Button'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -46,7 +44,6 @@ import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import OpenDialogOnElementClick from "@components/dialogs/OpenDialogOnElementClick";
 import type {ClientsType} from "@/types/apps/clientsType";
 import ClientDialog from "@components/dialogs/client-dialog";
 
@@ -128,21 +125,13 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [editValue, setEditValue] = useState<ClientRead>()
-  const [addValue, setAddValue] = useState(false)
+  const [setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
 
   console.log("datalist" + data)
   console.log("pagelist" + page)
-
-  // Vars
-  const buttonProps: ButtonProps = {
-    variant: 'contained',
-    children: 'Ajouter un Client',
-    className: 'max-sm:is-full',
-    startIcon: <i className='tabler-plus'/>
-  }
 
 
   console.log("countRecords" + countRecords)
@@ -318,13 +307,13 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
               placeholder='Rechercher un client'
               className='max-sm:is-full'
             />
-            <OpenDialogOnElementClick
-              element={Button}
-              elementProps={buttonProps}
-              dialog={ClientDialog}
-              dialogProps={{addValue, setAddValue, refetch}}
-              redirectTo="/clients/add" // This will redirect to the specified page instead of opening a dialog
-            />
+            <Button
+              variant='contained'
+              className='max-sm=is-full'
+              startIcon={<i className='tabler-plus'/>}
+            >
+              Ajouter un Client
+            </Button>
 
           </div>
         </div>
