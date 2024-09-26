@@ -7,20 +7,17 @@ import Typography from '@mui/material/Typography';
 
 
 import DialogCloseButton from '../DialogCloseButton';
-import type {ClientsType} from "@/types/apps/clientsType";
 import DeleteClientContent from "@components/dialogs/client-dialog/DeleteClientContent";
+import type {ClientRead} from "@/services/IsyBuildApi";
 
 
-
-type UserDialogProps = {
+type ClientDialogProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   id?: number;
-  addValue?: boolean;
-  setAddValue: Dispatch<SetStateAction<boolean>>
   setId: Dispatch<SetStateAction<number>>
-  setEditValue: Dispatch<SetStateAction<ClientsType | undefined>>
-  editValue?: ClientsType; // Updated type
+  setEditValue: Dispatch<SetStateAction<ClientRead | undefined>>
+  editValue?: ClientRead; // Updated type
   refetch?: () => void
 
 };
@@ -29,15 +26,13 @@ type UserDialogProps = {
 const ClientDialog = ({
                         open,
                         setOpen,
-                        addValue,
-                        setAddValue,
                         id,
                         setId,
                         editValue,
                         setEditValue,
                         refetch
 
-                      }: UserDialogProps) => {
+                      }: ClientDialogProps) => {
 
 
   console.log('editValue' + editValue)
@@ -47,7 +42,6 @@ const ClientDialog = ({
     setOpen(false);
     setEditValue?.(undefined);
     setId?.(0);
-    setAddValue?.(false);
 
     if (refetch) {
       refetch();
@@ -61,7 +55,7 @@ const ClientDialog = ({
   const isDelete = id !== undefined && id !== 0 && !editValue;
   const isEdit = !!editValue;
 
-  if (!isDelete && !isEdit && !addValue) {
+  if (!isDelete && !isEdit) {
     return null; // Return null if no condition is met
   }
 

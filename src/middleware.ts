@@ -29,8 +29,6 @@ export function middleware(req: NextRequest) {
   const userRole = user?.role; // Default to 'admin' if no role is available
 
 
-
-
   // Replace {role} in the path dynamically
   const updatedRountingData = rountingData().map(rule => ({
     ...rule,
@@ -40,7 +38,6 @@ export function middleware(req: NextRequest) {
   // Check if the current path matches any of the route rules
   const routeRule = updatedRountingData.find(rule => pathname === `/${rule.path}`);
 
-  console.log(routeRule)
 
   // If the route exists but the user doesn't have access, redirect to unauthorized page
   if (routeRule ? !routeRule.roles.includes(userRole) : true) {

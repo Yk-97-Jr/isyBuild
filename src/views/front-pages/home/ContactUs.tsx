@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography'
@@ -10,17 +10,15 @@ import classnames from 'classnames'
 
 import MuiAlert from '@mui/material/Alert';
 
-import type { AlertProps } from '@mui/material/Alert';
+import type {AlertProps} from '@mui/material/Alert';
 
 // Import your custom components and hooks
 import CustomTextField from '@core/components/mui/TextField'
 
- // Import the useAlert hook
-import { useIntersection } from '@/hooks/useIntersection'
+// Import the useAlert hook
+import {useIntersection} from '@/hooks/useIntersection'
 import frontCommonStyles from '@views/front-pages/styles.module.css'
 import {useContactUsSendEmailCreateMutation} from '@/services/IsyBuildApi';
-
-
 
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -33,9 +31,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 const ContactUs = () => {
   const skipIntersection = useRef(true)
   const ref = useRef<null | HTMLDivElement>(null)
-  const { updateIntersections } = useIntersection()
+  const {updateIntersections} = useIntersection()
   const [sendEmail] = useContactUsSendEmailCreateMutation();
-  
+
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -68,7 +66,7 @@ const ContactUs = () => {
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
+    const {id, value} = e.target;
 
     setFormData((prevData) => ({
       ...prevData,
@@ -83,7 +81,7 @@ const ContactUs = () => {
   };
 
   const validatePhoneNumber = (phoneNumber: string) => {
-    
+
     const frenchPhoneNumberPattern = /^(0[1-9]|(\+33\s?)[1-9])\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/;
 
     return frenchPhoneNumberPattern.test(phoneNumber);
@@ -124,8 +122,8 @@ const ContactUs = () => {
     setIsSubmitting(true)
 
     try {
-      await sendEmail({ contactUsEmail: formData }).unwrap();
-     
+      await sendEmail({contactUsEmailRequest: formData}).unwrap();
+
       setSeverity('success');
       setAlertMessage('Message envoyé avec succès!');
       setOpenSnackbar(true);
@@ -152,13 +150,13 @@ const ContactUs = () => {
       ([entry]) => {
         if (skipIntersection.current) {
           skipIntersection.current = false
-          
-         return
+
+          return
         }
 
-        updateIntersections({ [entry.target.id]: entry.isIntersecting })
+        updateIntersections({[entry.target.id]: entry.isIntersecting})
       },
-      { threshold: 0.35 }
+      {threshold: 0.35}
     )
 
     ref.current && observer.observe(ref.current)
@@ -184,7 +182,8 @@ const ContactUs = () => {
                   <div className='flex flex-col items-center text-center gap-y-[6px] mbe-6'>
                     <Typography variant='h4'>Envoyer un message</Typography>
                     <Typography>
-                      Si vous souhaitez discuter de quoi que ce soit concernant les paiements, les comptes, les licences, les partenariats, ou si vous avez des questions avant-vente, vous êtes au bon endroit.
+                      Si vous souhaitez discuter de quoi que ce soit concernant les paiements, les comptes, les
+                      licences, les partenariats, ou si vous avez des questions avant-vente, vous êtes au bon endroit.
                     </Typography>
                   </div>
                   <form className='flex flex-col items-start gap-6 w-full' onSubmit={handleSubmit} noValidate>
@@ -273,26 +272,29 @@ const ContactUs = () => {
                       value={formData.message}
                       onChange={handleChange}
                     />
-                    <Button 
-                      variant='contained' 
-                      type='submit' 
-                      disabled={isSubmitting} 
+                    <Button
+                      variant='contained'
+                      type='submit'
+                      disabled={isSubmitting}
                       className='w-full'
                     >
                       {isSubmitting ? 'Envoi en cours...' : 'Envoyer la demande'}
                     </Button>
                   </form>
-                  <Snackbar 
-        open={open} 
-        autoHideDuration={6000} 
-        onClose={handleSnackbarClose}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}  // Positioning the Snackbar at the top-right corner
-      >
-        <Alert onClose={handleSnackbarClose} severity={severity} sx={{ width: '100%' }}>
-          {alertMessage}
-        </Alert>
-     
-      </Snackbar>
+                  <Snackbar
+                    open={open}
+                    autoHideDuration={6000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }}  // Positioning the Snackbar at the top-right corner
+                  >
+                    <Alert onClose={handleSnackbarClose} severity={severity} sx={{width: '100%'}}>
+                      {alertMessage}
+                    </Alert>
+
+                  </Snackbar>
                 </CardContent>
               </Card>
             </Grid>

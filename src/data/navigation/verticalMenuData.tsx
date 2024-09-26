@@ -1,4 +1,4 @@
-import type { VerticalMenuDataType } from '@/types/menuTypes';
+import type {VerticalMenuDataType} from '@/types/menuTypes';
 
 // Define the menu data with dynamic role placeholder in the href
 const allMenuData = (): VerticalMenuDataType[] => [
@@ -38,7 +38,13 @@ const allMenuData = (): VerticalMenuDataType[] => [
 ];
 
 // Function to get menu items based on user role and replace 'role' in href
-const verticalMenuData = (userRole: string): VerticalMenuDataType[] => {
+const verticalMenuData = (userRole: string | undefined): VerticalMenuDataType[] => {
+  //  return different menu items if ther is no role
+  if (userRole === undefined) {
+    // Handle the case for undefined userRole
+    return []; // or some default menu data
+  }
+
   // Filter menu items based on the user's role and replace 'role' in href
 
   return allMenuData()

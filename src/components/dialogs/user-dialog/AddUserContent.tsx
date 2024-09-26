@@ -45,7 +45,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
 
     try {
       await createUser({
-        adminStaffCreate: {
+        adminStaffCreateRequest: {
           user: {
             first_name: data.firstName,
             last_name: data.lastName,

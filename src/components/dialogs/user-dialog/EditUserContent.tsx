@@ -57,7 +57,7 @@ const EditUserContent = ({handleClose, handleCloseWithoutRefresh, editValue}: Ed
 
       const response = await updateUser({
         adminUserId: editValue.id, // Assurez-vous que editValue.id contient l'identifiant de l'utilisateur
-        patchedAdminStaffUpdate: updatedData, // Passez l'objet updatedData
+        patchedAdminStaffUpdateRequest: updatedData, // Passez l'objet updatedData
       }).unwrap();
 
 

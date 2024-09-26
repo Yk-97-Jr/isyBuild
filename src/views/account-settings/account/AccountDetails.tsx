@@ -111,7 +111,7 @@ const AccountDetails = () => {
     try {
       // Unwrap the result of the mutation to get the actual response
       const updatedUser = await updateUser({
-        patchedUserProfileUpdate: {
+        patchedUserProfileUpdateRequest: {
           first_name: formData.firstName,
           last_name: formData.lastName,
 

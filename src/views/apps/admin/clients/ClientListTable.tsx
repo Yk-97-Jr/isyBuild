@@ -44,7 +44,6 @@ import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type {ClientsType} from "@/types/apps/clientsType";
 import ClientDialog from "@components/dialogs/client-dialog";
 
 import type {ClientRead} from "@/services/IsyBuildApi";
@@ -125,7 +124,6 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [editValue, setEditValue] = useState<ClientRead>()
-  const [setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
@@ -136,9 +134,9 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
 
   console.log("countRecords" + countRecords)
 
-  const handleEditUser = (user: ClientsType) => {
+  const handleEditClient = (client: ClientRead) => {
     setOpen(true)
-    setEditValue(user)
+    setEditValue(client)
   }
 
 
@@ -150,7 +148,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
 
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('clients.name', {
+      columnHelper.accessor('name', {
         header: 'Nom',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -162,7 +160,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
           </div>
         )
       }),
-      columnHelper.accessor('clients.siren_number', {
+      columnHelper.accessor('siren_number', {
         header: 'Siren',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -174,7 +172,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
           </div>
         )
       }),
-      columnHelper.accessor('clients.contact_email', {
+      columnHelper.accessor('contact_email', {
         header: 'Email',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -186,7 +184,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
           </div>
         )
       }),
-      columnHelper.accessor('clients.phone_number', {
+      columnHelper.accessor('phone_number', {
         header: 'Numéro de Telephone',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -198,7 +196,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
           </div>
         )
       }),
-      columnHelper.accessor('clients.is_active', {
+      columnHelper.accessor('is_active', {
         header: 'Status',
         cell: ({row}) => (
           <Chip
@@ -234,7 +232,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
                   icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEditUser(row.original),
+                    onClick: () => handleEditClient(row.original),
                   }
                 },
 
@@ -388,7 +386,7 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
 
       </Card>
       <ClientDialog open={open} setOpen={setOpen} id={id} setId={setId} editValue={editValue}
-                    setEditValue={setEditValue} setAddValue={setAddValue} refetch={refetch}/>
+                    setEditValue={setEditValue}  refetch={refetch}/>
     </>
   )
 }

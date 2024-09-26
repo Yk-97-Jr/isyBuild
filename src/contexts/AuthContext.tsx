@@ -5,19 +5,21 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 import Cookies from 'js-cookie';
 
-interface AuthUser {
-  id: number;
-  email: string;
-  first_name: string | null;
-  last_name: string | null;
-  date_joined: string;
-  is_active: boolean;
-  role: string;
-}
+import type {UserRead} from "@/services/IsyBuildApi";
+
+// interface AuthUser {
+//   id: number;
+//   email: string;
+//   first_name: string | null;
+//   last_name: string | null;
+//   date_joined: string;
+//   is_active: boolean;
+//   role: string;
+// }
 
 interface AuthContextType {
-  user: AuthUser | null;
-  setUser: (user: AuthUser | null) => void;
+  user: UserRead | null;
+  setUser: (user: UserRead | null) => void;
   clearUser: () => void;
 }
 
@@ -28,7 +30,7 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<UserRead | null>(null);
 
   useEffect(() => {
     const storedUser = Cookies.get('user');

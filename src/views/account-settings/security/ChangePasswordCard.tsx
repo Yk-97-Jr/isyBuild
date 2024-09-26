@@ -73,7 +73,7 @@ const ChangePasswordCard = () => {
   const onSubmit = async (formData: PasswordChangeFormData) => {
     try {
       await changePassword({
-        userChangePassword: {
+        userChangePasswordRequest: {
           old_password: formData.currentPassword,
           new_password: formData.newPassword
         }

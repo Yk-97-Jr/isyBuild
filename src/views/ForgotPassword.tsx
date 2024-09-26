@@ -90,7 +90,7 @@ const ForgotPassword = ({mode}: { mode: string }) => {
 
     try {
       await passwordReset({
-        passwordResetRequest: {
+        passwordResetRequestRequest: {
           email: data.email,
           redirect_uri: {appUrl} + '/reset-password',
         }
