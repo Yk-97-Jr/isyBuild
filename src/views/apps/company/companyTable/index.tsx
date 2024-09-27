@@ -152,43 +152,37 @@ const CompanyTable = ({
   const columns = useMemo<ColumnDef<CompanyTypeWithAction, any>[]>(
     () => [
       columnHelper.accessor('name', {
-        header: 'Nom',
+        header: 'Enterprise',
         cell: ({ row }) => (
           <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
                 {`${row.original.name} `}
               </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('contact_email', {
-        header: 'Email',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.contact_email}`}
+                {`${row.original.contact_email} `}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('owner.id', {
-        header: 'Owner',
+      columnHelper.accessor('phone_number', {
+        header: 'téléphone',
         cell: ({ row }) => (
           <div className='flex items-center gap-0'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original?.owner?.first_name} `}
+                {`${row.original.phone_number} `}
+              </Typography>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.clients} `}
               </Typography>
             </div>
           </div>
         )
       }),
       columnHelper.accessor('siren_number', {
-        header: 'siren_number',
+        header: 'numéro de sirène',
         cell: ({ row }) => (
           <div className='flex items-center gap-0'>
             <div className='flex flex-col'>
@@ -200,43 +194,29 @@ const CompanyTable = ({
         )
       }),
       columnHelper.accessor('created_by.id', {
-        header: 'Name',
+        header: 'propriétaire',
         cell: ({ row }) => (
           <div className='flex items-center gap-0'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.created_by.first_name} `}
+                {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
+              </Typography>
+              <Typography color='text.primary' className='font-extralight'>
+                {`${row.original.created_by.email} `}
               </Typography>
             </div>
           </div>
-        )
-      }),
-      columnHelper.accessor('phone_number', {
-        header: 'phone',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-0'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.phone_number} `}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('updated_at', {
-        header: `Date d'adhésion`,
-        cell: ({ row }) => (
-          <Typography>
-            {row.original ? new Date(row.original.updated_at).toLocaleDateString() : 'Date not available'}
-          </Typography>
         )
       }),
       columnHelper.accessor('created_at', {
         header: `Date de Creation`,
         cell: ({ row }) => (
-          <Typography>
-            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
-          </Typography>
+          <>
+           
+            <Typography>
+              {row.original.created_at ? new Date(row.original.created_at).toLocaleString() : 'Date not available'}
+            </Typography>
+          </>
         )
       }),
       columnHelper.accessor('is_active', {

@@ -6,17 +6,16 @@ import { useState } from 'react'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-
-/* import Divider from '@mui/material/Divider' */
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 
 // Component Imports
-import Form from '@components/Form'
 
+
+import Form from '@components/Form'
 import SelectMultiple from './SelectMultiple'
 
-const AddLotToCompany = () => {
+const AddLotToCompany = ({ register, errors }: { register: any; errors: any }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false)
 
   // Function to toggle the select menu state
@@ -46,14 +45,15 @@ const AddLotToCompany = () => {
           {/* Pass state and toggle function to SelectMultiple */}
           <SelectMultiple onToggleMenu={handleSelectToggle} />
 
-          {/* Spacer div to push the divider and "In stock" section to the bottom */}
+          {/* Spacer div to push the divider and "Status" section to the bottom */}
           <div style={{ flexGrow: 1 }}></div>
 
-          {/* Divider and "In stock" section */}
-          {/* <Divider className='mlb-2 mbe-6' /> */}
+          {/* Status section */}
           <div className='flex items-center justify-between mbe-6'>
             <Typography>Status</Typography>
-            <Switch defaultChecked />
+
+            <Switch {...register('is_active')} color='primary' />
+            {errors.is_active && <div className='text-red-500'>{errors.is_active.message}</div>}
           </div>
         </Form>
       </CardContent>

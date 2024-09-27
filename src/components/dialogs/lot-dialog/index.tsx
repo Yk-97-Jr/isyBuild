@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 
 import DialogCloseButton from '../DialogCloseButton'
 import type { LotsType } from '@/types/apps/usersType'
-import AddLotContent from '@components/dialogs/lot-dialog/AddLotContent'
+import AddLotContent from '@/components/dialogs/lot-dialog/AddLot'
 import EditLotContent from '@components/dialogs/lot-dialog/EditLotContent'
 import DeleteLotContent from '@components/dialogs/lot-dialog/DeleteLotContent'
 

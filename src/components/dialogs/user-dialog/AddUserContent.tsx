@@ -55,7 +55,7 @@ const AddUserContent = ({ handleClose, handleCloseWithoutRefresh }: AddUserConte
             first_name: data.firstName,
             last_name: data.lastName,
             email: data.email,
-            redirect_uri: 'http://localhost:3001/users/list'
+            redirect_uri: 'http://localhost:3000/users/list'
           }
         }
       }).unwrap()

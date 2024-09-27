@@ -50,7 +50,7 @@ const SelectMultiple = ({ onToggleMenu }: { onToggleMenu: (open: boolean) => voi
         <CustomTextField
           select
           fullWidth
-          label='Chip'
+          label=''
           value={personName}
           id='demo-multiple-chip'
           SelectProps={{
