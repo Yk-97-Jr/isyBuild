@@ -7,8 +7,7 @@ import Typography from '@mui/material/Typography'
 
 import DialogCloseButton from '../DialogCloseButton'
 import type { LotsType } from '@/types/apps/usersType'
-import AddLotContent from '@/components/dialogs/lot-dialog/AddLot'
-import EditLotContent from '@components/dialogs/lot-dialog/EditLotContent'
+
 import DeleteLotContent from '@components/dialogs/lot-dialog/DeleteLotContent'
 
 type LotsDialogProps = {
@@ -26,11 +25,11 @@ type LotsDialogProps = {
 const LotsDialog = ({
   open,
   setOpen,
-  addValue,
+
   setAddValue,
   id,
   setId,
-  editValue,
+
   setEditValue,
   refetch
 }: LotsDialogProps) => {
@@ -49,22 +48,18 @@ const LotsDialog = ({
     setOpen(false)
   }
 
-  const isDelete = id !== undefined && id !== 0 && !editValue
-  const isEdit = !!editValue
+  const isDelete = id !== undefined && id !== 0
 
-  if (!isDelete && !isEdit && !addValue) {
+  if (!isDelete ) {
     return null // Retourner null si aucune condition n'est remplie
   }
 
-  const dialogTitle = isDelete ? 'Supprimer lots' : isEdit ? 'Modifier lots' : 'Ajouter un nouvel lots'
+  const dialogTitle =  'Supprimer lots'
 
-  const dialogDescription = isDelete
-    ? 'Êtes-vous sûr de vouloir supprimer cet lots ?'
-    : isEdit
-      ? 'Modifiez les détails de le lots  ci-dessous.'
-      : 'Remplissez les détails pour créer un nouvel lots.'
+  const dialogDescription =  'Êtes-vous sûr de vouloir supprimer cet lots ?'
 
-  const ContentComponent = isDelete ? DeleteLotContent : isEdit ? EditLotContent : AddLotContent
+
+
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>
@@ -77,12 +72,15 @@ const LotsDialog = ({
           {dialogDescription}
         </Typography>
       </DialogTitle>
-      <ContentComponent
-        handleClose={handleClose}
-        handleCloseWithoutRefresh={handleCloseWithoutRefresh}
-        id={id!}
-        editValue={editValue!}
-      />
+
+      {/* Conditionally render DeleteUserContent if isDelete is true */}
+      {isDelete && (
+        <DeleteLotContent
+          handleClose={handleClose}
+          handleCloseWithoutRefresh={handleCloseWithoutRefresh}
+          id={id!}
+        />
+      )}
     </Dialog>
   )
 }
