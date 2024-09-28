@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import React, { useEffect, useState, useMemo } from 'react'
+import React, {useEffect, useState, useMemo} from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -9,13 +9,13 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
-import type { TextFieldProps } from '@mui/material/TextField'
+import type {TextFieldProps} from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
-import type { ButtonProps } from '@mui/material/Button'
+import type {ButtonProps} from '@mui/material/Button'
 
 // Third-party Imports
 import classnames from 'classnames'
-import { rankItem } from '@tanstack/match-sorter-utils'
+import {rankItem} from '@tanstack/match-sorter-utils'
 import {
   createColumnHelper,
   flexRender,
@@ -28,13 +28,13 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
+import type {ColumnDef, FilterFn} from '@tanstack/react-table'
+import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import Box from '@mui/material/Box'
 
-import { CircularProgress } from '@mui/material'
+import {CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -45,8 +45,9 @@ import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type { UsersType } from '@/types/apps/usersType'
+import type {UsersType} from '@/types/apps/usersType'
 import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
+
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -76,11 +77,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -101,22 +102,22 @@ const DebouncedInput = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
-  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)} />
+  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)}/>
 }
 
 // Column Definitions
 const columnHelper = createColumnHelper<UsersTypeWithAction>()
 
 const UserListTable = ({
-  data,
-  page,
-  setPage,
-  setPageSize,
-  pageSize,
-  countRecords,
-  isFetching,
-  refetch
-}: {
+                         data,
+                         page,
+                         setPage,
+                         setPageSize,
+                         pageSize,
+                         countRecords,
+                         isFetching,
+                         refetch
+                       }: {
   data?: UsersType[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -143,7 +144,7 @@ const UserListTable = ({
     variant: 'contained',
     children: 'Ajouter un Utilisateur',
     className: 'max-sm:is-full',
-    startIcon: <i className='tabler-plus' />
+    startIcon: <i className='tabler-plus'/>
   }
 
   console.log('countRecords' + countRecords)
@@ -162,7 +163,7 @@ const UserListTable = ({
     () => [
       columnHelper.accessor('user.first_name', {
         header: 'Nom',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
@@ -174,7 +175,7 @@ const UserListTable = ({
       }),
       columnHelper.accessor('user.email', {
         header: 'Email',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
@@ -186,7 +187,7 @@ const UserListTable = ({
       }),
       columnHelper.accessor('user.date_joined', {
         header: `Date d'adhésion`,
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <Typography>
             {row.original.user.date_joined
               ? new Date(row.original.user.date_joined).toLocaleDateString()
@@ -196,7 +197,7 @@ const UserListTable = ({
       }),
       columnHelper.accessor('created_at', {
         header: `Date de Creation`,
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <Typography>
             {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
           </Typography>
@@ -204,11 +205,13 @@ const UserListTable = ({
       }),
       columnHelper.accessor('created_by.first_name', {
         header: 'Creé par',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.created_by?.first_name} ${row.original.created_by?.last_name}`}
+                {row.original.created_by
+                  ? `${row.original.created_by.first_name} ${row.original.created_by.last_name}`
+                  : 'Données non disponible'}
               </Typography>
             </div>
           </div>
@@ -216,7 +219,7 @@ const UserListTable = ({
       }),
       columnHelper.accessor('user.is_active', {
         header: 'Status',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <Chip
             variant='tonal'
             label={row.original.user.is_active ? 'Active' : 'Inactive'}
@@ -226,13 +229,13 @@ const UserListTable = ({
       }),
       columnHelper.accessor('action', {
         header: 'Action',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center'>
             <IconButton onClick={() => handleDeleteUser(row.original.id)}>
-              <i className='tabler-trash text-textSecondary' />
+              <i className='tabler-trash text-textSecondary'/>
             </IconButton>
             <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
+              iconButtonProps={{size: 'medium'}}
               iconClassName='text-textSecondary'
               options={[
                 {
@@ -316,66 +319,66 @@ const UserListTable = ({
               element={Button}
               elementProps={buttonProps}
               dialog={UserDialog}
-              dialogProps={{ addValue, setAddValue, refetch }}
+              dialogProps={{addValue, setAddValue, refetch}}
             />
           </div>
         </div>
         <div className='overflow-x-auto'>
           {isFetching ? (
             <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
-              <CircularProgress />
+              <CircularProgress/>
             </Box>
           ) : (
             <table className={tableStyles.table}>
               <thead>
-                {table.getHeaderGroups().map(headerGroup => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map(header => (
-                      <th key={header.id}>
-                        {header.isPlaceholder ? null : (
-                          <>
-                            <div
-                              className={classnames({
-                                'flex items-center': header.column.getIsSorted(),
-                                'cursor-pointer select-none': header.column.getCanSort()
-                              })}
-                              onClick={header.column.getToggleSortingHandler()}
-                            >
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                              {{
-                                asc: <i className='tabler-chevron-up text-xl' />,
-                                desc: <i className='tabler-chevron-down text-xl' />
-                              }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                            </div>
-                          </>
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <th key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <>
+                          <div
+                            className={classnames({
+                              'flex items-center': header.column.getIsSorted(),
+                              'cursor-pointer select-none': header.column.getCanSort()
+                            })}
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                            {{
+                              asc: <i className='tabler-chevron-up text-xl'/>,
+                              desc: <i className='tabler-chevron-down text-xl'/>
+                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                          </div>
+                        </>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
               </thead>
               {table.getFilteredRowModel().rows.length === 0 ? (
                 <tbody>
-                  <tr>
-                    <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                      No data available
-                    </td>
-                  </tr>
+                <tr>
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    No data available
+                  </td>
+                </tr>
                 </tbody>
               ) : (
                 <tbody>
-                  {table
-                    .getRowModel()
-                    .rows.slice(0, table.getState().pagination.pageSize)
-                    .map(row => {
-                      return (
-                        <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                          {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                          ))}
-                        </tr>
-                      )
-                    })}
+                {table
+                  .getRowModel()
+                  .rows.slice(0, table.getState().pagination.pageSize)
+                  .map(row => {
+                    return (
+                      <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
+                        {row.getVisibleCells().map(cell => (
+                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                        ))}
+                      </tr>
+                    )
+                  })}
                 </tbody>
               )}
             </table>

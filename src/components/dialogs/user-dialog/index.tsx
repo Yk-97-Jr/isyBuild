@@ -49,6 +49,9 @@ const UserDialog = ({
 
   const handleCloseWithoutRefresh = () => {
     setOpen(false);
+    setEditValue?.(undefined);
+    setId?.(0);
+    setAddValue?.(false);
   };
 
   const isDelete = id !== undefined && id !== 0 && !editValue;

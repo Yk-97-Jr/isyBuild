@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, {useState, useEffect, useRef} from 'react';
 
-import Snackbar from '@mui/material/Snackbar'
+import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -8,27 +8,31 @@ import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import classnames from 'classnames'
 
-import MuiAlert from '@mui/material/Alert'
+import MuiAlert from '@mui/material/Alert';
 
-import type { AlertProps } from '@mui/material/Alert'
+import type {AlertProps} from '@mui/material/Alert';
 
 // Import your custom components and hooks
 import CustomTextField from '@core/components/mui/TextField'
 
 // Import the useAlert hook
-import { useIntersection } from '@/hooks/useIntersection'
+import {useIntersection} from '@/hooks/useIntersection'
 import frontCommonStyles from '@views/front-pages/styles.module.css'
-import { useContactUsSendEmailCreateMutation } from '@/services/IsyBuildApi'
+import {useContactUsSendEmailCreateMutation} from '@/services/IsyBuildApi';
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
-})
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const ContactUs = () => {
   const skipIntersection = useRef(true)
   const ref = useRef<null | HTMLDivElement>(null)
-  const { updateIntersections } = useIntersection()
-  const [sendEmail] = useContactUsSendEmailCreateMutation()
+  const {updateIntersections} = useIntersection()
+  const [sendEmail] = useContactUsSendEmailCreateMutation();
 
   const [formData, setFormData] = useState({
     nom: '',
@@ -37,7 +41,7 @@ const ContactUs = () => {
     telephone: '',
     fonction: '',
     entreprise: '',
-    message: ''
+    message: '',
   })
 
   const [errors, setErrors] = useState({
@@ -47,58 +51,58 @@ const ContactUs = () => {
     telephone: '',
     fonction: '',
     entreprise: '',
-    message: ''
+    message: '',
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [open, setOpenSnackbar] = useState(false)
-  const [alertMessage, setAlertMessage] = useState<string>('')
-  const [severity, setSeverity] = useState<'success' | 'error'>('success')
+  const [open, setOpenSnackbar] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string>('');
+  const [severity, setSeverity] = useState<'success' | 'error'>('success');
 
   // Use the useAlert hook
 
   const handleSnackbarClose = () => {
-    setOpenSnackbar(false)
-  }
+    setOpenSnackbar(false);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target
+    const {id, value} = e.target;
 
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [id]: value
-    }))
+      [id]: value,
+    }));
 
     // Clear the error for the field on change
-    setErrors(prevErrors => ({
+    setErrors((prevErrors) => ({
       ...prevErrors,
-      [id]: ''
-    }))
-  }
+      [id]: '',
+    }));
+  };
 
   const validatePhoneNumber = (phoneNumber: string) => {
-    const frenchPhoneNumberPattern = /^(0[1-9]|(\+33\s?)[1-9])\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/
 
-    return frenchPhoneNumberPattern.test(phoneNumber)
-  }
+    const frenchPhoneNumberPattern = /^(0[1-9]|(\+33\s?)[1-9])\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$/;
+
+    return frenchPhoneNumberPattern.test(phoneNumber);
+  };
 
   const validateEmail = (email: string) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-    return emailPattern.test(email)
-  }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return emailPattern.test(email);
+  };
 
   const validateForm = () => {
     const newErrors = {
       nom: formData.nom ? '' : 'Le champ "Nom" est obligatoire.',
       prenom: formData.prenom ? '' : 'Le champ "Prénom" est obligatoire.',
       email: validateEmail(formData.email) ? '' : 'Veuillez entrer une adresse email valide.',
-      telephone: validatePhoneNumber(formData.telephone)
-        ? ''
-        : 'Veuillez entrer un numéro de téléphone français valide.',
+      telephone: validatePhoneNumber(formData.telephone) ? '' : 'Veuillez entrer un numéro de téléphone français valide.',
       fonction: formData.fonction ? '' : 'Le champ "Fonction" est obligatoire.',
       entreprise: formData.entreprise ? '' : 'Le champ "Entreprise" est obligatoire.',
-      message: '' // The message field is not required, so no validation needed
+      message: '',  // The message field is not required, so no validation needed
     }
 
     setErrors(newErrors)
@@ -109,7 +113,7 @@ const ContactUs = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const isValid = validateForm()
+    const isValid = validateForm();
 
     if (!isValid) {
       return
@@ -118,11 +122,11 @@ const ContactUs = () => {
     setIsSubmitting(true)
 
     try {
-      await sendEmail({ contactUsEmailRequest: formData }).unwrap()
+      await sendEmail({contactUsEmailRequest: formData}).unwrap();
 
-      setSeverity('success')
-      setAlertMessage('Message envoyé avec succès!')
-      setOpenSnackbar(true)
+      setSeverity('success');
+      setAlertMessage('Message envoyé avec succès!');
+      setOpenSnackbar(true);
       setFormData({
         nom: '',
         prenom: '',
@@ -130,15 +134,15 @@ const ContactUs = () => {
         telephone: '',
         fonction: '',
         entreprise: '',
-        message: ''
-      })
+        message: '',
+      });
     } catch (error) {
-      setSeverity('error')
-      setAlertMessage("Une erreur s'est produite lors de l'envoi du message. Veuillez réessayer.")
-      setOpenSnackbar(true)
+      setSeverity('error');
+      setAlertMessage('Une erreur s\'est produite lors de l\'envoi du message. Veuillez réessayer.');
+      setOpenSnackbar(true);
     }
 
-    setIsSubmitting(false)
+    setIsSubmitting(false);
   }
 
   useEffect(() => {
@@ -150,9 +154,9 @@ const ContactUs = () => {
           return
         }
 
-        updateIntersections({ [entry.target.id]: entry.isIntersecting })
+        updateIntersections({[entry.target.id]: entry.isIntersecting})
       },
-      { threshold: 0.35 }
+      {threshold: 0.35}
     )
 
     ref.current && observer.observe(ref.current)
@@ -166,7 +170,9 @@ const ContactUs = () => {
           <Typography color='text.primary' variant='h4'>
             Travaillons ensemble
           </Typography>
-          <Typography className='text-center'>Une question ou une remarque ? Écrivez-nous un message</Typography>
+          <Typography className='text-center'>
+            Une question ou une remarque ? Écrivez-nous un message
+          </Typography>
         </div>
         <div className='flex justify-center w-full'>
           <Grid container spacing={6} className='w-full'>
@@ -235,9 +241,9 @@ const ContactUs = () => {
                         type='tel'
                         value={formData.telephone}
                         onChange={handleChange}
-                        onKeyPress={e => {
+                        onKeyPress={(e) => {
                           if (!/[0-9]/.test(e.key)) {
-                            e.preventDefault() // Prevent non-numeric characters from being entered
+                            e.preventDefault(); // Prevent non-numeric characters from being entered
                           }
                         }}
                         error={!!errors.telephone}
@@ -266,7 +272,12 @@ const ContactUs = () => {
                       value={formData.message}
                       onChange={handleChange}
                     />
-                    <Button variant='contained' type='submit' disabled={isSubmitting} className='w-full'>
+                    <Button
+                      variant='contained'
+                      type='submit'
+                      disabled={isSubmitting}
+                      className='w-full'
+                    >
                       {isSubmitting ? 'Envoi en cours...' : 'Envoyer la demande'}
                     </Button>
                   </form>
@@ -274,11 +285,15 @@ const ContactUs = () => {
                     open={open}
                     autoHideDuration={6000}
                     onClose={handleSnackbarClose}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Positioning the Snackbar at the top-right corner
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right'
+                    }}  // Positioning the Snackbar at the top-right corner
                   >
-                    <Alert onClose={handleSnackbarClose} severity={severity} sx={{ width: '100%' }}>
+                    <Alert onClose={handleSnackbarClose} severity={severity} sx={{width: '100%'}}>
                       {alertMessage}
                     </Alert>
+
                   </Snackbar>
                 </CardContent>
               </Card>

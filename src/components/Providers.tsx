@@ -11,6 +11,7 @@ import ReduxProvider from "@/store/ReduxProvider";
 
 // Util Imports
 import {getMode, getSettingsFromCookie, getSystemMode} from '@core/utils/serverHelpers'
+import {AuthProvider} from "@/contexts/AuthContext";
 
 type Props = ChildrenType & {
   direction: Direction
@@ -26,15 +27,18 @@ const Providers = (props: Props) => {
   const systemMode = getSystemMode()
 
   return (
-    <VerticalNavProvider>
-      <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
-        <ThemeProvider direction={direction} systemMode={systemMode}>
-          <ReduxProvider>
-            <SnackBarContextProvider>{children}</SnackBarContextProvider>
-          </ReduxProvider>
-        </ThemeProvider>
-      </SettingsProvider>
-    </VerticalNavProvider>
+    <AuthProvider>
+      <ReduxProvider>
+        <VerticalNavProvider>
+          <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
+            <ThemeProvider direction={direction} systemMode={systemMode}>
+              <SnackBarContextProvider>{children}</SnackBarContextProvider>
+            </ThemeProvider>
+          </SettingsProvider>
+        </VerticalNavProvider>
+      </ReduxProvider>
+    </AuthProvider>
+
   )
 }
 

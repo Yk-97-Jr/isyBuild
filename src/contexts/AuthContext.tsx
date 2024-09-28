@@ -1,44 +1,55 @@
-import type {ReactNode} from 'react';
-import { createContext, useContext, useState, useEffect} from 'react';
+'use client'
 
+import type { ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-// Define the structure for the authenticated users, including permissions
-interface AuthUser {
-  role: string;
-  permissions: string[];
-}
+import Cookies from 'js-cookie';
 
-// Define the context type including permissions
+import type {UserRead} from "@/services/IsyBuildApi";
+
+// interface AuthUser {
+//   id: number;
+//   email: string;
+//   first_name: string | null;
+//   last_name: string | null;
+//   date_joined: string;
+//   is_active: boolean;
+//   role: string;
+// }
+
 interface AuthContextType {
-  user: AuthUser | null;
-  setUser: (user: AuthUser | null) => void;
+  user: UserRead | null;
+  setUser: (user: UserRead | null) => void;
+  clearUser: () => void;
 }
 
 interface AuthProviderProps {
   children: ReactNode;
-};
+}
 
-// Create context with extended type
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({children}: AuthProviderProps) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<UserRead | null>(null);
 
   useEffect(() => {
-    // Fetch the authenticated users and their role and permissions
-    const fetchUser = async () => {
-      // Replace with your actual logic to fetch users data
-      const response = await fetch('/api/user');
-      const data = await response.json();
+    const storedUser = Cookies.get('user');
 
-      setUser(data); // Ensure data includes role and permissions
-    };
 
-    fetchUser();
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+      }
+    }
   }, []);
 
+  const clearUser = () => {
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{user, setUser}}>
+    <AuthContext.Provider value={{ user, setUser, clearUser }}>
       {children}
     </AuthContext.Provider>
   );
@@ -50,7 +61,6 @@ export const useAuth = () => {
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-
 
   return context;
 };

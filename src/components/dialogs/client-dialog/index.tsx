@@ -1,0 +1,95 @@
+import type {Dispatch, SetStateAction} from 'react';
+import React from 'react';
+
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import Typography from '@mui/material/Typography';
+
+
+import DialogCloseButton from '../DialogCloseButton';
+import DeleteClientContent from "@components/dialogs/client-dialog/DeleteClientContent";
+import type {ClientRead} from "@/services/IsyBuildApi";
+
+
+type ClientDialogProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  id?: number;
+  setId: Dispatch<SetStateAction<number>>
+  setEditValue: Dispatch<SetStateAction<ClientRead | undefined>>
+  editValue?: ClientRead; // Updated type
+  refetch?: () => void
+
+};
+
+
+const ClientDialog = ({
+                        open,
+                        setOpen,
+                        id,
+                        setId,
+                        editValue,
+                        setEditValue,
+                        refetch
+
+                      }: ClientDialogProps) => {
+
+
+  console.log('editValue' + editValue)
+  console.log('id' + id)
+
+  const handleClose = () => {
+    setOpen(false);
+    setEditValue?.(undefined);
+    setId?.(0);
+
+    if (refetch) {
+      refetch();
+    }
+  };
+
+  const handleCloseWithoutRefresh = () => {
+    setOpen(false);
+  };
+
+  const isDelete = id !== undefined && id !== 0 && !editValue;
+  const isEdit = !!editValue;
+
+  if (!isDelete && !isEdit) {
+    return null; // Return null if no condition is met
+  }
+
+  const dialogTitle = isDelete ? 'Delete Client' : isEdit ? 'Edit Client' : 'Add New Client';
+
+  const dialogDescription = isDelete
+    ? 'Are you sure you want to delete this client?'
+    : isEdit
+      ? 'Edit the client details below.'
+      : 'Fill in the details to create a new client.';
+
+  // removing for now the logic to have multipe dialogs
+  const ContentComponent = DeleteClientContent
+
+  return (
+    <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}>
+      <DialogCloseButton onClick={handleCloseWithoutRefresh} disableRipple>
+        <i className='tabler-x'/>
+      </DialogCloseButton>
+      <DialogTitle variant='h4' className='flex flex-col gap-2 text-center sm:pbs-16 sm:pbe-6 sm:pli-16'>
+        {dialogTitle}
+        <Typography component='span' className='flex flex-col text-center'>
+          {dialogDescription}
+        </Typography>
+      </DialogTitle>
+      <ContentComponent
+        handleClose={handleClose}
+        handleCloseWithoutRefresh={handleCloseWithoutRefresh}
+        id={id!}
+
+        // editValue={editValue!}
+      />
+    </Dialog>
+  );
+};
+
+export default ClientDialog;

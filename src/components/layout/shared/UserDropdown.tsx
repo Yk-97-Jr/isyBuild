@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import {useRef, useState} from 'react'
+import React, {useRef, useState} from 'react'
 import type {MouseEvent} from 'react'
 
 // Next Imports
@@ -18,12 +18,14 @@ import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
+import { CircularProgress } from '@mui/material'
 
 // Hook Imports
 import Cookies from "js-cookie";
 
-import {useSettings} from '@core/hooks/useSettings'
-
+import { useSettings } from '@core/hooks/useSettings'
+import { useLogoutCreateMutation } from "@/services/IsyBuildApi"
+import {useAuth} from "@/contexts/AuthContext";
 
 const UserDropdown = () => {
   // States
@@ -34,13 +36,15 @@ const UserDropdown = () => {
 
   // Hooks
   const router = useRouter()
+  const [logout, {isLoading}] = useLogoutCreateMutation();
+  const { settings } = useSettings()
 
-  const {settings} = useSettings()
+  // Get user data from the context
+  const { user } = useAuth()
 
   const handleDropdownOpen = () => {
     !open ? setOpen(true) : setOpen(false)
   }
-
 
   const handleDropdownClose = (event?: MouseEvent<HTMLLIElement> | (MouseEvent | TouchEvent), url?: string) => {
     if (url) {
@@ -54,24 +58,46 @@ const UserDropdown = () => {
     setOpen(false)
   }
 
-  const handleUserLogout = () => {
+  const handleUserLogout = async () => {
+    const refresh_token = Cookies.get('refresh_token')
 
+    if (!refresh_token) {
+      console.warn('No refresh token found, redirecting to login');
+      router.push('/login');
 
-    // Remove tokens from cookies
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
+return;
+    }
 
-    // Redirect to login page
-    router.push('/home')
+    try {
+      // Call the mutation to log out the user
+      await logout(
+        {
+          tokenRefreshRequest: {
+            refresh: refresh_token
+          }
+        }
+      ).unwrap();
 
+      // Remove tokens from cookies after successful logout
+      Cookies.remove('access_token');
+      Cookies.remove('refresh_token');
+      Cookies.remove('user');
 
-  }
+      // Redirect to login page
+      router.push('/login');
+
+    } catch (error) {
+      console.error('Logout failed:', error);
+
+      // Handle any error case if needed
+    }
+  };
 
   return (
     <>
       <Avatar
         ref={anchorRef}
-        alt='John Doe'
+        alt={user?.first_name || 'User Avatar'}
         src='/images/avatars/1.png'
         onClick={handleDropdownOpen}
         className='cursor-pointer bs-[38px] is-[38px]'
@@ -95,12 +121,14 @@ const UserDropdown = () => {
               <ClickAwayListener onClickAway={e => handleDropdownClose(e as MouseEvent | TouchEvent)}>
                 <MenuList>
                   <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
-                    <Avatar alt='John Doe' src='/images/avatars/1.png'/>
+                    <Avatar alt={user?.first_name || 'User Avatar'} src='/images/avatars/1.png'/>
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
-                        John Doe
+                        {user?.first_name || 'John Doe'}
                       </Typography>
-                      <Typography variant='caption'>admin@isybuild.com</Typography>
+                      <Typography variant='caption'>
+                        {user?.email || 'admin@isybuild.com'}
+                      </Typography>
                     </div>
                   </div>
                   <Divider className='mlb-1'/>
@@ -115,11 +143,11 @@ const UserDropdown = () => {
                       variant='contained'
                       color='error'
                       size='small'
-                      endIcon={<i className='tabler-logout'/>}
+                      disabled={isLoading} // Désactive le bouton pendant le chargement
                       onClick={handleUserLogout}
                       sx={{'& .MuiButton-endIcon': {marginInlineStart: 1.5}}}
                     >
-                      Déconnexion
+                      {isLoading ? <CircularProgress sx={{color: 'white'}} size={14}/> : 'Déconnexion'}
                     </Button>
                   </div>
                 </MenuList>

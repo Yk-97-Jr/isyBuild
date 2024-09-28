@@ -2,67 +2,69 @@ import type {NextRequest} from 'next/server';
 import {NextResponse} from 'next/server';
 
 import {verifyToken} from "@/utils/verifyToken";
-
-// Define access rules directly in the TypeScript file
-const accessRules = {
-  routes: [
-    {
-      path: '/admin',
-      roles: ['admin'],
-    },
-    {
-      path: '/dashboard',
-      roles: ['admin', 'user'],
-    },
-    {
-      path: '/users/list',
-      roles: ['admin'],
-    },
-  ],
-};
+import rountingData from "@/data/routing/routingData";
 
 export function middleware(req: NextRequest) {
   const {pathname} = req.nextUrl;
 
-  // Extract the token from cookies (assuming it's named 'auth_token')
+  // Get the access token from the cookies
   const token = req.cookies.get('access_token');
+  const userCookie = req.cookies.get('user')
+  const user = userCookie ? JSON.parse(userCookie.value) : null;
 
-  console.log(token)
-
+  // If no token is found, redirect to the login page
   if (!token) {
-    // Redirect to login if no token is found
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
+  // Verify and decode the token
   const decodedToken = verifyToken(token.value);
 
+  // If the token is invalid or expired, redirect to the login page
   if (!decodedToken) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
-  console.log("decodedToken" + decodedToken.exp)
+  // Extract the user's role from the decoded token (replace 'role' with actual token property)
+  const userRole = user?.role; // Default to 'admin' if no role is available
 
-  const currentTime = Math.floor(Date.now() / 1000); // current time in seconds
 
-  if (decodedToken.exp < currentTime) {
-    return NextResponse.redirect(new URL('/login', req.url));
+  // Replace {role} in the path dynamically
+  const updatedRountingData = rountingData().map(rule => ({
+    ...rule,
+    path: rule.path.replace('role', userRole), // Replace 'role' with the user's actual role
+  }));
+
+  // Check if the current path is a dynamic detail route
+  const detailPathRegex = /^\/([^/]+)\/([^/]+)\/\d+\/details$/; // Matches /role/type/:id/details
+  const isDetailRoute = detailPathRegex.test(pathname);
+
+  console.log(isDetailRoute)
+
+// Check if the current path matches any of the route rules
+  const routeRule = updatedRountingData.find(rule => {
+    const rulePath = `/${rule.path}`;
+
+    return pathname === rulePath || (isDetailRoute && rule.path.includes('/[id]/details'));
+  });
+
+  // If the route exists but the user doesn't have access, redirect to unauthorized page
+  if (routeRule ? !routeRule.roles.includes(userRole) : true) {
+    return NextResponse.redirect(new URL('/unauthorized', req.url));
   }
 
-  const userRole = 'admin';
-
-  const routeRule = accessRules.routes.find(rule => rule.path === pathname);
-
-  if (routeRule) {
-    if (!routeRule.roles.includes(userRole)) {
-      // need here to create view for unauthorized routes
-      return NextResponse.redirect(new URL('/unauthorized', req.url));
-    }
-  }
-
+  // Allow access to the route if the user has the correct role
   return NextResponse.next();
 }
 
 // Specify which routes this middleware should apply to
 export const config = {
-  matcher: ['/admin', '/dashboard', '/users/list'], // List of routes to apply middleware
+  matcher: [
+    '/:role/admin',// Matches /admin paths for any role
+    '/:role/dashboard',
+    '/:role/:type/list',// Match dynamic list routes
+    '/:role/:type/add',// Match dynamic add routes
+    '/:role/:type/:id/details',// Match dynamic detail routes
+
+  ],
 };

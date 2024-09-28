@@ -1,11 +1,10 @@
 'use client'
 
-// Next Imports
-import Link from 'next/link'
-
 // MUI Imports
+import {useRouter} from 'next/navigation'
+
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { styled, useTheme } from '@mui/material/styles'
+import {styled, useTheme} from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 
@@ -13,10 +12,11 @@ import Typography from '@mui/material/Typography'
 import classnames from 'classnames'
 
 // Type Imports
-import type { SystemMode } from '@core/types'
+import type {SystemMode} from '@core/types'
 
 // Hook Imports
-import { useImageVariant } from '@core/hooks/useImageVariant'
+import {useImageVariant} from '@core/hooks/useImageVariant'
+import {useAuth} from "@/contexts/AuthContext";
 
 // Styled Components
 const MaskImg = styled('img')({
@@ -28,7 +28,7 @@ const MaskImg = styled('img')({
   zIndex: -1
 })
 
-const NotFound = ({ mode }: { mode: SystemMode }) => {
+const NotFound = ({mode}: { mode: SystemMode }) => {
   // Vars
   const darkImg = '/images/pages/misc-mask-dark.png'
   const lightImg = '/images/pages/misc-mask-light.png'
@@ -37,6 +37,14 @@ const NotFound = ({ mode }: { mode: SystemMode }) => {
   const theme = useTheme()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
   const miscBackground = useImageVariant(mode, lightImg, darkImg)
+  const router = useRouter() // Use Next.js useRouter hook for navigation
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
+
+  // Handle onClick event
+  const handleOnClick = () => {
+      router.push(`/${userRole}/dashboard`);
+  }
 
   return (
     <div className='flex items-center justify-center min-bs-[100dvh] relative p-6 overflow-x-hidden'>
@@ -48,7 +56,7 @@ const NotFound = ({ mode }: { mode: SystemMode }) => {
           <Typography variant='h4'>Page Not Found ⚠️</Typography>
           <Typography>we couldn&#39;t find the page you are looking for.</Typography>
         </div>
-        <Button href='/' component={Link} variant='contained'>
+        <Button variant='contained' onClick={handleOnClick}>
           Back To Home
         </Button>
         <img
@@ -61,7 +69,7 @@ const NotFound = ({ mode }: { mode: SystemMode }) => {
         <MaskImg
           alt='mask'
           src={miscBackground}
-          className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
+          className={classnames({'scale-x-[-1]': theme.direction === 'rtl'})}
         />
       )}
     </div>

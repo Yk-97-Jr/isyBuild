@@ -2,7 +2,7 @@
 import React from 'react'
 
 // Component Imports
-import UserList from "@views/apps/users/list/UserList"
+import UserList from "@views/apps/admin/users/list/UserList"
 
 
 const UserListApp = () => {
@@ -11,4 +11,4 @@ const UserListApp = () => {
   return <UserList/>
 }
 
-export default UserListApp   
+export default UserListApp
