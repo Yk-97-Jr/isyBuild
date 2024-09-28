@@ -5,10 +5,12 @@ import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Typography from '@mui/material/Typography'
 
+import DeleteLotContent from '@components/dialogs/lot-dialog/DeleteLotContent'
+
 import DialogCloseButton from '../DialogCloseButton'
 import type { LotsType } from '@/types/apps/usersType'
 
-import DeleteLotContent from '@components/dialogs/lot-dialog/DeleteLotContent'
+
 
 type LotsDialogProps = {
   open: boolean
