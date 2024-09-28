@@ -45,9 +45,11 @@ import CustomTextField from '@core/components/mui/TextField'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import type { LotsType } from '@/types/apps/usersType'
-import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
-import type {  LotRead } from '@/services/IsyBuildApi'
+
+import type { LotRead } from '@/services/IsyBuildApi'
 import Chip from '@/@core/components/mui/Chip'
+
+import AddLots from '@/components/dialogs/lot-dialog/AddLot'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -133,7 +135,7 @@ const LotsListTable = ({
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [editValue, setEditValue] = useState<LotsType>()
-  const [addValue, setAddValue] = useState(false)
+  const [, setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
@@ -308,12 +310,7 @@ const LotsListTable = ({
               placeholder='Rechercher un lots'
               className='max-sm:is-full'
             />
-            <OpenDialogOnElementClick
-              element={Button}
-              elementProps={buttonProps}
-              dialog={LotsDialog}
-              dialogProps={{ addValue, setAddValue, refetch }}
-            />
+            <AddLots element={Button} elementProps={buttonProps} url='/lots/add' />
           </div>
         </div>
         <div className='overflow-x-auto'>

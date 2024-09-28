@@ -1186,6 +1186,337 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /project-lots/{project_id}/:
+    get:
+      operationId: project_lots_retrieve
+      description: Retrieve a list of all ProjectLots for a specific project with
+        pagination.
+      summary: List all Lots for a Project
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectLot'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/{project_lot_id}/:
+    get:
+      operationId: project_lots_retrieve_2
+      description: Fetch detailed information about a specific ProjectLot by its ID.
+      summary: Retrieve a Project Lot by ID
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLot'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/{project_lot_id}/delete/:
+    delete:
+      operationId: project_lots_delete_destroy
+      description: Remove a lot from a project by providing the project lot ID.
+      summary: Remove Lot from Project
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/{project_lot_id}/subcontractors/:
+    get:
+      operationId: project_lots_subcontractors_retrieve_2
+      description: Retrieve a list of all subcontractors assigned to a specific ProjectLot.
+      summary: List all Subcontractors for a ProjectLot
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectLotSubcontractor'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/{project_lot_id}/subcontractors/assign/:
+    post:
+      operationId: project_lots_subcontractors_assign_create
+      description: Assign a subcontractor to a specific project lot.
+      summary: Assign Subcontractor to a ProjectLot
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectLotSubcontractorCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectLotSubcontractorCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectLotSubcontractorCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLotSubcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/{project_lot_id}/update-status/:
+    put:
+      operationId: project_lots_update_status_update
+      description: Update the status of a ProjectLot by providing the new status.
+      summary: Update Status of Project Lot
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectLotUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectLotUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectLotUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLot'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/create/:
+    post:
+      operationId: project_lots_create_create
+      description: Assign a lot to a project by providing the project ID and lot ID.
+      summary: Add Lot to Project
+      tags:
+      - Appel d'offre Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectLotCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectLotCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectLotCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLot'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/subcontractors/{project_lot_subcontractor_id}/:
+    get:
+      operationId: project_lots_subcontractors_retrieve
+      description: Retrieve a specific subcontractor assigned to a project lot by
+        ID.
+      summary: Retrieve a Subcontractor for a ProjectLot by ID
+      parameters:
+      - in: path
+        name: project_lot_subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLotSubcontractor'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/subcontractors/{project_lot_subcontractor_id}/remove/:
+    delete:
+      operationId: project_lots_subcontractors_remove_destroy
+      description: Remove a subcontractor assigned to a specific project lot.
+      summary: Remove Subcontractor from a ProjectLot
+      parameters:
+      - in: path
+        name: project_lot_subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /projects/:
     get:
       operationId: projects_retrieve
@@ -2599,6 +2930,50 @@ components:
       - next
       - previous
       - results
+    PaginatedProjectLot:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectLot'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedProjectLotSubcontractor:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectLotSubcontractor'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PaginatedSubcontractorStaff:
       type: object
       properties:
@@ -2744,7 +3119,7 @@ components:
           - $ref: '#/components/schemas/Client'
           readOnly: true
         status:
-          $ref: '#/components/schemas/StatusEnum'
+          $ref: '#/components/schemas/ProjectStatusEnum'
         start_date:
           type: string
           format: date
@@ -2840,6 +3215,166 @@ components:
       required:
       - code
       - name
+    ProjectLot:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project:
+          allOf:
+          - $ref: '#/components/schemas/ProjectSimple'
+          readOnly: true
+        lot:
+          allOf:
+          - $ref: '#/components/schemas/LotSimple'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/Status109Enum'
+        notes:
+          type: string
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - lot
+      - project
+      - updated_at
+    ProjectLotCreateRequest:
+      type: object
+      properties:
+        lot_id:
+          type: integer
+        project_id:
+          type: integer
+      required:
+      - lot_id
+      - project_id
+    ProjectLotSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project:
+          allOf:
+          - $ref: '#/components/schemas/ProjectSimple'
+          readOnly: true
+        lot:
+          allOf:
+          - $ref: '#/components/schemas/LotSimple'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/Status109Enum'
+        notes:
+          type: string
+      required:
+      - id
+      - lot
+      - project
+    ProjectLotSubcontractor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project_lot:
+          allOf:
+          - $ref: '#/components/schemas/ProjectLotSimple'
+          readOnly: true
+        subcontractor:
+          allOf:
+          - $ref: '#/components/schemas/SubcontractorSimple'
+          readOnly: true
+        subcontractor_staff:
+          allOf:
+          - $ref: '#/components/schemas/SubcontractorStaffSimple'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/Status841Enum'
+        notes:
+          type: string
+          nullable: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - project_lot
+      - subcontractor
+      - subcontractor_staff
+      - updated_at
+    ProjectLotSubcontractorCreateRequest:
+      type: object
+      properties:
+        subcontractor_id:
+          type: integer
+        subcontractor_staff_id:
+          type: integer
+        status:
+          $ref: '#/components/schemas/Status841Enum'
+        notes:
+          type: string
+          nullable: true
+      required:
+      - subcontractor_id
+      - subcontractor_staff_id
+    ProjectLotUpdateRequest:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status109Enum'
+    ProjectSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - id
+      - name
+    ProjectStatusEnum:
+      enum:
+      - draft
+      - pending
+      - in_progress
+      - completed
+      - on_hold
+      - canceled
+      type: string
+      description: |-
+        * `draft` - Draft
+        * `pending` - Pending
+        * `in_progress` - In Progress
+        * `completed` - Completed
+        * `on_hold` - On Hold
+        * `canceled` - Canceled
     ProjectUpdateRequest:
       type: object
       properties:
@@ -2922,21 +3457,33 @@ components:
       - new_password
       - token
       - uid
-    StatusEnum:
+    Status109Enum:
       enum:
-      - draft
       - pending
       - in_progress
+      - review
       - completed
-      - on_hold
       - canceled
       type: string
       description: |-
-        * `draft` - Draft
+        * `pending` - Pending
+        * `in_progress` - In Progress
+        * `review` - Under Review
+        * `completed` - Completed
+        * `canceled` - Canceled
+    Status841Enum:
+      enum:
+      - pending
+      - in_progress
+      - completed
+      - not_responding
+      - canceled
+      type: string
+      description: |-
         * `pending` - Pending
         * `in_progress` - In Progress
         * `completed` - Completed
-        * `on_hold` - On Hold
+        * `not_responding` - Not Responding
         * `canceled` - Canceled
     Subcontractor:
       type: object
@@ -3048,6 +3595,24 @@ components:
       - name
       - phone_number
       - siren_number
+    SubcontractorSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom de l'entreprise
+          maxLength: 255
+        siren_number:
+          type: string
+          title: Numéro SIREN
+          maxLength: 9
+      required:
+      - id
+      - name
+      - siren_number
     SubcontractorStaff:
       type: object
       properties:
@@ -3082,6 +3647,22 @@ components:
         user:
           $ref: '#/components/schemas/UserCreateRequest'
       required:
+      - user
+    SubcontractorStaffSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        subcontractor:
+          allOf:
+          - $ref: '#/components/schemas/SubcontractorSimple'
+          readOnly: true
+      required:
+      - id
+      - subcontractor
       - user
     SubcontractorUpdateRequest:
       type: object
