@@ -38,7 +38,7 @@ function Page() {
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
 
     const submitData: ProjectCreateRequest = {
@@ -72,9 +72,7 @@ function Page() {
       }
 
       window.location.reload()
-    } 
-    catch (error) {
-      
+    } catch (error) {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'error', message: 'Error adding the project' })
       console.error('Error creating project:', error)
