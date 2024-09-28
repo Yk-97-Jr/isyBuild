@@ -81,6 +81,7 @@ return;
       // Remove tokens from cookies after successful logout
       Cookies.remove('access_token');
       Cookies.remove('refresh_token');
+      Cookies.remove('user');
 
       // Redirect to login page
       router.push('/login');

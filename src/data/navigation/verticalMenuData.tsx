@@ -42,7 +42,8 @@ const verticalMenuData = (userRole: string | undefined): VerticalMenuDataType[] 
   //  return different menu items if ther is no role
   if (userRole === undefined) {
     // Handle the case for undefined userRole ( need to work on this )
-    return []; // or some default menu data
+
+return []; // or some default menu data
   }
 
   // Filter menu items based on the user's role and replace 'role' in href

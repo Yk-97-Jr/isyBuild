@@ -90,7 +90,7 @@ const LoginV2 = ({mode}: { mode: 'light' | 'dark' }) => {
       // Set tokens in cookies
       Cookies.set('access_token', result.access);
       Cookies.set('refresh_token', result.refresh, {expires: refreshExpiryDate});
-      Cookies.set('user', JSON.stringify(result.user));
+      Cookies.set('user', JSON.stringify(result.user), {expires: 7});
 
       // Set the user data in context
       setUser(result.user);
