@@ -63,7 +63,6 @@ const ClientAdd = () => {
       // Redirect to client details after creation
       const clientId = response.id;
 
-      console.log("clientId" + clientId)
       router.push(`/${userRole}/clients/${clientId}/details`);
 
     } catch (err: any) {
