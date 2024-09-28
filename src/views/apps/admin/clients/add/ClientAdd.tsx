@@ -2,6 +2,8 @@
 
 import React, {useContext} from 'react';
 
+import {useRouter} from "next/navigation";
+
 import Grid from "@mui/material/Grid";
 import type {SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
@@ -15,9 +17,9 @@ import {useClientsCreateCreateMutation} from "@/services/IsyBuildApi";
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
 import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shemaClientAdd";
-import { schemaClientAdd} from "@views/apps/admin/clients/add/shemaClientAdd";
+import {schemaClientAdd} from "@views/apps/admin/clients/add/shemaClientAdd";
 
-
+import {useAuth} from "@/contexts/AuthContext";
 
 
 const ClientAdd = () => {
@@ -27,7 +29,9 @@ const ClientAdd = () => {
 
   const [createClient, {isLoading}] = useClientsCreateCreateMutation();
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
-
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
 
   const onSubmit: SubmitHandler<FormValidateClientAddType> = async (data) => {
     try {
@@ -55,12 +59,19 @@ const ClientAdd = () => {
       console.log('Client added successfully!', response);
       setOpenSnackBar(true);
       setInfoAlert({severity: "success", message: "Client ajouté avec succès"});
+
+      // Redirect to client details after creation
+      const clientId = response.id;
+
+      console.log("clientId" + clientId)
+      router.push(`/${userRole}/clients/${clientId}/details`);
+
     } catch (err: any) {
       console.error('Failed to add client:', err);
       setOpenSnackBar(true);
       setInfoAlert({
         severity: "error",
-        message: err.response?.data?.message || "Échec de la création de Client"
+        message: err.response || "Échec de la création de Client"
       });
     }
   };
