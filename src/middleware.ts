@@ -35,9 +35,18 @@ export function middleware(req: NextRequest) {
     path: rule.path.replace('role', userRole), // Replace 'role' with the user's actual role
   }));
 
-  // Check if the current path matches any of the route rules
-  const routeRule = updatedRountingData.find(rule => pathname === `/${rule.path}`);
+  // Check if the current path is a dynamic detail route
+  const detailPathRegex = /^\/([^/]+)\/([^/]+)\/\d+\/details$/; // Matches /role/type/:id/details
+  const isDetailRoute = detailPathRegex.test(pathname);
 
+  console.log(isDetailRoute)
+
+// Check if the current path matches any of the route rules
+  const routeRule = updatedRountingData.find(rule => {
+    const rulePath = `/${rule.path}`;
+
+    return pathname === rulePath || (isDetailRoute && rule.path.includes('/[id]/details'));
+  });
 
   // If the route exists but the user doesn't have access, redirect to unauthorized page
   if (routeRule ? !routeRule.roles.includes(userRole) : true) {
@@ -53,10 +62,9 @@ export const config = {
   matcher: [
     '/:role/admin',// Matches /admin paths for any role
     '/:role/dashboard',
-    '/:role/users/list',
-    '/:role/lots',
-    '/:role/clients/add',
-    '/:role/clients/:id/details',
+    '/:role/:type/list',// Match dynamic list routes
+    '/:role/:type/add',// Match dynamic add routes
+    '/:role/:type/:id/details',// Match dynamic detail routes
 
   ],
 };
