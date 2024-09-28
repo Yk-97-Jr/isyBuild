@@ -55,5 +55,8 @@ export const config = {
     '/:role/dashboard',
     '/:role/users/list',
     '/:role/lots',
+    '/:role/clients/add',
+    '/:role/clients/:id/details',
+
   ],
 };
