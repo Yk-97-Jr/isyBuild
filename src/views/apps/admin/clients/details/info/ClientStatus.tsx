@@ -3,10 +3,10 @@ import React from 'react';
 import { Card, CardHeader, CardContent, Divider, Typography, Switch } from '@mui/material';
 import type {FieldError, UseFormRegister} from "react-hook-form";
 
-import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shemaClientAdd";
+import type {FormValidateClientEditType} from "@views/apps/admin/clients/details/info/schemaClientEdit";
 
 type ClientStausProps = {
-  register: UseFormRegister<FormValidateClientAddType>; // Adjust the type as necessary
+  register: UseFormRegister<FormValidateClientEditType>; // Adjust the type as necessary
   errors: {
     is_active?: FieldError;
 

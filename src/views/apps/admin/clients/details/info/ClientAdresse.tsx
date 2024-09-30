@@ -11,11 +11,11 @@ import type {UseFormRegister, FieldError} from 'react-hook-form';
 
 import CustomTextField from '@core/components/mui/TextField';
 
-import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shemaClientAdd";
+import type {FormValidateClientEditType} from "@views/apps/admin/clients/details/info/schemaClientEdit";
 
 
 type ClientAdresseProps = {
-  register: UseFormRegister<FormValidateClientAddType>;
+  register: UseFormRegister<FormValidateClientEditType>;
   errors: {
     address?: {
       country?: FieldError;

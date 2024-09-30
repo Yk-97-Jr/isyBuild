@@ -1,51 +1,46 @@
 import React from 'react';
 
-import {Card, CardHeader, CardContent, Divider, Typography, Switch} from '@mui/material';
-import type {FieldError, UseFormRegister} from "react-hook-form";
+import { Card, CardHeader, CardContent, Divider, Typography } from '@mui/material';
 
-import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shemaClientAdd";
+import type { ClientRead } from "@/services/IsyBuildApi";
 
-type ClientStausProps = {
-  register: UseFormRegister<FormValidateClientAddType>; // Adjust the type as necessary
-  errors: {
-    is_active?: FieldError;
-
-  };
+type ClientEditProps = {
+  clientData: ClientRead | undefined; // Adjust the type as necessary
 };
 
-const ClientCreatedBy: React.FC<ClientStausProps> = ({register, errors}) => {
+const ClientCreatedBy: React.FC<ClientEditProps> = ({ clientData }) => {
   return (
     <Card>
-      <CardHeader title='Créé par'/>
+      <CardHeader title='Créé par' />
       <CardContent>
-        <Typography variant="subtitle2" className='mt-4' fontWeight="normal">Créé par
-        </Typography>
-        <Divider className='mlb-2' sx={{height: '1px', width: '50%', marginLeft: '0'}}/>
-        <Typography variant="h6" fontWeight="bold">Mahdadi Zakaria</Typography>
-        <Typography variant="body1">zaki.mahdadi@gmail.com</Typography>
+        <Typography variant="subtitle2" className='mt-4' fontWeight="normal">Créé par</Typography>
+        <Divider className='mlb-2' sx={{ height: '1px', width: '50%', marginLeft: '0' }} />
 
-        {/* Adjusted styling for "Plus De Détails" */}
-
-        <Typography variant="subtitle2" className='mt-4' fontWeight="normal">Plus De Détails</Typography>
-        <Divider className='mlb-2' sx={{height: '1px', width: '50%', marginLeft: '0'}}/>
-        <div className='flex flex-col gap-2'>
-          <div className='flex items-center flex-wrap gap-x-1.5'>
-            <Typography className='font-medium' color='text.primary'>
-              Créé à:
+        {clientData ? (
+          <>
+            <Typography variant="h6" fontWeight="bold">
+              {clientData.created_by?.first_name} {clientData.created_by?.last_name}
             </Typography>
-            <Typography>zaki.mahdadi@gmail.com</Typography>
+            <Typography variant="body1">{clientData.created_by?.email}</Typography>
 
-          </div>
-          <div className='flex items-center flex-wrap gap-x-1.5'>
-            <Typography className='font-medium' color='text.primary'>
-              Mise à jour à:
-            </Typography>
-            <Typography>2024-09-01</Typography>
-          </div>
-        </div>
+            <Typography variant="subtitle2" className='mt-4' fontWeight="normal">Plus De Détails</Typography>
+            <Divider className='mlb-2' sx={{ height: '1px', width: '50%', marginLeft: '0' }} />
+            <div className='flex flex-col gap-2'>
+              <div className='flex items-center flex-wrap gap-x-1.5'>
+                <Typography className='font-medium' color='text.primary'>Créé à:</Typography>
+                <Typography>{clientData.created_at}</Typography>
+              </div>
+              <div className='flex items-center flex-wrap gap-x-1.5'>
+                <Typography className='font-medium' color='text.primary'>Mise à jour à:</Typography>
+                <Typography>{clientData.updated_at}</Typography>
+              </div>
+            </div>
+          </>
+        ) : (
+          <Typography variant="body1" color="text.secondary">Aucune information disponible</Typography>
+        )}
       </CardContent>
     </Card>
-
   );
 };
 

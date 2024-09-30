@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 
 // Define the validation schema using Yup
-export const schemaClientAdd = yup.object({
+export const schemaClientEdit = yup.object({
   clientName: yup.string().required('Le nom du client est requis'),
   sireneNumber: yup
     .string()
@@ -19,8 +19,7 @@ export const schemaClientAdd = yup.object({
     city: yup.string().required('La ville est requise'),
     zipCode: yup.string().required('Le code postal est requis').max(5, 'Le code postal ne doit pas dépasser 5 caractères'),
   }).required(),
-  is_active: yup.boolean().required('Active status is required'),
-
+  is_active: yup.boolean().required('Active status is required').oneOf([true, false], 'Active status must be true or false'), // Ensures it's a boolean
 }).required();
 
-export type FormValidateClientAddType = yup.InferType<typeof schemaClientAdd>;
+export type FormValidateClientEditType = yup.InferType<typeof schemaClientEdit>;

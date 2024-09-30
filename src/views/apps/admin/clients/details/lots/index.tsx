@@ -1,7 +1,6 @@
 // MUI Imports
 import Grid from '@mui/material/Grid'
 
-import AccountDetails from "@views/account-settings/account/AccountDetails";
 
 // Component Imports
 
