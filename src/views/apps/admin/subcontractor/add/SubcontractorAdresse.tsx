@@ -6,43 +6,54 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
+import type { UseFormRegister, FieldError } from 'react-hook-form'
+
 // Components Imports
 import CustomTextField from '@core/components/mui/TextField'
+
+import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
 
 // Style Imports
 import '@/libs/styles/tiptapEditor.css'
 
-const AdresseCompany = ({ register, errors }: { register: any; errors: any }) => {
-  /*  address: {
-            street_number: data.address.street_number,
-            street_name: data.address.street_name,
-            postal_code: data.address.postal_code,
-            city: data.address.city
-          }, */
+type SubcontractorAdresseProps = {
+  register: UseFormRegister<FormValidateSubcontractorAddType>
+  errors: {
+    address?: {
+      country?: FieldError
+      streetNumber?: FieldError
+      streetName?: FieldError
+      department?: FieldError
+      city?: FieldError
+      postal_code?: FieldError
+    }
+  }
+}
 
+const SubcontractorAdresse: React.FC<SubcontractorAdresseProps> = ({ register, errors }) => {
   return (
     <Card>
-      <CardHeader title='Adresse ' />
+      <CardHeader title='Adresse' />
       <CardContent>
         <Grid container spacing={6} className='mbe-6'>
-          <Grid item xs={12} sm={16}>
+          <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Pays/région'
+              label='Pays/régions'
               placeholder='Algeria'
-              {...register('address.country')}
+              {...register('address.country')} // Registering the field
               error={!!errors.address?.country}
               helperText={errors.address?.country?.message}
             />
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={4}>
             <CustomTextField
               fullWidth
-              label='numéro de rue'
-              placeholder='Adresse'
-              {...register('address.street_number')}
-              error={!!errors.address?.street_number}
-              helperText={errors.address?.street_number?.message}
+              label='Numéro De Rue'
+              placeholder='Numéro De Rue'
+              {...register('address.streetNumber')}
+              error={!!errors.address?.streetNumber}
+              helperText={errors.address?.streetNumber?.message}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
@@ -50,22 +61,21 @@ const AdresseCompany = ({ register, errors }: { register: any; errors: any }) =>
               fullWidth
               label='Nom De Rue'
               placeholder='Nom De Rue'
-              {...register('address.street_name')}
-              error={!!errors.address?.street_name}
-              helperText={errors.address?.street_name?.message}
+              {...register('address.streetName')}
+              error={!!errors.address?.streetName}
+              helperText={errors.address?.streetName?.message}
             />
           </Grid>
           <Grid item xs={12} sm={4}>
             <CustomTextField
               fullWidth
-              label='Département'
-              placeholder='Département'
+              label='Departement'
+              placeholder='Departement'
               {...register('address.department')}
               error={!!errors.address?.department}
               helperText={errors.address?.department?.message}
             />
           </Grid>
-
           <Grid item xs={12} sm={6}>
             <CustomTextField
               fullWidth
@@ -79,8 +89,8 @@ const AdresseCompany = ({ register, errors }: { register: any; errors: any }) =>
           <Grid item xs={12} sm={6}>
             <CustomTextField
               fullWidth
-              label='Code Postal'
-              placeholder='Code Postal'
+              label='Code Postale'
+              placeholder='Code Postale'
               {...register('address.postal_code')}
               error={!!errors.address?.postal_code}
               helperText={errors.address?.postal_code?.message}
@@ -92,4 +102,4 @@ const AdresseCompany = ({ register, errors }: { register: any; errors: any }) =>
   )
 }
 
-export default AdresseCompany
+export default SubcontractorAdresse

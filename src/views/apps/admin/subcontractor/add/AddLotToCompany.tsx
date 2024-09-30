@@ -1,4 +1,4 @@
-'use client' // Add this line at the very top
+/* 'use client' // Add this line at the very top
 
 // MUI Imports
 import { useState } from 'react'
@@ -12,10 +12,22 @@ import Typography from '@mui/material/Typography'
 // Component Imports
 
 
+import type { FieldError, UseFormRegister } from 'react-hook-form'
+
 import Form from '@components/Form'
 import SelectMultiple from './SelectMultiple'
 
-const AddLotToCompany = ({ register, errors }: { register: any; errors: any }) => {
+
+import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
+
+type SubcontractorStausProps = {
+  register: UseFormRegister<FormValidateSubcontractorAddType> // Adjust the type as necessary
+  errors: {
+    is_active?: FieldError
+  }
+}
+
+const AddLotToSubcontractor: React.FC<SubcontractorStausProps> = ({ register, errors }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false)
 
   // Function to toggle the select menu state
@@ -42,13 +54,12 @@ const AddLotToCompany = ({ register, errors }: { register: any; errors: any }) =
         }}
       >
         <Form className='flex flex-grow flex-col'>
-          {/* Pass state and toggle function to SelectMultiple */}
+
           <SelectMultiple onToggleMenu={handleSelectToggle} />
 
-          {/* Spacer div to push the divider and "Status" section to the bottom */}
+
           <div style={{ flexGrow: 1 }}></div>
 
-          {/* Status section */}
           <div className='flex items-center justify-between mbe-6'>
             <Typography>Status</Typography>
 
@@ -61,4 +72,37 @@ const AddLotToCompany = ({ register, errors }: { register: any; errors: any }) =
   )
 }
 
-export default AddLotToCompany
+export default AddLotToSubcontractor
+ */
+
+import React from 'react'
+
+import { Card, CardHeader, CardContent, Divider, Typography, Switch } from '@mui/material'
+import type { FieldError, UseFormRegister } from 'react-hook-form'
+
+import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
+
+type ClientStausProps = {
+  register: UseFormRegister<FormValidateSubcontractorAddType> // Adjust the type as necessary
+  errors: {
+    is_active?: FieldError
+  }
+}
+
+const ClientStatus: React.FC<ClientStausProps> = ({ register, errors }) => {
+  return (
+    <Card>
+      <CardHeader title='Détails' />
+      <CardContent>
+        <Divider className='mlb-2' />
+        <div className='flex items-center justify-between'>
+          <Typography>Statut</Typography>
+          <Switch {...register('is_active')} defaultChecked />
+        </div>
+        {errors.is_active && <span>{errors.is_active.message}</span>}
+      </CardContent>
+    </Card>
+  )
+}
+
+export default ClientStatus

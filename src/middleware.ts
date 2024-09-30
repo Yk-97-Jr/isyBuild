@@ -63,7 +63,7 @@ export const config = {
     '/:role/admin',// Matches /admin paths for any role
     '/:role/dashboard',
     '/:role/:type/list',// Match dynamic list routes
-    '/:role/:type/add',// Match dynamic add routes
+    '/:role/:type/add',//  Match dynamic add routes
     '/:role/:type/:id/details',// Match dynamic detail routes
 
   ],

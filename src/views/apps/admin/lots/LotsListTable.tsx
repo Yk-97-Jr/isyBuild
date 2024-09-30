@@ -3,15 +3,15 @@
 // React Imports
 import React, { useEffect, useState, useMemo } from 'react'
 
-// MUI Imports
+import { useRouter } from 'next/navigation'
 
+// MUI Imports
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import type { TextFieldProps } from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
-import type { ButtonProps } from '@mui/material/Button'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -34,33 +34,36 @@ import type { RankingInfo } from '@tanstack/match-sorter-utils'
 // Type Imports
 import Box from '@mui/material/Box'
 
-import { Chip, CircularProgress } from '@mui/material'
+import { CircularProgress } from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import OptionMenu from '@core/components/option-menu'
+import LotsDialog from '@components/dialogs/lot-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
+import type { LotsType } from '@/types/apps/usersType'
 
-import type { PaginatedSubcontractortRead, SubcontractorRead } from '@/services/IsyBuildApi'
+import type { LotRead } from '@/services/IsyBuildApi'
+import Chip from '@/@core/components/mui/Chip'
 
-import CompanyDialog from '@/components/dialogs/company-dialog'
-import AddCompany from '@/components/dialogs/company-dialog/AddCompany'
+//import { useAuth } from '@/contexts/AuthContext'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
+
   interface FilterMeta {
     itemRank: RankingInfo
   }
 }
 
-type CompanyTypeWithAction = PaginatedSubcontractortRead &
-  SubcontractorRead & {
+type LotsTypeWithAction = LotsType &
+  LotRead & {
     action?: string
   }
 
@@ -107,10 +110,11 @@ const DebouncedInput = ({
 }
 
 // Column Definitions
-const columnHelper = createColumnHelper<CompanyTypeWithAction>()
+const columnHelper = createColumnHelper<LotsTypeWithAction>()
 
-const CompanyTable = ({
+const LotsListTable = ({
   data,
+
   page,
   setPage,
   setPageSize,
@@ -119,7 +123,7 @@ const CompanyTable = ({
   isFetching,
   refetch
 }: {
-  data?: SubcontractorRead[]
+  data?: LotRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -131,102 +135,101 @@ const CompanyTable = ({
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
-
+  const [editValue, setEditValue] = useState<LotsType>()
+  const [, setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
+  const router = useRouter()
+
+  //const { user } = useAuth()
+  //const userRole = user?.role
 
   // Vars
-  const buttonProps: ButtonProps = {
-    variant: 'contained',
-    children: 'Ajouter un company',
-    className: 'max-sm:is-full',
-    startIcon: <i className='tabler-plus' />
+
+  const handleEditLot = (Lot: LotsType) => {
+    setOpen(true)
+    setEditValue(Lot)
   }
 
-  const handleDeleteCompany = (id: number) => {
+  const handleDeleteLot = (id: number) => {
     setOpen(true)
     setId(id)
   }
 
-  const columns = useMemo<ColumnDef<CompanyTypeWithAction, any>[]>(
+  const handleAddLots = () => {
+    router.push(`/lots/add`)
+  }
+
+  const columns = useMemo<ColumnDef<LotsTypeWithAction, any>[]>(
     () => [
       columnHelper.accessor('name', {
-        header: 'Enterprise',
+        header: 'Nom',
+        cell: ({ row }) => {
+          const name = row.original.name
+
+          // Break the name after 20 characters if it's too long
+          const displayName = name.length > 50 ? name.substring(0, 50) + '\n' + name.substring(50) : name
+
+          return (
+            <div className='flex items-center gap-4 '>
+              <div className='flex flex-col'>
+                <Typography color='text.primary' className='font-medium whitespace-pre-wrap break-words'>
+                  {`${displayName} `}
+                </Typography>
+              </div>
+            </div>
+          )
+        }
+      }),
+
+      columnHelper.accessor('name', {
+        header: 'client',
         cell: ({ row }) => (
-          <div className='flex items-center gap-1'>
+          <>
+            {row.original?.client?.name ? (
+              <span>{row.original?.client?.name}</span>
+            ) : (
+              <Chip variant='tonal' label={'Default'} color='secondary' className='px-2' />
+            )}
+          </>
+        )
+      }),
+
+      columnHelper.accessor('description', {
+        header: 'description',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name} `}
-              </Typography>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.contact_email} `}
+                {`${row.original.description}`.length > 50
+                  ? `${row.original.description.substring(0, 50)}...`
+                  : `${row.original.description}`}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('phone_number', {
-        header: 'téléphone',
+
+      columnHelper.accessor('created_at', {
+        header: `Date de Creation`,
         cell: ({ row }) => (
-          <div className='flex items-center gap-0'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.phone_number} `}
-              </Typography>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.clients} `}
-              </Typography>
-            </div>
-          </div>
+          <Typography>
+            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
+          </Typography>
         )
       }),
-      columnHelper.accessor('siren_number', {
-        header: 'numéro de sirène',
+
+      columnHelper.accessor('created_by.first_name', {
+        header: 'Creé par',
         cell: ({ row }) => (
-          <div className='flex items-center gap-0'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.siren_number}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('created_by.id', {
-        header: 'propriétaire',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-0'>
+          <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
                 {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
               </Typography>
-              <Typography color='text.primary' className='font-extralight'>
-                {`${row.original.created_by.email} `}
-              </Typography>
             </div>
           </div>
-        )
-      }),
-      columnHelper.accessor('created_at', {
-        header: `Date de Creation`,
-        cell: ({ row }) => (
-          <>
-           
-            <Typography>
-              {row.original.created_at ? new Date(row.original.created_at).toLocaleString() : 'Date not available'}
-            </Typography>
-          </>
-        )
-      }),
-      columnHelper.accessor('is_active', {
-        header: 'Status',
-        cell: ({ row }) => (
-          <Chip
-            variant='tonal'
-            label={row.original.is_active ? 'Active' : 'Inactive'}
-            color={row.original.is_active ? 'success' : 'error'}
-          />
         )
       }),
 
@@ -234,8 +237,8 @@ const CompanyTable = ({
         header: 'Action',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDeleteCompany(row.original.id)}>
-              <i className='tabler-trash text-textSecondary' />
+            <IconButton onClick={() => handleDeleteLot(row.original.id)}>
+              <i className='tabler-trash  text-textSecondary' />
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
@@ -245,7 +248,8 @@ const CompanyTable = ({
                   text: 'Modifier',
                   icon: 'tabler-edit',
                   menuItemProps: {
-                    className: 'flex items-center gap-1 text-textSecondary'
+                    className: 'flex items-center gap-2  text-textSecondary',
+                    onClick: () => handleEditLot(row.original)
                   }
                 }
               ]}
@@ -260,7 +264,7 @@ const CompanyTable = ({
   )
 
   const table = useReactTable({
-    data: filteredData as SubcontractorRead[],
+    data: filteredData as LotRead[],
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -291,8 +295,6 @@ const CompanyTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -308,10 +310,17 @@ const CompanyTable = ({
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Rechercher un company'
+              placeholder='Rechercher un lots'
               className='max-sm:is-full'
             />
-            <AddCompany element={Button} elementProps={buttonProps} url='/company/add' />
+            <Button
+              variant='contained'
+              className='max-sm=is-full'
+              startIcon={<i className='tabler-plus' />}
+              onClick={handleAddLots}
+            >
+              Ajouter lots
+            </Button>
           </div>
         </div>
         <div className='overflow-x-auto'>
@@ -385,9 +394,18 @@ const CompanyTable = ({
           }}
         />
       </Card>
-      <CompanyDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch} />
+      <LotsDialog
+        open={open}
+        setOpen={setOpen}
+        id={id}
+        setId={setId}
+        editValue={editValue}
+        setEditValue={setEditValue}
+        setAddValue={setAddValue}
+        refetch={refetch}
+      />
     </>
   )
 }
 
-export default CompanyTable
+export default LotsListTable
