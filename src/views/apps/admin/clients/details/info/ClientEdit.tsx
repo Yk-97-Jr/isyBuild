@@ -9,9 +9,13 @@ import type {SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import ClientInformation from "@views/apps/admin/clients/add/ClientInformation";
-import ClientStatus from "@views/apps/admin/clients/add/ClientStatus";
-import ClientAdresse from "@views/apps/admin/clients/add/ClientAdresse";
+import Box from "@mui/material/Box";
+
+import {CircularProgress} from "@mui/material";
+
+import ClientInformation from "@views/apps/admin/clients/details/info/ClientInformation";
+import ClientStatus from "@views/apps/admin/clients/details/info/ClientStatus";
+import ClientAdresse from "@views/apps/admin/clients/details/info/ClientAdresse";
 import {useClientsRetrieve2Query, useClientsUpdateUpdateMutation} from "@/services/IsyBuildApi"; // Query to fetch client data
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
@@ -99,9 +103,12 @@ const ClientEdit = () => {
     }
   };
 
-  if (isLoadingQuery) {
-    return <div>Loading...</div>; // Loading state
-  }
+  if (isLoadingQuery) return (
+    <Box display="flex" justifyContent="center" alignItems="flex-start" height="100vh">
+      <CircularProgress/>
+    </Box>
+  )
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -122,7 +129,7 @@ const ClientEdit = () => {
         <Grid item xs={12} md={4}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <ClientStatus register={register} errors={errors}/>
+              <ClientStatus register={register} errors={errors} clientData={clientData}/>
             </Grid>
             <Grid item xs={12}>
               <ClientCreatedBy clientData={clientData}/>
