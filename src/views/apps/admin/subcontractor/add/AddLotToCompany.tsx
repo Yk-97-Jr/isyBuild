@@ -90,6 +90,7 @@ type ClientStausProps = {
 }
 
 const ClientStatus: React.FC<ClientStausProps> = ({ register, errors }) => {
+  
   return (
     <Card>
       <CardHeader title='Détails' />

@@ -50,7 +50,7 @@ import type { PaginatedSubcontractortRead, SubcontractorRead } from '@/services/
 
 import CompanyDialog from '@/components/dialogs/company-dialog'
 
-//import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/contexts/AuthContext'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -139,11 +139,11 @@ const SubcontractorTable = ({
   const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter()
 
-  //const { user } = useAuth()
+  const { user } = useAuth()
 
-  // Vars
 
-  //const userRole = user?.role
+
+  const userRole = user?.role
 
   const handleDeleteCompany = (id: number) => {
     setOpen(true)
@@ -151,7 +151,7 @@ const SubcontractorTable = ({
   }
 
   const handleAddClient = () => {
-    router.push(`/subcontractor/add`)
+    router.push(`/${userRole}/subcontractor/add`)
   }
 
   const columns = useMemo<ColumnDef<CompanyTypeWithAction, any>[]>(

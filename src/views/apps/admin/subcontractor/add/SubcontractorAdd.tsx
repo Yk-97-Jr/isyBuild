@@ -22,7 +22,6 @@ import ClientStatus from '@/views/apps/admin/subcontractor/add/AddLotToCompany'
 
 const SubcontractorAdd = () => {
   const {
-    reset,
     register,
     handleSubmit,
     formState: { errors }
@@ -72,7 +71,7 @@ const SubcontractorAdd = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <SubcontractorAddHeader onSubmit={handleSubmit(onSubmit)} isLoading={isLoading} reset={reset} />
+          <SubcontractorAddHeader onSubmit={handleSubmit(onSubmit)} isLoading={isLoading} />
         </Grid>
         <Grid item xs={12} md={8}>
           <Grid container spacing={6}>

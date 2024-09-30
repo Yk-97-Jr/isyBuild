@@ -29,7 +29,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
   },
   {
     label: 'Lots',
-    href: '/lots', // Use role as a placeholder
+    href: '/role/lots/list', // Use role as a placeholder
     icon: 'tabler-category',
     roles: ['client', 'admin'], // For both 'client' and 'admin'
     isSection: false,
@@ -37,7 +37,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
   },
   {
     label: 'entreprise',
-    href: '/subcontractor',
+    href: '/role/subcontractor/list',
     icon: 'tabler-building-community',
     roles: ['admin'],
     isSection: false,

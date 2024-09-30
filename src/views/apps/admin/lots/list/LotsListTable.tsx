@@ -50,7 +50,7 @@ import type { LotsType } from '@/types/apps/usersType'
 import type { LotRead } from '@/services/IsyBuildApi'
 import Chip from '@/@core/components/mui/Chip'
 
-//import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/contexts/AuthContext'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -142,10 +142,8 @@ const LotsListTable = ({
   const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter()
 
-  //const { user } = useAuth()
-  //const userRole = user?.role
-
-  // Vars
+  const { user } = useAuth()
+  const userRole = user?.role
 
   const handleEditLot = (Lot: LotsType) => {
     setOpen(true)
@@ -158,7 +156,7 @@ const LotsListTable = ({
   }
 
   const handleAddLots = () => {
-    router.push(`/lots/add`)
+    router.push(`/${userRole}/lots/add`)
   }
 
   const columns = useMemo<ColumnDef<LotsTypeWithAction, any>[]>(

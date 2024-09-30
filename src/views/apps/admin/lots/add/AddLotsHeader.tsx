@@ -4,11 +4,15 @@ import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 
+import { useAuth } from '@/contexts/AuthContext'
+
 const CompanyAddHeader = ({ onSubmit, isLoading }: { onSubmit: () => void; isLoading: boolean }) => {
   const router = useRouter()
+  const { user } = useAuth()
+  const userRole = user?.role
 
   const handleDiscard = () => {
-    router.push('/lots') // Replace '/lots' with the actual route of your lots list page
+    router.push(`/${userRole}/lots/list`) 
   }
 
   return (

@@ -1,4 +1,4 @@
-import LotsList from '@/views/apps/admin/lots/LotsLIst'
+import LotsList from '@/views/apps/admin/lots/list/LotsLIst'
 
 const LotsApp = async () => {
   // Vars

@@ -9,7 +9,7 @@ import { CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import SubcontractorTable from '@/views/apps/admin/subcontractor/SubcontractorTable'
+import SubcontractorTable from '@/views/apps/admin/subcontractor/list/SubcontractorTable'
 import { useSubcontractorsRetrieveQuery } from '@/services/IsyBuildApi'
 
 const SubcontractorList = () => {
