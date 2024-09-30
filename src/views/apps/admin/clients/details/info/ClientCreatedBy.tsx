@@ -11,7 +11,7 @@ type ClientEditProps = {
 const ClientCreatedBy: React.FC<ClientEditProps> = ({ clientData }) => {
   return (
     <Card>
-      <CardHeader title='Créé par' />
+      <CardHeader title='Détails De Création' />
       <CardContent>
         <Typography variant="subtitle2" className='mt-4' fontWeight="normal">Créé par</Typography>
         <Divider className='mlb-2' sx={{ height: '1px', width: '50%', marginLeft: '0' }} />
