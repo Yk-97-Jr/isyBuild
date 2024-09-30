@@ -1,4 +1,3 @@
-// ClientAddHeader.tsx
 import React from 'react';
 
 import Button from '@mui/material/Button';
@@ -8,9 +7,10 @@ import {CircularProgress} from "@mui/material";
 type ClientAddHeaderProps = {
   onSubmit: () => void; // Accept the onSubmit function as a prop
   isLoading: boolean;
+  handleBack: () => void;
 };
 
-const ClientAddHeader: React.FC<ClientAddHeaderProps> = ({onSubmit, isLoading}) => {
+const ClientAddHeader: React.FC<ClientAddHeaderProps> = ({onSubmit, isLoading, handleBack}) => {
   return (
     <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
       <div>
@@ -19,7 +19,7 @@ const ClientAddHeader: React.FC<ClientAddHeaderProps> = ({onSubmit, isLoading}) 
         </Typography>
       </div>
       <div className='flex flex-wrap max-sm:flex-col gap-4'>
-        <Button variant='tonal' color='secondary'>
+        <Button onClick={handleBack} variant='tonal' color='secondary'>
           Annuler
         </Button>
         <Button variant='contained' onClick={onSubmit} disabled={isLoading}>

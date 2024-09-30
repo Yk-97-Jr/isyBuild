@@ -20,6 +20,7 @@ import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shem
 import {schemaClientAdd} from "@views/apps/admin/clients/add/shemaClientAdd";
 
 import {useAuth} from "@/contexts/AuthContext";
+import useHandleBack from "@components/useHandleBack";
 
 
 const ClientAdd = () => {
@@ -32,6 +33,8 @@ const ClientAdd = () => {
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
+  const handleBack = useHandleBack();
+
 
   const onSubmit: SubmitHandler<FormValidateClientAddType> = async (data) => {
     try {
@@ -79,7 +82,7 @@ const ClientAdd = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <ClientAddHeader onSubmit={handleSubmit(onSubmit)} isLoading={isLoading}/>
+          <ClientAddHeader onSubmit={handleSubmit(onSubmit)} isLoading={isLoading} handleBack={handleBack}/>
         </Grid>
         <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
