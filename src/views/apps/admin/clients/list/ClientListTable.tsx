@@ -139,9 +139,9 @@ const ClientListTable = ({
   const { user } = useAuth() // Get the user from AuthContext
   const userRole = user?.role
 
-  const handleEditClient = (client: ClientRead) => {
-    setOpen(true)
-    setEditValue(client)
+
+  const handleEditClient = (id: number) => {
+    router.push(`/${userRole}/clients/${id}/details`);
   }
 
   const handleDeleteClient = (id: number) => {
@@ -234,11 +234,10 @@ const ClientListTable = ({
               iconClassName='text-textSecondary'
               options={[
                 {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
+                  text: 'Détail',
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEditClient(row.original)
+                    onClick: () => handleEditClient(row.original.id)
                   }
                 }
 
