@@ -41,7 +41,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
 
 
   const onSubmit: SubmitHandler<FormValidateType> = async (data) => {
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || ""
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
     try {
       await createUser({
@@ -50,7 +50,7 @@ const AddUserContent = ({handleClose, handleCloseWithoutRefresh}: AddUserContent
             first_name: data.firstName,
             last_name: data.lastName,
             email: data.email,
-            redirect_uri: {appUrl} + '/set-password',
+            redirect_uri: appUrl + '/set-password',
           },
         },
       }).unwrap();

@@ -92,7 +92,7 @@ const ForgotPassword = ({mode}: { mode: string }) => {
       await passwordReset({
         passwordResetRequestRequest: {
           email: data.email,
-          redirect_uri: {appUrl} + '/reset-password',
+          redirect_uri: appUrl + '/reset-password',
         }
       }).unwrap()
     } catch (err) {
