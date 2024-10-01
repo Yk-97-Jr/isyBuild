@@ -336,30 +336,26 @@ const injectedRtkApi = api.injectEndpoints({
 })
 
 export { injectedRtkApi as pIsyBuildApi }
-
-export type AdminStaffRetrieveApiResponse = PaginatedAdminStaffRead
-
+export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
 
+  /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
 }
-export type AdminStaffRetrieve2ApiResponse = AdminStaffRead
+export type AdminStaffRetrieve2ApiResponse = /** status 200  */ AdminStaffRead
 export type AdminStaffRetrieve2ApiArg = {
   adminUserId: number
 }
-export type AdminStaffCreateCreateApiResponse = AdminStaffRead
+export type AdminStaffCreateCreateApiResponse = /** status 201  */ AdminStaffRead
 export type AdminStaffCreateCreateApiArg = {
   adminStaffCreateRequest: AdminStaffCreateRequestWrite
 }
-export type AdminStaffUpdatePartialUpdateApiResponse = AdminStaffRead
-
+export type AdminStaffUpdatePartialUpdateApiResponse = /** status 200  */ AdminStaffRead
 export type AdminStaffUpdatePartialUpdateApiArg = {
   adminUserId: number
-
   patchedAdminStaffUpdateRequest: PatchedAdminStaffUpdateRequest
 }
 export type AdminUsersDeleteDestroyApiResponse = /** status 204  */ any
@@ -367,15 +363,12 @@ export type AdminUsersDeleteDestroyApiArg = {
   adminUserId: number
 }
 export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedClientRead
-
 export type ClientsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
-
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
 }
 export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead
@@ -387,11 +380,9 @@ export type ClientsStaffRetrieve2ApiArg = {
   clientId: number
 
   /** Page number of the results to fetch */
-
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
 }
 export type ClientsStaffCreateCreateApiResponse = /** status 201  */ ClientStaffRead
@@ -442,11 +433,9 @@ export type ContactsPhoneNumbersRetrieveApiArg = {
   contactId: number
 
   /** Page number of the results to fetch */
-
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
 }
 export type ContactsPhoneNumbersCreateCreateApiResponse = /** status 201  */ PhoneNumberRead
@@ -466,7 +455,6 @@ export type LoginCreateApiArg = {
   tokenObtainPairRequest: TokenObtainPairRequestWrite
 }
 export type LogoutCreateApiResponse = /** status 205 No response body */ void
-
 export type LogoutCreateApiArg = {
   tokenRefreshRequest: TokenRefreshRequest
 }
@@ -474,11 +462,9 @@ export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead
 export type LotsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
-
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
 }
 export type LotsRetrieve2ApiResponse = /** status 200  */ LotRead
@@ -514,22 +500,18 @@ export type PhoneNumbersDeleteDestroyApiResponse = /** status 204  */ any
 export type PhoneNumbersDeleteDestroyApiArg = {
   phoneNumberId: number
 }
-export type PhoneNumbersUpdateUpdateApiResponse = PhoneNumberRead
-
+export type PhoneNumbersUpdateUpdateApiResponse = /** status 200  */ PhoneNumberRead
 export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
-
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
 export type ProjectLotsRetrieveApiResponse = /** status 200  */ PaginatedProjectLotRead
 export type ProjectLotsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
-
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
   projectId: number
 }
@@ -575,11 +557,9 @@ export type ProjectsRetrieveApiResponse = /** status 200  */ PaginatedProjectRea
 export type ProjectsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
-
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
 }
 export type ProjectsRetrieve2ApiResponse = /** status 200  */ ProjectRead
@@ -604,15 +584,12 @@ export type SetPasswordCreateApiArg = {
   setasswordRequest: SetasswordRequestWrite
 }
 export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubcontractortRead
-
 export type SubcontractorsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
-
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
 }
 export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ SubcontractorRead
@@ -623,15 +600,11 @@ export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ Paginat
 export type SubcontractorsStaffRetrieve2ApiArg = {
 
   /** Page number of the results to fetch */
-
   page?: number
 
   /** Number of results per page */
-
   pageSize?: number
-
   subcontractorId: number
-
 }
 export type SubcontractorsStaffCreateCreateApiResponse = /** status 201  */ SubcontractorStaffRead
 export type SubcontractorsStaffCreateCreateApiArg = {

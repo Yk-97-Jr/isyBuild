@@ -9,9 +9,9 @@ import * as yup from 'yup'
 
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
-import AddLotsHeader from '@views/apps/lots/add/AddLotsHeader'
+import AddLotsHeader from '@/views/apps/admin/lots/add/AddLotsHeader'
 
-import LotsInfo from '@views/apps/lots/add/LotsInfo'
+import LotsInfo from '@/views/apps/admin/lots/add/LotsInfo'
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import { useLotsCreateCreateMutation } from '@/services/IsyBuildApi'
@@ -35,7 +35,7 @@ const LotsAdd = () => {
     resolver: yupResolver(schema)
   })
 
-  const [createLot, {isLoading}] = useLotsCreateCreateMutation()
+  const [createLot, { isLoading }] = useLotsCreateCreateMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
   const onSubmit: SubmitHandler<FormValidateType> = async data => {
@@ -49,6 +49,7 @@ const LotsAdd = () => {
 
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'lot ajouté avec succès' })
+      console.log(reset())
 
       reset()
     } catch (err: any) {

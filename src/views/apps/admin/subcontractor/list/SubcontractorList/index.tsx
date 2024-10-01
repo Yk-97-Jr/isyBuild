@@ -9,10 +9,10 @@ import { CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import CompanyTable from '@/views/apps/company/companyTable'
+import SubcontractorTable from '@/views/apps/admin/subcontractor/list/SubcontractorTable'
 import { useSubcontractorsRetrieveQuery } from '@/services/IsyBuildApi'
 
-const CompanyList = () => {
+const SubcontractorList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -43,7 +43,7 @@ const CompanyList = () => {
   const countRecords = data?.count
 
   return isFetching ? (
-    <CompanyTable
+    <SubcontractorTable
       pageSize={pageSize}
       setPageSize={setPageSize}
       page={page}
@@ -56,7 +56,7 @@ const CompanyList = () => {
   ) : (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <CompanyTable
+        <SubcontractorTable
           pageSize={pageSize}
           setPageSize={setPageSize}
           page={page}
@@ -71,4 +71,4 @@ const CompanyList = () => {
   )
 }
 
-export default CompanyList
+export default SubcontractorList

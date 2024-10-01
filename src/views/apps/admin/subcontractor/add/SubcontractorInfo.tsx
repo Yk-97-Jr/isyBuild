@@ -6,15 +6,27 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
+import type { UseFormRegister, FieldError } from 'react-hook-form'
+
 // Components Imports
 import CustomTextField from '@core/components/mui/TextField'
+
+import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
 
 // Style Imports
 import '@/libs/styles/tiptapEditor.css'
 
+type SubcontractorInformationProps = {
+  register: UseFormRegister<FormValidateSubcontractorAddType> // Adjust the type as necessary
+  errors: {
+    subcontractorName?: FieldError
+    sireneNumber?: FieldError
+    email?: FieldError
+    phoneNumber?: FieldError
+  }
+}
 
-
-const CompanyInfo = ({ register, errors }: { register: any; errors: any }) => {
+const SubcontractorInfo: React.FC<SubcontractorInformationProps> = ({ register, errors }) => {
   return (
     <Card>
       <CardHeader title='Entreprise' />
@@ -25,9 +37,9 @@ const CompanyInfo = ({ register, errors }: { register: any; errors: any }) => {
               fullWidth
               label='Nom'
               placeholder='Nom'
-              {...register('name')}
-              error={!!errors.name}
-              helperText={errors.name?.message}
+              {...register('subcontractorName')}
+              error={!!errors.subcontractorName}
+              helperText={errors.subcontractorName?.message}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -35,9 +47,9 @@ const CompanyInfo = ({ register, errors }: { register: any; errors: any }) => {
               fullWidth
               label='Numéro de Siren'
               placeholder='numéro de siren'
-              {...register('siren_number')}
-              error={!!errors.siren_number}
-              helperText={errors.siren_number?.message}
+              {...register('sireneNumber')}
+              error={!!errors.sireneNumber}
+              helperText={errors.sireneNumber?.message}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -45,9 +57,9 @@ const CompanyInfo = ({ register, errors }: { register: any; errors: any }) => {
               fullWidth
               label='E-mail'
               placeholder='email@example.com'
-              {...register('contact_email')}
-              error={!!errors.contact_email}
-              helperText={errors.contact_email?.message}
+              {...register('email')}
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -55,9 +67,9 @@ const CompanyInfo = ({ register, errors }: { register: any; errors: any }) => {
               fullWidth
               label='Téléphone'
               placeholder='Téléphone'
-              {...register('phone_number')}
-              error={!!errors.phone_number}
-              helperText={errors.phone_number?.message}
+              {...register('phoneNumber')}
+              error={!!errors.phoneNumber}
+              helperText={errors.phoneNumber?.message}
             />
           </Grid>
         </Grid>
@@ -66,4 +78,4 @@ const CompanyInfo = ({ register, errors }: { register: any; errors: any }) => {
   )
 }
 
-export default CompanyInfo
+export default SubcontractorInfo
