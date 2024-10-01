@@ -2,6 +2,8 @@
 
 import React, {useContext} from 'react';
 
+import {useRouter} from "next/navigation";
+
 import Grid from "@mui/material/Grid";
 import type {SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
@@ -15,9 +17,10 @@ import {useClientsCreateCreateMutation} from "@/services/IsyBuildApi";
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
 import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shemaClientAdd";
-import { schemaClientAdd} from "@views/apps/admin/clients/add/shemaClientAdd";
+import {schemaClientAdd} from "@views/apps/admin/clients/add/shemaClientAdd";
 
-
+import {useAuth} from "@/contexts/AuthContext";
+import useHandleBack from "@components/useHandleBack";
 
 
 const ClientAdd = () => {
@@ -27,6 +30,10 @@ const ClientAdd = () => {
 
   const [createClient, {isLoading}] = useClientsCreateCreateMutation();
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
+  const handleBack = useHandleBack();
 
 
   const onSubmit: SubmitHandler<FormValidateClientAddType> = async (data) => {
@@ -55,12 +62,18 @@ const ClientAdd = () => {
       console.log('Client added successfully!', response);
       setOpenSnackBar(true);
       setInfoAlert({severity: "success", message: "Client ajouté avec succès"});
+
+      // Redirect to client details after creation
+      const clientId = response.id;
+
+      router.push(`/${userRole}/clients/${clientId}/details`);
+
     } catch (err: any) {
       console.error('Failed to add client:', err);
       setOpenSnackBar(true);
       setInfoAlert({
         severity: "error",
-        message: err.response?.data?.message || "Échec de la création de Client"
+        message: err.response || "Échec de la création de Client"
       });
     }
   };
@@ -69,7 +82,7 @@ const ClientAdd = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <ClientAddHeader onSubmit={handleSubmit(onSubmit)} isLoading={isLoading}/>
+          <ClientAddHeader onSubmit={handleSubmit(onSubmit)} isLoading={isLoading} handleBack={handleBack}/>
         </Grid>
         <Grid item xs={12} md={8}>
           <Grid container spacing={6}>

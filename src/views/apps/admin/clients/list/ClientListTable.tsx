@@ -136,9 +136,8 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
   const userRole = user?.role
 
 
-  const handleEditClient = (client: ClientRead) => {
-    setOpen(true)
-    setEditValue(client)
+  const handleEditClient = (id: number) => {
+    router.push(`/${userRole}/clients/${id}/details`);
   }
 
 
@@ -235,11 +234,10 @@ const ClientListTable = ({data, page, setPage, setPageSize, pageSize, countRecor
               iconClassName='text-textSecondary'
               options={[
                 {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
+                  text: 'Détail',
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEditClient(row.original),
+                    onClick: () => handleEditClient(row.original.id),
                   }
                 },
 
