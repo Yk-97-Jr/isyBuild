@@ -1,16 +1,16 @@
 'use client'
 
-import {useParams} from 'next/navigation';
+import { useParams } from 'next/navigation'
 
 const DetailsPage = () => {
-  const {id} = useParams();
+  const { id } = useParams()
 
   return (
     <div>
-      <h1>Details for ID: {id}</h1>
+      <h1>Details for ID: {id} xs</h1>
       {/* Add your details rendering logic here */}
     </div>
-  );
-};
+  )
+}
 
-export default DetailsPage;
+export default DetailsPage

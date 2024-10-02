@@ -141,9 +141,11 @@ const SubcontractorTable = ({
 
   const { user } = useAuth()
 
-
-
   const userRole = user?.role
+
+  const handleEditClient = (id: number) => {
+    router.push(`/${userRole}/subcontractor/${id}/details`)
+  }
 
   const handleDeleteCompany = (id: number) => {
     setOpen(true)
@@ -249,7 +251,8 @@ const SubcontractorTable = ({
                   text: 'Modifier',
                   icon: 'tabler-edit',
                   menuItemProps: {
-                    className: 'flex items-center gap-1 text-textSecondary'
+                    className: 'flex items-center gap-1 text-textSecondary',
+                    onClick: () => handleEditClient(row.original.id)
                   }
                 }
               ]}
