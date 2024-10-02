@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 
 import { useParams } from 'next/navigation'
 
-import { useRouter } from 'next/navigation'
 
 import { Button } from '@mui/material'
 

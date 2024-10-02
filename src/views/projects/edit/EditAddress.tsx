@@ -83,6 +83,7 @@ const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps
     }))
     console.log('Ville:', value)
   }
+
   const handleCodePostal = (event: any) => {
     const value = event.target.value
 
@@ -193,6 +194,7 @@ const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps
               fullWidth
               label='Departement'
               placeholder='Departement'
+
               // value={projectState?.client.address.department || ''}
               onChange={handleDepartement}
               error={!!errors.departement}

@@ -168,12 +168,11 @@ import { CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import { useProjectsRetrieveQuery } from '@/services/IsyBuildApi'
 
 import ProjectListTable from './ProjectListTable'
 
 
-import { useProjectsDeleteDestroyMutation } from '@/services/IsyBuildApi'
+import { useProjectsDeleteDestroyMutation,useProjectsRetrieveQuery } from '@/services/IsyBuildApi'
 
 
 import type { ProjectRead } from '@/services/IsyBuildApi'
