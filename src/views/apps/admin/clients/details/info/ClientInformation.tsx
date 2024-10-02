@@ -9,12 +9,12 @@ import CardContent from '@mui/material/CardContent';
 import type {UseFormRegister, FieldError} from 'react-hook-form';
 
 import CustomTextField from '@core/components/mui/TextField';
-import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shemaClientAdd";
+import type {FormValidateClientEditType} from "@views/apps/admin/clients/details/info/schemaClientEdit";
 
 // Type imports for form handling
 
 type ClientInformationProps = {
-  register: UseFormRegister<FormValidateClientAddType>; // Adjust the type as necessary
+  register: UseFormRegister<FormValidateClientEditType>; // Adjust the type as necessary
   errors: {
     clientName?: FieldError;
     sireneNumber?: FieldError;
@@ -76,4 +76,3 @@ const ClientInformation: React.FC<ClientInformationProps> = ({register, errors})
 };
 
 export default ClientInformation;
- 

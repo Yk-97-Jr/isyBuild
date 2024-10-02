@@ -5,10 +5,10 @@ import React, { useEffect, useState, useMemo } from 'react'
 
 import { useRouter } from 'next/navigation'
 
+// MUI Imports
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import type { TextFieldProps } from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
@@ -39,14 +39,16 @@ import { CircularProgress } from '@mui/material'
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import OptionMenu from '@core/components/option-menu'
+import LotsDialog from '@components/dialogs/lot-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import ClientDialog from '@components/dialogs/client-dialog'
+import type { LotsType } from '@/types/apps/usersType'
 
-import type { ClientRead } from '@/services/IsyBuildApi'
+import type { LotRead } from '@/services/IsyBuildApi'
+import Chip from '@/@core/components/mui/Chip'
 
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -60,9 +62,10 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ClientTypeWithAction = ClientRead & {
-  action?: string
-}
+type LotsTypeWithAction = LotsType &
+  LotRead & {
+    action?: string
+  }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -107,10 +110,11 @@ const DebouncedInput = ({
 }
 
 // Column Definitions
-const columnHelper = createColumnHelper<ClientTypeWithAction>()
+const columnHelper = createColumnHelper<LotsTypeWithAction>()
 
-const ClientListTable = ({
+const LotsListTable = ({
   data,
+
   page,
   setPage,
   setPageSize,
@@ -119,7 +123,7 @@ const ClientListTable = ({
   isFetching,
   refetch
 }: {
-  data?: ClientRead[]
+  data?: LotRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -131,88 +135,80 @@ const ClientListTable = ({
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
-  const [editValue, setEditValue] = useState<ClientRead>()
+  const [editValue, setEditValue] = useState<LotsType>()
+  const [, setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter()
-  const { user } = useAuth() // Get the user from AuthContext
+
+  const { user } = useAuth()
   const userRole = user?.role
 
-
-  const handleEditClient = (id: number) => {
-    router.push(`/${userRole}/clients/${id}/details`);
+  const handleEditLot = (Lot: LotsType) => {
+    setOpen(true)
+    setEditValue(Lot)
   }
 
-  const handleDeleteClient = (id: number) => {
+  const handleDeleteLot = (id: number) => {
     setOpen(true)
     setId(id)
   }
 
-  const handleAddClient = () => {
-    router.push(`/${userRole}/clients/add`)
+  const handleAddLots = () => {
+    router.push(`/${userRole}/lots/add`)
   }
 
-  const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
+  const columns = useMemo<ColumnDef<LotsTypeWithAction, any>[]>(
     () => [
       columnHelper.accessor('name', {
         header: 'Nom',
+        cell: ({ row }) => {
+          const name = row.original.name
+
+          // Break the name after 20 characters if it's too long
+          const displayName = name.length > 50 ? name.substring(0, 50) + '\n' + name.substring(50) : name
+
+          return (
+            <div className='flex items-center gap-4 '>
+              <div className='flex flex-col'>
+                <Typography color='text.primary' className='font-medium whitespace-pre-wrap break-words'>
+                  {`${displayName} `}
+                </Typography>
+              </div>
+            </div>
+          )
+        }
+      }),
+
+      columnHelper.accessor('name', {
+        header: 'client',
+        cell: ({ row }) => (
+          <>
+            {row.original?.client?.name ? (
+              <span>{row.original?.client?.name}</span>
+            ) : (
+              <Chip variant='tonal' label={'Default'} color='secondary' className='px-2' />
+            )}
+          </>
+        )
+      }),
+
+      columnHelper.accessor('description', {
+        header: 'description',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name}`}
+                {`${row.original.description}`.length > 50
+                  ? `${row.original.description.substring(0, 50)}...`
+                  : `${row.original.description}`}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('siren_number', {
-        header: 'Siren',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.siren_number}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('contact_email', {
-        header: 'Email',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.contact_email}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('phone_number', {
-        header: 'Numéro de Telephone',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.phone_number}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('is_active', {
-        header: 'Status',
-        cell: ({ row }) => (
-          <Chip
-            variant='tonal'
-            label={row.original.is_active ? 'Active' : 'Inactive'}
-            color={row.original.is_active ? 'success' : 'secondary'}
-          />
-        )
-      }),
+
       columnHelper.accessor('created_at', {
         header: `Date de Creation`,
         cell: ({ row }) => (
@@ -222,30 +218,38 @@ const ClientListTable = ({
         )
       }),
 
+      columnHelper.accessor('created_by.first_name', {
+        header: 'Creé par',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDeleteClient(row.original.id)}>
-              <i className='tabler-trash text-textSecondary' />
+            <IconButton onClick={() => handleDeleteLot(row.original.id)}>
+              <i className='tabler-trash  text-textSecondary' />
             </IconButton>
             <OptionMenu
               iconButtonProps={{ size: 'medium' }}
               iconClassName='text-textSecondary'
               options={[
                 {
-                  text: 'Détail',
+                  text: 'Modifier',
+                  icon: 'tabler-edit',
                   menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEditClient(row.original.id)
+                    className: 'flex items-center gap-2  text-textSecondary',
+                    onClick: () => handleEditLot(row.original)
                   }
                 }
-
-                // {
-                //   text: 'Suspendre',
-                //   icon: 'tabler-download',
-                //   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
-                // }
               ]}
             />
           </div>
@@ -258,7 +262,7 @@ const ClientListTable = ({
   )
 
   const table = useReactTable({
-    data: filteredData as ClientRead[],
+    data: filteredData as LotRead[],
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -289,8 +293,6 @@ const ClientListTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -306,16 +308,16 @@ const ClientListTable = ({
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Rechercher un client'
+              placeholder='Rechercher un lots'
               className='max-sm:is-full'
             />
             <Button
               variant='contained'
               className='max-sm=is-full'
               startIcon={<i className='tabler-plus' />}
-              onClick={handleAddClient}
+              onClick={handleAddLots}
             >
-              Ajouter Client
+              Ajouter lots
             </Button>
           </div>
         </div>
@@ -390,17 +392,18 @@ const ClientListTable = ({
           }}
         />
       </Card>
-      <ClientDialog
+      <LotsDialog
         open={open}
         setOpen={setOpen}
         id={id}
         setId={setId}
         editValue={editValue}
         setEditValue={setEditValue}
+        setAddValue={setAddValue}
         refetch={refetch}
       />
     </>
   )
 }
 
-export default ClientListTable
+export default LotsListTable

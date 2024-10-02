@@ -39,7 +39,6 @@ export function middleware(req: NextRequest) {
   const detailPathRegex = /^\/([^/]+)\/([^/]+)\/\d+\/details$/; // Matches /role/type/:id/details
   const isDetailRoute = detailPathRegex.test(pathname);
 
-  console.log(isDetailRoute)
 
 // Check if the current path matches any of the route rules
   const routeRule = updatedRountingData.find(rule => {
@@ -63,7 +62,7 @@ export const config = {
     '/:role/admin',// Matches /admin paths for any role
     '/:role/dashboard',
     '/:role/:type/list',// Match dynamic list routes
-    '/:role/:type/add',// Match dynamic add routes
+    '/:role/:type/add',//  Match dynamic add routes
     '/:role/:type/:id/details',// Match dynamic detail routes
 
   ],

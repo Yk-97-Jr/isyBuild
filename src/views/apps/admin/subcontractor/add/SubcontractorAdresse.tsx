@@ -1,38 +1,39 @@
-'use client';
+'use client'
 
 // MUI Imports
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid'
+import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader'
+import CardContent from '@mui/material/CardContent'
 
-import type {UseFormRegister, FieldError} from 'react-hook-form';
+import type { UseFormRegister, FieldError } from 'react-hook-form'
 
+// Components Imports
+import CustomTextField from '@core/components/mui/TextField'
 
-import CustomTextField from '@core/components/mui/TextField';
+import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
 
-import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shemaClientAdd";
+// Style Imports
+import '@/libs/styles/tiptapEditor.css'
 
-
-type ClientAdresseProps = {
-  register: UseFormRegister<FormValidateClientAddType>;
+type SubcontractorAdresseProps = {
+  register: UseFormRegister<FormValidateSubcontractorAddType>
   errors: {
     address?: {
-      country?: FieldError;
-      streetNumber?: FieldError;
-      streetName?: FieldError;
-      department?: FieldError;
-      city?: FieldError;
-      zipCode?: FieldError;
-    };
-  };
-};
+      country?: FieldError
+      streetNumber?: FieldError
+      streetName?: FieldError
+      department?: FieldError
+      city?: FieldError
+      postal_code?: FieldError
+    }
+  }
+}
 
-
-const ClientAdresse: React.FC<ClientAdresseProps> = ({register, errors}) => {
+const SubcontractorAdresse: React.FC<SubcontractorAdresseProps> = ({ register, errors }) => {
   return (
     <Card>
-      <CardHeader title='Adresse'/>
+      <CardHeader title='Adresse' />
       <CardContent>
         <Grid container spacing={6} className='mbe-6'>
           <Grid item xs={12}>
@@ -90,16 +91,15 @@ const ClientAdresse: React.FC<ClientAdresseProps> = ({register, errors}) => {
               fullWidth
               label='Code Postale'
               placeholder='Code Postale'
-              {...register('address.zipCode')}
-              error={!!errors.address?.zipCode}
-              helperText={errors.address?.zipCode?.message}
+              {...register('address.postal_code')}
+              error={!!errors.address?.postal_code}
+              helperText={errors.address?.postal_code?.message}
             />
           </Grid>
         </Grid>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default ClientAdresse;
- 
+export default SubcontractorAdresse
