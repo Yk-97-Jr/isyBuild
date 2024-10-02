@@ -23,7 +23,7 @@ import type {FormValidateClientEditType} from "@views/apps/admin/clients/details
 import {schemaClientEdit} from "@views/apps/admin/clients/details/info/schemaClientEdit";
 import ClientCreatedBy from "@views/apps/admin/clients/details/info/ClientCreatedBy";
 import ClientModifyHeader from "@views/apps/admin/clients/details/info/ClientModifyHeader";
-import useHandleBack from "@components/useHandleBack";
+import useHandleBack from "@/hooks/useHandleBack";
 
 const ClientEdit = () => {
   const {register, handleSubmit, setValue, formState: {errors}} = useForm<FormValidateClientEditType>({

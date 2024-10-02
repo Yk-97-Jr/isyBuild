@@ -20,7 +20,7 @@ import type {FormValidateClientAddType} from "@views/apps/admin/clients/add/shem
 import {schemaClientAdd} from "@views/apps/admin/clients/add/shemaClientAdd";
 
 import {useAuth} from "@/contexts/AuthContext";
-import useHandleBack from "@components/useHandleBack";
+import useHandleBack from "@/hooks/useHandleBack";
 
 
 const ClientAdd = () => {
