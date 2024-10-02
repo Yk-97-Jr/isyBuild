@@ -11,12 +11,11 @@ interface LocationProps {
   setLatitude: (value: number | null) => void
   longitude: number | null
   setLongitude: (value: number | null) => void
+  errors: any
 }
 
-const Location = ({ latitude, setLatitude, longitude, setLongitude }: LocationProps) => {
-
+const Location = ({  setLatitude, setLongitude, errors }: LocationProps) => {
   const handleLatitude = (event: React.ChangeEvent<HTMLInputElement>) => {
-
     const value = parseFloat(event.target.value)
 
     if (!isNaN(value) && value >= -90 && value <= 90) {
@@ -25,12 +24,11 @@ const Location = ({ latitude, setLatitude, longitude, setLongitude }: LocationPr
     } else {
       console.error('Invalid latitude value')
     }
-
   }
 
   const handleLongitude = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value)
-    
+
     if (!isNaN(value) && value >= -180 && value <= 180) {
       setLongitude(value)
       console.log(value)
@@ -50,14 +48,8 @@ const Location = ({ latitude, setLatitude, longitude, setLongitude }: LocationPr
           placeholder='For Example:37.7749'
           className='mbe-6'
           onChange={handleLatitude}
-          error={latitude === null || latitude < -90 || latitude > 90}
-          helperText={
-            latitude === null
-              ? 'Latitude is required'
-              : latitude < -90 || latitude > 90
-                ? 'Latitude must be between -90 and 90'
-                : ''
-          }
+          error={!!errors.latitude}
+          helperText={errors.latitude}
         />
         <CustomTextField
           fullWidth
@@ -65,16 +57,8 @@ const Location = ({ latitude, setLatitude, longitude, setLongitude }: LocationPr
           placeholder='For Example:-122.4194'
           className='mbe-6'
           onChange={handleLongitude}
-          error={longitude === null || longitude < -90 || longitude > 90 || typeof longitude === 'string'}
-          helperText={
-            longitude === null
-              ? 'Longitude is required'
-              : longitude < -180 || longitude > 180
-                ? 'Longitude must be between -180 and 180'
-                : typeof longitude === 'string'
-                  ? 'Longitude must be a  Number'
-                  : ''
-          }
+        error={!!errors.longitude} 
+        helperText={errors.longitude}
         />
         <Divider className='mlb-2' />
         <div className='flex items-center justify-between'></div>
