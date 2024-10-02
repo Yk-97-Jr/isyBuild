@@ -34,12 +34,105 @@ function Page() {
   const [codePostal, setCodePostal] = useState<number>(0)
   const [latitude, setLatitude] = useState<number | null>(null)
   const [longitude, setLongitude] = useState<number | null>(null)
-  const [client, setClient] = useState({ id: 0 })
+  const [client, setClient] = useState({ id: null })
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
+  const [errors, setErrors] = useState<Record<string, string>>({})
+
+
+  const validateForm = (
+    name: string,
+    code: string,
+    date: Date,
+    pays: string,
+    roadNumber: string,
+    roadName: string,
+    departement: string,
+    ville: string,
+    codePostal: number,
+    latitude: any,
+    longitude: any,
+    client: any
+  ): Record<string, string> => {
+    const errors: any = {}
+
+    if (!name || name.length < 4) {
+      errors.name = 'Name is required and must be at least 4 characters long'
+    }
+
+    if (!code || code.length < 4) {
+      errors.code = 'Code is required and must be at least 4 characters long'
+    }
+
+    if (!pays) {
+      errors.pays = 'Country is required'
+    }
+
+    if (!roadNumber || !/^\d{4,}$/.test(roadNumber)) {
+      errors.roadNumber = 'Road number is required and must be a number with at least 4 digits'
+    }
+
+    if (!roadName || roadName.length < 4) {
+      errors.roadName = 'Road name is required and must be at least 4 characters long'
+    }
+
+
+    if (!codePostal || !/^\d{5}$/.test(codePostal.toString())) {
+      errors.codePostal = 'Postal code is required and must be a 5-digit number'
+    }
+
+    if (!departement || departement.length < 2) {
+      errors.departement = 'Department is required and must be at least 2 characters long'
+    }
+
+    if (!ville || ville.length < 2) {
+      errors.ville = 'City is required and must be at least 2 characters long'
+    }
+
+    if (latitude === null || latitude < -180 || latitude > 180) {
+      errors.latitude = 'Latitude is required and must be  in the range of  -90 90'
+    }
+
+    if (longitude === null || longitude < -180 || longitude > 180) {
+      errors.longitude = 'Latitude is required and must be  in the range of  -90 90'
+    }
+
+    if (!client.id) {
+      errors.client = 'Please Select a client'
+    }
+
+    return errors
+
+  }
+
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
+
+    const validationErrors = validateForm(
+      name,
+      code,
+      date,
+      pays,
+      roadNumber,
+      roadName,
+      departement,
+      ville,
+      codePostal,
+      latitude,
+      longitude,
+      client
+    )
+
+    if (Object.keys(validationErrors).length > 0) {
+
+      setErrors(validationErrors)
+
+      return
+      
+    }
+
+    setErrors({})
 
     const submitData: ProjectCreateRequest = {
       code,
@@ -69,9 +162,10 @@ function Page() {
         router.push('/Projects')
         setOpenSnackBar(true)
         setInfoAlert({ severity: 'success', message: 'The project has been added correctly' })
+        console.log(result)
       }
 
-      window.location.reload()
+      // window.location.reload()
     } catch (error) {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'error', message: 'Error adding the project' })
@@ -98,6 +192,7 @@ function Page() {
             setDate={setDate}
             description={description}
             setDescription={setDescription}
+            errors={errors}
           />
           <AddressInfo
             pays={pays}
@@ -112,11 +207,18 @@ function Page() {
             codePostal={codePostal}
             setCodePostal={setCodePostal}
             setVille={setVille}
+            errors={errors}
           />
         </div>
         <div className='w-3/2 flex flex-col gap-2 '>
-          <Location latitude={latitude} setLatitude={setLatitude} longitude={longitude} setLongitude={setLongitude} />
-          <Details client={client} setClient={setClient} />
+          <Location
+            latitude={latitude}
+            setLatitude={setLatitude}
+            longitude={longitude}
+            setLongitude={setLongitude}
+            errors={errors}
+          />
+          <Details client={client} setClient={setClient} errors={errors} />
         </div>
       </div>
     </div>
