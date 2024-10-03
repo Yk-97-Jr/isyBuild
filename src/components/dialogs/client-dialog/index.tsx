@@ -16,8 +16,6 @@ type ClientDialogProps = {
   setOpen: (open: boolean) => void;
   id?: number;
   setId: Dispatch<SetStateAction<number>>
-  setEditValue: Dispatch<SetStateAction<ClientRead | undefined>>
-  editValue?: ClientRead; // Updated type
   refetch?: () => void
 
 };
@@ -29,18 +27,14 @@ const ClientDialog = ({
                         id,
                         setId,
                         editValue,
-                        setEditValue,
                         refetch
 
                       }: ClientDialogProps) => {
 
 
-  console.log('editValue' + editValue)
-  console.log('id' + id)
 
   const handleClose = () => {
     setOpen(false);
-    setEditValue?.(undefined);
     setId?.(0);
 
     if (refetch) {

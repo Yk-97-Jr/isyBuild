@@ -5,11 +5,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 
-import AddUserContent from "@components/dialogs/user-dialog/AddUserContent";
 
 import DialogCloseButton from '../DialogCloseButton';
-import type { UsersType } from "@/types/apps/usersType";
-import EditUserContent from "@components/dialogs/user-dialog/EditUserContent";
 import DeleteUserContent from "@components/dialogs/user-dialog/DeleteUserContent";
 
 type UserDialogProps = {
@@ -19,8 +16,6 @@ type UserDialogProps = {
   addValue?: boolean;
   setAddValue: Dispatch<SetStateAction<boolean>>;
   setId: Dispatch<SetStateAction<number>>;
-  setEditValue: Dispatch<SetStateAction<UsersType | undefined>>;
-  editValue?: UsersType; // Type mis à jour
   refetch?: () => void;
 };
 
@@ -72,11 +67,7 @@ const UserDialog = ({
       ? 'Modifiez les détails de l\'utilisateur ci-dessous.'
       : 'Remplissez les détails pour créer un nouvel utilisateur.';
 
-  const ContentComponent = isDelete
-    ? DeleteUserContent
-    : isEdit
-      ? EditUserContent
-      : AddUserContent;
+  const ContentComponent =  DeleteUserContent
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>
@@ -93,7 +84,8 @@ const UserDialog = ({
         handleClose={handleClose}
         handleCloseWithoutRefresh={handleCloseWithoutRefresh}
         id={id!}
-        editValue={editValue!}
+
+        // editValue={editValue!}
       />
     </Dialog>
   );
