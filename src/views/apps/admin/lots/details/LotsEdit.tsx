@@ -15,6 +15,7 @@ import { CircularProgress } from '@mui/material'
 
 import LotsEditInfo from '@/views/apps/admin/lots/details/LotsEditInfo'
 import LotsEditHeader from '@/views/apps/admin/lots/details/LotsEditHeader'
+import LotsAbout from '@/views/apps/admin/lots/details/LotsAbout'
 
 import type { FormValidateLotsEditType } from '@/views/apps/admin/lots/details/schemaLots'
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
@@ -38,7 +39,7 @@ const LotsEdit = () => {
 
   const { id } = useParams()
 
-  const { data: lotsData, isLoading: isLoadingQuery } = useLotsRetrieve2Query({
+  const { data: lotData, isLoading: isLoadingQuery } = useLotsRetrieve2Query({
     lotId: +id
   })
 
@@ -48,11 +49,11 @@ const LotsEdit = () => {
   const handleBack = useHandleBack()
 
   useEffect(() => {
-    if (lotsData) {
-      setValue('firstName', lotsData.name)
-      setValue('description', lotsData.description || '')
+    if (lotData) {
+      setValue('firstName', lotData.name)
+      setValue('description', lotData.description || '')
     }
-  }, [lotsData, setValue])
+  }, [lotData, setValue])
 
   const onSubmit: SubmitHandler<FormValidateLotsEditType> = async data => {
     try {
@@ -97,11 +98,11 @@ const LotsEdit = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={4}>
-          {/* <Grid container spacing={6}>
+          <Grid container spacing={6}>
             <Grid item xs={12}>
-              <SubcontractorStatus register={register} errors={errors} subcontractorData={subcontractorData} />
+              <LotsAbout lotData={lotData} />
             </Grid>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Grid>
     </form>
