@@ -145,9 +145,8 @@ const LotsListTable = ({
   const { user } = useAuth()
   const userRole = user?.role
 
-  const handleEditLot = (Lot: LotsType) => {
-    setOpen(true)
-    setEditValue(Lot)
+  const handleEditLot = (id: number) => {
+    router.push(`/${userRole}/lots/${id}/details`)
   }
 
   const handleDeleteLot = (id: number) => {
@@ -247,7 +246,7 @@ const LotsListTable = ({
                   icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-2  text-textSecondary',
-                    onClick: () => handleEditLot(row.original)
+                    onClick: () => handleEditLot(row.original.id)
                   }
                 }
               ]}
