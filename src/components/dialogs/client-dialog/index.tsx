@@ -59,13 +59,13 @@ const ClientDialog = ({
     return null; // Return null if no condition is met
   }
 
-  const dialogTitle = isDelete ? 'Delete Client' : isEdit ? 'Edit Client' : 'Add New Client';
+   const dialogTitle = isDelete ? 'Supprimer Client' : isEdit ? 'Modifier Client' : 'Ajouter un nouvel Client';
 
   const dialogDescription = isDelete
-    ? 'Are you sure you want to delete this client?'
+    ? 'Êtes-vous sûr de vouloir supprimer cet Client ?'
     : isEdit
-      ? 'Edit the client details below.'
-      : 'Fill in the details to create a new client.';
+      ? 'Modifiez les détails de Client ci-dessous.'
+      : 'Remplissez les détails pour créer un nouvel Client.';
 
   // removing for now the logic to have multipe dialogs
   const ContentComponent = DeleteClientContent

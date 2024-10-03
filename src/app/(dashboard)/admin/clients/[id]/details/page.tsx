@@ -1,16 +1,35 @@
-'use client'
+// React Imports
+import type {ReactElement} from 'react'
 
-import { useParams } from 'next/navigation'
+// Next Imports
+import dynamic from 'next/dynamic'
 
-const DetailsPage = () => {
-  const { id } = useParams()
+// Component Imports
+import ClientDetails from "@views/apps/admin/clients/details/ClientDetails";
 
-  return (
-    <div>
-      <h1>Details for ID: {id} xs</h1>
-      {/* Add your details rendering logic here */}
-    </div>
-  )
+const InfosClient = dynamic(() => import('@views/apps/admin/clients/details/info'))
+
+const EntrepriseClient = dynamic(() => import('@views/apps/admin/clients/details/entreprise'))
+
+const LotsClient = dynamic(() => import('@views/apps/admin/clients/details/lots'))
+
+const ProjectsClient = dynamic(() => import('@views/apps/admin/clients/details/projects'))
+
+const UsersClient = dynamic(() => import('@views/apps/admin/clients/details/users'))
+
+
+// Vars
+const tabContentList = (): { [key: string]: ReactElement } => ({
+  infoclient: <InfosClient/>,
+  entrepriseclient: <EntrepriseClient/>,
+  lotsclient: <LotsClient/>,
+  projectsclient: <ProjectsClient/>,
+  usersclient: <UsersClient/>,
+
+})
+
+const AccountSettingsPage = () => {
+  return <ClientDetails tabContentList={tabContentList()}/>
 }
 
-export default DetailsPage
+export default AccountSettingsPage

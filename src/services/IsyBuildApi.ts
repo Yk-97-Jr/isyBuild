@@ -338,8 +338,6 @@ const injectedRtkApi = api.injectEndpoints({
 export { injectedRtkApi as pIsyBuildApi }
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
-
-  /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
@@ -459,6 +457,7 @@ export type LogoutCreateApiArg = {
   tokenRefreshRequest: TokenRefreshRequest
 }
 export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead
+
 export type LotsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -553,7 +552,9 @@ export type ProjectLotsSubcontractorsRemoveDestroyApiResponse = /** status 204  
 export type ProjectLotsSubcontractorsRemoveDestroyApiArg = {
   projectLotSubcontractorId: number
 }
+
 export type ProjectsRetrieveApiResponse = /** status 200  */ PaginatedProjectRead
+
 export type ProjectsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -580,10 +581,16 @@ export type ProjectsUpdateUpdateApiArg = {
   projectUpdateRequest: ProjectUpdateRequest
 }
 export type SetPasswordCreateApiResponse = /** status 200  */ any
+
 export type SetPasswordCreateApiArg = {
+
   setasswordRequest: SetasswordRequestWrite
+
 }
-export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubcontractortRead
+
+
+export type SubcontractorsRetrieveApiResponse =  PaginatedSubcontractortRead
+
 export type SubcontractorsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -593,10 +600,15 @@ export type SubcontractorsRetrieveApiArg = {
   pageSize?: number
 }
 export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ SubcontractorRead
+
 export type SubcontractorsRetrieve2ApiArg = {
+
   subcontractorId: number
+
 }
+
 export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+
 export type SubcontractorsStaffRetrieve2ApiArg = {
 
   /** Page number of the results to fetch */
@@ -1085,6 +1097,7 @@ export type MapCoordinate = {
   longitude: string
 }
 export type ProjectRead = {
+  address: any
   id: number
   code: string
   name: string

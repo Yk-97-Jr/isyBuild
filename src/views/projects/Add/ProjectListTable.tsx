@@ -5,17 +5,30 @@ import React, { useEffect, useState, useMemo } from 'react'
 
 import { useRouter } from 'next/navigation'
 
+// MUI Imports
 import Card from '@mui/material/Card'
+
 import Button from '@mui/material/Button'
+
 import Typography from '@mui/material/Typography'
+
 import Chip from '@mui/material/Chip'
+
 import IconButton from '@mui/material/IconButton'
+
 import type { TextFieldProps } from '@mui/material/TextField'
+
 import MenuItem from '@mui/material/MenuItem'
+
+import Box from '@mui/material/Box'
+
+import { CircularProgress } from '@mui/material'
 
 // Third-party Imports
 import classnames from 'classnames'
+
 import { rankItem } from '@tanstack/match-sorter-utils'
+
 import {
   createColumnHelper,
   flexRender,
@@ -28,27 +41,27 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from '@tanstack/react-table'
+
 import type { ColumnDef, FilterFn } from '@tanstack/react-table'
+
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
-// Type Imports
-import Box from '@mui/material/Box'
-
-import { CircularProgress } from '@mui/material'
-
+// Custom Components
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
 import OptionMenu from '@core/components/option-menu'
 
 import CustomTextField from '@core/components/mui/TextField'
 
-// Style Imports
+import ProjectDialog from './ProjectDialog'
+
+// Styles
 import tableStyles from '@core/styles/table.module.css'
-import ClientDialog from '@components/dialogs/client-dialog'
 
-import type { ClientRead } from '@/services/IsyBuildApi'
+// Types
+import type { ProjectRead } from '@/services/IsyBuildApi'
 
-import { useAuth } from '@/contexts/AuthContext'
+// Context
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -60,20 +73,15 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ClientTypeWithAction = ClientRead & {
+type ClientTypeWithAction = ProjectRead & {
   action?: string
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value)
 
-  // Store the itemRank info
-  addMeta({
-    itemRank
-  })
+  addMeta({ itemRank })
 
-  // Return if the item should be filtered in/out
   return itemRank.passed
 }
 
@@ -87,7 +95,6 @@ const DebouncedInput = ({
   onChange: (value: string | number) => void
   debounce?: number
 } & Omit<TextFieldProps, 'onChange'>) => {
-  // States
   const [value, setValue] = useState(initialValue)
 
   useEffect(() => {
@@ -100,16 +107,14 @@ const DebouncedInput = ({
     }, debounce)
 
     return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
+  }, [value, onChange, debounce])
 
   return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)} />
 }
 
-// Column Definitions
 const columnHelper = createColumnHelper<ClientTypeWithAction>()
 
-const ClientListTable = ({
+const ProjectListTable = ({
   data,
   page,
   setPage,
@@ -117,9 +122,11 @@ const ClientListTable = ({
   pageSize,
   countRecords,
   isFetching,
-  refetch
+  refetch,
+  handleEdit,
+  handleDelete
 }: {
-  data?: ClientRead[]
+  data?: ProjectRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -127,36 +134,45 @@ const ClientListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
+  handleEdit: any
+  handleDelete: any
+  setTableRows: any
 }) => {
-  // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
-  const [editValue, setEditValue] = useState<ClientRead>()
+
+  // const [editValue, setEditValue] = useState<ProjectRead>()
+
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter()
-  const { user } = useAuth() // Get the user from AuthContext
-  const userRole = user?.role
 
-
-  const handleEditClient = (id: number) => {
-    router.push(`/${userRole}/clients/${id}/details`);
-  }
-
-  const handleDeleteClient = (id: number) => {
-    setOpen(true)
-    setId(id)
-  }
+  // const handleEditClient = (project: ProjectRead) => {
+  //   setOpen(true)
+  //   setEditValue(project)
+  // }
 
   const handleAddClient = () => {
-    router.push(`/${userRole}/clients/add`)
+    router.push(`/Projects/add`)
   }
 
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
+      columnHelper.accessor('code', {
+        header: 'Code',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-4'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.code}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
       columnHelper.accessor('name', {
-        header: 'Nom',
+        header: 'Name',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
@@ -167,66 +183,43 @@ const ClientListTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('siren_number', {
-        header: 'Siren',
+      columnHelper.accessor('client.address.country', {
+        header: 'Address',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.siren_number}`}
+                {row.original.client?.address?.country || 'N/A'}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('contact_email', {
-        header: 'Email',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.contact_email}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('phone_number', {
-        header: 'Numéro de Telephone',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.phone_number}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('is_active', {
-        header: 'Status',
+      columnHelper.accessor('status', {
+        header: 'status',
         cell: ({ row }) => (
           <Chip
             variant='tonal'
-            label={row.original.is_active ? 'Active' : 'Inactive'}
-            color={row.original.is_active ? 'success' : 'secondary'}
+            label={row.original.status ? 'pending' : 'completed'}
+            color={row.original.status ? 'warning' : 'secondary'}
           />
         )
       }),
-      columnHelper.accessor('created_at', {
+      columnHelper.accessor('client.created_at', {
         header: `Date de Creation`,
         cell: ({ row }) => (
           <Typography>
-            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
+            {row.original.client?.created_at
+              ? new Date(row.original.client.created_at).toLocaleDateString()
+              : 'Date not available'}
           </Typography>
         )
       }),
-
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDeleteClient(row.original.id)}>
+            <IconButton onClick={() => handleDelete(row.original.id)}>
               <i className='tabler-trash text-textSecondary' />
             </IconButton>
             <OptionMenu
@@ -234,18 +227,13 @@ const ClientListTable = ({
               iconClassName='text-textSecondary'
               options={[
                 {
-                  text: 'Détail',
+                  text: 'Modifier',
+                  icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEditClient(row.original.id)
+                    onClick: () => handleEdit(row.original.id)
                   }
                 }
-
-                // {
-                //   text: 'Suspendre',
-                //   icon: 'tabler-download',
-                //   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
-                // }
               ]}
             />
           </div>
@@ -253,12 +241,11 @@ const ClientListTable = ({
         enableSorting: false
       })
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, filteredData]
+    [handleDelete, handleEdit]
   )
 
   const table = useReactTable({
-    data: filteredData as ClientRead[],
+    data: filteredData as ProjectRead[],
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -272,8 +259,7 @@ const ClientListTable = ({
         pageSize: pageSize
       }
     },
-    enableRowSelection: true, //enable row selection for all rows
-    // enableRowSelection: row => row.original.age > 18, // or enable row selection conditionally per row
+    enableRowSelection: true,
     globalFilterFn: fuzzyFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
@@ -289,8 +275,6 @@ const ClientListTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -306,7 +290,7 @@ const ClientListTable = ({
             <DebouncedInput
               value={globalFilter ?? ''}
               onChange={value => setGlobalFilter(String(value))}
-              placeholder='Rechercher un client'
+              placeholder={`chercher un Projet`}
               className='max-sm:is-full'
             />
             <Button
@@ -315,7 +299,7 @@ const ClientListTable = ({
               startIcon={<i className='tabler-plus' />}
               onClick={handleAddClient}
             >
-              Ajouter Client
+              Ajouter Projet
             </Button>
           </div>
         </div>
@@ -384,23 +368,15 @@ const ClientListTable = ({
         <TablePaginationComponent
           totalRecords={countRecords}
           pageSize={pageSize}
-          currentPage={page} // Pass the currentPage directly
+          currentPage={page}
           onPageChange={newPage => {
             setPage(newPage)
           }}
         />
       </Card>
-      <ClientDialog
-        open={open}
-        setOpen={setOpen}
-        id={id}
-        setId={setId}
-        editValue={editValue}
-        setEditValue={setEditValue}
-        refetch={refetch}
-      />
+      <ProjectDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch} />
     </>
   )
 }
 
-export default ClientListTable
+export default ProjectListTable

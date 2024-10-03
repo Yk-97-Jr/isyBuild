@@ -1,14 +1,14 @@
 // useHandleBack.js
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 const useHandleBack = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleBack = () => {
-    router.back() // Go back to the previous page
-  }
+    router.back(); // Go back to the previous page
+  };
 
-  return handleBack
-}
+  return handleBack;
+};
 
-export default useHandleBack
+export default useHandleBack;

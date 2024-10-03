@@ -130,6 +130,7 @@ interface ProjectInformationProps {
   setDate: (valeu: Date) => void
   description: string
   setDescription: (value: string) => void
+  errors: any
 }
 
 const ProjectInformation = ({
@@ -137,15 +138,11 @@ const ProjectInformation = ({
   setName,
   code,
   setCode,
-
+  errors,
   setDate,
   description,
   setDescription
-}
-
-:
-
- ProjectInformationProps) => {
+}: ProjectInformationProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -167,16 +164,17 @@ const ProjectInformation = ({
 
   function handleName(event: any) {
     event.preventDefault()
-
     setName(event.target.value)
-
+    console.log(Name)
   }
 
-  function handleCode(event: any) {
+  function handleCode(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
 
-    setCode(event.target.value)
+    const value = event.target.value
 
+    setCode(value.toUpperCase())
+    
   }
 
   // const { isValid, error } = validateForm()
@@ -191,11 +189,8 @@ const ProjectInformation = ({
               fullWidth
               label='Nom de Projet'
               placeholder='Construction ADL'
-              required={true}
-              error={!Name || Name.length < 3}
-              helperText={
-                !Name ? 'Name is required' : Name.length < 3 ? 'name of the project must at least be 3 chars' : ''
-              }
+              error={!!errors.name}
+              helperText={errors.name}
               onChange={e => handleName(e)}
             />
           </Grid>
@@ -205,16 +200,10 @@ const ProjectInformation = ({
               fullWidth
               label='Code de Projet'
               placeholder='FXSK123U'
-              onChange={e => handleCode(e)}
-              error={!code || code.length < 4}
-              required={true}
-              helperText={
-                !code
-                  ? 'Please add project Code'
-                  : code.length < 4
-                    ? 'Code of the project must at least be 4 chars'
-                    : ''
-              }
+              value={code}
+              onChange={handleCode}
+              error={!!errors.code}
+              helperText={errors.code}
             />
           </Grid>
           <Grid item xs={12} sm={6}>

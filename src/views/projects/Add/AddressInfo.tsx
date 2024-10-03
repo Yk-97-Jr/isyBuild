@@ -9,11 +9,9 @@ import CardContent from '@mui/material/CardContent'
 import Select from '@mui/material/Select'
 import type { SelectChangeEvent } from '@mui/material/Select'
 
-import { InputLabel } from '@mui/material'
+import { FormHelperText, InputLabel } from '@mui/material'
 
 import MenuItem from '@mui/material/MenuItem'
-
-
 
 // Components Imports
 
@@ -125,6 +123,7 @@ interface AddressInfoProps {
   setVille: (value: string) => void
   codePostal: number
   setCodePostal: (value: number) => void
+  errors: any
 }
 
 const AddressInfo = ({
@@ -137,23 +136,23 @@ const AddressInfo = ({
   departement,
   setDepartement,
   ville,
+  
   setVille,
-  codePostal,
-  setCodePostal
+
+  // codePostal,
+
+  setCodePostal,
+  errors
 }: AddressInfoProps) => {
-
   const handleDepartement = (event: any) => {
-
     const value = event.target.value
 
     setDepartement(value)
 
     console.log('Departement:', value)
-
   }
 
   const handleVille = (event: any) => {
-
     const value = event.target.value
 
     setVille(value)
@@ -162,51 +161,38 @@ const AddressInfo = ({
   }
 
   const handleCodePostal = (event: any) => {
-
     const value = event.target.value
 
     setCodePostal(Number(value))
 
     console.log('Code Postal:', value)
-
   }
 
   const handlePays = (event: SelectChangeEvent) => {
-
     event.preventDefault()
 
     const value = event.target.value
 
     setPays(value)
-
   }
 
-
   const handleRoadNumber = (event: any) => {
-
     event.preventDefault()
 
     const value = event.target.value
 
     setRoadNumber(value)
-
   }
-  
-  const hanleRoadName = (event: any) => {
 
+  const hanleRoadName = (event: any) => {
     const value = event.target.value
 
     setRoadName(value)
-
-
   }
 
- 
-
   useEffect(() => {
-    console.log(pays, RoadNumber, RoadName)
+    console.log(pays)
   }, [pays, RoadNumber, RoadName, RoadName])
-
 
   return (
     <Card>
@@ -215,10 +201,14 @@ const AddressInfo = ({
         <Grid container spacing={6} className='mbe-6'>
           <Grid item xs={12}>
             <InputLabel className='py-1'>Pays/country</InputLabel>
-            <Select value={pays} onChange={handlePays} className='w-full' required={true} error={!pays}>
-              <MenuItem value='Algeria'>Algeria</MenuItem>
-              <MenuItem value='Tsetsgeria'>Tsetsgeria</MenuItem>
+            <Select value={pays} onChange={handlePays} className='w-full' displayEmpty error={!!errors.pays}>
+              <MenuItem value='' disabled>
+                Select a country
+              </MenuItem>
+              <MenuItem value='FR'>France</MenuItem>
+              <MenuItem value='DZ'>Algeria</MenuItem>
             </Select>
+            {errors && <FormHelperText className='text-red-500'>{errors.pays}</FormHelperText>}
           </Grid>
           <Grid item xs={12} sm={6}>
             <CustomTextField
@@ -226,9 +216,8 @@ const AddressInfo = ({
               label='Numero de Rue'
               placeholder='Numero de Rue'
               onChange={handleRoadNumber}
-              required={true}
-              error={!RoadNumber}
-              helperText={!RoadNumber ? 'Road Number required' : ' '}
+              error={!!errors.roadNumber}
+              helperText={errors.roadNumber}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -237,9 +226,8 @@ const AddressInfo = ({
               label='Nom de Rue'
               placeholder='Nom de Rue'
               onChange={hanleRoadName}
-              error={!RoadName}
-              required={true}
-              helperText={!RoadName ? 'Nom de Rue is required' : ' '}
+              error={!!errors.roadName}
+              helperText={errors.roadName}
             />
           </Grid>
 
@@ -250,9 +238,8 @@ const AddressInfo = ({
               placeholder='Departement'
               value={departement}
               onChange={handleDepartement}
-              error={!departement}
-              required={true}
-              helperText={!departement ? 'Departement is required' : ' '}
+              error={!!errors.departement}
+              helperText={errors.departement}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -262,9 +249,8 @@ const AddressInfo = ({
               placeholder='Ville'
               value={ville}
               onChange={handleVille}
-              error={!ville}
-              required={true}
-              helperText={!ville ? 'Ville is required' : ' '}
+              error={!!errors.ville}
+              helperText={errors.ville}
             />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -274,9 +260,8 @@ const AddressInfo = ({
               placeholder='Code Postal'
               type='number'
               onChange={handleCodePostal}
-              error={!codePostal}
-              required={true}
-              helperText={!codePostal ? 'Code Postal is required' : ' '}
+              error={!!errors.codePostal}
+              helperText={errors.codePostal}
             />
           </Grid>
         </Grid>
