@@ -37,11 +37,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
   },
   {
     label: 'Lots',
-<<<<<<< HEAD
-    href: '/role/lots/list', // Use role as a placeholder
-=======
     href: '/role/lots', // Use role as a placeholder
->>>>>>> Edit/AppeleOffre
     icon: 'tabler-category',
     roles: ['client', 'admin'], // For both 'client' and 'admin'
     isSection: false,
