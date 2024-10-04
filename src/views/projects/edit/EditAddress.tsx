@@ -35,23 +35,18 @@ interface addressProps {
   errors: any
 }
 
-
 const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addressProps) => {
-
   if (isLoading || !projectState || !projectState.client || !projectState.client.address) {
-
     return (
       <div className='flex justify-center items-center'>
         <CircularProgress />
       </div>
-
     )
   }
 
   //Functions to handle Feilds
 
   function handleCountry(event: SelectChangeEvent) {
-
     const country = event.target.value
 
     setProjectState({
@@ -69,7 +64,6 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
   }
 
   function handleRoadNumber(event: React.ChangeEvent<HTMLInputElement>) {
-
     event.preventDefault()
 
     const roadNumber = event.target.value
@@ -84,11 +78,9 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
         }
       }
     })
-
   }
 
   function handleRoadName(event: React.ChangeEvent<HTMLInputElement>) {
-
     event.preventDefault()
 
     const roadName = event.target.value
@@ -103,14 +95,12 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
         }
       }
     })
-
   }
 
   function handleDepartement(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
 
     const departement = event.target.value
-
 
     setProjectState({
       ...projectState,
@@ -122,12 +112,9 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
         }
       }
     })
-
   }
 
   function handleVille(event: React.ChangeEvent<HTMLInputElement>) {
-
-
     event.preventDefault()
     const city = event.target.value
 
@@ -141,7 +128,6 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
         }
       }
     })
-
   }
 
   function handleCodePostal(event: React.ChangeEvent<HTMLInputElement>) {
@@ -158,12 +144,7 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
           postal_code: postal_code
         }
       }
-    }
-  )
-
-
-
-
+    })
   }
 
   return (

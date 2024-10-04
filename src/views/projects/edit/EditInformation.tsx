@@ -1,6 +1,5 @@
 'use client'
 
-
 // MUI Imports
 import Grid from '@mui/material/Grid'
 
@@ -38,13 +37,10 @@ import { TextAlign } from '@tiptap/extension-text-align'
 // Components Imports
 import CustomTextField from '@core/components/mui/TextField'
 
-
-
 // Style Imports
 import '@/libs/styles/tiptapEditor.css'
 
 import type { ProjectRead } from '@/services/IsyBuildApi'
-
 
 interface Props {
   projectState: ProjectRead
@@ -54,8 +50,6 @@ interface Props {
 }
 
 const EditInformation = ({ projectState, errors, setProjectState, isLoading }: Props) => {
-
-
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -69,27 +63,20 @@ const EditInformation = ({ projectState, errors, setProjectState, isLoading }: P
     ],
     content: projectState.description,
     onUpdate: ({ editor }) => {
-      
       const newValue = editor.getText()
 
       setProjectState({ ...projectState, description: newValue })
-      
     }
   })
 
   if (!projectState || isLoading) {
-
     return (
       <div className='flex justify-center items-center'>
         {' '}
         <CircularProgress />
       </div>
     )
-
   }
-
-
-
 
   //function handle Change Name
 
@@ -138,6 +125,8 @@ const EditInformation = ({ projectState, errors, setProjectState, isLoading }: P
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={['DateField', 'DateField']}>
+                  {/* <InputLabel className='py-1'>Pays/country</InputLabel> */}
+
                   <DateField
                     size='small'
                     label='Date'

@@ -5,7 +5,6 @@ import { Card, CardHeader, CardContent, Typography } from '@mui/material'
 
 import { EditorContent, useEditor } from '@tiptap/react'
 
-
 import StarterKit from '@tiptap/starter-kit'
 
 import Placeholder from '@tiptap/extension-placeholder'
@@ -18,10 +17,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 
 import { CircularProgress } from '@mui/material'
 
-import type{ ProjectRead } from '@/services/IsyBuildApi'
-
-
-
+import type { ProjectRead } from '@/services/IsyBuildApi'
 
 interface DetialsProps {
   projectState: ProjectRead
@@ -42,9 +38,6 @@ function Details({ projectState, isLoading }: DetialsProps) {
       Underline
     ],
     content: ''
-
-
-  
   })
 
   if (!projectState || !projectState.client || isLoading) {
@@ -55,23 +48,22 @@ function Details({ projectState, isLoading }: DetialsProps) {
     )
   }
 
-
   return (
     <Card>
       <CardHeader title='Détails De Projet' />
       <CardContent className='flex flex-col gap-2'>
-        <Typography variant='h5' className='mt-4 text-gray-500' fontWeight='normal'>
+        <Typography variant='h6' className='mt-4 ' fontWeight='normal'>
           Client:{projectState.client.name}
         </Typography>
         <>
-          <Typography variant='h5' fontWeight='normal' className='text-gray-500'>
+          <Typography variant='h6' fontWeight='normal'>
             Status:{projectState.status}
           </Typography>
-          <Typography variant='h5' fontWeight='normal' className='text-gray-500'>
+          <Typography variant='h6' fontWeight='normal'>
             Niveau de Risque:{projectState.risk_level}
           </Typography>
           <div className='flex w-full items-center  gap-2'>
-            <Typography variant='h5' fontWeight='normal' className='text-gray-500'>
+            <Typography variant='h6' fontWeight='normal'>
               Progress:
             </Typography>
             <LinearProgress

@@ -8,18 +8,15 @@ import { CircularProgress, Button } from '@mui/material'
 
 import EditInformation from './EditInformation'
 
-
 import EditAddress from './EditAddress'
 
 import Details from './Details'
 
 import CreatedBy from './CreatedBy'
 
-
-
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
-import type{ SnackBarContextType } from '@/types/apps/snackbarType'
+import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
 import { useProjectsRetrieve2Query, useProjectsUpdateUpdateMutation } from '@/services/IsyBuildApi'
 
@@ -33,7 +30,7 @@ function MainEdit2() {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-  const { data: ProjectData, isLoading,  } = useProjectsRetrieve2Query({ projectId })
+  const { data: ProjectData, isLoading } = useProjectsRetrieve2Query({ projectId })
   const [projectState, setProjectState] = useState<ProjectRead>()
 
   useEffect(() => {
@@ -135,13 +132,10 @@ function MainEdit2() {
       projectState?.map_coordinate?.longitude || 0
     )
 
-    if
-     (Object.keys(validationErrors).length > 0) {
-
+    if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
 
       return
-
     }
 
     setErrors({})
@@ -169,15 +163,15 @@ function MainEdit2() {
           <CircularProgress />
         </div>
       ) : (
-        <div className='p-2'>
-          <div className='flex justify-between p-2'>
+        <div className='p'>
+          <div className='flex justify-between items-center p-5'>
             <p className='text-xl'>Information Sur le Projet</p>
             <Button variant='contained' onClick={handleUpdate}>
               Update Project
             </Button>
           </div>
-          <div className='flex flex-col sm:flex-row gap-4'>
-            <div className='flex flex-col gap-4 sm:w-3/5'>
+          <div className='flex flex-col sm:flex-row gap-5'>
+            <div className='flex flex-col gap-5  sm:w-3/5'>
               <EditInformation
                 projectState={projectState || ({} as ProjectRead)}
                 setProjectState={setProjectState}
@@ -191,7 +185,7 @@ function MainEdit2() {
                 errors={errors}
               />
             </div>
-            <div className='sm:w-2/5 flex flex-col gap-4'>
+            <div className='sm:w-2/5 flex flex-col gap-5'>
               <Details
                 projectState={projectState || ({} as ProjectRead)}
                 setProjectState={setProjectState}
