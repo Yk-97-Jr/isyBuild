@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, CardHeader, CardContent, Divider, Typography, Icon } from '@mui/material'
+import { Card, CardHeader, CardContent, Divider, Typography } from '@mui/material'
 
 import type { LotRead } from '@/services/IsyBuildApi'
 
