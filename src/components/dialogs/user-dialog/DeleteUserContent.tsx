@@ -13,19 +13,17 @@ interface DeleteProps {
 }
 
 const DeleteUserContent = ({ handleClose, handleCloseWithoutRefresh, id }: DeleteProps) => {
-  const [deleteUser, { isLoading, isSuccess }] = useAdminUsersDeleteDestroyMutation()
-  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
+  const [deleteUser, { isLoading }] = useAdminUsersDeleteDestroyMutation();
+  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType;
 
   const handleDelete = async () => {
     try {
       await deleteUser({ adminUserId: id }).unwrap() // Passez l'identifiant de l'utilisateur à la mutation
       handleClose()
 
-      if (isSuccess) {
-        console.log('Utilisateur supprimé avec succès')
-        setOpenSnackBar(true)
-        setInfoAlert({ severity: 'success', message: 'Utilisateur supprimé avec succès' })
-      }
+        console.log('Utilisateur supprimé avec succès');
+        setOpenSnackBar(true);
+        setInfoAlert({ severity: "success", message: "Utilisateur supprimé avec succès" });
     } catch (error) {
       console.error("Échec de la suppression de l'utilisateur :", error)
       setOpenSnackBar(true)

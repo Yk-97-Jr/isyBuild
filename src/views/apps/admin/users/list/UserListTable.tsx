@@ -4,6 +4,8 @@
 import React, {useEffect, useState, useMemo} from 'react'
 
 // MUI Imports
+import {useRouter} from "next/navigation";
+
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
@@ -11,7 +13,6 @@ import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import type {TextFieldProps} from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
-import type {ButtonProps} from '@mui/material/Button'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -46,7 +47,7 @@ import CustomTextField from '@core/components/mui/TextField'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import type {UsersType} from '@/types/apps/usersType'
-import OpenDialogOnElementClick from '@components/dialogs/OpenDialogOnElementClick'
+import {useAuth} from "@/contexts/AuthContext";
 
 
 declare module '@tanstack/table-core' {
@@ -130,33 +131,33 @@ const UserListTable = ({
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
-  const [editValue, setEditValue] = useState<UsersType>()
-  const [addValue, setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
 
   console.log('datalist' + data)
   console.log('pagelist' + page)
 
-  // Vars
-  const buttonProps: ButtonProps = {
-    variant: 'contained',
-    children: 'Ajouter un Utilisateur',
-    className: 'max-sm:is-full',
-    startIcon: <i className='tabler-plus'/>
-  }
 
   console.log('countRecords' + countRecords)
 
-  const handleEditUser = (user: UsersType) => {
-    setOpen(true)
-    setEditValue(user)
+  const handleEditUser = (id: number) => {
+    console.log(id)
+    console.log(`/${userRole}/users/${id}/details`)
+    router.push(`/${userRole}/users/${id}/details`);
   }
 
   const handleDeleteUser = (id: number) => {
     setOpen(true)
     setId(id)
+  }
+
+  const handleAddUser = () => {
+    router.push(`/${userRole}/users/add`);
+
   }
 
   const columns = useMemo<ColumnDef<UsersTypeWithAction, any>[]>(
@@ -243,7 +244,7 @@ const UserListTable = ({
                   icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleEditUser(row.original)
+                    onClick: () => handleEditUser(row.original.id)
                   }
                 }
 
@@ -315,12 +316,14 @@ const UserListTable = ({
               placeholder='Rechercher un utilisateur'
               className='max-sm:is-full'
             />
-            <OpenDialogOnElementClick
-              element={Button}
-              elementProps={buttonProps}
-              dialog={UserDialog}
-              dialogProps={{addValue, setAddValue, refetch}}
-            />
+            <Button
+              variant='contained'
+              className='max-sm=is-full'
+              startIcon={<i className='tabler-plus'/>}
+              onClick={handleAddUser}
+            >
+              Ajouter Utilisateur
+            </Button>
           </div>
         </div>
         <div className='overflow-x-auto'>
@@ -399,9 +402,6 @@ const UserListTable = ({
         setOpen={setOpen}
         id={id}
         setId={setId}
-        editValue={editValue}
-        setEditValue={setEditValue}
-        setAddValue={setAddValue}
         refetch={refetch}
       />
     </>

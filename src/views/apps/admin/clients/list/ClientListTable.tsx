@@ -131,7 +131,6 @@ const ClientListTable = ({
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
-  const [editValue, setEditValue] = useState<ClientRead>()
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
@@ -390,15 +389,7 @@ const ClientListTable = ({
           }}
         />
       </Card>
-      <ClientDialog
-        open={open}
-        setOpen={setOpen}
-        id={id}
-        setId={setId}
-        editValue={editValue}
-        setEditValue={setEditValue}
-        refetch={refetch}
-      />
+      <ClientDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch}/>
     </>
   )
 }
