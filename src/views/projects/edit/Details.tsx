@@ -1,6 +1,7 @@
+/* eslint-disable import/no-named-as-default */
 
 // import Card from '@mui/material/Card'
-import { Card, CardHeader, CardContent, Typography } from '@mui/material'
+import { Card, CardHeader, CardContent, Typography,CircularProgress } from '@mui/material'
 
 import { EditorContent, useEditor } from '@tiptap/react'
 
@@ -14,7 +15,7 @@ import Underline from '@tiptap/extension-underline'
 
 import LinearProgress from '@mui/material/LinearProgress'
 
-import { CircularProgress } from '@mui/material'
+
 
 import type { ProjectRead } from '@/services/IsyBuildApi'
 
