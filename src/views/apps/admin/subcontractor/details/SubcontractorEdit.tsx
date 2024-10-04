@@ -27,6 +27,8 @@ import SubcontractorModifyHeader from '@/views/apps/admin/subcontractor/details/
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 import { useSubcontractorsRetrieve2Query, useSubcontractorsUpdateUpdateMutation } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
+import Owner from './SubcontractorOwner'
+import SubcontractorListInfo from './ClientsListInfo'
 
 const SubcontractorEdit = () => {
   const {
@@ -132,7 +134,13 @@ const SubcontractorEdit = () => {
         <Grid item xs={12} md={4}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
+              <Owner subcontractorData={subcontractorData} />
+            </Grid>
+            <Grid item xs={12}>
               <SubcontractorStatus register={register} errors={errors} subcontractorData={subcontractorData} />
+            </Grid>
+            <Grid item xs={12}>
+              <SubcontractorListInfo subcontractorData={subcontractorData} />
             </Grid>
           </Grid>
         </Grid>
