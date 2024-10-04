@@ -39,7 +39,6 @@ function Page() {
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-
   const validateForm = (
     name: string,
     code: string,
@@ -76,7 +75,6 @@ function Page() {
       errors.roadName = 'Road name is required and must be at least 4 characters long'
     }
 
-
     if (!codePostal || !/^\d{5}$/.test(codePostal.toString())) {
       errors.codePostal = 'Postal code is required and must be a 5-digit number'
     }
@@ -102,9 +100,7 @@ function Page() {
     }
 
     return errors
-
   }
-
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -125,11 +121,9 @@ function Page() {
     )
 
     if (Object.keys(validationErrors).length > 0) {
-
       setErrors(validationErrors)
 
       return
-      
     }
 
     setErrors({})
@@ -182,7 +176,7 @@ function Page() {
         </Button>
       </div>
       <div className='flex sm:flex-row flex-col gap-2'>
-        <div className='w-3/2 flex flex-col gap-2'>
+        <div className='w- flex flex-col gap-2'>
           <ProjectInformation
             Name={name}
             setName={setName}
@@ -210,7 +204,7 @@ function Page() {
             errors={errors}
           />
         </div>
-        <div className='w-3/2 flex flex-col gap-2 '>
+        <div className='sm:w-1/2 flex flex-col gap-2 w-full '>
           <Location
             latitude={latitude}
             setLatitude={setLatitude}

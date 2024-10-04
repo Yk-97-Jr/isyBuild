@@ -59,7 +59,7 @@ const Details = ({ client, setClient, errors }: DetailsProps) => {
       <CardHeader title='Details' />
       <CardContent>
         <div className='mb-2'>
-          <InputLabel children='CLient' />
+          <InputLabel children='Client' />
           <Select
             displayEmpty
             fullWidth

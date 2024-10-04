@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import React from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid'
@@ -15,7 +15,7 @@ import Select from '@mui/material/Select'
 
 import type { SelectChangeEvent } from '@mui/material/Select'
 
-import { FormHelperText, InputLabel } from '@mui/material'
+import { CircularProgress, FormHelperText } from '@mui/material'
 
 import MenuItem from '@mui/material/MenuItem'
 
@@ -26,123 +26,145 @@ import CustomTextField from '@core/components/mui/TextField'
 // Style Imports
 
 import '@/libs/styles/tiptapEditor.css'
+import type { ProjectRead } from '@/services/IsyBuildApi'
 
-interface EditAddressProps {
-  projectState: any
-  setProjectState: any
-  errors: Record<string, string>
+interface addressProps {
+  projectState: ProjectRead
+  setProjectState: (value: ProjectRead) => void
+  isLoading: boolean
+  errors: any
 }
 
-const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps) => {
-  useEffect(() => {
-    if (!projectState) {
-      return
-    }
-  }, [projectState])
 
-  if (!projectState) {
+const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addressProps) => {
+
+  if (isLoading || !projectState || !projectState.client || !projectState.client.address) {
+
     return (
-      <div>
-        <p>Loading...</p>
+      <div className='flex justify-center items-center'>
+        <CircularProgress />
       </div>
+
     )
   }
 
-  console.log(projectState)
+  //Functions to handle Feilds
 
-  const handleDepartement = (event: any) => {
-    const value = event.target.value
+  function handleCountry(event: SelectChangeEvent) {
 
-    setProjectState((prevState: any) => ({
-      ...prevState,
+    const country = event.target.value
+
+    setProjectState({
+      ...projectState,
       client: {
-        // Ensure you're updating the correct path
-        ...prevState.client,
+        ...projectState.client,
         address: {
-          ...prevState.client.address,
-          department: value
+          ...projectState.client.address,
+          country
         }
       }
-    }))
-    console.log('Department:', value)
+    })
+
+    console.log(projectState.client.address.country)
   }
 
-  const handleVille = (event: any) => {
-    const value = event.target.value
+  function handleRoadNumber(event: React.ChangeEvent<HTMLInputElement>) {
 
-    setProjectState((prevState: any) => ({
-      ...prevState,
-      client: {
-        // Ensure you're updating the correct path
-        ...prevState.client,
-        address: {
-          ...prevState.client.address,
-          city: value
-        }
-      }
-    }))
-    console.log('Ville:', value)
-  }
-  const handleCodePostal = (event: any) => {
-    const value = event.target.value
-
-    setProjectState((prevState: any) => ({
-      ...prevState,
-      client: {
-        ...prevState.client,
-        address: {
-          ...prevState.client.address,
-          postal_code: value // Ensure this is correctly updating the state
-        }
-      }
-    }))
-    console.log('Code Postal:', value)
-  }
-
-  const handlePays = (event: SelectChangeEvent) => {
     event.preventDefault()
 
-    const value = event.target.value
+    const roadNumber = event.target.value
 
-    setProjectState((prevState: any) => ({
-      ...prevState,
-      address: {
-        ...prevState.address,
-        country: value
+    setProjectState({
+      ...projectState,
+      client: {
+        ...projectState.client,
+        address: {
+          ...projectState.client.address,
+          street_number: roadNumber
+        }
       }
-    }))
-    console.log('Pays:', value)
+    })
+
   }
 
-  const handleRoadNumber = (event: any) => {
+  function handleRoadName(event: React.ChangeEvent<HTMLInputElement>) {
+
     event.preventDefault()
 
-    const value = event.target.value
+    const roadName = event.target.value
 
-    setProjectState((prevState: any) => ({
-      ...prevState,
-      address: {
-        ...prevState.address,
-        street_number: value
+    setProjectState({
+      ...projectState,
+      client: {
+        ...projectState.client,
+        address: {
+          ...projectState.client.address,
+          street_name: roadName
+        }
       }
-    }))
-    console.log('Road Number:', value)
+    })
+
   }
 
-  const handleRoadName = (event: any) => {
-    const value = event.target.value
+  function handleDepartement(event: React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault()
 
-    setProjectState((prevState: any) => ({
-      ...prevState,
-      address: {
-        ...prevState.address,
-        street_name: value
+    const departement = event.target.value
+
+
+    setProjectState({
+      ...projectState,
+      client: {
+        ...projectState.client,
+        address: {
+          ...projectState.client.address,
+          street_name: departement
+        }
       }
-    }))
-    console.log('Road Name:', value)
+    })
+
   }
 
-  // console.log(roadNumber)
+  function handleVille(event: React.ChangeEvent<HTMLInputElement>) {
+
+
+    event.preventDefault()
+    const city = event.target.value
+
+    setProjectState({
+      ...projectState,
+      client: {
+        ...projectState.client,
+        address: {
+          ...projectState.client.address,
+          city: city
+        }
+      }
+    })
+
+  }
+
+  function handleCodePostal(event: React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault()
+
+    const postal_code = event.target.value
+
+    setProjectState({
+      ...projectState,
+      client: {
+        ...projectState.client,
+        address: {
+          ...projectState.client.address,
+          postal_code: postal_code
+        }
+      }
+    }
+  )
+
+
+
+
+  }
 
   return (
     <Card>
@@ -150,10 +172,9 @@ const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps
       <CardContent>
         <Grid container spacing={6} className='mbe-6'>
           <Grid item xs={12}>
-            <InputLabel className='py-1'>Pays/country</InputLabel>
             <Select
-              value={projectState.address?.country || ''}
-              onChange={handlePays}
+              value={projectState.client.address.country || ''}
+              onChange={handleCountry}
               className='w-full'
               displayEmpty
               error={!!errors.pays}
@@ -169,7 +190,7 @@ const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps
           <Grid item xs={12} sm={6}>
             <CustomTextField
               fullWidth
-              value={projectState.address?.street_number || ''}
+              value={projectState?.client.address.street_number || ''}
               label='Numero de Rue'
               placeholder='Numero de Rue'
               onChange={handleRoadNumber}
@@ -182,7 +203,7 @@ const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps
               fullWidth
               label='Nom de Rue'
               placeholder='Nom de Rue'
-              value={projectState.address?.street_name || ''}
+              value={projectState?.client.address.street_name || ''}
               error={!!errors.roadName}
               helperText={errors.roadName}
               onChange={handleRoadName}
@@ -193,7 +214,7 @@ const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps
               fullWidth
               label='Departement'
               placeholder='Departement'
-              // value={projectState?.client.address.department || ''}
+              value={projectState?.client.address.department || ''}
               onChange={handleDepartement}
               error={!!errors.departement}
               helperText={errors.departement}
@@ -204,7 +225,7 @@ const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps
               fullWidth
               label='Ville'
               placeholder='Ville'
-              value={projectState.client.address.city || ''}
+              value={projectState?.client.address.city || ''}
               onChange={handleVille}
               error={!!errors.ville}
               helperText={errors.ville}
@@ -213,7 +234,7 @@ const EditAddress = ({ projectState, setProjectState, errors }: EditAddressProps
           <Grid item xs={12} sm={6}>
             <CustomTextField
               fullWidth
-              value={projectState.client.address.postal_code || ''}
+              value={projectState.client.address.postal_code}
               label='Code Postal'
               placeholder='Code Postal'
               type='number'
