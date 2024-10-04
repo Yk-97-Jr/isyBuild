@@ -1,11 +1,12 @@
 import React from 'react'
 
-import MainEdit from '@/views/projects/edit/MainEdit'
+
+import Tabs from '@/views/projects/edit/Tabs'
 
 function page() {
   return (
     <div>
-      <MainEdit />
+      <Tabs />
     </div>
   )
 }

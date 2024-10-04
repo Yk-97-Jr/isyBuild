@@ -504,7 +504,12 @@ export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
-export type ProjectLotsRetrieveApiResponse = /** status 200  */ PaginatedProjectLotRead
+export type ProjectLotsRetrieveApiResponse = 
+
+/** status 200  */ 
+
+PaginatedProjectLotRead
+
 export type ProjectLotsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -546,9 +551,14 @@ export type ProjectLotsSubcontractorsRetrieveApiResponse = /** status 200  */ Pr
 export type ProjectLotsSubcontractorsRetrieveApiArg = {
   projectLotSubcontractorId: number
 }
-export type ProjectLotsSubcontractorsRemoveDestroyApiResponse = /** status 204  */ {
+export type ProjectLotsSubcontractorsRemoveDestroyApiResponse =
+
+ /** status 204  */ 
+
+ {
   [key: string]: any
 }
+
 export type ProjectLotsSubcontractorsRemoveDestroyApiArg = {
   projectLotSubcontractorId: number
 }
@@ -583,18 +593,16 @@ export type ProjectsUpdateUpdateApiArg = {
 export type SetPasswordCreateApiResponse = /** status 200  */ any
 
 export type SetPasswordCreateApiArg = {
-
   setasswordRequest: SetasswordRequestWrite
-
 }
 
-
-export type SubcontractorsRetrieveApiResponse =  PaginatedSubcontractortRead
+export type SubcontractorsRetrieveApiResponse = PaginatedSubcontractortRead
 
 export type SubcontractorsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
   page?: number
+
 
   /** Number of results per page */
   pageSize?: number
@@ -602,14 +610,17 @@ export type SubcontractorsRetrieveApiArg = {
 export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ SubcontractorRead
 
 export type SubcontractorsRetrieve2ApiArg = {
-
   subcontractorId: number
-
 }
 
-export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+export type SubcontractorsStaffRetrieve2ApiResponse =
+
+ /** status 200  */ 
+ 
+ PaginatedSubcontractorStaffRead
 
 export type SubcontractorsStaffRetrieve2ApiArg = {
+
 
   /** Page number of the results to fetch */
   page?: number

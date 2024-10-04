@@ -12,6 +12,14 @@ const allMenuData = (): VerticalMenuDataType[] => [
     children: []
   },
   {
+    label: 'Projects',
+    href: '/Projects',
+    icon: 'tabler-clipboard-list',
+    roles: ['user', 'admin'],
+    isSection: false,
+    children: []
+  },
+  {
     label: 'Utilisateurs',
     href: '/role/users/list', // Use role as a placeholder
     icon: 'tabler-user',
@@ -29,7 +37,11 @@ const allMenuData = (): VerticalMenuDataType[] => [
   },
   {
     label: 'Lots',
+<<<<<<< HEAD
     href: '/role/lots/list', // Use role as a placeholder
+=======
+    href: '/role/lots', // Use role as a placeholder
+>>>>>>> Edit/AppeleOffre
     icon: 'tabler-category',
     roles: ['client', 'admin'], // For both 'client' and 'admin'
     isSection: false,
@@ -40,14 +52,6 @@ const allMenuData = (): VerticalMenuDataType[] => [
     href: '/role/subcontractor/list',
     icon: 'tabler-building-community',
     roles: ['admin'],
-    isSection: false,
-    children: []
-  },
-  {
-    label: 'Projects',
-    href: '/Projects',
-    icon: 'tabler-clipboard-list',
-    roles: ['user', 'admin'],
     isSection: false,
     children: []
   }
