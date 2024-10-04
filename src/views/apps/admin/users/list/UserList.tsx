@@ -1,35 +1,41 @@
 'use client'
 
 // components/UserList.js
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 
 import Grid from '@mui/material/Grid'
 
-import { CircularProgress } from '@mui/material'
+import {CircularProgress} from '@mui/material'
 
 import Box from '@mui/material/Box'
 
 import UserListTable from './UserListTable'
-import { useAdminStaffRetrieveQuery } from '@/services/IsyBuildApi'
+import {useAdminStaffRetrieveQuery} from '@/services/IsyBuildApi'
 
 const UserList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
 
-  console.log('page ' + page)
 
   // Pass parameters to the query hook
-  const { data, error, isLoading, isFetching, refetch } = useAdminStaffRetrieveQuery({ page, pageSize })
+  const {data, error, isLoading, isFetching, refetch} = useAdminStaffRetrieveQuery({page, pageSize})
 
   useEffect(() => {
-    refetch()
-  }, [page, pageSize])
+    refetch();
+    setPage(1)
+  }, [pageSize]);
+
+
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
 
   if (isLoading)
     return (
       <Box display='flex' justifyContent='center' alignItems='flex-start' height='100vh'>
-        <CircularProgress />
+        <CircularProgress/>
       </Box>
     )
   if (error)

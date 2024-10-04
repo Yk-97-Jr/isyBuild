@@ -18,14 +18,19 @@ const UserList = () => {
   const [pageSize, setPageSize] = useState(10);
 
 
-  console.log("page" + page)
-
   // Pass parameters to the query hook
   const {data, error, isLoading, isFetching, refetch} = useClientsRetrieveQuery({page, pageSize});
 
   useEffect(() => {
     refetch();
-  }, [page, pageSize]);
+    setPage(1)
+  }, [pageSize]);
+
+
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
 
   if (isLoading) return (
     <Box display="flex" justifyContent="center" alignItems="flex-start" height="100vh">
@@ -47,12 +52,12 @@ const UserList = () => {
   return (
     isFetching ?
       <ClientListTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} data={clients}
-                     countRecords={countRecords} isFetching={isFetching} refetch={refetch}/>
+                       countRecords={countRecords} isFetching={isFetching} refetch={refetch}/>
       :
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <ClientListTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} data={clients}
-                         countRecords={countRecords} isFetching={isFetching} refetch={refetch}/>
+                           countRecords={countRecords} isFetching={isFetching} refetch={refetch}/>
         </Grid>
       </Grid>
   )
