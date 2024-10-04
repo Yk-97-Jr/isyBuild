@@ -5,7 +5,7 @@ import {useState} from 'react'
 
 // Next Imports
 import Link from 'next/link'
-import {useParams} from 'next/navigation'
+import {useSearchParams} from 'next/navigation'
 
 // MUI Imports
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -94,7 +94,10 @@ const SetPassword = ({mode}: { mode: SystemMode }) => {
   })
 
   // Hooks for theming and responsive design
-  const {token, uid} = useParams();
+  const searchParams = useSearchParams();
+
+  const token = searchParams.get('token');
+  const uid = searchParams.get('uid');
   const {settings} = useSettings()
   const theme = useTheme()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
