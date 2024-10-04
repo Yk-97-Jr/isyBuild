@@ -13,6 +13,7 @@ import Box from '@mui/material/Box'
 
 import { CircularProgress } from '@mui/material'
 
+import LotsCreatedBy from './LotsCreatedBy'
 import LotsEditInfo from '@/views/apps/admin/lots/details/LotsEditInfo'
 import LotsEditHeader from '@/views/apps/admin/lots/details/LotsEditHeader'
 import LotsAbout from '@/views/apps/admin/lots/details/LotsAbout'
@@ -101,6 +102,9 @@ const LotsEdit = () => {
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <LotsAbout lotData={lotData} />
+            </Grid>
+            <Grid item xs={12}>
+              <LotsCreatedBy lotData={lotData} />
             </Grid>
           </Grid>
         </Grid>

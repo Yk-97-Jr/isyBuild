@@ -16,15 +16,15 @@ const LotsAbout: React.FC<LotStausProps> = ({ lotData }) => {
         <div className='flex items-center gap-2'>
           <i className='tabler-user' />
           <div className='flex items-center flex-wrap gap-2'>
-            {lotData?.client ? (
+            {lotData?.client?.name ? (
               <>
-                <Typography variant='h6' fontWeight='bold'>
-                  Client:{lotData.client.name}
+                <Typography variant='h6' fontWeight='medium'>
+                  Client: {lotData.client.name}
                 </Typography>
               </>
             ) : (
               <>
-                <Typography variant='body1' color='text.secondary'>
+                <Typography variant='body1' color='text.secondary' className=' font-medium text-[15px] leading-[22px] '>
                   Aucune information disponible
                 </Typography>
               </>
