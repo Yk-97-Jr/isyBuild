@@ -28,8 +28,8 @@ const tabContentList = (): { [key: string]: ReactElement } => ({
 
 })
 
-const AccountSettingsPage = () => {
+const ClientPage = () => {
   return <ClientDetails tabContentList={tabContentList()}/>
 }
 
-export default AccountSettingsPage
+export default ClientPage

@@ -3,10 +3,11 @@ import React from 'react';
 import { Card, CardHeader, CardContent, Divider, Typography, Switch } from '@mui/material';
 import type {FieldError, UseFormRegister} from "react-hook-form";
 
-import type {FormValidateUserAddType} from "@views/apps/admin/users/add/shemaUserAdd";
+import type {FormValidateUserEditType} from "@views/apps/admin/users/details/shemaUserEdit";
+
 
 type UserStatusProps = {
-  register: UseFormRegister<FormValidateUserAddType>; // Adjust the type as necessary
+  register: UseFormRegister<FormValidateUserEditType>; // Adjust the type as necessary
   errors: {
     is_active?: FieldError;
 

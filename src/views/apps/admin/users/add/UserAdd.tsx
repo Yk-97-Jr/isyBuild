@@ -33,14 +33,20 @@ const UserAdd = () => {
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
   const handleBack = useHandleBack();
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
 
   const onSubmit: SubmitHandler<FormValidateUserAddType> = async (data) => {
+
     try {
 
       const response = await createUser(
         {
-          user: {...data},
+          adminStaffCreateRequest: {
+            user: {
+              ...data, redirect_uri: appUrl + '/set-password',
+            }
+          },
         }
       ).unwrap();
 
@@ -51,10 +57,10 @@ const UserAdd = () => {
       // Redirect to client details after creation
       const clientId = response.id;
 
-      router.push(`/${userRole}/clients/${clientId}/details`);
+      router.push(`/${userRole}/users/${clientId}/details`);
 
     } catch (err: any) {
-      console.error('Failed to add client:', err);
+      console.error('Failed to add user:', err);
       setOpenSnackBar(true);
       setInfoAlert({
         severity: "error",

@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 
 import DialogCloseButton from '../DialogCloseButton';
 import DeleteClientContent from "@components/dialogs/client-dialog/DeleteClientContent";
-import type {ClientRead} from "@/services/IsyBuildApi";
 
 
 type ClientDialogProps = {
@@ -26,7 +25,6 @@ const ClientDialog = ({
                         setOpen,
                         id,
                         setId,
-                        editValue,
                         refetch
 
                       }: ClientDialogProps) => {
@@ -46,20 +44,17 @@ const ClientDialog = ({
     setOpen(false);
   };
 
-  const isDelete = id !== undefined && id !== 0 && !editValue;
-  const isEdit = !!editValue;
+  const isDelete = id !== undefined && id !== 0
 
-  if (!isDelete && !isEdit) {
+  if (!isDelete) {
     return null; // Return null if no condition is met
   }
 
-   const dialogTitle = isDelete ? 'Supprimer Client' : isEdit ? 'Modifier Client' : 'Ajouter un nouvel Client';
+   const dialogTitle = isDelete && 'Supprimer Client'
 
-  const dialogDescription = isDelete
-    ? 'Êtes-vous sûr de vouloir supprimer cet Client ?'
-    : isEdit
-      ? 'Modifiez les détails de Client ci-dessous.'
-      : 'Remplissez les détails pour créer un nouvel Client.';
+   const dialogDescription = isDelete
+    && 'Êtes-vous sûr de vouloir supprimer cet Client ?'
+
 
   // removing for now the logic to have multipe dialogs
   const ContentComponent = DeleteClientContent

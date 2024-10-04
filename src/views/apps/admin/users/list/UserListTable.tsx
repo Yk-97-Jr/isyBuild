@@ -131,7 +131,6 @@ const UserListTable = ({
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
-  const [editValue, setEditValue] = useState<UsersType>()
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
@@ -145,9 +144,10 @@ const UserListTable = ({
 
   console.log('countRecords' + countRecords)
 
-  const handleEditUser = (user: UsersType) => {
-    setOpen(true)
-    setEditValue(user)
+  const handleEditUser = (id: number) => {
+    console.log(id)
+    console.log(`/${userRole}/users/${id}/details`)
+    router.push(`/${userRole}/users/${id}/details`);
   }
 
   const handleDeleteUser = (id: number) => {
@@ -244,7 +244,7 @@ const UserListTable = ({
                   icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleEditUser(row.original)
+                    onClick: () => handleEditUser(row.original.id)
                   }
                 }
 
@@ -402,8 +402,6 @@ const UserListTable = ({
         setOpen={setOpen}
         id={id}
         setId={setId}
-        editValue={editValue}
-        setEditValue={setEditValue}
         refetch={refetch}
       />
     </>

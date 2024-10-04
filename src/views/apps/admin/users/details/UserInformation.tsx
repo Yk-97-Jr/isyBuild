@@ -10,13 +10,10 @@ import CardContent from '@mui/material/CardContent';
 import type {UseFormRegister, FieldError} from 'react-hook-form';
 
 import CustomTextField from '@core/components/mui/TextField';
-import type {FormValidateUserAddType} from "@views/apps/admin/users/add/shemaUserAdd"; // Assuming you have a custom MUI TextField component
+import type {FormValidateUserEditType} from "@views/apps/admin/users/details/shemaUserEdit";
 
-// Import type for form validation
-
-// Define the prop types based on the form schema
 type UserInformationProps = {
-  register: UseFormRegister<FormValidateUserAddType>; // Register from react-hook-form
+  register: UseFormRegister<FormValidateUserEditType>; // Register from react-hook-form
   errors: {
     first_name?: FieldError;
     last_name?: FieldError;
