@@ -1,6 +1,9 @@
 // MUI Imports
 import Grid from '@mui/material/Grid'
 
+import UserClientList from "@views/apps/admin/clients/details/users/list/UserClientList";
+
+
 
 // Component Imports
 
@@ -9,7 +12,7 @@ const UsersClient = () => {
     <Grid container spacing={6}>
        <Grid item xs={12}>
         <h1>
-          users
+         <UserClientList/>
         </h1>
       </Grid>
     </Grid>
