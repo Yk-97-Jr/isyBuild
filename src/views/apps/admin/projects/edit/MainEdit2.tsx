@@ -147,7 +147,7 @@ function MainEdit2() {
       if (response) {
         setOpenSnackBar(true)
         setInfoAlert({ message: 'The Project has been Edited !!', severity: 'success' })
-        router.push('/Projects')
+        router.push('/admin/projects/list')
       }
     } catch (err) {
       setOpenSnackBar(true)

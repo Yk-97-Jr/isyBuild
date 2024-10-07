@@ -9,14 +9,16 @@ import { Button } from '@mui/material'
 import type { ProjectCreateRequest } from '@/services/IsyBuildApi'
 import { useProjectsCreateCreateMutation } from '@/services/IsyBuildApi'
 
-import ProjectInformation from '@/views/projects/Add/ProjectInformation'
-import Location from '@/views/projects/Add/Location'
-import AddressInfo from '@/views/projects/Add/AddressInfo'
-import Details from '@/views/projects/Add/Details'
+import ProjectInformation from '@/views/apps/client/projects/Add/ProjectInformation'
+import Location from '@/views/apps/client/projects/Add/Location'
+import AddressInfo from '@/views/apps/client/projects/Add/AddressInfo'
+import Details from '@/views/apps/client/projects/Add/Details'
 
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
+
+import { useParams } from 'next/navigation'
 
 function Page() {
   const router = useRouter()
@@ -153,7 +155,7 @@ function Page() {
       const result = await createProject({ projectCreateRequest: submitData }).unwrap()
 
       if (result) {
-        router.push('/Projects')
+        router.push(`${result.id}/details`)
         setOpenSnackBar(true)
         setInfoAlert({ severity: 'success', message: 'The project has been added correctly' })
         console.log(result)
@@ -169,14 +171,14 @@ function Page() {
 
   return (
     <div className=''>
-      <div className='flex justify-between py-4'>
+      <div className='flex sm:flex-row flex-col gap-5 justify-between py-4'>
         <h1>Create a Project</h1>
         <Button variant='contained' className='px-10' onClick={handleSubmit}>
           Create
         </Button>
       </div>
-      <div className='flex sm:flex-row flex-col gap-2'>
-        <div className='w- flex flex-col gap-2'>
+      <div className='flex md:flex-row flex-col gap-4'>
+        <div className=' flex flex-col gap-4'>
           <ProjectInformation
             Name={name}
             setName={setName}
@@ -204,7 +206,7 @@ function Page() {
             errors={errors}
           />
         </div>
-        <div className='sm:w-1/2 flex flex-col gap-2 w-full '>
+        <div className='flex flex-col gap-4 w-full '>
           <Location
             latitude={latitude}
             setLatitude={setLatitude}

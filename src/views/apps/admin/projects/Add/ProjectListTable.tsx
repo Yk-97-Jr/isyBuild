@@ -153,9 +153,9 @@ const ProjectListTable = ({
   //   setEditValue(project)
   // }
 
-  const handleAddClient = () => {
-    router.push(`/Projects/add`)
-  }
+  // const handleAddClient = () => {
+  //   router.push(`/role/projects/add`)
+  // }
 
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
@@ -293,12 +293,7 @@ const ProjectListTable = ({
               placeholder={`chercher un Projet`}
               className='max-sm:is-full'
             />
-            <Button
-              variant='contained'
-              className='max-sm=is-full'
-              startIcon={<i className='tabler-plus' />}
-              onClick={handleAddClient}
-            >
+            <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus' />} href='add'>
               Ajouter Projet
             </Button>
           </div>

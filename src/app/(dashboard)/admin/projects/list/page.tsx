@@ -1,6 +1,6 @@
 import React from 'react'
 
-import MainProject from '@/views/projects/Add/MainProject'
+import MainProject from '@/views/apps/admin/projects/Add/MainProject'
 
 function page() {
   return (
