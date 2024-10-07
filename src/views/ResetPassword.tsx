@@ -106,6 +106,8 @@ const ResetPassword = ({ mode }: { mode: SystemMode }) => {
 
   // Form submission handler
   const onSubmit: SubmitHandler<FormValues> = async data => {
+    console.log(uid)
+
     try {
       await setPassword({
         setasswordRequest: {

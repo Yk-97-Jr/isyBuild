@@ -10,10 +10,13 @@ import CardContent from '@mui/material/CardContent';
 import type {UseFormRegister, FieldError} from 'react-hook-form';
 
 import CustomTextField from '@core/components/mui/TextField';
-import type {FormValidateUserEditType} from "@views/apps/admin/users/details/shemaUserEdit";
+import type {FormValidateUserAddType} from "@views/apps/admin/users/add/shemaUserAdd"; // Assuming you have a custom MUI TextField component
 
+// Import type for form validation
+
+// Define the prop types based on the form schema
 type UserInformationProps = {
-  register: UseFormRegister<FormValidateUserEditType>; // Register from react-hook-form
+  register: UseFormRegister<FormValidateUserAddType>; // Register from react-hook-form
   errors: {
     first_name?: FieldError;
     last_name?: FieldError;
@@ -62,7 +65,6 @@ const UserInformation: React.FC<UserInformationProps> = ({register, errors}) => 
               {...register('email')} // Registering the email field from props
               error={!!errors.email} // Error handling
               helperText={errors.email?.message} // Error message
-              disabled={true}
             />
           </Grid>
 
