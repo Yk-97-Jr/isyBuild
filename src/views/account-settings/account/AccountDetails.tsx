@@ -12,7 +12,6 @@ import Typography from '@mui/material/Typography'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from "@mui/material/Box";
 
-
 // React Hook Form & Yup
 import {useForm} from 'react-hook-form'
 import * as Yup from 'yup'
@@ -22,12 +21,12 @@ import Cookies from "js-cookie";
 
 import {
   useUserProfileRetrieveQuery,
-  useUserUpdatePartialUpdateMutation
+  useUserUpdatePartialUpdateMutation,
+  useUserUpdateAvatarCreateMutation // Import the avatar mutation
 } from '@/services/IsyBuildApi'
 import CustomTextField from '@core/components/mui/TextField'
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
-
 
 import {useAuth} from "@/contexts/AuthContext";
 
@@ -52,6 +51,9 @@ const AccountDetails = () => {
   // Mutation for updating users data
   const [updateUser, {isLoading: isUpdating}] = useUserUpdatePartialUpdateMutation()
 
+  // Mutation for updating user avatar
+  const [updateAvatar, {isLoading: isUpdatingAvatar}] = useUserUpdateAvatarCreateMutation()
+
   // React Hook Form setup
   const {
     register,
@@ -63,12 +65,11 @@ const AccountDetails = () => {
   })
 
   // State for profile image
-  const [fileInput, setFileInput] = useState<string>('')
-  const [imgSrc, setImgSrc] = useState<string>('/images/avatars/1.png')
+  const [fileInput, setFileInput] = useState<File>()
+  const [imgSrc, setImgSrc] = useState<string>()
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
 
   const {setUser} = useAuth(); // Get setUser from AuthContext
-
 
   // Load the data into form state when available
   useEffect(() => {
@@ -76,65 +77,83 @@ const AccountDetails = () => {
       setValue('firstName', data.first_name || '')
       setValue('lastName', data.last_name || '')
       setValue('email', data.email || '')
-      setImgSrc('/images/avatars/1.png') // data.profile_image ||
+      setImgSrc(data.avatar || '/images/avatars/1.png') // data.profile_image ||
     }
   }, [data, setValue])
 
-  // temporary for typing prb until we add it to users
-  console.log(fileInput)
-
-
   // Handle profile image change
   const handleFileInputChange = (file: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader()
-    const {files} = file.target
+    const {files} = file.target;
 
     if (files && files.length !== 0) {
-      reader.onload = () => setImgSrc(reader.result as string)
-      reader.readAsDataURL(files[0])
 
-      if (reader.result !== null) {
-        setFileInput(reader.result as string)
-      }
+      const selectedFile = files[0]; // Store the file object directly
+
+      // Display the image preview if needed
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const fileDataUrl = reader.result as string;
+
+        setImgSrc(fileDataUrl); // Set the image source for preview
+      };
+
+      reader.readAsDataURL(selectedFile); // Generate the preview
+
+      // Save the file object in state for later submission
+      setFileInput(selectedFile);
     }
-  }
+  };
+
 
   // Reset the profile image to default
   const handleFileInputReset = () => {
-    setFileInput('')
+    // setFileInput()
     setImgSrc('/images/avatars/1.png')
   }
 
   // Handle form submission
-  // Handle form submission
   const onSubmit = async (formData: Data) => {
     try {
-      // Unwrap the result of the mutation to get the actual response
+      // Update user details
       const updatedUser = await updateUser({
         patchedUserProfileUpdateRequest: {
           first_name: formData.firstName,
-          last_name: formData.lastName,
+          last_name: formData.lastName
 
-          // email: formData.email,
-          // profile_image: fileInput // Include profile image if updated
+          // email: formData.email
         }
       }).unwrap();
 
-      // set the updated data in cookies
-      Cookies.set('user', JSON.stringify(updatedUser));
 
-      // Set the user data in context
+      // Update avatar if a new image was uploaded
+      // Check if a new file was uploaded
+      if (fileInput) {
+        // Create a FormData object to hold the avatar file
+        const formDataToSend = new FormData();
+
+        formDataToSend.append('avatar', fileInput); // Append the file directly
+
+        // Now send the FormData ( need to disable eslint here cause we have a picutre to pass ( surpass the eslint error )
+        await updateAvatar({
+          // @ts-expect-error
+          avatarUpdateRequest: formDataToSend // Pass the FormData
+        }).unwrap();
+      }
+
+
+      // Update cookies and context with updated data
+      Cookies.set('user', JSON.stringify(updatedUser));
       setUser(updatedUser);
 
       setOpenSnackBar(true);
       setInfoAlert({severity: 'success', message: 'User updated successfully'});
     } catch (error) {
       setOpenSnackBar(true);
-      setInfoAlert({severity: 'error', message: 'Failed to update users'});
-      console.error('Failed to update users:', error);
+      setInfoAlert({severity: 'error', message: 'Failed to update user'});
+      console.error('Failed to update user:', error);
     }
   };
-
 
   if (isLoading) {
     return (
@@ -199,8 +218,8 @@ const AccountDetails = () => {
               />
             </Grid>
             <Grid item xs={12} className='flex gap-4 flex-wrap'>
-              <Button variant='contained' type='submit' disabled={isUpdating}>
-                {isUpdating ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Save Changes'}
+              <Button variant='contained' type='submit' disabled={isUpdating || isUpdatingAvatar}>
+                {isUpdating || isUpdatingAvatar ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Save Changes'}
               </Button>
               <Button
                 variant='tonal'
@@ -224,4 +243,4 @@ const AccountDetails = () => {
   )
 }
 
-export default AccountDetails
+export default AccountDetails;
