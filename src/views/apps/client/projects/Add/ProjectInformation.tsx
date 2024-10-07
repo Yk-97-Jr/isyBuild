@@ -131,6 +131,7 @@ interface ProjectInformationProps {
   description: string
   setDescription: (value: string) => void
   errors: any
+  setClinet: any
 }
 
 const ProjectInformation = ({
@@ -141,7 +142,10 @@ const ProjectInformation = ({
   errors,
   setDate,
   description,
-  setDescription
+  setDescription,
+
+  // setClinet,
+  
 }: ProjectInformationProps) => {
   const editor = useEditor({
     extensions: [

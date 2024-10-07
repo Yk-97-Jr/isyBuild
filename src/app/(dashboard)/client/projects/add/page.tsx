@@ -12,13 +12,10 @@ import { useProjectsCreateCreateMutation } from '@/services/IsyBuildApi'
 import ProjectInformation from '@/views/apps/client/projects/Add/ProjectInformation'
 import Location from '@/views/apps/client/projects/Add/Location'
 import AddressInfo from '@/views/apps/client/projects/Add/AddressInfo'
-import Details from '@/views/apps/client/projects/Add/Details'
 
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
-
-import { useParams } from 'next/navigation'
 
 function Page() {
   const router = useRouter()
@@ -189,6 +186,7 @@ function Page() {
             description={description}
             setDescription={setDescription}
             errors={errors}
+            setClient={setClient}
           />
           <AddressInfo
             pays={pays}

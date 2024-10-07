@@ -28,25 +28,31 @@ export function middleware(req: NextRequest) {
   // Extract the user's role from the decoded token (replace 'role' with actual token property)
   const userRole = user?.role // Default to 'admin' if no role is available
   // Replace {role} in the path dynamically
+
   const updatedRountingData = rountingData().map(rule => ({
     ...rule,
     path: rule.path.replace('role', userRole) // Replace 'role' with the user's actual role
   }))
 
   // Check if the current path is a dynamic detail route
-  const detailPathRegex = /^\/([^/]+)\/([^/]+)\/\d+\/details$/ // Matches /role/type/:id/details
+  const detailPathRegex = /^\/([^/]+)\/([^/]+)\/\d+\/details$/ 
+  
+  // Matches /role/type/:id/details
+
   const isDetailRoute = detailPathRegex.test(pathname)
 
   // Check if the current path matches any of the route rules
   const routeRule = updatedRountingData.find(rule => {
-    const rulePath = `/${rule.path}`
+   
+   const rulePath = `/${rule.path}`
 
     return pathname === rulePath || (isDetailRoute && rule.path.includes('/[id]/details'))
   })
-  console.log(routeRule)
-  console.log(userRole)
+
   // If the route exists but the user doesn't have access, redirect to unauthorized page
-  if (routeRule ? !routeRule.roles.includes(userRole) : true) {
+
+  if (routeRule ? !routeRule.roles.includes(userRole) : true)
+     {
     return NextResponse.redirect(new URL('/unauthorized', req.url))
   }
   // Allow access to the route if the user has the correct role

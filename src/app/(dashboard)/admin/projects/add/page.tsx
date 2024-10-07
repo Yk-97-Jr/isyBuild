@@ -18,7 +18,6 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
-import { useParams } from 'next/navigation'
 
 function Page() {
   const router = useRouter()
