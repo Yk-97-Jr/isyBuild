@@ -13,12 +13,13 @@ const allMenuData = (): VerticalMenuDataType[] => [
   },
   {
     label: 'Projects',
-    href: '/Projects',
+    href: '/role/projects/list', // Use role as a placeholder
     icon: 'tabler-clipboard-list',
-    roles: ['user', 'admin'],
+    roles: ['admin', 'client'],
     isSection: false,
     children: []
   },
+
   {
     label: 'Utilisateurs',
     href: '/role/users/list', // Use role as a placeholder

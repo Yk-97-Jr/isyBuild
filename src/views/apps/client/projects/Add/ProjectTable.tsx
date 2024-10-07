@@ -159,7 +159,6 @@
 // components/UserList.js
 import React, { useEffect, useState } from 'react'
 
-
 import { useRouter } from 'next/navigation'
 
 import Grid from '@mui/material/Grid'
@@ -168,12 +167,9 @@ import { CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-
 import ProjectListTable from './ProjectListTable'
 
-
-import { useProjectsDeleteDestroyMutation,useProjectsRetrieveQuery } from '@/services/IsyBuildApi'
-
+import { useProjectsDeleteDestroyMutation, useProjectsRetrieveQuery } from '@/services/IsyBuildApi'
 
 import type { ProjectRead } from '@/services/IsyBuildApi'
 
@@ -243,17 +239,16 @@ const UserList = () => {
   const countRecords = data?.count
 
   //Logique Functions
-  const hanldeRouting = (path: string) => {
-    router.push(`/Projects/${path}`)
-  }
-
+  // const hanldeRouting = (path: string) => {
+  //   router.push(`/role/projects/${path}`)
+  // }
 
   const handleEdit = (rowId: any) => {
-    hanldeRouting(`edit/${rowId}`)
+    // hanldeRouting()
+    router.push(`${rowId}/details`)
   }
 
   return isFetching ? (
-
     <ProjectListTable
       pageSize={pageSize}
       setPageSize={setPageSize}
@@ -267,8 +262,7 @@ const UserList = () => {
       handleDelete={handleDelete}
       setTableRows={setTableRows}
     />
-  ) : 
-  (
+  ) : (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <ProjectListTable
