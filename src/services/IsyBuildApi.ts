@@ -148,6 +148,62 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.phoneNumberCreateUpdateRequest
       })
     }),
+    projectLotsRetrieve: build.query<ProjectLotsRetrieveApiResponse, ProjectLotsRetrieveApiArg>({
+      query: queryArg => ({
+        url: `/project-lots/${queryArg.projectId}/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
+    projectLotsRetrieve2: build.query<ProjectLotsRetrieve2ApiResponse, ProjectLotsRetrieve2ApiArg>({
+      query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/` })
+    }),
+    projectLotsDeleteDestroy: build.mutation<ProjectLotsDeleteDestroyApiResponse, ProjectLotsDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/delete/`, method: 'DELETE' })
+    }),
+    projectLotsSubcontractorsRetrieve2: build.query<
+      ProjectLotsSubcontractorsRetrieve2ApiResponse,
+      ProjectLotsSubcontractorsRetrieve2ApiArg
+    >({
+      query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/subcontractors/` })
+    }),
+    projectLotsSubcontractorsAssignCreate: build.mutation<
+      ProjectLotsSubcontractorsAssignCreateApiResponse,
+      ProjectLotsSubcontractorsAssignCreateApiArg
+    >({
+      query: queryArg => ({
+        url: `/project-lots/${queryArg.projectLotId}/subcontractors/assign/`,
+        method: 'POST',
+        body: queryArg.projectLotSubcontractorCreateRequest
+      })
+    }),
+    projectLotsUpdateStatusUpdate: build.mutation<
+      ProjectLotsUpdateStatusUpdateApiResponse,
+      ProjectLotsUpdateStatusUpdateApiArg
+    >({
+      query: queryArg => ({
+        url: `/project-lots/${queryArg.projectLotId}/update-status/`,
+        method: 'PUT',
+        body: queryArg.projectLotUpdateRequest
+      })
+    }),
+    projectLotsCreateCreate: build.mutation<ProjectLotsCreateCreateApiResponse, ProjectLotsCreateCreateApiArg>({
+      query: queryArg => ({ url: `/project-lots/create/`, method: 'POST', body: queryArg.projectLotCreateRequest })
+    }),
+    projectLotsSubcontractorsRetrieve: build.query<
+      ProjectLotsSubcontractorsRetrieveApiResponse,
+      ProjectLotsSubcontractorsRetrieveApiArg
+    >({
+      query: queryArg => ({ url: `/project-lots/subcontractors/${queryArg.projectLotSubcontractorId}/` })
+    }),
+    projectLotsSubcontractorsRemoveDestroy: build.mutation<
+      ProjectLotsSubcontractorsRemoveDestroyApiResponse,
+      ProjectLotsSubcontractorsRemoveDestroyApiArg
+    >({
+      query: queryArg => ({
+        url: `/project-lots/subcontractors/${queryArg.projectLotSubcontractorId}/remove/`,
+        method: 'DELETE'
+      })
+    }),
     projectsRetrieve: build.query<ProjectsRetrieveApiResponse, ProjectsRetrieveApiArg>({
       query: queryArg => ({ url: `/projects/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
     }),
@@ -282,8 +338,6 @@ const injectedRtkApi = api.injectEndpoints({
 export { injectedRtkApi as pIsyBuildApi }
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
-
-  /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
@@ -403,6 +457,7 @@ export type LogoutCreateApiArg = {
   tokenRefreshRequest: TokenRefreshRequest
 }
 export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead
+
 export type LotsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -449,7 +504,67 @@ export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
+export type ProjectLotsRetrieveApiResponse = 
+
+/** status 200  */ 
+
+PaginatedProjectLotRead
+
+export type ProjectLotsRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+  projectId: number
+}
+export type ProjectLotsRetrieve2ApiResponse = /** status 200  */ ProjectLotRead
+export type ProjectLotsRetrieve2ApiArg = {
+  projectLotId: number
+}
+export type ProjectLotsDeleteDestroyApiResponse = /** status 204  */ {
+  [key: string]: any
+}
+export type ProjectLotsDeleteDestroyApiArg = {
+  projectLotId: number
+}
+export type ProjectLotsSubcontractorsRetrieve2ApiResponse = /** status 200  */ PaginatedProjectLotSubcontractorRead
+export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
+  projectLotId: number
+}
+export type ProjectLotsSubcontractorsAssignCreateApiResponse = /** status 201  */ ProjectLotSubcontractorRead
+export type ProjectLotsSubcontractorsAssignCreateApiArg = {
+  projectLotId: number
+  projectLotSubcontractorCreateRequest: ProjectLotSubcontractorCreateRequest
+}
+export type ProjectLotsUpdateStatusUpdateApiResponse = /** status 200  */ ProjectLotRead
+export type ProjectLotsUpdateStatusUpdateApiArg = {
+  projectLotId: number
+  projectLotUpdateRequest: ProjectLotUpdateRequest
+}
+export type ProjectLotsCreateCreateApiResponse = /** status 201  */ ProjectLotRead
+export type ProjectLotsCreateCreateApiArg = {
+  projectLotCreateRequest: ProjectLotCreateRequest
+}
+export type ProjectLotsSubcontractorsRetrieveApiResponse = /** status 200  */ ProjectLotSubcontractorRead
+export type ProjectLotsSubcontractorsRetrieveApiArg = {
+  projectLotSubcontractorId: number
+}
+export type ProjectLotsSubcontractorsRemoveDestroyApiResponse =
+
+ /** status 204  */ 
+
+ {
+  [key: string]: any
+}
+
+export type ProjectLotsSubcontractorsRemoveDestroyApiArg = {
+  projectLotSubcontractorId: number
+}
+
 export type ProjectsRetrieveApiResponse = /** status 200  */ PaginatedProjectRead
+
 export type ProjectsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -476,24 +591,36 @@ export type ProjectsUpdateUpdateApiArg = {
   projectUpdateRequest: ProjectUpdateRequest
 }
 export type SetPasswordCreateApiResponse = /** status 200  */ any
+
 export type SetPasswordCreateApiArg = {
   setasswordRequest: SetasswordRequestWrite
 }
-export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubcontractortRead
+
+export type SubcontractorsRetrieveApiResponse = PaginatedSubcontractortRead
+
 export type SubcontractorsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
   page?: number
 
+
   /** Number of results per page */
   pageSize?: number
 }
 export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ SubcontractorRead
+
 export type SubcontractorsRetrieve2ApiArg = {
   subcontractorId: number
 }
-export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+
+export type SubcontractorsStaffRetrieve2ApiResponse =
+
+ /** status 200  */ 
+ 
+ PaginatedSubcontractorStaffRead
+
 export type SubcontractorsStaffRetrieve2ApiArg = {
+
 
   /** Page number of the results to fetch */
   page?: number
@@ -851,13 +978,123 @@ export type PasswordResetRequestRequest = {
   email: string
   redirect_uri: string
 }
-export type StatusEnum = 'draft' | 'pending' | 'in_progress' | 'completed' | 'on_hold' | 'canceled'
+export type Status109Enum = 'pending' | 'in_progress' | 'review' | 'completed' | 'canceled'
+export type ProjectLot = {
+  status?: Status109Enum
+  notes?: string
+}
+export type ProjectSimple = {
+  name: string
+}
+export type ProjectSimpleRead = {
+  id: number
+  name: string
+}
+export type LotSimple = {
+  name: string
+}
+export type LotSimpleRead = {
+  id: number
+  name: string
+}
+export type ProjectLotRead = {
+  id: number
+  project: ProjectSimpleRead
+  lot: LotSimpleRead
+  status?: Status109Enum
+  notes?: string
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type PaginatedProjectLot = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectLot[]
+}
+export type PaginatedProjectLotRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectLotRead[]
+}
+export type Status841Enum = 'pending' | 'in_progress' | 'completed' | 'not_responding' | 'canceled'
+export type ProjectLotSubcontractor = {
+  status?: Status841Enum
+  notes?: string | null
+}
+export type ProjectLotSimple = {
+  status?: Status109Enum
+  notes?: string
+}
+export type ProjectLotSimpleRead = {
+  id: number
+  project: ProjectSimpleRead
+  lot: LotSimpleRead
+  status?: Status109Enum
+  notes?: string
+}
+export type SubcontractorSimple = {
+  name: string
+  siren_number: string
+}
+export type SubcontractorSimpleRead = {
+  id: number
+  name: string
+  siren_number: string
+}
+export type SubcontractorStaffSimple = {
+  user: number
+}
+export type SubcontractorStaffSimpleRead = {
+  id: number
+  user: number
+  subcontractor: SubcontractorSimpleRead
+}
+export type ProjectLotSubcontractorRead = {
+  id: number
+  project_lot: ProjectLotSimpleRead
+  subcontractor: SubcontractorSimpleRead
+  subcontractor_staff: SubcontractorStaffSimpleRead
+  status?: Status841Enum
+  notes?: string | null
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type PaginatedProjectLotSubcontractor = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectLotSubcontractor[]
+}
+export type PaginatedProjectLotSubcontractorRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectLotSubcontractorRead[]
+}
+export type ProjectLotSubcontractorCreateRequest = {
+  subcontractor_id: number
+  subcontractor_staff_id: number
+  status?: Status841Enum
+  notes?: string | null
+}
+export type ProjectLotUpdateRequest = {
+  status?: Status109Enum
+}
+export type ProjectLotCreateRequest = {
+  lot_id: number
+  project_id: number
+}
+export type ProjectStatusEnum = 'draft' | 'pending' | 'in_progress' | 'completed' | 'on_hold' | 'canceled'
 export type RiskLevelEnum = 'low' | 'medium' | 'high' | 'critical'
 export type Project = {
   code: string
   name: string
   description?: string
-  status?: StatusEnum
+  status?: ProjectStatusEnum
   start_date?: string | null
   estimated_completion_date?: string | null
   percentage_complete?: string
@@ -871,12 +1108,13 @@ export type MapCoordinate = {
   longitude: string
 }
 export type ProjectRead = {
+  address: any
   id: number
   code: string
   name: string
   description?: string
   client: ClientRead
-  status?: StatusEnum
+  status?: ProjectStatusEnum
   start_date?: string | null
   estimated_completion_date?: string | null
   map_coordinate: MapCoordinate
@@ -941,13 +1179,6 @@ export type Subcontractor = {
   contact_email: string
   phone_number: string
   is_active?: boolean
-}
-export type LotSimple = {
-  name: string
-}
-export type LotSimpleRead = {
-  id: number
-  name: string
 }
 export type SubcontractorRead = {
   id: number
@@ -1081,6 +1312,15 @@ export const {
   usePhoneNumbersRetrieveQuery,
   usePhoneNumbersDeleteDestroyMutation,
   usePhoneNumbersUpdateUpdateMutation,
+  useProjectLotsRetrieveQuery,
+  useProjectLotsRetrieve2Query,
+  useProjectLotsDeleteDestroyMutation,
+  useProjectLotsSubcontractorsRetrieve2Query,
+  useProjectLotsSubcontractorsAssignCreateMutation,
+  useProjectLotsUpdateStatusUpdateMutation,
+  useProjectLotsCreateCreateMutation,
+  useProjectLotsSubcontractorsRetrieveQuery,
+  useProjectLotsSubcontractorsRemoveDestroyMutation,
   useProjectsRetrieveQuery,
   useProjectsRetrieve2Query,
   useProjectsCreateCreateMutation,

@@ -25,7 +25,6 @@ const UserDialog = ({
                       refetch
                     }: UserDialogProps) => {
 
-
   const handleClose = () => {
     setOpen(false);
     setId?.(0);

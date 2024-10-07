@@ -24,3 +24,4 @@ export const schemaClientAdd = yup.object({
 }).required();
 
 export type FormValidateClientAddType = yup.InferType<typeof schemaClientAdd>;
+ 

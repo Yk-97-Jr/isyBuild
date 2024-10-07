@@ -76,3 +76,4 @@ const ClientInformation: React.FC<ClientInformationProps> = ({register, errors})
 };
 
 export default ClientInformation;
+ 

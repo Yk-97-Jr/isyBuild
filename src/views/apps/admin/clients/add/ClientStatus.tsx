@@ -33,3 +33,4 @@ const ClientStatus : React.FC<ClientStausProps> = ({register, errors})  => {
 };
 
 export default ClientStatus;
+ 
