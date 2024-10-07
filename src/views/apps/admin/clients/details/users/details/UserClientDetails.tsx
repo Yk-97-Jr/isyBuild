@@ -21,12 +21,12 @@ import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 import useHandleBack from "@/hooks/useHandleBack";
-import UserInformation from "@views/apps/admin/users/details/UserInformation";
 import UserStatus from "@views/apps/admin/users/details/UserStatus";
 import type {FormValidateUserEditType} from "@views/apps/admin/users/details/shemaUserEdit";
 import UserEditHeader from "@views/apps/admin/users/details/UserEditHeader";
 import UserCreatedBy from "@views/apps/admin/users/details/UserCreatedBy";
 import {schemaUserEdit} from "@views/apps/admin/users/details/shemaUserEdit";
+import UserInformation from "@views/apps/admin/clients/details/users/details/UserInformation";
 
 
 const UserCLientDetails = () => {

@@ -62,6 +62,7 @@ const UserInformation: React.FC<UserInformationProps> = ({register, errors}) => 
               {...register('email')} // Registering the email field from props
               error={!!errors.email} // Error handling
               helperText={errors.email?.message} // Error message
+              disabled={true}
             />
           </Grid>
 
