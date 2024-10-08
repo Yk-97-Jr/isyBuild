@@ -26,7 +26,7 @@ const Owner: React.FC<OwnerStausProps> = ({ subcontractorData }) => {
                 <>
                   <ListItemAvatar className='p-0'>
                     <Avatar
-                      src={subcontractorData?.owner?.avatar || undefined}
+                      src={subcontractorData?.owner?.avatar || '/images/avatars/1.png'}
                       alt={subcontractorData?.owner?.first_name}
                     />
                   </ListItemAvatar>

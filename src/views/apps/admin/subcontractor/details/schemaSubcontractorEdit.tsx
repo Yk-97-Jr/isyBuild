@@ -13,7 +13,10 @@ export const schemaSubcontractorEdit = yup
     phoneNumber: yup.string().required('Le numéro de téléphone est requis'),
     address: yup
       .object({
-        streetNumber: yup.string().required('Le numéro de rue est requis'),
+        streetNumber: yup
+          .string()
+          .required('Le numéro de rue est requis')
+          .matches(/^\d+$/, 'Le numéro de rue doit contenir uniquement des chiffres'),
         streetName: yup.string().required('Le nom de rue est requis'),
         postal_code: yup
           .string()

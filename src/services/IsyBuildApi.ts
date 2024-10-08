@@ -504,9 +504,9 @@ export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
-export type ProjectLotsRetrieveApiResponse = 
+export type ProjectLotsRetrieveApiResponse =
 
-/** status 200  */ 
+/** status 200  */
 
 PaginatedProjectLotRead
 
@@ -553,7 +553,7 @@ export type ProjectLotsSubcontractorsRetrieveApiArg = {
 }
 export type ProjectLotsSubcontractorsRemoveDestroyApiResponse =
 
- /** status 204  */ 
+ /** status 204  */
 
  {
   [key: string]: any
@@ -615,8 +615,8 @@ export type SubcontractorsRetrieve2ApiArg = {
 
 export type SubcontractorsStaffRetrieve2ApiResponse =
 
- /** status 200  */ 
- 
+ /** status 200  */
+
  PaginatedSubcontractorStaffRead
 
 export type SubcontractorsStaffRetrieve2ApiArg = {
@@ -799,6 +799,7 @@ export type Client = {
   is_active?: boolean
 }
 export type ClientRead = {
+  [x: string]: any
   id: number
   name: string
   siren_number: string
