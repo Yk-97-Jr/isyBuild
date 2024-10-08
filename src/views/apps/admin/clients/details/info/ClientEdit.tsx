@@ -13,6 +13,7 @@ import Box from "@mui/material/Box";
 
 import {CircularProgress} from "@mui/material";
 
+
 import ClientInformation from "@views/apps/admin/clients/details/info/ClientInformation";
 import ClientStatus from "@views/apps/admin/clients/details/info/ClientStatus";
 import ClientAdresse from "@views/apps/admin/clients/details/info/ClientAdresse";
@@ -24,6 +25,7 @@ import {schemaClientEdit} from "@views/apps/admin/clients/details/info/schemaCli
 import ClientCreatedBy from "@views/apps/admin/clients/details/info/ClientCreatedBy";
 import ClientModifyHeader from "@views/apps/admin/clients/details/info/ClientModifyHeader";
 import useHandleBack from "@/hooks/useHandleBack";
+import CLientProprietaire from "@views/apps/admin/clients/details/info/CLientProprietaire";
 
 const ClientEdit = () => {
   const {register, handleSubmit, setValue, formState: {errors}} = useForm<FormValidateClientEditType>({
@@ -128,6 +130,9 @@ const ClientEdit = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <CLientProprietaire clientData={clientData}/>
+            </Grid>
             <Grid item xs={12}>
               <ClientStatus register={register} errors={errors} clientData={clientData}/>
             </Grid>

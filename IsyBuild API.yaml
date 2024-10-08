@@ -222,6 +222,162 @@ paths:
               schema:
                 $ref: '#/components/schemas/Client'
           description: ''
+  /clients/{client_id}/owner/:
+    get:
+      operationId: clients_owner_retrieve
+      description: Fetches the owner details of a client by the client's ID.
+      summary: Retrieve Client Owner Details
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /clients/{client_id}/owner/assign/:
+    put:
+      operationId: clients_owner_assign_update
+      description: Assigns an owner to a client by setting a user as the owner.
+      summary: Assign Owner to Client
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /clients/{client_id}/owner/delete/:
+    delete:
+      operationId: clients_owner_delete_destroy
+      description: Deletes an client owner by ID. Requires administrative privileges.
+      summary: Delete Client owner
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: client deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: client not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /clients/{client_id}/owner/update/:
+    put:
+      operationId: clients_owner_update_update
+      description: Update an owner to a client by setting a user as the owner.
+      summary: Update Owner to Client
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /clients/{client_id}/staff/:
     get:
       operationId: clients_staff_retrieve_2
@@ -1186,50 +1342,9 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
-  /project-lots/{project_id}/:
-    get:
-      operationId: project_lots_retrieve
-      description: Retrieve a list of all ProjectLots for a specific project with
-        pagination.
-      summary: List all Lots for a Project
-      parameters:
-      - in: query
-        name: page
-        schema:
-          type: integer
-        description: Page number of the results to fetch
-      - in: query
-        name: page_size
-        schema:
-          type: integer
-        description: Number of results per page
-      - in: path
-        name: project_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Appel d'offre Management
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedProjectLot'
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
   /project-lots/{project_lot_id}/:
     get:
-      operationId: project_lots_retrieve_2
+      operationId: project_lots_retrieve
       description: Fetch detailed information about a specific ProjectLot by its ID.
       summary: Retrieve a Project Lot by ID
       parameters:
@@ -1418,6 +1533,45 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /project-lots/{project_lot_id}/upload-document/:
+    post:
+      operationId: project_lots_upload_document_create
+      description: Upload a file to the folder associated with the given ProjectLot
+        ID.
+      summary: Upload a document to a ProjectLot's folder
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /project-lots/create/:
     post:
       operationId: project_lots_create_create
@@ -1445,6 +1599,86 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectLot'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/documents/{document_id}/delete/:
+    delete:
+      operationId: project_lots_documents_delete_destroy
+      description: Delete the document and all its associated versions by providing
+        the document ID.
+      summary: Delete a document by its ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/documents/{document_id}/update/:
+    post:
+      operationId: project_lots_documents_update_create
+      description: Upload a new version for an existing document and make it the latest
+        version.
+      summary: Update a document by adding a new version
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
           description: ''
         '400':
           content:
@@ -1517,6 +1751,86 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /project-lots/subcontractors/documents/{document_id}/delete-devis/:
+    delete:
+      operationId: project_lots_subcontractors_documents_delete_devis_destroy
+      description: Delete the document and all its associated versions by providing
+        the document ID.
+      summary: Delete a document by its ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/subcontractors/documents/{project_lot_subcontractor_id}/upload-devis/:
+    post:
+      operationId: project_lots_subcontractors_documents_upload_devis_create
+      description: Allows subcontractors to upload or update their Devis (pricing
+        proposal) document.
+      summary: Upload or update Devis document for ProjectLotSubcontractor
+      parameters:
+      - in: path
+        name: project_lot_subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /projects/:
     get:
       operationId: projects_retrieve
@@ -1566,6 +1880,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
+          description: ''
+  /projects/{project_id}/lots/:
+    get:
+      operationId: projects_lots_retrieve
+      description: Retrieve a list of all ProjectLots for a specific project with
+        pagination.
+      summary: List all Lots for a Project
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectLot'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
           description: ''
   /projects/create/:
     post:
@@ -2472,6 +2827,10 @@ components:
           maxLength: 9
         address:
           $ref: '#/components/schemas/Address'
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
         contact_email:
           type: string
           format: email
@@ -2503,6 +2862,7 @@ components:
       - created_by
       - id
       - name
+      - owner
       - phone_number
       - siren_number
       - updated_at
@@ -2541,6 +2901,20 @@ components:
       - name
       - phone_number
       - siren_number
+    ClientOwnerCreateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreateRequest'
+      required:
+      - user
+    ClientOwnerUpdateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserUpdateRequest'
+      required:
+      - user
     ClientStaff:
       type: object
       properties:
@@ -2693,8 +3067,7 @@ components:
           readOnly: true
         avatar:
           type: string
-          format: uri
-          nullable: true
+          readOnly: true
         email:
           type: string
           format: email
@@ -2707,8 +3080,86 @@ components:
           type: string
           maxLength: 30
       required:
+      - avatar
       - email
       - id
+    Document:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        tags:
+          type: string
+          nullable: true
+          maxLength: 255
+        latest_version:
+          allOf:
+          - $ref: '#/components/schemas/DocumentVersion'
+          readOnly: true
+      required:
+      - id
+      - latest_version
+      - name
+    DocumentUploadRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        file:
+          type: string
+          format: binary
+        tags:
+          type: string
+          maxLength: 255
+        notes:
+          type: string
+      required:
+      - file
+    DocumentVersion:
+      type: object
+      properties:
+        version_number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        file_url:
+          type: string
+          readOnly: true
+        notes:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - file_url
+      - version_number
+    Folder:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+          readOnly: true
+      required:
+      - documents
+      - id
+      - name
     Lot:
       type: object
       properties:
@@ -3150,6 +3601,10 @@ components:
           pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
         risk_level:
           $ref: '#/components/schemas/RiskLevelEnum'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          readOnly: true
         manager:
           allOf:
           - $ref: '#/components/schemas/ClientStaff'
@@ -3172,6 +3627,7 @@ components:
           format: date-time
           readOnly: true
       required:
+      - address
       - client
       - code
       - created_at
@@ -3231,6 +3687,10 @@ components:
           readOnly: true
         status:
           $ref: '#/components/schemas/Status109Enum'
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/Folder'
+          readOnly: true
         notes:
           type: string
         created_by:
@@ -3248,6 +3708,7 @@ components:
       required:
       - created_at
       - created_by
+      - folder
       - id
       - lot
       - project
@@ -3744,7 +4205,7 @@ components:
           readOnly: true
         avatar:
           type: string
-          format: uri
+          readOnly: true
         email:
           type: string
           format: email
