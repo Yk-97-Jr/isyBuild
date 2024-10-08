@@ -3,6 +3,7 @@
 // React Imports
 import React, { useEffect, useState, useMemo } from 'react'
 
+
 // MUI Imports
 import Card from '@mui/material/Card'
 
@@ -22,16 +23,17 @@ import Box from '@mui/material/Box'
 
 import { CircularProgress } from '@mui/material'
 
+
 // Third-party Imports
 import classnames from 'classnames'
 
 import { rankItem } from '@tanstack/match-sorter-utils'
 
 import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
+    createColumnHelper,
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
   getFilteredRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
@@ -47,17 +49,19 @@ import type { RankingInfo } from '@tanstack/match-sorter-utils'
 // Custom Components
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
+import ProjectDialog from '../../Add/ProjectDialog'
+
 import OptionMenu from '@core/components/option-menu'
 
 import CustomTextField from '@core/components/mui/TextField'
 
-import ProjectDialog from './ProjectDialog'
+// import ProjectDialog from './ProjectDialog'
 
 // Styles
 import tableStyles from '@core/styles/table.module.css'
 
 // Types
-import type { ProjectRead } from '@/services/IsyBuildApi'
+import type { LotRead, ProjectRead } from '@/services/IsyBuildApi'
 
 // Context
 
@@ -112,19 +116,19 @@ const DebouncedInput = ({
 
 const columnHelper = createColumnHelper<ClientTypeWithAction>()
 
-const ProjectListTable = ({
+const AppeleOffreTable = ({
   data,
   page,
   setPage,
   setPageSize,
   pageSize,
+  refetch,
   countRecords,
   isFetching,
-  refetch,
   handleEdit,
   handleDelete
 }: {
-  data?: ProjectRead[]
+  data?: LotRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -291,7 +295,7 @@ const ProjectListTable = ({
               className='max-sm:is-full'
             />
             <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus' />} href='add'>
-              Ajouter Projet
+              Assigne Lot
             </Button>
           </div>
         </div>
@@ -371,4 +375,4 @@ const ProjectListTable = ({
   )
 }
 
-export default ProjectListTable
+export default AppeleOffreTable

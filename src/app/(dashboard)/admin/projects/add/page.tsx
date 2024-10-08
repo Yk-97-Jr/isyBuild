@@ -18,7 +18,6 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
-
 function Page() {
   const router = useRouter()
   const [createProject] = useProjectsCreateCreateMutation()
@@ -133,7 +132,9 @@ function Page() {
       code,
       name,
       description,
-      client_id: client.id,
+
+      // client_id: client.id,
+      
       start_date: date.toISOString().split('T')[0],
       address: {
         street_number: roadNumber,

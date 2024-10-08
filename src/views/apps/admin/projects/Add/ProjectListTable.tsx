@@ -3,7 +3,6 @@
 // React Imports
 import React, { useEffect, useState, useMemo } from 'react'
 
-import { useRouter } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -146,7 +145,6 @@ const ProjectListTable = ({
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
-  const router = useRouter()
 
   // const handleEditClient = (project: ProjectRead) => {
   //   setOpen(true)

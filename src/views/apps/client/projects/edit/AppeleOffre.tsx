@@ -1,9 +1,7 @@
 import React from 'react'
 
 function AppeleOffre() {
-  return (
-    <div>Appele Offre Page</div>
-  )
+  return <div>apple offre page</div>
 }
 
 export default AppeleOffre

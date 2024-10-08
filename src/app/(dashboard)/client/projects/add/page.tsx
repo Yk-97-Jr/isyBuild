@@ -33,7 +33,8 @@ function Page() {
   const [codePostal, setCodePostal] = useState<number>(0)
   const [latitude, setLatitude] = useState<number | null>(null)
   const [longitude, setLongitude] = useState<number | null>(null)
-  const [client, setClient] = useState({ id: null })
+
+  // const [client, setClient] = useState({ id: null })
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -49,8 +50,9 @@ function Page() {
     ville: string,
     codePostal: number,
     latitude: any,
-    longitude: any,
-    client: any
+    longitude: any
+
+    // client: any
   ): Record<string, string> => {
     const errors: any = {}
 
@@ -94,9 +96,9 @@ function Page() {
       errors.longitude = 'Latitude is required and must be  in the range of  -90 90'
     }
 
-    if (!client.id) {
-      errors.client = 'Please Select a client'
-    }
+    // if (!client.id) {
+    //   errors.client = 'Please Select a client'
+    // }
 
     return errors
   }
@@ -115,8 +117,9 @@ function Page() {
       ville,
       codePostal,
       latitude,
-      longitude,
-      client
+      longitude
+
+      // client
     )
 
     if (Object.keys(validationErrors).length > 0) {
@@ -131,7 +134,9 @@ function Page() {
       code,
       name,
       description,
-      client_id: client.id,
+
+      // client_id: client.id,
+
       start_date: date.toISOString().split('T')[0],
       address: {
         street_number: roadNumber,
@@ -186,7 +191,6 @@ function Page() {
             description={description}
             setDescription={setDescription}
             errors={errors}
-            setClient={setClient}
           />
           <AddressInfo
             pays={pays}
