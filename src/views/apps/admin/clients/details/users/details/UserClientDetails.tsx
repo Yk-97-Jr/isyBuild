@@ -34,10 +34,10 @@ const UserCLientDetails = () => {
     resolver: yupResolver(schemaUserEdit),
   });
 
-  const {id} = useParams(); // Get clientId from route parameters
+  const {clientstaffId} = useParams(); // Get clientId from route parameters
 
   const {data: userData, isLoading: isLoadingQuery} = useClientsStaffRetrieveQuery({
-    clientStaffId: +id,
+    clientStaffId: +clientstaffId,
   });
 
   const [updateUser, {isLoading}] = useClientsStaffUpdateUpdateMutation();
@@ -59,7 +59,7 @@ const UserCLientDetails = () => {
     try {
       const response = await updateUser({
 
-        clientStaffId: +id,
+        clientStaffId: +clientstaffId,
         clientStaffUpdateRequest: {
           user: {...data}
         }
