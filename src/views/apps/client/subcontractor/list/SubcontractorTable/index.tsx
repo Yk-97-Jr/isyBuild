@@ -153,6 +153,9 @@ const SubcontractorTable = ({
   }
 
   const handleAddClient = () => {
+
+    console.log(`/${userRole}/subcontractor/add`)
+
     router.push(`/${userRole}/subcontractor/add`)
   }
 

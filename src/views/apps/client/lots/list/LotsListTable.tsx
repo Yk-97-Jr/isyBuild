@@ -145,7 +145,13 @@ const LotsListTable = ({
   const { user } = useAuth()
   const userRole = user?.role
 
+
+
+
   const handleEditLot = (id: number) => {
+
+    console.log(`/${userRole}/lots/${id}/details`)
+
     router.push(`/${userRole}/lots/${id}/details`)
   }
 
@@ -155,6 +161,9 @@ const LotsListTable = ({
   }
 
   const handleAddLots = () => {
+
+    console.log(`/${userRole}/lots/add`)
+
     router.push(`/${userRole}/lots/add`)
   }
 

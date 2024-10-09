@@ -23,11 +23,11 @@ import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import useHandleBack from '@/hooks/useHandleBack'
 
 import type { FormValidateStaffEditType } from './schemaStaffEdit'
-import StaffEditHeader from '@views/apps/admin/subcontractor/staff/details/StaffEditHeader'
-import StaffCreatedBy from '@views/apps/admin/subcontractor/staff/details/StaffCreatedBy'
+import StaffEditHeader from '@views/apps/client/subcontractor/staff/details/StaffEditHeader'
+import StaffCreatedBy from '@views/apps/client/subcontractor/staff/details/StaffCreatedBy'
 import { schemaStaffEdit } from './schemaStaffEdit'
 
-import StaffInformation from '@views/apps/admin/subcontractor/staff/details/StaffInformation'
+import StaffInformation from '@views/apps/client/subcontractor/staff/details/StaffInformation'
 
 const StaffCLientDetails = () => {
   const {
@@ -39,10 +39,10 @@ const StaffCLientDetails = () => {
     resolver: yupResolver(schemaStaffEdit)
   })
 
-  const { id } = useParams() // Get clientId from route parameters
+  const { staffId } = useParams() // Get clientId from route parameters
 
-  const { data: subcontractorData, isLoading: isLoadingQuery } = useSubcontractorsStaffRetrieveQuery({
-    subcontractorStaffId: +id
+  const { data: subcontractorStaffData, isLoading: isLoadingQuery } = useSubcontractorsStaffRetrieveQuery({
+    subcontractorStaffId: +staffId
   })
 
   const [updateUser, { isLoading }] = useSubcontractorsStaffUpdatePartialUpdateMutation()
@@ -50,19 +50,23 @@ const StaffCLientDetails = () => {
   const handleBack = useHandleBack()
 
   useEffect(() => {
-    if (subcontractorData && subcontractorData.user) {
-      setValue('first_name', subcontractorData.user.first_name ?? '')
-      setValue('last_name', subcontractorData.user.last_name ?? '')
-      setValue('is_active', subcontractorData.user.is_active ?? false)
+    if (subcontractorStaffData && subcontractorStaffData.user) {
+      setValue('first_name', subcontractorStaffData.user.first_name || '')
+      setValue('last_name', subcontractorStaffData.user.last_name || '')
+      setValue('is_active', subcontractorStaffData.user.is_active || false)
     }
-  }, [subcontractorData, setValue])
+  }, [subcontractorStaffData, setValue])
 
   const onSubmit: SubmitHandler<FormValidateStaffEditType> = async data => {
     try {
       const response = await updateUser({
-        subcontractorStaffId: +id,
+        subcontractorStaffId: +staffId,
         patchedSubcontractorStaffUpdateRequest: {
-          user: { ...data }
+          user: {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            is_active: data.is_active
+          }
         }
       }).unwrap()
 
@@ -86,7 +90,12 @@ const StaffCLientDetails = () => {
       </Box>
     )
 
-  console.log(subcontractorData?.created_by.email)
+  console.log('++++')
+
+  console.log('Subcontractor Data:', subcontractorStaffData)
+  console.log('ID from Params:', staffId)
+
+  console.log('++++')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -104,7 +113,7 @@ const StaffCLientDetails = () => {
         <Grid item xs={12} md={4}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <StaffCreatedBy subcontractorData={subcontractorData} />
+              <StaffCreatedBy subcontractorData={subcontractorStaffData} />
             </Grid>
           </Grid>
         </Grid>
