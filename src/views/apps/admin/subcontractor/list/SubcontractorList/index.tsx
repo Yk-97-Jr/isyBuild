@@ -42,6 +42,11 @@ const SubcontractorList = () => {
   const users = data?.results || []
   const countRecords = data?.count
 
+  console.log('*********')
+  console.log(data)
+  console.log(data?.results)
+  console.log('*********')
+
   return isFetching ? (
     <SubcontractorTable
       pageSize={pageSize}

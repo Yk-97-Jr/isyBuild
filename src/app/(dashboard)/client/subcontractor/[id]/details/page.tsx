@@ -3,10 +3,10 @@ import dynamic from 'next/dynamic'
 
 // Component Imports
 
-const StaffAdd = dynamic(() => import('@views/apps/admin/subcontractor/staff/add/index'))
+const InfosClient = dynamic(() => import('@views/apps/client/subcontractor/details/index'))
 
 const AccountSettingsPage = () => {
-  return <StaffAdd />
+  return <InfosClient />
 }
 
 export default AccountSettingsPage

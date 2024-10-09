@@ -11,9 +11,7 @@ const InfosSubcontractor = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <h1>
-          <SubcontractorEdit />
-        </h1>
+        <SubcontractorEdit />
       </Grid>
     </Grid>
   )

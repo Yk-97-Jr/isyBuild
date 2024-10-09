@@ -34,7 +34,9 @@ const SubcontractorAdd = () => {
 
   const onSubmit: SubmitHandler<FormValidateSubcontractorAddType> = async data => {
     try {
-        await createSubcontractor({
+      console.log(data.lots_ids)
+
+      await createSubcontractor({
         subcontractorCreateRequest: {
           name: data.subcontractorName,
           siren_number: data.sireneNumber,
@@ -45,7 +47,7 @@ const SubcontractorAdd = () => {
             city: data.address.city, // unchanged
             department: data.address.department || null, // allow null
             // unchanged
-            postal_code:data.address.postal_code
+            postal_code: data.address.postal_code
           },
           contact_email: data.email,
           phone_number: data.phoneNumber,

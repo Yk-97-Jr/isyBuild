@@ -1,11 +1,11 @@
 // React Imports
-import type {ReactElement} from 'react'
+import type { ReactElement } from 'react'
 
 // Next Imports
 import dynamic from 'next/dynamic'
 
 // Component Imports
-import ClientDetails from "@views/apps/admin/clients/details/ClientDetails";
+import ClientDetails from '@views/apps/admin/clients/details/ClientDetails'
 
 const InfosClient = dynamic(() => import('@views/apps/admin/clients/details/info'))
 
@@ -17,19 +17,17 @@ const ProjectsClient = dynamic(() => import('@views/apps/admin/clients/details/p
 
 const UsersClient = dynamic(() => import('@views/apps/admin/clients/details/users'))
 
-
 // Vars
 const tabContentList = (): { [key: string]: ReactElement } => ({
-  infoclient: <InfosClient/>,
-  entrepriseclient: <EntrepriseClient/>,
-  lotsclient: <LotsClient/>,
-  projectsclient: <ProjectsClient/>,
-  usersclient: <UsersClient/>,
-
+  infoclient: <InfosClient />,
+  entrepriseclient: <EntrepriseClient />,
+  lotsclient: <LotsClient />,
+  projectsclient: <ProjectsClient />,
+  usersclient: <UsersClient />
 })
 
 const ClientPage = () => {
-  return <ClientDetails tabContentList={tabContentList()}/>
+  return <ClientDetails tabContentList={tabContentList()} />
 }
 
 export default ClientPage

@@ -35,6 +35,8 @@ const StaffAdd = () => {
 
   const { id } = useParams()
 
+  console.log(id)
+
   const handleBack = useHandleBack()
   const appUrl = process.env.NEXT_PUBLIC_APP_URL
 
@@ -71,7 +73,7 @@ const StaffAdd = () => {
         <Grid item xs={12}>
           <StaffAddHeader onSubmit={handleSubmit(onSubmit)} isLoading={isLoading} handleBack={handleBack} />
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={15}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <StaffInfo register={register} errors={errors} />
