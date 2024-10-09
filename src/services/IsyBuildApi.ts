@@ -50,13 +50,13 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.clientOwnerUpdateRequest
       })
     }),
-    clientsStaffRetrieve2: build.query<ClientsStaffRetrieve2ApiResponse, ClientsStaffRetrieve2ApiArg>({
+    clientsStaffRetrieve3: build.query<ClientsStaffRetrieve3ApiResponse, ClientsStaffRetrieve3ApiArg>({
       query: queryArg => ({
         url: `/clients/${queryArg.clientId}/staff/`,
         params: { page: queryArg.page, page_size: queryArg.pageSize }
       })
     }),
-    clientsStaffCreateCreate: build.mutation<ClientsStaffCreateCreateApiResponse, ClientsStaffCreateCreateApiArg>({
+    clientsStaffCreateCreate2: build.mutation<ClientsStaffCreateCreate2ApiResponse, ClientsStaffCreateCreate2ApiArg>({
       query: queryArg => ({
         url: `/clients/${queryArg.clientId}/staff/create/`,
         method: 'POST',
@@ -70,6 +70,9 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/clients/delete/${queryArg.clientId}/`, method: 'DELETE' })
     }),
     clientsStaffRetrieve: build.query<ClientsStaffRetrieveApiResponse, ClientsStaffRetrieveApiArg>({
+      query: queryArg => ({ url: `/clients/staff/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+    }),
+    clientsStaffRetrieve2: build.query<ClientsStaffRetrieve2ApiResponse, ClientsStaffRetrieve2ApiArg>({
       query: queryArg => ({ url: `/clients/staff/${queryArg.clientStaffId}/` })
     }),
     clientsStaffDeleteDestroy: build.mutation<ClientsStaffDeleteDestroyApiResponse, ClientsStaffDeleteDestroyApiArg>({
@@ -81,6 +84,9 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'PUT',
         body: queryArg.clientStaffUpdateRequest
       })
+    }),
+    clientsStaffCreateCreate: build.mutation<ClientsStaffCreateCreateApiResponse, ClientsStaffCreateCreateApiArg>({
+      query: queryArg => ({ url: `/clients/staff/create/`, method: 'POST', body: queryArg.clientStaffCreateRequest })
     }),
     clientsUpdateUpdate: build.mutation<ClientsUpdateUpdateApiResponse, ClientsUpdateUpdateApiArg>({
       query: queryArg => ({
@@ -458,8 +464,8 @@ export type ClientsOwnerUpdateUpdateApiArg = {
   clientId: number
   clientOwnerUpdateRequest: ClientOwnerUpdateRequest
 }
-export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedClientStaffRead
-export type ClientsStaffRetrieve2ApiArg = {
+export type ClientsStaffRetrieve3ApiResponse = /** status 200  */ PaginatedClientStaffRead
+export type ClientsStaffRetrieve3ApiArg = {
   clientId: number
 
   /** Page number of the results to fetch */
@@ -468,8 +474,8 @@ export type ClientsStaffRetrieve2ApiArg = {
   /** Number of results per page */
   pageSize?: number
 }
-export type ClientsStaffCreateCreateApiResponse = /** status 201  */ ClientStaffRead
-export type ClientsStaffCreateCreateApiArg = {
+export type ClientsStaffCreateCreate2ApiResponse = /** status 201  */ ClientStaffRead
+export type ClientsStaffCreateCreate2ApiArg = {
   clientId: number
   clientStaffCreateRequest: ClientStaffCreateRequestWrite
 }
@@ -481,8 +487,17 @@ export type ClientsDeleteDestroyApiResponse = /** status 204  */ any
 export type ClientsDeleteDestroyApiArg = {
   clientId: number
 }
-export type ClientsStaffRetrieveApiResponse = /** status 200  */ ClientStaffRead
+export type ClientsStaffRetrieveApiResponse = /** status 200  */ PaginatedClientStaffRead
 export type ClientsStaffRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ ClientStaffRead
+export type ClientsStaffRetrieve2ApiArg = {
   clientStaffId: number
 }
 export type ClientsStaffDeleteDestroyApiResponse = /** status 204  */ any
@@ -493,6 +508,10 @@ export type ClientsStaffUpdateUpdateApiResponse = /** status 200  */ ClientStaff
 export type ClientsStaffUpdateUpdateApiArg = {
   clientStaffId: number
   clientStaffUpdateRequest: ClientStaffUpdateRequest
+}
+export type ClientsStaffCreateCreateApiResponse = /** status 201  */ ClientStaffRead
+export type ClientsStaffCreateCreateApiArg = {
+  clientStaffCreateRequest: ClientStaffCreateRequestWrite
 }
 export type ClientsUpdateUpdateApiResponse = /** status 200  */ ClientRead
 export type ClientsUpdateUpdateApiArg = {
@@ -950,9 +969,11 @@ export type PaginatedClientStaffRead = {
 }
 export type ClientStaffCreateRequest = {
   user: UserCreateRequest
+  client_id?: number | null
 }
 export type ClientStaffCreateRequestWrite = {
   user: UserCreateRequestWrite
+  client_id?: number | null
 }
 export type AddressCreateRequest = {
   street_number: string
@@ -1426,13 +1447,15 @@ export const {
   useClientsOwnerAssignUpdateMutation,
   useClientsOwnerDeleteDestroyMutation,
   useClientsOwnerUpdateUpdateMutation,
-  useClientsStaffRetrieve2Query,
-  useClientsStaffCreateCreateMutation,
+  useClientsStaffRetrieve3Query,
+  useClientsStaffCreateCreate2Mutation,
   useClientsCreateCreateMutation,
   useClientsDeleteDestroyMutation,
   useClientsStaffRetrieveQuery,
+  useClientsStaffRetrieve2Query,
   useClientsStaffDeleteDestroyMutation,
   useClientsStaffUpdateUpdateMutation,
+  useClientsStaffCreateCreateMutation,
   useClientsUpdateUpdateMutation,
   useContactUsSendEmailCreateMutation,
   useContactsRetrieveQuery,

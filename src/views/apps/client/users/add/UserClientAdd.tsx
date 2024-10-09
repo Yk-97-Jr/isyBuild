@@ -9,17 +9,17 @@ import type {SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import {useClientsStaffCreateCreate2Mutation} from "@/services/IsyBuildApi";
+import {useClientsStaffCreateCreateMutation} from "@/services/IsyBuildApi";
 import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 import {useAuth} from "@/contexts/AuthContext";
 import useHandleBack from "@/hooks/useHandleBack";
-import UserAddHeader from "@views/apps/admin/users/add/UserAddHeader";
-import UserInformation from "@views/apps/admin/users/add/UserInformation";
-import UserStatus from "@views/apps/admin/users/add/UserStatus";
 import type {FormValidateUserAddType} from "@views/apps/admin/users/add/shemaUserAdd";
 import {schemaUserAdd} from "@views/apps/admin/users/add/shemaUserAdd";
+import UserAddHeader from "@views/apps/client/users/add/UserAddHeader";
+import UserInformation from "@views/apps/client/users/add/UserInformation";
+import UserStatus from "@views/apps/client/users/add/UserStatus";
 
 
 const UserClientAdd = () => {
@@ -27,14 +27,13 @@ const UserClientAdd = () => {
     resolver: yupResolver(schemaUserAdd),
   });
 
-  const [createUser, {isLoading}] = useClientsStaffCreateCreate2Mutation();
+  const [createUser, {isLoading}] = useClientsStaffCreateCreateMutation();
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
   const handleBack = useHandleBack();
   const appUrl = process.env.NEXT_PUBLIC_APP_URL
-  const {id: clientId} = useParams(); // Get clientId from route parameters
 
 
   const onSubmit: SubmitHandler<FormValidateUserAddType> = async (data) => {
@@ -43,7 +42,6 @@ const UserClientAdd = () => {
 
       const response = await createUser(
         {
-          clientId: +clientId,
           clientStaffCreateRequest: {
             user: {
               ...data, redirect_uri: appUrl + '/set-password',
@@ -59,7 +57,7 @@ const UserClientAdd = () => {
       // Redirect to client details after creation
       const ClientStaffId = response.id;
 
-      router.push(`/${userRole}/clients/${clientId}/details/${ClientStaffId}`);
+      router.push(`/${userRole}/users/${ClientStaffId}/details/`);
 
     } catch (err: any) {
       console.error('Failed to add user:', err);

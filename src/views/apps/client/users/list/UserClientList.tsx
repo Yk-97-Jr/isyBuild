@@ -3,7 +3,6 @@
 // components/UserList.js
 import React, {useEffect, useState} from 'react'
 
-import {useParams} from "next/navigation";
 
 import Grid from '@mui/material/Grid'
 
@@ -11,20 +10,20 @@ import {CircularProgress} from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import {useClientsStaffRetrieve3Query} from '@/services/IsyBuildApi'
-import UserClientListTable from "./UserClientListTable";
+import {
+  useClientsStaffRetrieveQuery
+} from '@/services/IsyBuildApi'
+import UserClientListTable from "@views/apps/client/users/list/UserClientListTable";
 
 const UserClientList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const {id} = useParams(); // Get clientId from route parameters
 
 
   // Pass parameters to the query hook
-  const {data, error, isLoading, isFetching, refetch} = useClientsStaffRetrieve3Query({
+  const {data, error, isLoading, isFetching, refetch} = useClientsStaffRetrieveQuery({
     page, pageSize,
-    clientId: +id
   })
 
   useEffect(() => {
