@@ -21,12 +21,12 @@ import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 import useHandleBack from "@/hooks/useHandleBack";
-import UserStatus from "@views/apps/admin/users/details/UserStatus";
 import type {FormValidateUserEditType} from "@views/apps/admin/users/details/shemaUserEdit";
-import UserEditHeader from "@views/apps/admin/users/details/UserEditHeader";
-import UserCreatedBy from "@views/apps/admin/users/details/UserCreatedBy";
 import {schemaUserEdit} from "@views/apps/admin/users/details/shemaUserEdit";
-import UserInformation from "@views/apps/admin/clients/details/users/details/UserInformation";
+import UserEditHeader from "@views/apps/client/users/details/UserEditHeader";
+import UserInformation from "@views/apps/client/users/details/UserInformation";
+import UserStatus from "@views/apps/client/users/details/UserStatus";
+import UserCreatedBy from "@views/apps/client/users/details/UserCreatedBy";
 
 
 const UserCLientDetails = () => {
@@ -34,10 +34,10 @@ const UserCLientDetails = () => {
     resolver: yupResolver(schemaUserEdit),
   });
 
-  const {clientstaffId} = useParams(); // Get clientId from route parameters
+  const {id} = useParams(); // Get clientId from route parameters
 
   const {data: userData, isLoading: isLoadingQuery} = useClientsStaffRetrieve2Query({
-    clientStaffId: +clientstaffId,
+    clientStaffId: +id,
   });
 
   const [updateUser, {isLoading}] = useClientsStaffUpdateUpdateMutation();
@@ -59,7 +59,7 @@ const UserCLientDetails = () => {
     try {
       const response = await updateUser({
 
-        clientStaffId: +clientstaffId,
+        clientStaffId: +id,
         clientStaffUpdateRequest: {
           user: {...data}
         }

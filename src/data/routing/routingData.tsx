@@ -1,34 +1,34 @@
 // Type Imports
-import type { rountingDataType } from '@/types/menuTypes'
+import type {rountingDataType} from '@/types/menuTypes'
 
 const rountingData = (): rountingDataType[] => [
   {
     path: 'role/admin',
-    roles: ['admin']
+    roles: ['admin'],
   },
   {
     path: 'role/dashboard',
-    roles: ['admin', 'client']
+    roles: ['admin', 'client'],
   },
   {
     path: 'role/users/list',
-    roles: ['admin']
+    roles: ['admin', 'client'],
   },
   {
     path: 'role/users/add',
-    roles: ['admin']
+    roles: ['admin', 'client'],
   },
   {
     path: 'role/users/[id]/details',
-    roles: ['admin']
+    roles: ['admin', 'client'],
   },
   {
     path: 'role/clients/list',
-    roles: ['admin']
+    roles: ['admin'],
   },
   {
     path: 'role/clients/add',
-    roles: ['admin']
+    roles: ['admin'],
   },
   {
     path: 'role/clients/[id]/details',
@@ -69,3 +69,7 @@ const rountingData = (): rountingDataType[] => [
 ]
 
 export default rountingData
+
+
+
+

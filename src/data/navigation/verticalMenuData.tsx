@@ -1,10 +1,10 @@
-import type { VerticalMenuDataType } from '@/types/menuTypes'
+import type {VerticalMenuDataType} from '@/types/menuTypes';
 
 // Define the menu data with dynamic role placeholder in the href
 const allMenuData = (): VerticalMenuDataType[] => [
   {
     label: 'Tableau de bord',
-    href: '/role/dashboard', // Use role as a placeholder
+    href: '/role/dashboard',  // Use role as a placeholder
     icon: 'tabler-smart-home',
     roles: ['admin', 'client'],
     permissions: ['view dashboard'],
@@ -24,15 +24,15 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Utilisateurs',
     href: '/role/users/list', // Use role as a placeholder
     icon: 'tabler-user',
-    roles: ['admin'], // Only for 'admin'
+    roles: ['admin', 'client'], // Only for 'admin'
     isSection: false,
     children: []
   },
   {
     label: 'Clients',
-    href: '/role/clients/list', // Use role as a placeholder
+    href: '/role/clients/list',  // Use role as a placeholder
     icon: 'tabler-users',
-    roles: ['client', 'admin'], // For both 'client' and 'admin'
+    roles: ['admin'],  // For both 'client' and 'admin'
     isSection: false,
     children: []
   },
@@ -60,7 +60,7 @@ const verticalMenuData = (userRole: string | undefined): VerticalMenuDataType[] 
   if (userRole === undefined) {
     // Handle the case for undefined userRole ( need to work on this )
 
-    return [] // or some default menu data
+return []; // or some default menu data
   }
 
   // Filter menu items based on the user's role and replace 'role' in href
@@ -69,8 +69,8 @@ const verticalMenuData = (userRole: string | undefined): VerticalMenuDataType[] 
     .filter(item => item.roles?.includes(userRole)) // Filter by user role
     .map(item => ({
       ...item,
-      href: item.href?.replace('role', userRole) // Replace 'role' in href with the actual role
-    }))
+      href: item.href?.replace('role', userRole), // Replace 'role' in href with the actual role
+    }));
 }
 
-export default verticalMenuData
+export default verticalMenuData;

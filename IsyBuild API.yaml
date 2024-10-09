@@ -380,7 +380,7 @@ paths:
           description: ''
   /clients/{client_id}/staff/:
     get:
-      operationId: clients_staff_retrieve_2
+      operationId: clients_staff_retrieve_3
       description: Retrieve a list of all client staff users with pagination.
       summary: List all Client staff
       parameters:
@@ -412,7 +412,7 @@ paths:
           description: ''
   /clients/{client_id}/staff/create/:
     post:
-      operationId: clients_staff_create_create
+      operationId: clients_staff_create_create_2
       description: Create a new client staff member.
       parameters:
       - in: path
@@ -520,9 +520,36 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
-  /clients/staff/{client_staff_id}/:
+  /clients/staff/:
     get:
       operationId: clients_staff_retrieve
+      description: Retrieve a list of all client staff users with pagination.
+      summary: List all Client staff
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Client Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedClientStaff'
+          description: ''
+  /clients/staff/{client_staff_id}/:
+    get:
+      operationId: clients_staff_retrieve_2
       description: Fetches detailed information about an  client staff member by their
         unique identifier.
       summary: Retrieve  Client Staff Details
@@ -620,6 +647,41 @@ paths:
                 description: Unspecified response body
           description: ''
         '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /clients/staff/create/:
+    post:
+      operationId: clients_staff_create_create
+      description: Create a new client staff member.
+      tags:
+      - Client Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientStaff'
+          description: ''
+        '400':
           content:
             application/json:
               schema:
@@ -2948,6 +3010,9 @@ components:
       properties:
         user:
           $ref: '#/components/schemas/UserCreateRequest'
+        client_id:
+          type: integer
+          nullable: true
       required:
       - user
     ClientStaffUpdateRequest:
