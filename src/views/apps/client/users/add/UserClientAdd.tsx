@@ -2,7 +2,7 @@
 
 import React, {useContext} from 'react';
 
-import {useParams, useRouter} from "next/navigation";
+import {useRouter} from "next/navigation";
 
 import Grid from "@mui/material/Grid";
 import type {SubmitHandler} from 'react-hook-form';

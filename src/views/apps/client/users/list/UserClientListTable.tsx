@@ -4,7 +4,7 @@
 import React, {useEffect, useState, useMemo} from 'react'
 
 // MUI Imports
-import {useParams, useRouter} from "next/navigation";
+import {useRouter} from "next/navigation";
 
 import Card from '@mui/material/Card'
 import Button from '@mui/material/Button'

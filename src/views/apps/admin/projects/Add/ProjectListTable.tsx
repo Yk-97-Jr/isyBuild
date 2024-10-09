@@ -1,9 +1,8 @@
 'use client'
 
 // React Imports
-import React, { useEffect, useState, useMemo } from 'react'
+import React, {useEffect, useState, useMemo} from 'react'
 
-import { useRouter } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -16,18 +15,18 @@ import Chip from '@mui/material/Chip'
 
 import IconButton from '@mui/material/IconButton'
 
-import type { TextFieldProps } from '@mui/material/TextField'
+import type {TextFieldProps} from '@mui/material/TextField'
 
 import MenuItem from '@mui/material/MenuItem'
 
 import Box from '@mui/material/Box'
 
-import { CircularProgress } from '@mui/material'
+import {CircularProgress} from '@mui/material'
 
 // Third-party Imports
 import classnames from 'classnames'
 
-import { rankItem } from '@tanstack/match-sorter-utils'
+import {rankItem} from '@tanstack/match-sorter-utils'
 
 import {
   createColumnHelper,
@@ -42,9 +41,9 @@ import {
   getSortedRowModel
 } from '@tanstack/react-table'
 
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
+import type {ColumnDef, FilterFn} from '@tanstack/react-table'
 
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
+import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Custom Components
 import TablePaginationComponent from '@components/TablePaginationComponent'
@@ -59,7 +58,7 @@ import ProjectDialog from './ProjectDialog'
 import tableStyles from '@core/styles/table.module.css'
 
 // Types
-import type { ProjectRead } from '@/services/IsyBuildApi'
+import type {ProjectRead} from '@/services/IsyBuildApi'
 
 // Context
 
@@ -80,17 +79,17 @@ type ClientTypeWithAction = ProjectRead & {
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value)
 
-  addMeta({ itemRank })
+  addMeta({itemRank})
 
   return itemRank.passed
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -109,23 +108,23 @@ const DebouncedInput = ({
     return () => clearTimeout(timeout)
   }, [value, onChange, debounce])
 
-  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)} />
+  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)}/>
 }
 
 const columnHelper = createColumnHelper<ClientTypeWithAction>()
 
 const ProjectListTable = ({
-  data,
-  page,
-  setPage,
-  setPageSize,
-  pageSize,
-  countRecords,
-  isFetching,
-  refetch,
-  handleEdit,
-  handleDelete
-}: {
+                            data,
+                            page,
+                            setPage,
+                            setPageSize,
+                            pageSize,
+                            countRecords,
+                            isFetching,
+                            refetch,
+                            handleEdit,
+                            handleDelete
+                          }: {
   data?: ProjectRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -146,7 +145,8 @@ const ProjectListTable = ({
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
-  const router = useRouter()
+
+  // const router = useRouter()
 
   // const handleEditClient = (project: ProjectRead) => {
   //   setOpen(true)
@@ -161,7 +161,7 @@ const ProjectListTable = ({
     () => [
       columnHelper.accessor('code', {
         header: 'Code',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
@@ -173,7 +173,7 @@ const ProjectListTable = ({
       }),
       columnHelper.accessor('name', {
         header: 'Name',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
@@ -185,7 +185,7 @@ const ProjectListTable = ({
       }),
       columnHelper.accessor('client.address.country', {
         header: 'Address',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
@@ -197,7 +197,7 @@ const ProjectListTable = ({
       }),
       columnHelper.accessor('status', {
         header: 'status',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <Chip
             variant='tonal'
             label={row.original.status ? 'pending' : 'completed'}
@@ -207,7 +207,7 @@ const ProjectListTable = ({
       }),
       columnHelper.accessor('client.created_at', {
         header: `Date de Creation`,
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <Typography>
             {row.original.client?.created_at
               ? new Date(row.original.client.created_at).toLocaleDateString()
@@ -217,13 +217,13 @@ const ProjectListTable = ({
       }),
       columnHelper.accessor('action', {
         header: 'Action',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center'>
             <IconButton onClick={() => handleDelete(row.original.id)}>
-              <i className='tabler-trash text-textSecondary' />
+              <i className='tabler-trash text-textSecondary'/>
             </IconButton>
             <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
+              iconButtonProps={{size: 'medium'}}
               iconClassName='text-textSecondary'
               options={[
                 {
@@ -293,7 +293,7 @@ const ProjectListTable = ({
               placeholder={`chercher un Projet`}
               className='max-sm:is-full'
             />
-            <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus' />} href='add'>
+            <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus'/>} href='add'>
               Ajouter Projet
             </Button>
           </div>
@@ -301,59 +301,59 @@ const ProjectListTable = ({
         <div className='overflow-x-auto'>
           {isFetching ? (
             <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
-              <CircularProgress />
+              <CircularProgress/>
             </Box>
           ) : (
             <table className={tableStyles.table}>
               <thead>
-                {table.getHeaderGroups().map(headerGroup => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map(header => (
-                      <th key={header.id}>
-                        {header.isPlaceholder ? null : (
-                          <>
-                            <div
-                              className={classnames({
-                                'flex items-center': header.column.getIsSorted(),
-                                'cursor-pointer select-none': header.column.getCanSort()
-                              })}
-                              onClick={header.column.getToggleSortingHandler()}
-                            >
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                              {{
-                                asc: <i className='tabler-chevron-up text-xl' />,
-                                desc: <i className='tabler-chevron-down text-xl' />
-                              }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                            </div>
-                          </>
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <th key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <>
+                          <div
+                            className={classnames({
+                              'flex items-center': header.column.getIsSorted(),
+                              'cursor-pointer select-none': header.column.getCanSort()
+                            })}
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                            {{
+                              asc: <i className='tabler-chevron-up text-xl'/>,
+                              desc: <i className='tabler-chevron-down text-xl'/>
+                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                          </div>
+                        </>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
               </thead>
               {table.getFilteredRowModel().rows.length === 0 ? (
                 <tbody>
-                  <tr>
-                    <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                      No data available
-                    </td>
-                  </tr>
+                <tr>
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    No data available
+                  </td>
+                </tr>
                 </tbody>
               ) : (
                 <tbody>
-                  {table
-                    .getRowModel()
-                    .rows.slice(0, table.getState().pagination.pageSize)
-                    .map(row => {
-                      return (
-                        <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                          {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                          ))}
-                        </tr>
-                      )
-                    })}
+                {table
+                  .getRowModel()
+                  .rows.slice(0, table.getState().pagination.pageSize)
+                  .map(row => {
+                    return (
+                      <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
+                        {row.getVisibleCells().map(cell => (
+                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                        ))}
+                      </tr>
+                    )
+                  })}
                 </tbody>
               )}
             </table>
@@ -369,7 +369,7 @@ const ProjectListTable = ({
           }}
         />
       </Card>
-      <ProjectDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch} />
+      <ProjectDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch}/>
     </>
   )
 }
