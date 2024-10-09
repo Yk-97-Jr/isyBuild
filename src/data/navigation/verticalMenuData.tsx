@@ -15,7 +15,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Utilisateurs',
     href: '/role/users/list',  // Use role as a placeholder
     icon: 'tabler-user',
-    roles: ['admin'], // Only for 'admin'
+    roles: ['admin', 'client'], // Only for 'admin'
     isSection: false,
     children: []
   },
@@ -23,7 +23,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Clients',
     href: '/role/clients/list',  // Use role as a placeholder
     icon: 'tabler-users',
-    roles: ['client', 'admin'],  // For both 'client' and 'admin'
+    roles: ['admin'],  // For both 'client' and 'admin'
     isSection: false,
     children: []
   },
@@ -31,7 +31,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Lots',
     href: '/role/lots',  // Use role as a placeholder
     icon: 'tabler-category',
-    roles: ['client', 'admin'],  // For both 'client' and 'admin'
+    roles: ['admin'],  // For both 'client' and 'admin'
     isSection: false,
     children: []
   }
@@ -43,7 +43,7 @@ const verticalMenuData = (userRole: string | undefined): VerticalMenuDataType[] 
   if (userRole === undefined) {
     // Handle the case for undefined userRole ( need to work on this )
 
-return []; // or some default menu data
+    return []; // or some default menu data
   }
 
   // Filter menu items based on the user's role and replace 'role' in href
