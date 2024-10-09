@@ -52,10 +52,16 @@ export function middleware(req: NextRequest) {
   // If the route exists but the user doesn't have access, redirect to unauthorized page
 
   if (routeRule ? !routeRule.roles.includes(userRole) : true)
+
      {
+
     return NextResponse.redirect(new URL('/unauthorized', req.url))
+
   }
+  
+  
   // Allow access to the route if the user has the correct role
+
   return NextResponse.next()
 }
 

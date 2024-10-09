@@ -1,9 +1,11 @@
 import React from 'react'
 
+import Main from '@/views/apps/admin/projects/edit/AppeleOffre/Main'
+
 function page() {
   return (
     <div>
-      <h1>Appele Offre Page</h1>
+      <Main />
     </div>
   )
 }

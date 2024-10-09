@@ -4,14 +4,14 @@ import type { ReactElement } from 'react'
 
 import MainEdit2 from './MainEdit2'
 
-import AppeleOffre from './AppeleOffre'
+import Main from './AppeleOffre/Main'
 
 import Tabilation from './Tabilation'
 
 
 const tabContentList: { [key: string]: ReactElement } = {
   'Informations Generales': <MainEdit2 />,
-  'Appelle Offre': <AppeleOffre />
+  'Appelle Offre': <Main />
 }
 
 
