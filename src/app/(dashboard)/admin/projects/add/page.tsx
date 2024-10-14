@@ -133,8 +133,8 @@ function Page() {
       name,
       description,
 
-      // client_id: client.id,
-      
+      client_id: client.id,
+
       start_date: date.toISOString().split('T')[0],
       address: {
         street_number: roadNumber,
