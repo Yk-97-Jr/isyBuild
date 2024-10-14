@@ -7,7 +7,7 @@ import MainEdit2 from './MainEdit2'
 
 import Tabilation from './Tabilation'
 
-import AppeleOffre from '@/views/apps/admin/projects/edit/appeleOffre/AppeleOffre'
+import AppeleOffre from './appeleOffre/AppeleOffre'
 
 
 const tabContentList: { [key: string]: ReactElement } = {
