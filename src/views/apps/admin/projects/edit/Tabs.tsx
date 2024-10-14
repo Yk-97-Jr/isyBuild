@@ -4,7 +4,7 @@ import type { ReactElement } from 'react'
 
 import MainEdit2 from './MainEdit2'
 
-import AppeleOffre from './AppeleOffre/AppeleOffre'
+import AppeleOffre from './appeleOffre/AppeleOffre'
 
 import Tabilation from './Tabilation'
 

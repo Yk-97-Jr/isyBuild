@@ -1,6 +1,6 @@
 import React from 'react'
 
-import AppeleOffre from '@views/apps/admin/projects/edit/AppeleOffre/AppeleOffre'
+import AppeleOffre from '@views/apps/admin/projects/edit/appeleOffre/AppeleOffre'
 
 function page() {
   return (
