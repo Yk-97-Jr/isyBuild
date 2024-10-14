@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import React, { useEffect, useState, useMemo } from 'react'
+import React, {useEffect, useState, useMemo} from 'react'
 
 
 // MUI Imports
@@ -15,25 +15,25 @@ import Chip from '@mui/material/Chip'
 
 import IconButton from '@mui/material/IconButton'
 
-import type { TextFieldProps } from '@mui/material/TextField'
+import type {TextFieldProps} from '@mui/material/TextField'
 
 import MenuItem from '@mui/material/MenuItem'
 
 import Box from '@mui/material/Box'
 
-import { CircularProgress } from '@mui/material'
+import {CircularProgress} from '@mui/material'
 
 
 // Third-party Imports
 import classnames from 'classnames'
 
-import { rankItem } from '@tanstack/match-sorter-utils'
+import {rankItem} from '@tanstack/match-sorter-utils'
 
 import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
   getFilteredRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
@@ -42,14 +42,12 @@ import {
   getSortedRowModel
 } from '@tanstack/react-table'
 
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
+import type {ColumnDef, FilterFn} from '@tanstack/react-table'
 
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
+import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Custom Components
 import TablePaginationComponent from '@components/TablePaginationComponent'
-
-import ProjectDialog from '../../Add/ProjectDialog'
 
 import OptionMenu from '@core/components/option-menu'
 
@@ -61,7 +59,8 @@ import CustomTextField from '@core/components/mui/TextField'
 import tableStyles from '@core/styles/table.module.css'
 
 // Types
-import type { LotRead, ProjectRead } from '@/services/IsyBuildApi'
+import type {ProjectLotRead} from '@/services/IsyBuildApi'
+import ProjectLotDialog from "@components/dialogs/project-lots-dialog";
 
 // Context
 
@@ -75,24 +74,24 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ClientTypeWithAction = ProjectRead & {
+type ClientTypeWithAction = ProjectLotRead & {
   action?: string
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   const itemRank = rankItem(row.getValue(columnId), value)
 
-  addMeta({ itemRank })
+  addMeta({itemRank})
 
   return itemRank.passed
 }
 
 const DebouncedInput = ({
-  value: initialValue,
-  onChange,
-  debounce = 500,
-  ...props
-}: {
+                          value: initialValue,
+                          onChange,
+                          debounce = 500,
+                          ...props
+                        }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
@@ -111,24 +110,22 @@ const DebouncedInput = ({
     return () => clearTimeout(timeout)
   }, [value, onChange, debounce])
 
-  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)} />
+  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)}/>
 }
 
 const columnHelper = createColumnHelper<ClientTypeWithAction>()
 
 const AppeleOffreTable = ({
-  data,
-  page,
-  setPage,
-  setPageSize,
-  pageSize,
-  refetch,
-  countRecords,
-  isFetching,
-  handleEdit,
-  handleDelete
-}: {
-  data?: LotRead[]
+                            data,
+                            page,
+                            setPage,
+                            setPageSize,
+                            pageSize,
+                            refetch,
+                            countRecords,
+                            isFetching,
+                          }: {
+  data?: ProjectLotRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -136,61 +133,68 @@ const AppeleOffreTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
-  handleEdit: any
-  handleDelete: any
-  setTableRows: any
 }) => {
   const [rowSelection, setRowSelection] = useState({})
-  const [id, setId] = useState(0)
-
-  // const [editValue, setEditValue] = useState<ProjectRead>()
-
+  const [id, setId] = useState<number | undefined>(undefined);
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
 
-  // const handleEditClient = (project: ProjectRead) => {
-  //   setOpen(true)
-  //   setEditValue(project)
+  // const handleEdit = (id: number) => {
+  //   console.log(id)
+  //   console.log(`/${userRole}/users/${id}/details`)
+  //   router.push(`/${userRole}/users/${id}/details`);
   // }
+  //
+  const handleDelete = (id: number) => {
+    setOpen(true)
+    setId(id)
+  }
 
-  // const handleAddClient = () => {
-  //   router.push(`/role/projects/add`)
-  // }
+  //
+  const handleAdd = () => {
+    setOpen(true)
+
+  }
 
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('code', {
-        header: 'Code',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.code}`}
-              </Typography>
+      columnHelper.accessor('lot.name', {
+        header: 'Nom',
+        cell: ({row}) => {
+          const name = row.original.lot.name
+
+          // Break the name after 20 characters if it's too long
+          const displayName = name.length > 50 ? name.substring(0, 50) + '\n' + name.substring(50) : name
+
+          return (
+            <div className='flex items-center gap-4 '>
+              <div className='flex flex-col'>
+                <Typography color='text.primary' className='font-medium whitespace-pre-wrap break-words'>
+                  {`${displayName} `}
+                </Typography>
+              </div>
             </div>
-          </div>
+          )
+        }
+      }),
+      columnHelper.accessor('created_at', {
+        header: `Date de Creation`,
+        cell: ({row}) => (
+          <Typography>
+            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
+          </Typography>
         )
       }),
-      columnHelper.accessor('name', {
-        header: 'Name',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
+      columnHelper.accessor('created_by', {
+        header: 'Creé par',
+        cell: ({row}) => (
+          <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('client.address.country', {
-        header: 'Address',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original.client?.address?.country || 'N/A'}
+                {row.original.created_by
+                  ? `${row.original.created_by.first_name} ${row.original.created_by.last_name}`
+                  : 'Données non disponible'}
               </Typography>
             </div>
           </div>
@@ -198,33 +202,34 @@ const AppeleOffreTable = ({
       }),
       columnHelper.accessor('status', {
         header: 'status',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <Chip
             variant='tonal'
-            label={row.original.status ? 'pending' : 'completed'}
+            label={row.original.status ? row.original.status : 'completed'}
             color={row.original.status ? 'warning' : 'secondary'}
           />
         )
       }),
-      columnHelper.accessor('client.created_at', {
-        header: `Date de Creation`,
-        cell: ({ row }) => (
-          <Typography>
-            {row.original.client?.created_at
-              ? new Date(row.original.client.created_at).toLocaleDateString()
-              : 'Date not available'}
-          </Typography>
+      columnHelper.accessor('folder.documents', {
+        header: 'DOCUMENT TELECHARGÉ',
+        cell: ({row}) => (
+          <Chip
+            variant='tonal'
+            label={row.original.folder && row.original.folder.documents.length > 0 ? 'Existé' : 'Non existé'}
+            color={row.original.folder && row.original.folder.documents.length > 0 ? 'success' : 'error'}
+          />
+
         )
       }),
       columnHelper.accessor('action', {
         header: 'Action',
-        cell: ({ row }) => (
+        cell: ({row}) => (
           <div className='flex items-center'>
             <IconButton onClick={() => handleDelete(row.original.id)}>
-              <i className='tabler-trash text-textSecondary' />
+              <i className='tabler-trash text-textSecondary'/>
             </IconButton>
             <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
+              iconButtonProps={{size: 'medium'}}
               iconClassName='text-textSecondary'
               options={[
                 {
@@ -232,7 +237,8 @@ const AppeleOffreTable = ({
                   icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEdit(row.original.id)
+
+                    // onClick: () => handleEdit(row.original.id)
                   }
                 }
               ]}
@@ -240,13 +246,13 @@ const AppeleOffreTable = ({
           </div>
         ),
         enableSorting: false
-      })
+      }),
     ],
-    [handleDelete, handleEdit]
+    []
   )
 
   const table = useReactTable({
-    data: filteredData as ProjectRead[],
+    data: filteredData as ProjectLotRead[],
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -294,7 +300,8 @@ const AppeleOffreTable = ({
               placeholder={`chercher un Projet`}
               className='max-sm:is-full'
             />
-            <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus' />} href='add'>
+            <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus'/>}
+                    onClick={handleAdd}>
               Assigne Lot
             </Button>
           </div>
@@ -302,59 +309,59 @@ const AppeleOffreTable = ({
         <div className='overflow-x-auto'>
           {isFetching ? (
             <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
-              <CircularProgress />
+              <CircularProgress/>
             </Box>
           ) : (
             <table className={tableStyles.table}>
               <thead>
-                {table.getHeaderGroups().map(headerGroup => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map(header => (
-                      <th key={header.id}>
-                        {header.isPlaceholder ? null : (
-                          <>
-                            <div
-                              className={classnames({
-                                'flex items-center': header.column.getIsSorted(),
-                                'cursor-pointer select-none': header.column.getCanSort()
-                              })}
-                              onClick={header.column.getToggleSortingHandler()}
-                            >
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                              {{
-                                asc: <i className='tabler-chevron-up text-xl' />,
-                                desc: <i className='tabler-chevron-down text-xl' />
-                              }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                            </div>
-                          </>
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <th key={header.id}>
+                      {header.isPlaceholder ? null : (
+                        <>
+                          <div
+                            className={classnames({
+                              'flex items-center': header.column.getIsSorted(),
+                              'cursor-pointer select-none': header.column.getCanSort()
+                            })}
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                            {{
+                              asc: <i className='tabler-chevron-up text-xl'/>,
+                              desc: <i className='tabler-chevron-down text-xl'/>
+                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                          </div>
+                        </>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
               </thead>
               {table.getFilteredRowModel().rows.length === 0 ? (
                 <tbody>
-                  <tr>
-                    <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                      No data available
-                    </td>
-                  </tr>
+                <tr>
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    No data available
+                  </td>
+                </tr>
                 </tbody>
               ) : (
                 <tbody>
-                  {table
-                    .getRowModel()
-                    .rows.slice(0, table.getState().pagination.pageSize)
-                    .map(row => {
-                      return (
-                        <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                          {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                          ))}
-                        </tr>
-                      )
-                    })}
+                {table
+                  .getRowModel()
+                  .rows.slice(0, table.getState().pagination.pageSize)
+                  .map(row => {
+                    return (
+                      <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
+                        {row.getVisibleCells().map(cell => (
+                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                        ))}
+                      </tr>
+                    )
+                  })}
                 </tbody>
               )}
             </table>
@@ -370,7 +377,7 @@ const AppeleOffreTable = ({
           }}
         />
       </Card>
-      <ProjectDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch} />
+      <ProjectLotDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch}/>
     </>
   )
 }
