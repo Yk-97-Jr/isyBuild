@@ -134,7 +134,7 @@ function Page() {
       description,
 
       // client_id: client.id,
-      
+
       start_date: date.toISOString().split('T')[0],
       address: {
         street_number: roadNumber,
@@ -162,6 +162,7 @@ function Page() {
       }
 
       // window.location.reload()
+      //handle back end errors .
     } catch (error) {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'error', message: 'Error adding the project' })
