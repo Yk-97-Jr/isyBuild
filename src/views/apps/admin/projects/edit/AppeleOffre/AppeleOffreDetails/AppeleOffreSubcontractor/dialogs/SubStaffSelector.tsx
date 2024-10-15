@@ -41,7 +41,8 @@ export default function SubStaffSelect({selectedSub, selectedStaffSub, setSelect
       setPage(1);       // Reset page to 1
       //  preparing for an automatic refretch
       setIsWaitingData(true);
-      refetch()
+
+      // refetch()
 
 
     }
