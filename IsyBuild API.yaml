@@ -1480,6 +1480,16 @@ paths:
       description: Retrieve a list of all subcontractors assigned to a specific ProjectLot.
       summary: List all Subcontractors for a ProjectLot
       parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
       - in: path
         name: project_lot_id
         schema:
@@ -1984,6 +1994,30 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /projects/{project_id}/templates/:
+    get:
+      operationId: projects_templates_list
+      description: Retrieve a list of all email templates associated with a project.
+      summary: List all email templates for a project
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectEmailTemplate'
+          description: ''
   /projects/create/:
     post:
       operationId: projects_create_create
@@ -2052,6 +2086,62 @@ paths:
             application/json:
               schema:
                 description: Permission denied.
+          description: ''
+  /projects/templates/{template_id}/:
+    get:
+      operationId: projects_templates_retrieve
+      description: Fetch detailed information about an email template.
+      summary: Retrieve an Email Template by ID
+      parameters:
+      - in: path
+        name: template_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectEmailTemplate'
+          description: ''
+  /projects/templates/{template_id}/update/:
+    put:
+      operationId: projects_templates_update_update
+      description: Updates an existing email template for a project.
+      summary: Update an email template for a project
+      parameters:
+      - in: path
+        name: template_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectEmailTemplateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectEmailTemplateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectEmailTemplateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectEmailTemplate'
           description: ''
   /projects/update/{project_id}/:
     put:
@@ -3207,6 +3297,65 @@ components:
       - created_at
       - file_url
       - version_number
+    EmailTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Template name for internal reference
+          maxLength: 255
+        subject_template:
+          type: string
+          description: Subject template with placeholders
+          maxLength: 255
+        header_template:
+          type: string
+          nullable: true
+          description: Customizable header content with placeholders
+        body_template:
+          type: string
+          description: Customizable body content with placeholders
+        footer_template:
+          type: string
+          nullable: true
+          description: Customizable footer content with placeholders
+      required:
+      - body_template
+      - id
+      - name
+      - subject_template
+    EmailTemplateUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Template name for internal reference
+          maxLength: 255
+        subject_template:
+          type: string
+          minLength: 1
+          description: Subject template with placeholders
+          maxLength: 255
+        header_template:
+          type: string
+          nullable: true
+          description: Customizable header content with placeholders
+        body_template:
+          type: string
+          minLength: 1
+          description: Customizable body content with placeholders
+        footer_template:
+          type: string
+          nullable: true
+          description: Customizable footer content with placeholders
+      required:
+      - body_template
+      - name
+      - subject_template
     Folder:
       type: object
       properties:
@@ -3736,6 +3885,32 @@ components:
       required:
       - code
       - name
+    ProjectEmailTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project:
+          $ref: '#/components/schemas/ProjectSimple'
+        email_template:
+          allOf:
+          - $ref: '#/components/schemas/EmailTemplate'
+          readOnly: true
+        template_type:
+          $ref: '#/components/schemas/TemplateTypeEnum'
+      required:
+      - email_template
+      - id
+      - project
+      - template_type
+    ProjectEmailTemplateUpdateRequest:
+      type: object
+      properties:
+        email_template:
+          $ref: '#/components/schemas/EmailTemplateUpdateRequest'
+      required:
+      - email_template
     ProjectLot:
       type: object
       properties:
@@ -4230,6 +4405,16 @@ components:
       - name
       - phone_number
       - siren_number
+    TemplateTypeEnum:
+      enum:
+      - upload_devis
+      - assign_subcontractor
+      - update_document
+      type: string
+      description: |-
+        * `upload_devis` - Upload Devis
+        * `assign_subcontractor` - Assign Subcontractor
+        * `update_document` - Update Document
     TokenObtainPairRequest:
       type: object
       properties:

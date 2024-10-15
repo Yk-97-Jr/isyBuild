@@ -184,7 +184,10 @@ const injectedRtkApi = api.injectEndpoints({
       ProjectLotsSubcontractorsRetrieve2ApiResponse,
       ProjectLotsSubcontractorsRetrieve2ApiArg
     >({
-      query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/subcontractors/` })
+      query: queryArg => ({
+        url: `/project-lots/${queryArg.projectLotId}/subcontractors/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
     }),
     projectLotsSubcontractorsAssignCreate: build.mutation<
       ProjectLotsSubcontractorsAssignCreateApiResponse,
@@ -281,11 +284,27 @@ const injectedRtkApi = api.injectEndpoints({
         params: { page: queryArg.page, page_size: queryArg.pageSize }
       })
     }),
+    projectsTemplatesList: build.query<ProjectsTemplatesListApiResponse, ProjectsTemplatesListApiArg>({
+      query: queryArg => ({ url: `/projects/${queryArg.projectId}/templates/` })
+    }),
     projectsCreateCreate: build.mutation<ProjectsCreateCreateApiResponse, ProjectsCreateCreateApiArg>({
       query: queryArg => ({ url: `/projects/create/`, method: 'POST', body: queryArg.projectCreateRequest })
     }),
     projectsDeleteDestroy: build.mutation<ProjectsDeleteDestroyApiResponse, ProjectsDeleteDestroyApiArg>({
       query: queryArg => ({ url: `/projects/delete/${queryArg.projectId}/`, method: 'DELETE' })
+    }),
+    projectsTemplatesRetrieve: build.query<ProjectsTemplatesRetrieveApiResponse, ProjectsTemplatesRetrieveApiArg>({
+      query: queryArg => ({ url: `/projects/templates/${queryArg.templateId}/` })
+    }),
+    projectsTemplatesUpdateUpdate: build.mutation<
+      ProjectsTemplatesUpdateUpdateApiResponse,
+      ProjectsTemplatesUpdateUpdateApiArg
+    >({
+      query: queryArg => ({
+        url: `/projects/templates/${queryArg.templateId}/update/`,
+        method: 'PUT',
+        body: queryArg.projectEmailTemplateUpdateRequest
+      })
     }),
     projectsUpdateUpdate: build.mutation<ProjectsUpdateUpdateApiResponse, ProjectsUpdateUpdateApiArg>({
       query: queryArg => ({
@@ -619,6 +638,12 @@ export type ProjectLotsDeleteDestroyApiArg = {
 }
 export type ProjectLotsSubcontractorsRetrieve2ApiResponse = /** status 200  */ PaginatedProjectLotSubcontractorRead
 export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
   projectLotId: number
 }
 export type ProjectLotsSubcontractorsAssignCreateApiResponse = /** status 201  */ ProjectLotSubcontractorRead
@@ -701,6 +726,10 @@ export type ProjectsLotsRetrieveApiArg = {
   pageSize?: number
   projectId: number
 }
+export type ProjectsTemplatesListApiResponse = /** status 200  */ ProjectEmailTemplateRead[]
+export type ProjectsTemplatesListApiArg = {
+  projectId: number
+}
 export type ProjectsCreateCreateApiResponse = /** status 201  */ ProjectRead
 export type ProjectsCreateCreateApiArg = {
   projectCreateRequest: ProjectCreateRequest
@@ -708,6 +737,15 @@ export type ProjectsCreateCreateApiArg = {
 export type ProjectsDeleteDestroyApiResponse = /** status 204  */ any
 export type ProjectsDeleteDestroyApiArg = {
   projectId: number
+}
+export type ProjectsTemplatesRetrieveApiResponse = /** status 200  */ ProjectEmailTemplateRead
+export type ProjectsTemplatesRetrieveApiArg = {
+  templateId: number
+}
+export type ProjectsTemplatesUpdateUpdateApiResponse = /** status 200  */ ProjectEmailTemplateRead
+export type ProjectsTemplatesUpdateUpdateApiArg = {
+  templateId: number
+  projectEmailTemplateUpdateRequest: ProjectEmailTemplateUpdateRequest
 }
 export type ProjectsUpdateUpdateApiResponse = /** status 200  */ ProjectRead
 export type ProjectsUpdateUpdateApiArg = {
@@ -1298,6 +1336,52 @@ export type PaginatedProjectLotRead = {
   previous: string | null
   results: ProjectLotRead[]
 }
+export type TemplateTypeEnum = 'upload_devis' | 'assign_subcontractor' | 'update_document'
+export type ProjectEmailTemplate = {
+  project: ProjectSimple
+  template_type: TemplateTypeEnum
+}
+export type EmailTemplate = {
+
+  /** Template name for internal reference */
+  name: string
+
+  /** Subject template with placeholders */
+  subject_template: string
+
+  /** Customizable header content with placeholders */
+  header_template?: string | null
+
+  /** Customizable body content with placeholders */
+  body_template: string
+
+  /** Customizable footer content with placeholders */
+  footer_template?: string | null
+}
+export type EmailTemplateRead = {
+  id: number
+
+  /** Template name for internal reference */
+  name: string
+
+  /** Subject template with placeholders */
+  subject_template: string
+
+  /** Customizable header content with placeholders */
+  header_template?: string | null
+
+  /** Customizable body content with placeholders */
+  body_template: string
+
+  /** Customizable footer content with placeholders */
+  footer_template?: string | null
+}
+export type ProjectEmailTemplateRead = {
+  id: number
+  project: ProjectSimpleRead
+  email_template: EmailTemplateRead
+  template_type: TemplateTypeEnum
+}
 export type MapCoordinateCreateOrUpdateRequest = {
   latitude: string
   longitude: string
@@ -1312,6 +1396,26 @@ export type ProjectCreateRequest = {
   address?: AddressCreateRequest
   map_coordinate?: MapCoordinateCreateOrUpdateRequest
   notes?: string
+}
+export type EmailTemplateUpdateRequest = {
+
+  /** Template name for internal reference */
+  name: string
+
+  /** Subject template with placeholders */
+  subject_template: string
+
+  /** Customizable header content with placeholders */
+  header_template?: string | null
+
+  /** Customizable body content with placeholders */
+  body_template: string
+
+  /** Customizable footer content with placeholders */
+  footer_template?: string | null
+}
+export type ProjectEmailTemplateUpdateRequest = {
+  email_template: EmailTemplateUpdateRequest
 }
 export type ProjectUpdateRequest = {
   code: string
@@ -1491,8 +1595,11 @@ export const {
   useProjectsRetrieveQuery,
   useProjectsRetrieve2Query,
   useProjectsLotsRetrieveQuery,
+  useProjectsTemplatesListQuery,
   useProjectsCreateCreateMutation,
   useProjectsDeleteDestroyMutation,
+  useProjectsTemplatesRetrieveQuery,
+  useProjectsTemplatesUpdateUpdateMutation,
   useProjectsUpdateUpdateMutation,
   useSetPasswordCreateMutation,
   useSubcontractorsRetrieveQuery,

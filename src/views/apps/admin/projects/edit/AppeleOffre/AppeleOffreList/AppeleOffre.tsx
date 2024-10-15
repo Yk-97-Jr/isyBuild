@@ -11,8 +11,8 @@ import {CircularProgress} from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import AppeleOffreTable from "@views/apps/admin/projects/edit/appeleOffre/AppeleOffreTable";
 import {useProjectsLotsRetrieveQuery} from "@/services/IsyBuildApi";
+import AppeleOffreTable from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreList/AppeleOffreTable";
 
 const AppeleOffre = () => {
   // States for pagination or other parameters
