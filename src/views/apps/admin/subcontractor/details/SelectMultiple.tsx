@@ -11,10 +11,10 @@ import CustomTextField from '@core/components/mui/TextField'
 
 // Component Imports
 import type { SelectChangeEvent } from '@mui/material'
-import type { UseFormRegister } from 'react-hook-form'
+import {  UseFormSetValue, type UseFormRegister } from 'react-hook-form'
+import { LotSimpleRead, useLotsRetrieveQuery } from '@/services/IsyBuildApi'
+import {  type FormValidateSubcontractorEditType } from './schemaSubcontractorEdit'
 
-import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
-import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -35,18 +35,21 @@ const MenuProps = {
 
 const SelectMultiple = ({
   onToggleMenu,
-  register
+  register,
+  selectedLotIds: initialSelectedIds,
+  setValue
 }: {
   onToggleMenu: (open: boolean) => void
-  register: UseFormRegister<FormValidateSubcontractorAddType>
+  register: UseFormRegister<FormValidateSubcontractorEditType>
+  selectedLotIds: LotSimpleRead[]
+  setValue: UseFormSetValue<FormValidateSubcontractorEditType>
 }) => {
   const [page, setPage] = useState(1)
   const [pageSize] = useState(10)
-  const [selectedLotNames, setSelectedLotNames] = useState<string[]>([])
+  const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [lots, setLots] = useState<any[]>([])
   const { data, refetch } = useLotsRetrieveQuery({ page, pageSize })
 
-  // Ref to track the observer for infinite scrolling
   const observer = useRef<IntersectionObserver | null>(null)
   const lastLotRef = useCallback(
     (node: HTMLLIElement | null) => {
@@ -65,7 +68,7 @@ const SelectMultiple = ({
     if (data?.results) {
       const newLots = data.results.map(lot => ({
         ...lot,
-        uniqueKey: `${lot.id}-${Math.random().toString(36).substring(2, 9)}` // Appends a random string to each id
+        uniqueKey: `${lot.id}-${Math.random().toString(36).substring(2, 9)}`
       }))
       setLots(prevLots => [...prevLots, ...newLots])
     }
@@ -75,10 +78,17 @@ const SelectMultiple = ({
     refetch()
   }, [page, pageSize, refetch])
 
+  useEffect(() => {
+    const ids = initialSelectedIds.map(lot => lot.id)
+    setSelectedIds(ids)
+  }, [initialSelectedIds])
+
   const handleChange = (event: SelectChangeEvent<unknown>) => {
-    const selectedNames = event.target.value as string[]
-    setSelectedLotNames(selectedNames)
+    const selectedIds = event.target.value as number[] // cast to number[]
+    setSelectedIds(selectedIds)
+    setValue('lots_ids', selectedIds)
   }
+  
 
   return (
     <div className='flex gap-4 flex-col mbe-6'>
@@ -86,7 +96,7 @@ const SelectMultiple = ({
         select
         fullWidth
         label=''
-        value={selectedLotNames}
+        value={selectedIds}
         id='lots_ids'
         {...register('lots_ids')}
         SelectProps={{
@@ -105,19 +115,15 @@ const SelectMultiple = ({
           )
         }}
       >
-        {lots.map((lot, index) => {
-          
-         
-          
-          return(
+        {lots.map((lot, index) => (
           <MenuItem
-          key={lot.uniqueKey}
+            key={lot.uniqueKey}
             value={lot.id}
-            ref={index === lots.length - 1 ? lastLotRef : null} // Attach ref to last item
+            ref={index === lots.length - 1 ? lastLotRef : null}
           >
             <Typography>{lot.name}</Typography>
           </MenuItem>
-        )})}
+        ))}
         {!data?.results?.length && <MenuItem disabled>Loading lots...</MenuItem>}
       </CustomTextField>
     </div>

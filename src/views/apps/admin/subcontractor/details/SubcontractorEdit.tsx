@@ -2,6 +2,9 @@
 
 import React, { useContext, useEffect } from 'react'
 
+import {useRouter} from "next/navigation";
+import {useAuth} from "@/contexts/AuthContext";
+
 import { useParams } from 'next/navigation'
 
 import Grid from '@mui/material/Grid'
@@ -43,6 +46,9 @@ const SubcontractorEdit = () => {
   })
 
   const { id } = useParams() // Get subcontractorId from route parameters
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
 
   const { data: subcontractorData, isLoading: isLoadingQuery } = useSubcontractorsRetrieve2Query({
     subcontractorId: +id
@@ -67,6 +73,7 @@ const SubcontractorEdit = () => {
       setValue('email', subcontractorData.contact_email)
       setValue('phoneNumber', subcontractorData.phone_number)
       setValue('is_active', subcontractorData.is_active as boolean)
+      setValue('lots_ids',subcontractorData.lots)
     }
   }, [subcontractorData, setValue])
 
@@ -92,12 +99,17 @@ const SubcontractorEdit = () => {
           },
           contact_email: data.email,
           phone_number: data.phoneNumber,
-          is_active: data.is_active
+          is_active: data.is_active,
+          lots_ids:data.lots_ids
         }
       }).unwrap()
 
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'entreprise modifié avec succès' })
+
+      
+
+      router.push(`/${userRole}/subcontractor/list`);
 
       // Optionally, redirect after successful submission
     } catch (err: any) {
@@ -142,8 +154,13 @@ const SubcontractorEdit = () => {
               <Owner subcontractorData={subcontractorData} />
             </Grid>
             <Grid item xs={12}>
-              <SubcontractorStatus register={register} errors={errors} subcontractorData={subcontractorData} />
-            </Grid>
+            <SubcontractorStatus 
+  register={register} 
+  setValue={setValue} 
+  errors={errors} 
+  subcontractorData={subcontractorData} 
+  selectedLotIds={subcontractorData?.lots || []} 
+/>            </Grid>
             <Grid item xs={12}>
               <SubcontractorListInfo subcontractorData={subcontractorData} />
             </Grid>

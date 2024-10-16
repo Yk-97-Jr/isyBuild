@@ -62,9 +62,9 @@ const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors })
               label='E-mail'
               placeholder='email@example.com'
               
-              // Error message
+              
 
-              disabled={true}
+             
             />
           </Grid>
           <Grid item xs={12}>

@@ -27,7 +27,7 @@ type SubcontractorInformationProps = {
 const SubcontractorInformation: React.FC<SubcontractorInformationProps> = ({ register, errors }) => {
   return (
     <Card>
-      <CardHeader title='Entreprise' />
+      <CardHeader  />
       <CardContent>
         <Grid container spacing={6} className='mbe-6'>
           <Grid item xs={12} sm={6}>

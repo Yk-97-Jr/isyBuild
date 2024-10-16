@@ -40,7 +40,7 @@ const SubcontractorListInfo: React.FC<ClientStatusProps> = ({ subcontractorData 
           </>
         ) : (
           <Typography variant='body1' color='textSecondary'>
-            No clients available
+            No clients available 
           </Typography>
         )}
       </CardContent>

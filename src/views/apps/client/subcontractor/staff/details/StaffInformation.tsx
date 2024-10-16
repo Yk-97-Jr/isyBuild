@@ -28,7 +28,7 @@ type StaffInformationProps = {
 const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors }) => {
   return (
     <Card>
-      <CardHeader title='User Information' />
+      <CardHeader/>
       <CardContent>
         <Grid container spacing={6} className='mbe-6'>
           {/* First Name */}
@@ -64,7 +64,7 @@ const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors })
               
               // Error message
 
-              disabled={true}
+              
             />
           </Grid>
           <Grid item xs={12}>
