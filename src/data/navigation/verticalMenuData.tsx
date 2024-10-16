@@ -48,7 +48,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'entreprise',
     href: '/role/subcontractor/list',
     icon: 'tabler-building-community',
-    roles: ['admin'],
+    roles: ['admin', 'client'],
     isSection: false,
     children: []
   }

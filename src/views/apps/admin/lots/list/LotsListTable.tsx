@@ -299,7 +299,7 @@ const LotsListTable = ({
             onChange={e => setPageSize(Number(e.target.value))}
             className='max-sm:is-full sm:is-[70px]'
           >
-            <MenuItem value='10'>10</MenuItem>
+            <MenuItem key={'10'} value='10'>10</MenuItem>
             <MenuItem value='25'>25</MenuItem>
             <MenuItem value='50'>50</MenuItem>
           </CustomTextField>

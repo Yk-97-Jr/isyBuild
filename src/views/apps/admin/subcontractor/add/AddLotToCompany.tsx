@@ -1,7 +1,8 @@
-/* 'use client' // Add this line at the very top
+'use client' // Add this line at the very top
 
 // MUI Imports
-import { useState } from 'react'
+
+import React, { useState } from 'react'
 
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
@@ -11,23 +12,22 @@ import Typography from '@mui/material/Typography'
 
 // Component Imports
 
-
 import type { FieldError, UseFormRegister } from 'react-hook-form'
 
-import Form from '@components/Form'
-import SelectMultiple from './SelectMultiple'
+import { Divider } from '@mui/material'
 
+import SelectMultiple from './SelectMultiple'
 
 import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
 
-type SubcontractorStausProps = {
+type ClientStatusProps = {
   register: UseFormRegister<FormValidateSubcontractorAddType> // Adjust the type as necessary
   errors: {
     is_active?: FieldError
   }
 }
 
-const AddLotToSubcontractor: React.FC<SubcontractorStausProps> = ({ register, errors }) => {
+const ClientStatus: React.FC<ClientStatusProps> = ({ register, errors }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false)
 
   // Function to toggle the select menu state
@@ -53,54 +53,19 @@ const AddLotToSubcontractor: React.FC<SubcontractorStausProps> = ({ register, er
           flexDirection: 'column' // Column layout inside CardContent
         }}
       >
-        <Form className='flex flex-grow flex-col'>
-
-          <SelectMultiple onToggleMenu={handleSelectToggle} />
-
+        <div className='flex flex-grow flex-col'>
+          <SelectMultiple onToggleMenu={handleSelectToggle} register={register} />
 
           <div style={{ flexGrow: 1 }}></div>
 
+          <Divider className='mlb-2' />
           <div className='flex items-center justify-between mbe-6'>
             <Typography>Status</Typography>
 
-            <Switch {...register('is_active')} color='primary' />
+            <Switch {...register('is_active')} color='primary' defaultChecked />
             {errors.is_active && <div className='text-red-500'>{errors.is_active.message}</div>}
           </div>
-        </Form>
-      </CardContent>
-    </Card>
-  )
-}
-
-export default AddLotToSubcontractor
- */
-
-import React from 'react'
-
-import { Card, CardHeader, CardContent, Divider, Typography, Switch } from '@mui/material'
-import type { FieldError, UseFormRegister } from 'react-hook-form'
-
-import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
-
-type ClientStausProps = {
-  register: UseFormRegister<FormValidateSubcontractorAddType> // Adjust the type as necessary
-  errors: {
-    is_active?: FieldError
-  }
-}
-
-const ClientStatus: React.FC<ClientStausProps> = ({ register, errors }) => {
-  
-  return (
-    <Card>
-      <CardHeader title='Détails' />
-      <CardContent>
-        <Divider className='mlb-2' />
-        <div className='flex items-center justify-between'>
-          <Typography>Statut</Typography>
-          <Switch {...register('is_active')} defaultChecked />
         </div>
-        {errors.is_active && <span>{errors.is_active.message}</span>}
       </CardContent>
     </Card>
   )

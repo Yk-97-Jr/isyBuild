@@ -29,6 +29,8 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 import { useSubcontractorsRetrieve2Query, useSubcontractorsUpdateUpdateMutation } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
 import Owner from './SubcontractorOwner'
 import SubcontractorListInfo from './ClientsListInfo'
+import SubcontractorCreatedBy from './SubcontractorCreatedBy'
+import StaffList from '../staff/list/StaffList'
 
 const SubcontractorEdit = () => {
   const {
@@ -121,7 +123,7 @@ const SubcontractorEdit = () => {
         <Grid item xs={12}>
           <SubcontractorModifyHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating} handleBack={handleBack} />
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={8.5}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <SubcontractorInformation register={register} errors={errors} />
@@ -129,9 +131,12 @@ const SubcontractorEdit = () => {
             <Grid item xs={12}>
               <SubcontractorAdresse register={register} errors={errors} />
             </Grid>
+            <Grid item xs={12}>
+              <StaffList />
+            </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={3.5}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <Owner subcontractorData={subcontractorData} />
@@ -141,6 +146,9 @@ const SubcontractorEdit = () => {
             </Grid>
             <Grid item xs={12}>
               <SubcontractorListInfo subcontractorData={subcontractorData} />
+            </Grid>
+            <Grid item xs={12}>
+              <SubcontractorCreatedBy subcontractorData={subcontractorData} />
             </Grid>
           </Grid>
         </Grid>
