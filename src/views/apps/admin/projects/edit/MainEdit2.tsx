@@ -6,6 +6,8 @@ import { useParams, useRouter } from 'next/navigation'
 
 import { CircularProgress, Button } from '@mui/material'
 
+import Templates from './Templates'
+
 import EditInformation from './EditInformation'
 
 import EditAddress from './EditAddress'
@@ -22,6 +24,10 @@ import { useProjectsRetrieve2Query, useProjectsUpdateUpdateMutation } from '@/se
 
 import type { ProjectRead, ProjectUpdateRequest } from '@/services/IsyBuildApi'
 
+import { useProjectsTemplatesListQuery } from '@/services/IsyBuildApi'
+
+import type { ProjectEmailTemplateRead } from '@/services/IsyBuildApi'
+
 function MainEdit2() {
   const params = useParams()
   const projectId = parseInt(params?.edit as string)
@@ -33,11 +39,25 @@ function MainEdit2() {
   const { data: ProjectData, isLoading } = useProjectsRetrieve2Query({ projectId })
   const [projectState, setProjectState] = useState<ProjectRead>()
 
+  //state to store  Email Templates
+  const { data: templates_data, isLoading: templates_loading } = useProjectsTemplatesListQuery({ projectId })
+
+  const [templates, setTemplates] = useState<ProjectEmailTemplateRead[]>()
+
   useEffect(() => {
     if (ProjectData) {
       setProjectState(ProjectData)
     }
-  }, [ProjectData])
+
+    if (templates_data) {
+
+      setTemplates(templates_data)
+      
+    }
+
+  }, [ProjectData, templates_data])
+
+  console.log(templates)
 
   const validateForm = (
     name: string,
@@ -196,6 +216,7 @@ function MainEdit2() {
                 setProjectState={setProjectState}
                 isLoading={isLoading}
               />
+              <Templates templates={templates || []} templates_loading={templates_loading} />
             </div>
           </div>
         </div>
