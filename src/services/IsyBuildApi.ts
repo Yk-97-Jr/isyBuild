@@ -1,4 +1,5 @@
 import { IsyBuildClient as api } from '../apiClients/IsyBuildClient'
+
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
     adminStaffRetrieve: build.query<AdminStaffRetrieveApiResponse, AdminStaffRetrieveApiArg>({
@@ -423,11 +424,14 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false
 })
+
 export { injectedRtkApi as pIsyBuildApi }
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }
@@ -450,8 +454,10 @@ export type AdminUsersDeleteDestroyApiArg = {
 }
 export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedClientRead
 export type ClientsRetrieveApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }
@@ -480,8 +486,10 @@ export type ClientsOwnerUpdateUpdateApiArg = {
 export type ClientsStaffRetrieve3ApiResponse = /** status 200  */ PaginatedClientStaffRead
 export type ClientsStaffRetrieve3ApiArg = {
   clientId: number
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }
@@ -500,8 +508,10 @@ export type ClientsDeleteDestroyApiArg = {
 }
 export type ClientsStaffRetrieveApiResponse = /** status 200  */ PaginatedClientStaffRead
 export type ClientsStaffRetrieveApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }
@@ -542,8 +552,10 @@ export type ContactsDeleteDestroyApiArg = {
 export type ContactsPhoneNumbersRetrieveApiResponse = /** status 200  */ PaginatedPhoneNumberRead
 export type ContactsPhoneNumbersRetrieveApiArg = {
   contactId: number
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }
@@ -569,8 +581,10 @@ export type LogoutCreateApiArg = {
 }
 export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead
 export type LotsRetrieveApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }
@@ -624,8 +638,10 @@ export type ProjectLotsDeleteDestroyApiArg = {
 }
 export type ProjectLotsSubcontractorsRetrieve2ApiResponse = /** status 200  */ PaginatedProjectLotSubcontractorRead
 export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
   projectLotId: number
@@ -689,8 +705,10 @@ export type ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiArg = {
 }
 export type ProjectsRetrieveApiResponse = /** status 200  */ PaginatedProjectRead
 export type ProjectsRetrieveApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }
@@ -700,8 +718,10 @@ export type ProjectsRetrieve2ApiArg = {
 }
 export type ProjectsLotsRetrieveApiResponse = /** status 200  */ PaginatedProjectLotRead
 export type ProjectsLotsRetrieveApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
   projectId: number
@@ -738,8 +758,10 @@ export type SetPasswordCreateApiArg = {
 }
 export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubcontractortRead
 export type SubcontractorsRetrieveApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
 }
@@ -749,8 +771,10 @@ export type SubcontractorsRetrieve2ApiArg = {
 }
 export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
 export type SubcontractorsStaffRetrieve2ApiArg = {
+
   /** Page number of the results to fetch */
   page?: number
+
   /** Number of results per page */
   pageSize?: number
   subcontractorId: number
@@ -1318,27 +1342,37 @@ export type ProjectEmailTemplate = {
   template_type: TemplateTypeEnum
 }
 export type EmailTemplate = {
+
   /** Template name for internal reference */
   name: string
+
   /** Subject template with placeholders */
   subject_template: string
+
   /** Customizable header content with placeholders */
   header_template?: string | null
+
   /** Customizable body content with placeholders */
   body_template: string
+
   /** Customizable footer content with placeholders */
   footer_template?: string | null
 }
 export type EmailTemplateRead = {
   id: number
+
   /** Template name for internal reference */
   name: string
+
   /** Subject template with placeholders */
   subject_template: string
+
   /** Customizable header content with placeholders */
   header_template?: string | null
+
   /** Customizable body content with placeholders */
   body_template: string
+
   /** Customizable footer content with placeholders */
   footer_template?: string | null
 }
@@ -1364,14 +1398,19 @@ export type ProjectCreateRequest = {
   notes?: string
 }
 export type EmailTemplateUpdateRequest = {
+
   /** Template name for internal reference */
   name: string
+
   /** Subject template with placeholders */
   subject_template: string
+
   /** Customizable header content with placeholders */
   header_template?: string | null
+
   /** Customizable body content with placeholders */
   body_template: string
+
   /** Customizable footer content with placeholders */
   footer_template?: string | null
 }
