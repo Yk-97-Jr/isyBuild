@@ -31,7 +31,6 @@ import CustomTextField from '@core/components/mui/TextField'
 import {useImageVariant} from '@core/hooks/useImageVariant'
 import {useSettings} from '@core/hooks/useSettings'
 import {usePasswordConfirmCreateMutation} from '@/services/IsyBuildApi'
-import type {SystemMode} from '@core/types'
 
 // Styled Custom Components
 const ResetPasswordIllustration = styled('img')(({theme}) => ({
@@ -71,7 +70,7 @@ type FormValues = {
   confirmPassword: string
 }
 
-const SetPassword = ({mode}: { mode: SystemMode }) => {
+const SetPassword = ({ mode }: { mode: 'light' | 'dark' }) => {
   // States for visibility toggling
   const [isPasswordShown, setIsPasswordShown] = useState(false)
   const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false)
@@ -81,8 +80,9 @@ const SetPassword = ({mode}: { mode: SystemMode }) => {
   // Vars for illustrations and backgrounds
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
-  const darkIllustration = '/images/illustrations/auth/v2-reset-password-dark.png'
-  const lightIllustration = '/images/illustrations/auth/v2-reset-password-light.png'
+
+  // const darkIllustration = '/images/illustrations/auth/v2-reset-password-dark.png'
+  // const lightIllustration = '/images/illustrations/auth/v2-reset-password-light.png'
 
   // Initialize form with react-hook-form and yup validation
   const {
@@ -102,7 +102,15 @@ const SetPassword = ({mode}: { mode: SystemMode }) => {
   const theme = useTheme()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
   const authBackground = useImageVariant(mode, lightImg, darkImg)
-  const characterIllustration = useImageVariant(mode, lightIllustration, darkIllustration)
+
+  const characterIllustration = useImageVariant(
+    mode,
+    '/images/illustrations/auth/v2-login-light.png',
+    '/images/illustrations/auth/v2-login-dark.png',
+    '/images/illustrations/auth/v2-login-light-border.png',
+    '/images/illustrations/auth/v2-login-dark-border.png'
+  )
+
 
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
   const handleClickShowConfirmPassword = () => setIsConfirmPasswordShown(show => !show)

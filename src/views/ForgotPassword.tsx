@@ -12,6 +12,12 @@ import CircularProgress from '@mui/material/CircularProgress'
 import classnames from 'classnames'
 
 // Import your RTK Query mutation
+import {useTheme} from "@mui/material/styles";
+
+import useMediaQuery from "@mui/material/useMediaQuery";
+
+import {styled} from "@mui/material";
+
 import {usePasswordResetCreateMutation} from '@/services/IsyBuildApi'
 
 // Custom Components
@@ -21,29 +27,37 @@ import CustomTextField from '@core/components/mui/TextField'
 // import { useImageVariant } from '@core/hooks/useImageVariant'
 import {useSettings} from '@core/hooks/useSettings'
 
-// Styled Components
-// const ForgotPasswordIllustration = styled('img')(({ theme }) => ({
-//   zIndex: 2,
-//   blockSize: 'auto',
-//   maxBlockSize: 650,
-//   maxInlineSize: '100%',
-//   margin: theme.spacing(12),
-//   [theme.breakpoints.down(1536)]: {
-//     maxBlockSize: 550
-//   },
-//   [theme.breakpoints.down('lg')]: {
-//     maxBlockSize: 450
-//   }
-// }))
-//
-// const MaskImg = styled('img')({
-//   blockSize: 'auto',
-//   maxBlockSize: 355,
-//   inlineSize: '100%',
-//   position: 'absolute',
-//   insetBlockEnd: 0,
-//   zIndex: -1
-// })
+
+import {useImageVariant} from "@core/hooks/useImageVariant";
+
+
+const ForgotPasswordIllustration = styled('img')(({ theme }) => ({
+  zIndex: 2,
+  blockSize: 'auto',
+  maxBlockSize: 650,
+  maxInlineSize: '100%',
+  margin: theme.spacing(12),
+  [theme.breakpoints.down(1536)]: {
+    maxBlockSize: 550
+  },
+  [theme.breakpoints.down('lg')]: {
+    maxBlockSize: 450
+  }
+}))
+
+const MaskImg = styled('img')({
+  blockSize: 'auto',
+  maxBlockSize: 355,
+  inlineSize: '100%',
+  position: 'absolute',
+  insetBlockEnd: 0,
+  zIndex: -1
+})
+
+// Vars for illustrations and backgrounds
+  const darkImg = '/images/pages/auth-mask-dark.png'
+  const lightImg = '/images/pages/auth-mask-light.png'
+
 
 // Define validation schema with Yup
 const validationSchema = Yup.object().shape({
@@ -55,22 +69,20 @@ type FormValues = {
   email: string
 }
 
-const ForgotPassword = ({mode}: { mode: string }) => {
+const ForgotPassword = ({ mode }: { mode: 'light' | 'dark' }) => {
   // Hooks for various states and utilities
   const {settings} = useSettings()
+  const theme = useTheme()
+  const hidden = useMediaQuery(theme.breakpoints.down('md'))
+  const authBackground = useImageVariant(mode, lightImg, darkImg)
 
-  console.log(mode)
-
-  // const theme = useTheme()
-
-  // const hidden = useMediaQuery(theme.breakpoints.down('md'))
-  // const authBackground = useImageVariant(mode, '/images/pages/auth-mask-light.png', '/images/pages/auth-mask-dark.png')
-
-  // const characterIllustration = useImageVariant(
-  //   mode,
-  //   '/images/illustrations/auth/v2-forgot-password-light.png',
-  //   '/images/illustrations/auth/v2-forgot-password-dark.png'
-  // )
+  const characterIllustration = useImageVariant(
+    mode,
+    '/images/illustrations/auth/v2-login-light.png',
+    '/images/illustrations/auth/v2-login-dark.png',
+    '/images/illustrations/auth/v2-login-light-border.png',
+    '/images/illustrations/auth/v2-login-dark-border.png'
+  )
 
   // Initialize form with react-hook-form and Yup schema
   const {
@@ -108,8 +120,8 @@ const ForgotPassword = ({mode}: { mode: string }) => {
           {'border-ie': settings.skin === 'bordered'}
         )}
       >
-        {/*<ForgotPasswordIllustration src={characterIllustration} alt='character-illustration' />*/}
-        {/*{!hidden && <MaskImg alt='mask' src={authBackground} />}*/}
+        <ForgotPasswordIllustration src={characterIllustration} alt='character-illustration' />
+        {!hidden && <MaskImg alt='mask' src={authBackground} />}
       </div>
       <div
         className='flex justify-center items-center bs-full bg-backgroundPaper p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
