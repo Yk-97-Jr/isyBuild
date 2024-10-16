@@ -1,15 +1,15 @@
 'use client'
 
 // React Imports
-import { useState } from 'react'
+import {useState} from 'react'
 
 // Next Imports
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import {useSearchParams} from 'next/navigation'
 
 // MUI Imports
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { styled, useTheme } from '@mui/material/styles'
+import {styled, useTheme} from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -18,9 +18,9 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 // Third-party Imports
 import classnames from 'classnames'
-import type { SubmitHandler } from 'react-hook-form'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
+import type {SubmitHandler} from 'react-hook-form'
+import {useForm} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers/yup'
 import * as Yup from 'yup'
 
 // Component Imports
@@ -28,13 +28,13 @@ import Logo from '@components/layout/shared/Logo'
 import CustomTextField from '@core/components/mui/TextField'
 
 // Hook Imports
-import { useImageVariant } from '@core/hooks/useImageVariant'
-import { useSettings } from '@core/hooks/useSettings'
-import { usePasswordConfirmCreateMutation } from '@/services/IsyBuildApi'
-import type { SystemMode } from '@core/types'
+import {useImageVariant} from '@core/hooks/useImageVariant'
+import {useSettings} from '@core/hooks/useSettings'
+import {usePasswordConfirmCreateMutation} from '@/services/IsyBuildApi'
+import type {SystemMode} from '@core/types'
 
 // Styled Custom Components
-const ResetPasswordIllustration = styled('img')(({ theme }) => ({
+const ResetPasswordIllustration = styled('img')(({theme}) => ({
   zIndex: 2,
   blockSize: 'auto',
   maxBlockSize: 650,
@@ -71,12 +71,12 @@ type FormValues = {
   confirmPassword: string
 }
 
-const SetPassword = ({ mode }: { mode: SystemMode }) => {
+const SetPassword = ({mode}: { mode: SystemMode }) => {
   // States for visibility toggling
   const [isPasswordShown, setIsPasswordShown] = useState(false)
   const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false)
 
-  const [setPassword, { isLoading, isSuccess, isError, error }] = usePasswordConfirmCreateMutation()
+  const [setPassword, {isLoading, isSuccess, isError, error}] = usePasswordConfirmCreateMutation()
 
   // Vars for illustrations and backgrounds
   const darkImg = '/images/pages/auth-mask-dark.png'
@@ -88,14 +88,17 @@ const SetPassword = ({ mode }: { mode: SystemMode }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: {errors}
   } = useForm<FormValues>({
     resolver: yupResolver(validationSchema)
   })
 
   // Hooks for theming and responsive design
-  const { token, uid } = useParams()
-  const { settings } = useSettings()
+  const searchParams = useSearchParams();
+
+  const token = searchParams.get('token');
+  const uid = searchParams.get('uid');
+  const {settings} = useSettings()
   const theme = useTheme()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
   const authBackground = useImageVariant(mode, lightImg, darkImg)
@@ -133,20 +136,22 @@ const SetPassword = ({ mode }: { mode: SystemMode }) => {
           }
         )}
       >
-        <ResetPasswordIllustration src={characterIllustration} alt='character-illustration' />
+        <ResetPasswordIllustration src={characterIllustration} alt='character-illustration'/>
         {!hidden && (
           <MaskImg
             alt='mask'
             src={authBackground}
-            className={classnames({ 'scale-x-[-1]': theme.direction === 'rtl' })}
+            className={classnames({'scale-x-[-1]': theme.direction === 'rtl'})}
           />
         )}
       </div>
-      <div className='flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
+      <div
+        className='flex justify-center items-center bs-full bg-backgroundPaper !min-is-full p-6 md:!min-is-[unset] md:p-12 md:is-[480px]'>
         <Link href={'/'} className='absolute block-start-5 sm:block-start-[33px] inline-start-6 sm:inline-start-[38px]'>
-          <Logo />
+          <Logo/>
         </Link>
-        <div className='flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>
+        <div
+          className='flex flex-col gap-6 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset] mbs-11 sm:mbs-14 md:mbs-0'>
           <div className='flex flex-col gap-1'>
             <Typography variant='h4'>Set Password 🔒</Typography>
             <Typography>Bienvenu dans IsyBuild, priere de rajouter un mot de passe dans votre compte </Typography>
@@ -166,7 +171,7 @@ const SetPassword = ({ mode }: { mode: SystemMode }) => {
                 endAdornment: (
                   <InputAdornment position='end'>
                     <IconButton edge='end' onClick={handleClickShowPassword} onMouseDown={e => e.preventDefault()}>
-                      <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
+                      <i className={isPasswordShown ? 'tabler-eye-off' : 'tabler-eye'}/>
                     </IconButton>
                   </InputAdornment>
                 )
@@ -189,7 +194,7 @@ const SetPassword = ({ mode }: { mode: SystemMode }) => {
                       onClick={handleClickShowConfirmPassword}
                       onMouseDown={e => e.preventDefault()}
                     >
-                      <i className={isConfirmPasswordShown ? 'tabler-eye-off' : 'tabler-eye'} />
+                      <i className={isConfirmPasswordShown ? 'tabler-eye-off' : 'tabler-eye'}/>
                     </IconButton>
                   </InputAdornment>
                 )
@@ -197,7 +202,7 @@ const SetPassword = ({ mode }: { mode: SystemMode }) => {
             />
 
             <Button fullWidth variant='contained' type='submit' disabled={isLoading}>
-              {isLoading ? <CircularProgress size={20} color='inherit' /> : 'Set New Password'}
+              {isLoading ? <CircularProgress size={20} color='inherit'/> : 'Set New Password'}
             </Button>
 
             {/* Error and success message handling */}
