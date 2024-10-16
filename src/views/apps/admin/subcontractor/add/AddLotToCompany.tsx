@@ -72,3 +72,4 @@ const ClientStatus: React.FC<ClientStatusProps> = ({ register, errors }) => {
 }
 
 export default ClientStatus
+ 

@@ -29,7 +29,7 @@ type SubcontractorAdresseProps = {
     }
   }
 }
-
+ 
 const SubcontractorAdresse: React.FC<SubcontractorAdresseProps> = ({ register, errors }) => {
   return (
     <Card>

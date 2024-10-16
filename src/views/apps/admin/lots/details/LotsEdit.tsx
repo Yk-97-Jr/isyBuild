@@ -27,6 +27,8 @@ import { schemaLotsEdit } from '@/views/apps/admin/lots/details/schemaLots'
 import useHandleBack from '@components/useHandleBack'
 
 import { useLotsRetrieve2Query, useLotsUpdateUpdateMutation } from '@/services/IsyBuildApi'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/contexts/AuthContext'
 
 const LotsEdit = () => {
   const {
@@ -39,6 +41,9 @@ const LotsEdit = () => {
   })
 
   const { id } = useParams()
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
 
   const { data: lotData, isLoading: isLoadingQuery } = useLotsRetrieve2Query({
     lotId: +id
@@ -68,6 +73,10 @@ const LotsEdit = () => {
 
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'lots modifié avec succès' })
+      
+
+      router.push(`/${userRole}/lots/list`);
+
     } catch (err: any) {
       console.error('Failed to update lots:', err)
       setOpenSnackBar(true)

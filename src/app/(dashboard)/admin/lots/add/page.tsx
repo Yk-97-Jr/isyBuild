@@ -15,6 +15,8 @@ import LotsInfo from '@/views/apps/admin/lots/add/LotsInfo'
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import { useLotsCreateCreateMutation } from '@/services/IsyBuildApi'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
 
 const schema = yup
   .object({
@@ -37,10 +39,13 @@ const LotsAdd = () => {
 
   const [createLot, { isLoading }] = useLotsCreateCreateMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
 
   const onSubmit: SubmitHandler<FormValidateType> = async data => {
     try {
-      await createLot({
+      const response = await createLot({
         lotCreateUpdateRequest: {
           name: data.firstName,
           description: data.description
@@ -49,7 +54,10 @@ const LotsAdd = () => {
 
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'lot ajouté avec succès' })
-      console.log(reset())
+      
+      const clientId = response.id;
+
+      router.push(`/${userRole}/lots/${clientId}/details`);
 
       reset()
     } catch (err: any) {

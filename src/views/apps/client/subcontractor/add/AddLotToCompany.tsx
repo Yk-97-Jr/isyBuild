@@ -20,14 +20,14 @@ import SelectMultiple from './SelectMultiple'
 
 import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
 
-type ClientStausProps = {
+type ClientStatusProps = {
   register: UseFormRegister<FormValidateSubcontractorAddType> // Adjust the type as necessary
   errors: {
     is_active?: FieldError
   }
 }
 
-const ClientStatus: React.FC<ClientStausProps> = ({ register, errors }) => {
+const ClientStatus: React.FC<ClientStatusProps> = ({ register, errors }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false)
 
   // Function to toggle the select menu state
@@ -62,7 +62,7 @@ const ClientStatus: React.FC<ClientStausProps> = ({ register, errors }) => {
           <div className='flex items-center justify-between mbe-6'>
             <Typography>Status</Typography>
 
-            <Switch {...register('is_active')} color='primary' />
+            <Switch {...register('is_active')} color='primary' defaultChecked />
             {errors.is_active && <div className='text-red-500'>{errors.is_active.message}</div>}
           </div>
         </div>

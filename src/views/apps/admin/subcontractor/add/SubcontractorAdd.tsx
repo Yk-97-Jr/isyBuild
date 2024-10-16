@@ -2,6 +2,9 @@
 
 import React, { useContext } from 'react'
 
+import {useRouter} from "next/navigation";
+import {useAuth} from "@/contexts/AuthContext";
+
 import Grid from '@mui/material/Grid'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -32,11 +35,15 @@ const SubcontractorAdd = () => {
   const [createSubcontractor, { isLoading }] = useSubcontractorsCreateCreateMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
+
   const onSubmit: SubmitHandler<FormValidateSubcontractorAddType> = async data => {
     try {
       console.log(data.lots_ids)
 
-      await createSubcontractor({
+      const response = await createSubcontractor({
         subcontractorCreateRequest: {
           name: data.subcontractorName,
           siren_number: data.sireneNumber,
@@ -59,6 +66,11 @@ const SubcontractorAdd = () => {
 
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'entreprise ajouté avec succès' })
+
+      const clientId = response.id;
+
+      router.push(`/${userRole}/subcontractor/${clientId}/details`);
+
     } catch (err: any) {
       console.error('Failed to add entreprise:', err)
       setOpenSnackBar(true)
