@@ -155,8 +155,8 @@ const LotsSubListTable = ({
         cell: ({row}) => (
           <Typography>
             {row.original.subcontractor_staff.user
-              ? new Date(row.original.subcontractor_staff.user).toLocaleDateString()
-              : 'Date not available'}
+              ? row.original.subcontractor_staff.user
+              : 'user not available'}
           </Typography>
         )
       }),
