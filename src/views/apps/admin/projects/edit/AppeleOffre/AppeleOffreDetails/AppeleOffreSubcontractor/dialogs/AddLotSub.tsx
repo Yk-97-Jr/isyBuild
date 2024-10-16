@@ -67,7 +67,7 @@ const AddLotSub = ({open, setOpen, refetch}: AddProps) => {
           projectLotSubcontractorCreateRequest: {
             subcontractor_id: selectedSub,
             subcontractor_staff_id: selectedStaffSub,
-            status: 'completed' // need to verify this
+            status: 'pending' // need to verify this
           },
         }
       ).unwrap();
