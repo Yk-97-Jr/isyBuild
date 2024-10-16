@@ -67,7 +67,7 @@ const AddLotSub = ({open, setOpen, refetch}: AddProps) => {
           projectLotSubcontractorCreateRequest: {
             subcontractor_id: selectedSub,
             subcontractor_staff_id: selectedStaffSub,
-            status: 'completed' // need to verify this
+            status: 'pending' // need to verify this
           },
         }
       ).unwrap();
@@ -76,8 +76,13 @@ const AddLotSub = ({open, setOpen, refetch}: AddProps) => {
       setOpenSnackBar(true);
       setInfoAlert({severity: 'success', message: 'Entreprise assinger avec succès'});
     } catch (error) {
+
+      const message = error && typeof error === 'object' && 'data' in error
+        ? JSON.stringify((error as { data?: unknown }).data)
+        : 'Une erreur inattendue est survenue.';
+
       setOpenSnackBar(true);
-      setInfoAlert({severity: 'error', message: 'Échec de l\'ajout d\'une  Entreprise'});
+      setInfoAlert({severity: 'error', message: {message}});
     }
   };
 

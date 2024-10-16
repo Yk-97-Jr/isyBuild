@@ -50,6 +50,8 @@ import {Status841Mapping} from "@/utils/statusEnums";
 import {getStatusProps} from "@/utils/statusHelper";
 import AddLotSub
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/AddLotSub";
+import DeleteLotSub
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/DeleteLotSub";
 
 
 declare module '@tanstack/table-core' {
@@ -105,8 +107,9 @@ const LotsSubListTable = ({
   // States
   const [rowSelection, setRowSelection] = useState({})
 
-  // const [id, setId] = useState(0)
-  const [open, setOpen] = useState(false)
+  const [id, setId] = useState(0)
+  const [openAdd, setOpenAdd] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter();
@@ -124,12 +127,12 @@ const LotsSubListTable = ({
   const handleDeleteUser = (id: number) => {
     console.log(id)
 
-    // setOpen(true)
-    // setId(id)
+    setOpenDelete(true)
+    setId(id)
   }
 
   const handleAddUser = () => {
-    setOpen(true)
+    setOpenAdd(true)
 
   }
 
@@ -152,8 +155,8 @@ const LotsSubListTable = ({
         cell: ({row}) => (
           <Typography>
             {row.original.subcontractor_staff.user
-              ? new Date(row.original.subcontractor_staff.user).toLocaleDateString()
-              : 'Date not available'}
+              ? row.original.subcontractor_staff.user
+              : 'user not available'}
           </Typography>
         )
       }),
@@ -339,9 +342,15 @@ const LotsSubListTable = ({
         />
       </Card>
       <AddLotSub
-        open={open}
-        setOpen={setOpen}
+        open={openAdd}
+        setOpen={setOpenAdd}
         refetch={refetch}
+      />
+      <DeleteLotSub
+        open={openDelete}
+        setOpen={setOpenDelete}
+        refetch={refetch}
+        id={id}
       />
     </>
   )
