@@ -40,7 +40,6 @@ import type { SnackBarContextType } from '@/types/apps/snackbarType'
 const Templates = () => {
   const params = useParams()
 
-
   const templateId: number = parseInt(params?.templates.toString())
 
   const router = useRouter()
@@ -156,7 +155,7 @@ const Templates = () => {
       </div>
     )
   }
-  
+
   return (
     <Card>
       <div className='flex sm:flex-row  flex-col w-full justify-between items-center '>
