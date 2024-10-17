@@ -50,11 +50,8 @@ function MainEdit2() {
     }
 
     if (templates_data) {
-
       setTemplates(templates_data)
-      
     }
-
   }, [ProjectData, templates_data])
 
   console.log(templates)
@@ -167,7 +164,7 @@ function MainEdit2() {
       if (response) {
         setOpenSnackBar(true)
         setInfoAlert({ message: 'The Project has been Edited !!', severity: 'success' })
-        router.push('/admin/projects/list')
+        window.location.reload()
       }
     } catch (err) {
       setOpenSnackBar(true)
@@ -187,7 +184,7 @@ function MainEdit2() {
           <div className='flex justify-between items-center p-5'>
             <p className='text-xl'>Information Sur le Projet</p>
             <Button variant='contained' onClick={handleUpdate}>
-              Update Project
+              Modifier le Projet
             </Button>
           </div>
           <div className='flex flex-col sm:flex-row gap-5'>

@@ -180,15 +180,18 @@ function Page() {
     }
   }
 
-  function handleCancel() {}
-  function handleEdit() {}
-
   return (
     <div className=''>
       <div className='flex sm:flex-row flex-col gap-5 justify-between py-4'>
         <h1>Create a Project</h1>
         <div className='flex flex-wrap max-sm:flex-col gap-4 px-5 w-full sm:w-auto'>
-          <Button variant='tonal' color='secondary' onClick={handleCancel}>
+          <Button
+            variant='tonal'
+            color='secondary'
+            onClick={() => {
+              router.back()
+            }}
+          >
             Annuler
           </Button>
           <Button variant='contained' onClick={handleSubmit}>

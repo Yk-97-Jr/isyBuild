@@ -33,6 +33,8 @@ import { useProjectsTemplatesUpdateUpdateMutation } from '@/services/IsyBuildApi
 
 import type { EmailTemplateUpdateRequest } from '@/services/IsyBuildApi'
 
+import { useProjectsTemplatesResetCreateMutation } from '@/services/IsyBuildApi'
+
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
@@ -44,7 +46,7 @@ const Templates = () => {
 
   const router = useRouter()
 
-  const [templateContent, setTemplateContent] = useState<ProjectEmailTemplateRead | undefined>()
+  const [templateContent, setTemplateContent] = useState<ProjectEmailTemplateRead | undefined>(undefined)
 
   const { data: projectTemplates, isLoading, error } = useProjectsTemplatesRetrieveQuery({ templateId: templateId })
 
@@ -57,6 +59,9 @@ const Templates = () => {
   })
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
+
+  const [trigger_Reset, { error: template_reset_error, isLoading: template_reset_isloading }] =
+    useProjectsTemplatesResetCreateMutation()
 
   useEffect(() => {
     if (projectTemplates) {
@@ -119,7 +124,7 @@ const Templates = () => {
     if (response) {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'Modification avec succe' })
-      router.back()
+      window.location.reload()
     } else {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'error', message: 'Error de modification' })
@@ -127,12 +132,43 @@ const Templates = () => {
   }
 
   //TODO waiting saad to create the endponts
-  function handleReset(event: FormEvent) {
+
+  //Done
+
+  const handleReset = async (event: FormEvent) => {
     event.preventDefault()
-    window.location.reload()
+    try {
+      const response = await trigger_Reset({ templateId }).unwrap()
+
+      if (isLoading) {
+        return (
+          <div className='flex justify-center items-center'>
+            <CircularProgress />
+          </div>
+        )
+      }
+
+      if (response) {
+        if (templateContent) {
+          set_new_template({
+            name: templateContent.email_template.name || '',
+            subject_template: templateContent.email_template.subject_template || '',
+            header_template: templateContent.email_template.header_template || '',
+            body_template: templateContent.email_template.body_template || '',
+            footer_template: templateContent.email_template.footer_template || ''
+          })
+        }
+      }
+      setOpenSnackBar(true)
+      setInfoAlert({ severity: 'success', message: 'Template has been reset successfully.' })
+      window.location.reload()
+    } catch (error) {
+      setOpenSnackBar(true)
+      setInfoAlert({ severity: 'error', message: 'Failed to reset the template.' })
+    }
   }
 
-  //TODO waiting saad to create the endpoints
+  //DONE
   function handleCancel(event: FormEvent) {
     event.preventDefault()
     router.back()
@@ -177,7 +213,7 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Objet du Modèle'
+              label='Objet '
               defaultValue={templateContent?.email_template.subject_template}
               onChange={handlesubject_template}
               multiline
@@ -186,7 +222,7 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Modèle Modèle'
+              label='Modèle '
               InputProps={{
                 style: { minHeight: '80px', padding: '12px' }
               }}
@@ -198,7 +234,7 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Contenu de Page'
+              label='Contenu '
               InputProps={{
                 style: { minHeight: '180px', padding: '12px' }
               }}
@@ -210,7 +246,7 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Pied de page'
+              label='Pied '
               InputProps={{
                 style: { minHeight: '80px', padding: '12px' }
               }}

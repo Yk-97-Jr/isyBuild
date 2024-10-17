@@ -956,6 +956,53 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /folders/{folder_id}/:
+    get:
+      operationId: get_folder_detail
+      description: 'Fetch detailed information about a specific Folder by its ID,
+        including documents '
+      summary: Retrieve a Folder by ID
+      parameters:
+      - in: path
+        name: folder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folder Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Folder'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /login/:
     post:
       operationId: login_create
@@ -1205,6 +1252,79 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /notifications/in-app/:
+    get:
+      operationId: get_in_app_notifications_list
+      description: Retrieve a list of all unread notifications with pagination.
+      summary: List all unread notifications
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Notifications Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedInAppNotification'
+          description: ''
+  /notifications/in-app/{notification_id}:
+    get:
+      operationId: get_in_app_notification_detail
+      description: Retrieve details of a specific notification by its ID for the authenticated
+        user.
+      summary: 'Get a in app  notification detail '
+      parameters:
+      - in: path
+        name: notification_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Notifications Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InAppNotification'
+          description: 'Success: Notification retrieved'
+        '404':
+          description: 'Error: Notification not found'
+  /notifications/in-app/{notification_id}/read/:
+    post:
+      operationId: mark_notification_as_read
+      description: Marks a single notification as read for the authenticated user
+        by notification ID.
+      summary: Mark a notification as read
+      parameters:
+      - in: path
+        name: notification_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Notifications Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: 'Success: Notification marked as read'
+        '404':
+          description: 'Error: No matching notification found'
   /password-confirm/:
     post:
       operationId: password_confirm_create
@@ -1480,6 +1600,16 @@ paths:
       description: Retrieve a list of all subcontractors assigned to a specific ProjectLot.
       summary: List all Subcontractors for a ProjectLot
       parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
       - in: path
         name: project_lot_id
         schema:
@@ -2082,6 +2212,29 @@ paths:
       operationId: projects_templates_retrieve
       description: Fetch detailed information about an email template.
       summary: Retrieve an Email Template by ID
+      parameters:
+      - in: path
+        name: template_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectEmailTemplate'
+          description: ''
+  /projects/templates/{template_id}/reset/:
+    post:
+      operationId: projects_templates_reset_create
+      description: Resets the specified email template for the given project to the
+        default settings.
+      summary: Reset a single email template to default
       parameters:
       - in: path
         name: template_id
@@ -2953,6 +3106,20 @@ components:
           format: binary
       required:
       - avatar
+    ChannelEnum:
+      enum:
+      - Email
+      - sms
+      - whatsApp
+      - push
+      - in_app
+      type: string
+      description: |-
+        * `Email` - Email
+        * `sms` - sms
+        * `whatsApp` - WhatsApp
+        * `push` - Push Notification
+        * `in_app` - In-App Notification
     Client:
       type: object
       properties:
@@ -3364,6 +3531,55 @@ components:
       - documents
       - id
       - name
+    InAppNotification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: string
+          nullable: true
+          maxLength: 255
+        message:
+          type: string
+        status:
+          $ref: '#/components/schemas/InAppNotificationStatusEnum'
+        channel:
+          $ref: '#/components/schemas/ChannelEnum'
+        sent_at:
+          type: string
+          format: date-time
+          nullable: true
+        read_at:
+          type: string
+          format: date-time
+          nullable: true
+        redirect_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        context_data:
+          nullable: true
+      required:
+      - channel
+      - id
+      - message
+    InAppNotificationStatusEnum:
+      enum:
+      - pending
+      - Sent
+      - Failed
+      - read
+      - unread
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `Sent` - Sent
+        * `Failed` - Failed
+        * `read` - Read
+        * `unread` - unread
     Lot:
       type: object
       properties:
@@ -3514,6 +3730,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClientStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedInAppNotification:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InAppNotification'
       required:
       - count
       - next
@@ -4346,7 +4584,9 @@ components:
           type: integer
           readOnly: true
         user:
-          type: integer
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
         subcontractor:
           allOf:
           - $ref: '#/components/schemas/SubcontractorSimple'

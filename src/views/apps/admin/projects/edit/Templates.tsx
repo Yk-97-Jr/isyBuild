@@ -3,12 +3,11 @@ import React from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, IconButton } from '@mui/material'
 
 import { Card, CardContent, CardHeader, Typography, Button } from '@mui/material'
 
 import type { ProjectEmailTemplateRead } from '@/services/IsyBuildApi'
-
 
 interface Templates {
   templates: ProjectEmailTemplateRead[]
@@ -30,8 +29,6 @@ function Templates({ templates, templates_loading }: Templates) {
     router.push(`${id}/templates`)
   }
 
-
-
   return (
     <Card>
       <CardHeader title='Templates des Email' />
@@ -42,14 +39,11 @@ function Templates({ templates, templates_loading }: Templates) {
               <div className='flex flex-col p-2' key={Element.id}>
                 <div className='flex justify-between items-center'>
                   <Typography variant='h6' className='mt-4' fontWeight='semibold' color='text.primary'>
-                    {`${Element.template_type} email `}
+                    {`${Element.email_template.name} email `}
                   </Typography>
-                  <Button
-                    children='Modifier'
-                    className='scale-90'
-                    variant='contained'
-                    onClick={() => handleRouts(Element.id)}
-                  />
+                  <IconButton onClick={() => handleRouts(Element.id)}>
+                    <i className='tabler-edit text-textSecondary' />
+                  </IconButton>
                 </div>
               </div>
             )
