@@ -7,12 +7,10 @@ import type { FormEvent } from 'react'
 
 import { useParams, useRouter } from 'next/navigation'
 
-
 // MUI Imports
 import Grid from '@mui/material/Grid'
 
 import Card from '@mui/material/Card'
-
 
 import CardHeader from '@mui/material/CardHeader'
 
@@ -37,11 +35,11 @@ import type { EmailTemplateUpdateRequest } from '@/services/IsyBuildApi'
 
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
-import type{ SnackBarContextType } from '@/types/apps/snackbarType'
-
+import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
 const Templates = () => {
   const params = useParams()
+
 
   const templateId: number = parseInt(params?.templates.toString())
 
@@ -66,8 +64,6 @@ const Templates = () => {
       setTemplateContent(projectTemplates)
     }
   }, [projectTemplates])
-
- 
 
   const handlesubject_template = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
@@ -106,7 +102,6 @@ const Templates = () => {
   }, [templateContent])
 
   const handleSave = async (event: FormEvent) => {
-
     event.preventDefault()
 
     const updated_Data: EmailTemplateUpdateRequest = {
@@ -140,14 +135,11 @@ const Templates = () => {
 
   //TODO waiting saad to create the endpoints
   function handleCancel(event: FormEvent) {
-
     event.preventDefault()
     router.back()
   }
 
-  
   if (isLoading) {
-  
     return (
       <div className='flex justify-center items-center h-full'>
         <CircularProgress />
@@ -164,7 +156,7 @@ const Templates = () => {
       </div>
     )
   }
-
+  
   return (
     <Card>
       <div className='flex sm:flex-row  flex-col w-full justify-between items-center '>
