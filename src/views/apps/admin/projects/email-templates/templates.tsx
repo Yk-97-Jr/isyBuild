@@ -7,8 +7,7 @@ import type { FormEvent } from 'react'
 
 import { useParams, useRouter } from 'next/navigation'
 
-import { useForm,  type SubmitHandler } from 'react-hook-form'
-
+import { useForm, type SubmitHandler } from 'react-hook-form'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -78,8 +77,7 @@ const Templates = () => {
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
-  const [trigger_Reset] =
-    useProjectsTemplatesResetCreateMutation()
+  const [trigger_Reset] = useProjectsTemplatesResetCreateMutation()
 
   useEffect(() => {
     if (projectTemplates) {
@@ -156,7 +154,6 @@ const Templates = () => {
   //TODO waiting saad to create the endpoints
   //Done
   const handleReset = async (event: FormEvent) => {
-
     event.preventDefault()
 
     try {
@@ -181,21 +178,16 @@ const Templates = () => {
           })
         }
       }
-      
+
       setOpenSnackBar(true)
 
       setInfoAlert({ severity: 'success', message: 'Template has been reset successfully.' })
 
       window.location.reload()
-
-    } 
-    catch (error) 
-    {
-
+    } catch (error) {
       setOpenSnackBar(true)
 
       setInfoAlert({ severity: 'error', message: 'Failed to reset the template.' })
-
     }
   }
 
