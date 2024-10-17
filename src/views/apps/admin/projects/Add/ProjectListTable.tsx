@@ -187,7 +187,7 @@ const ProjectListTable = ({
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {row.original.client?.address?.country || 'N/A'}
+                {row.original.address?.country || 'N/A'}
               </Typography>
             </div>
           </div>
