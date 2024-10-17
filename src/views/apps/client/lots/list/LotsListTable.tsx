@@ -149,11 +149,11 @@ const LotsListTable = ({
 
 
   const handleEditLot = (id: number) => {
-
-    console.log(`/${userRole}/lots/${id}/details`)
-
-    router.push(`/${userRole}/lots/${id}/details`)
-  }
+    const targetPath = `/${userRole}/lots/${id}/details`;
+    
+    console.log("Navigating to:", targetPath);
+    router.push(targetPath);
+  };
 
   const handleDeleteLot = (id: number) => {
     setOpen(true)

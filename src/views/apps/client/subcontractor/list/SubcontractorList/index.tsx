@@ -1,64 +1,51 @@
 'use client'
 
-// components/CompanyList.js
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
-import Grid from '@mui/material/Grid'
+import { useRouter } from 'next/navigation';
 
-import { CircularProgress } from '@mui/material'
+import Grid from '@mui/material/Grid';
+import { CircularProgress, Box} from '@mui/material';
 
-import Box from '@mui/material/Box'
-
-import SubcontractorTable from '@/views/apps/client/subcontractor/list/SubcontractorTable'
-import { useSubcontractorsRetrieveQuery } from '@/services/IsyBuildApi'
+import SubcontractorTable from '@/views/apps/client/subcontractor/list/SubcontractorTable';
+import { useSubcontractorsRetrieveQuery } from '@/services/IsyBuildApi';
 
 const SubcontractorList = () => {
-  // States for pagination or other parameters
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-
-  console.log('page ' + page)
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const router = useRouter();
 
   // Pass parameters to the query hook
-  const { data, error, isLoading, isFetching, refetch } = useSubcontractorsRetrieveQuery({ page, pageSize })
+  const { data, error, isLoading, isFetching, refetch } = useSubcontractorsRetrieveQuery({ page, pageSize });
 
+  // Effect to refetch data based on pagination changes
   useEffect(() => {
-    refetch()
-  }, [page, pageSize, refetch])
+    refetch();
+  }, [page, pageSize, refetch]);
 
-  if (isLoading)
+    // Handle error state in a separate effect
+    useEffect(() => {
+      if (error) {
+        // Redirect to the SomethingWrong page if an error occurs
+        router.push('/something-wrong'); // Adjust the URL as needed
+      }
+    }, [error, router]);
+
+  // Handle loading state
+  if (isLoading) {
     return (
-      <Box display='flex' justifyContent='center' alignItems='flex-start' height='100vh'>
+      <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
         <CircularProgress />
       </Box>
-    )
-  if (error)
-    return (
-      <div>
-        Error fetching user data:{' '}
-        {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
-      </div>
-    )
-  const users = data?.results || []
-  const countRecords = data?.count
+    );
+  }
 
-  console.log('*********')
-  console.log(data)
-  console.log(data?.results)
-  console.log('*********')
 
-  return isFetching ? (
-    <SubcontractorTable
-      pageSize={pageSize}
-      setPageSize={setPageSize}
-      page={page}
-      setPage={setPage}
-      data={users}
-      countRecords={countRecords}
-      isFetching={isFetching}
-      refetch={refetch}
-    />
-  ) : (
+
+  const users = data?.results || [];
+  const countRecords = data?.count;
+
+  return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <SubcontractorTable
@@ -73,7 +60,56 @@ const SubcontractorList = () => {
         />
       </Grid>
     </Grid>
-  )
-}
+  );
+};
 
-export default SubcontractorList
+export default SubcontractorList;
+
+
+
+
+
+/* // Define an interface for the error data structure you expect
+interface ErrorData {
+  message?: string;
+}
+ */
+/* if (error) {
+
+  // Redirect to the SomethingWrong page
+   // Adjust the URL as needed
+  
+ // Prevent rendering anything while redirecting
+
+
+  let errorMessage = 'An unexpected error occurred. Please try again later.'
+
+  // Check if the error has a specific structure
+  if ('status' in error) {
+    if (typeof error.data === 'string') {
+      // Handle string error data
+      const messageMatch = error.data.match(/<h1>(.*?)<\/h1>/);
+
+      errorMessage = messageMatch ? messageMatch[1] : 'Somthing went wrong: Please try again later.'
+    } else if (error.data && typeof error.data === 'object') {
+      // Assert the type of error.data
+      const errorData = error.data as ErrorData;
+
+      errorMessage = errorData.message || 'Error fetching subcontractor data.'
+    }
+  } else if ('message' in error) {
+    // Handle SerializedError
+    errorMessage = error.message || 'An unexpected error occurred.'
+  }
+
+  return (
+    <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center' height='100vh'>
+      <Typography variant="h6" color="error">
+        {errorMessage}
+      </Typography>
+      <Button variant="contained" color="primary" onClick={refetch}>
+        Retry
+      </Button>
+    </Box>
+  ) 
+}*/

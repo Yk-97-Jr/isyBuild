@@ -48,15 +48,15 @@ const rountingData = (): rountingDataType[] => [
   },
   {
     path: 'role/subcontractor/list',
-    roles: ['admin']
+    roles: ['admin','client']
   },
   {
     path: 'role/subcontractor/add',
-    roles: ['admin']
+    roles: ['admin','client']
   },
   {
     path: 'role/subcontractor/[id]/details',
-    roles: ['admin']
+    roles: ['admin','client']
   },
   {
     path: 'role/staff/[id]/details/add',
