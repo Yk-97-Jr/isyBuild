@@ -19,7 +19,7 @@ const SubcontractorAddHeader: React.FC<SubcontractorAddHeaderProps> = ({ onSubmi
     <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
       <div>
         <Typography variant='h4' className='mbe-1'>
-        ajouter un membre à l'équipe
+        ajouter un membre à l&apos;équipe
         </Typography>
       </div>
       <div className='flex flex-wrap max-sm:flex-col gap-4'>

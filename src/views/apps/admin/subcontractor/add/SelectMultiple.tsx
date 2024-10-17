@@ -7,14 +7,16 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import Chip from '@mui/material/Chip'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
-import CustomTextField from '@core/components/mui/TextField'
+
 
 // Component Imports
 import type { SelectChangeEvent } from '@mui/material'
 import type { UseFormRegister } from 'react-hook-form'
 
-import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
+import CustomTextField from '@core/components/mui/TextField'
 import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
+
+import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -47,8 +49,11 @@ const SelectMultiple = ({
   const { data, refetch } = useLotsRetrieveQuery({ page, pageSize })
 
   // Ref to track the observer for infinite scrolling
+
   const observer = useRef<IntersectionObserver | null>(null)
+
   const lastLotRef = useCallback(
+
     (node: HTMLLIElement | null) => {
       if (observer.current) observer.current.disconnect()
       observer.current = new IntersectionObserver(entries => {
@@ -64,19 +69,24 @@ const SelectMultiple = ({
   useEffect(() => {
     if (data?.results) {
       const newLots = data.results.map(lot => ({
+
         ...lot,
         uniqueKey: `${lot.id}-${Math.random().toString(36).substring(2, 9)}` // Appends a random string to each id
+
       }))
+
       setLots(prevLots => [...prevLots, ...newLots])
     }
   }, [data])
 
   useEffect(() => {
+
     refetch()
   }, [page, pageSize, refetch])
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
     const selectedNames = event.target.value as string[]
+
     setSelectedLotNames(selectedNames)
   }
 
@@ -89,16 +99,20 @@ const SelectMultiple = ({
         value={selectedLotNames}
         id='lots_ids'
         {...register('lots_ids')}
+
         SelectProps={{
+
           multiple: true,
           MenuProps,
           onChange: handleChange,
           onOpen: () => onToggleMenu(true),
           onClose: () => onToggleMenu(false),
           renderValue: selected => (
+            
             <div className='flex flex-wrap gap-1'>
               {(selected as number[]).map(value => {
                 const lot = lots.find(lot => lot.id === value)
+
                 return lot ? <Chip key={value} label={lot.name} size='small' /> : null
               })}
             </div>

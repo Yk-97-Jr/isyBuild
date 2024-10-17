@@ -7,11 +7,13 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import Chip from '@mui/material/Chip'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
-import CustomTextField from '@core/components/mui/TextField'
+
 
 // Component Imports
 import type { SelectChangeEvent } from '@mui/material'
 import type { UseFormRegister } from 'react-hook-form'
+
+import CustomTextField from '@core/components/mui/TextField'
 
 import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
 import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
@@ -48,6 +50,7 @@ const SelectMultiple = ({
 
   // Ref to track the observer for infinite scrolling
   const observer = useRef<IntersectionObserver | null>(null)
+
   const lastLotRef = useCallback(
     (node: HTMLLIElement | null) => {
       if (observer.current) observer.current.disconnect()
@@ -67,6 +70,7 @@ const SelectMultiple = ({
         ...lot,
         uniqueKey: `${lot.id}-${Math.random().toString(36).substring(2, 9)}` // Appends a random string to each id
       }))
+
       setLots(prevLots => [...prevLots, ...newLots])
     }
   }, [data])
@@ -77,6 +81,7 @@ const SelectMultiple = ({
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
     const selectedNames = event.target.value as string[]
+
     setSelectedLotNames(selectedNames)
   }
 
@@ -99,7 +104,9 @@ const SelectMultiple = ({
             <div className='flex flex-wrap gap-1'>
               {(selected as number[]).map(value => {
                 const lot = lots.find(lot => lot.id === value)
-                return lot ? <Chip key={value} label={lot.name} size='small' /> : null
+
+                
+return lot ? <Chip key={value} label={lot.name} size='small' /> : null
               })}
             </div>
           )

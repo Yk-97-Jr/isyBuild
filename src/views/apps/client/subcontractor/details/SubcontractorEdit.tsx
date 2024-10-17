@@ -142,7 +142,7 @@ const SubcontractorEdit = () => {
               <Owner subcontractorData={subcontractorData} />
             </Grid>
             <Grid item xs={12}>
-              <SubcontractorStatus register={register} errors={errors} subcontractorData={subcontractorData} />
+              <SubcontractorStatus register={register} errors={errors} setValue={setValue} selectedLotIds={[]}/>
             </Grid>
             <Grid item xs={12}>
               <SubcontractorListInfo subcontractorData={subcontractorData} />

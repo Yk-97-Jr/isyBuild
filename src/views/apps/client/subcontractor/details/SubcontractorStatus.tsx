@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+
 import { Card, CardHeader, CardContent, Divider, Typography, Switch } from '@mui/material'
 import type { FieldError, UseFormRegister, UseFormSetValue } from 'react-hook-form'
+
 import type { FormValidateSubcontractorEditType } from '@/views/apps/admin/subcontractor/details/schemaSubcontractorEdit'
-import type { LotSimpleRead, SubcontractorRead } from '@/services/IsyBuildApi'
+import type { LotSimpleRead} from '@/services/IsyBuildApi'
 import SelectMultiple from './SelectMultiple'
 
 type ClientStatusProps = {
@@ -11,11 +13,11 @@ type ClientStatusProps = {
   errors: {
     is_active?: FieldError
   }
-  subcontractorData: SubcontractorRead | undefined
+ 
   selectedLotIds: LotSimpleRead[]
 }
 
-const SubcontractorStatus: React.FC<ClientStatusProps> = ({ register, setValue, errors, subcontractorData, selectedLotIds }) => {
+const SubcontractorStatus: React.FC<ClientStatusProps> = ({ register, setValue, errors,  selectedLotIds }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false)
 
   const handleSelectToggle = (open: boolean) => {
