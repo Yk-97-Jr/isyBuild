@@ -214,7 +214,7 @@ const Templates = () => {
   return (
     <Card>
       <div className='flex sm:flex-row  flex-col w-full justify-between items-center '>
-        <CardHeader title='Templates des Emails' />
+        <CardHeader title={templateContent?.email_template.name} />
         <div className='flex flex-wrap max-sm:flex-col gap-4 px-5 w-full sm:w-auto'>
           <Button variant='tonal' color='secondary' onClick={handleCancel}>
             Annuler
@@ -251,6 +251,7 @@ const Templates = () => {
               helperText={errors.header?.message}
               onChange={handleheader_template}
               multiline
+              rows={3}
             />
           </Grid>
           <Grid item xs={12}>
@@ -263,6 +264,7 @@ const Templates = () => {
               helperText={errors.body?.message}
               onChange={handlebody_template}
               multiline
+              rows={8}
             />
           </Grid>
           <Grid item xs={12}>
@@ -275,6 +277,7 @@ const Templates = () => {
               helperText={errors.footer?.message}
               onChange={handlefooter_template}
               multiline
+              rows={3}
             />
           </Grid>
         </Grid>
