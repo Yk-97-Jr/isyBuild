@@ -5,7 +5,11 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import type { FormEvent } from 'react'
 
+import { useForm, SubmitHandler } from 'react-hook-form'
+
 import { useParams, useRouter } from 'next/navigation'
+
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // MUI Imports
 import Grid from '@mui/material/Grid'
@@ -33,6 +37,10 @@ import { useProjectsTemplatesUpdateUpdateMutation } from '@/services/IsyBuildApi
 
 import type { EmailTemplateUpdateRequest } from '@/services/IsyBuildApi'
 
+import type { templateSchemaType } from './templatesSchema'
+
+import { Schema } from './templatesSchema'
+
 import { useProjectsTemplatesResetCreateMutation } from '@/services/IsyBuildApi'
 
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
@@ -41,6 +49,15 @@ import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
 const Templates = () => {
   const params = useParams()
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<templateSchemaType>({
+    resolver: yupResolver(Schema)
+  })
 
   const templateId: number = parseInt(params?.templates.toString())
 
@@ -102,12 +119,16 @@ const Templates = () => {
         body_template: templateContent.email_template.body_template,
         footer_template: templateContent.email_template.footer_template
       })
+      reset({
+        subject: templateContent.email_template.subject_template ?? '',
+        header: templateContent.email_template.header_template ?? '',
+        body: templateContent.email_template.body_template ?? '',
+        footer: templateContent.email_template.footer_template ?? ''
+      })
     }
-  }, [templateContent])
+  }, [templateContent, reset])
 
-  const handleSave = async (event: FormEvent) => {
-    event.preventDefault()
-
+  const handleSave: SubmitHandler<templateSchemaType> = async data => {
     const updated_Data: EmailTemplateUpdateRequest = {
       name: new_template.name || '',
       subject_template: new_template.subject_template || '',
@@ -131,10 +152,8 @@ const Templates = () => {
     }
   }
 
-  //TODO waiting saad to create the endponts
-
+  //TODO waiting saad to create the endpoints
   //Done
-
   const handleReset = async (event: FormEvent) => {
     event.preventDefault()
     try {
@@ -203,7 +222,7 @@ const Templates = () => {
           <Button variant='tonal' onClick={handleReset}>
             Reinitialiser
           </Button>
-          <Button variant='contained' onClick={handleSave}>
+          <Button variant='contained' onClick={handleSubmit(handleSave)}>
             Modifier
           </Button>
         </div>
@@ -213,8 +232,11 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Objet '
+              label='Objet'
+              {...register('subject')}
               defaultValue={templateContent?.email_template.subject_template}
+              error={!!errors.subject}
+              helperText={errors.subject?.message}
               onChange={handlesubject_template}
               multiline
             />
@@ -222,11 +244,11 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Modèle '
-              InputProps={{
-                style: { minHeight: '80px', padding: '12px' }
-              }}
+              label='Modèle'
+              {...register('header')}
               defaultValue={templateContent?.email_template.header_template}
+              error={!!errors.header}
+              helperText={errors.header?.message}
               onChange={handleheader_template}
               multiline
             />
@@ -234,11 +256,11 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Contenu '
-              InputProps={{
-                style: { minHeight: '180px', padding: '12px' }
-              }}
+              label='Contenu'
+              {...register('body')}
               defaultValue={templateContent?.email_template.body_template}
+              error={!!errors.body}
+              helperText={errors.body?.message}
               onChange={handlebody_template}
               multiline
             />
@@ -246,11 +268,11 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Pied '
-              InputProps={{
-                style: { minHeight: '80px', padding: '12px' }
-              }}
+              label='Pied'
+              {...register('footer')}
               defaultValue={templateContent?.email_template.footer_template}
+              error={!!errors.footer}
+              helperText={errors.footer?.message}
               onChange={handlefooter_template}
               multiline
             />
