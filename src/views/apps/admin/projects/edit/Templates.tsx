@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import { CircularProgress, IconButton } from '@mui/material'
 
-import { Card, CardContent, CardHeader, Typography, Button } from '@mui/material'
+import { Card, CardContent, CardHeader, Typography } from '@mui/material'
 
 import type { ProjectEmailTemplateRead } from '@/services/IsyBuildApi'
 

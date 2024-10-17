@@ -92,18 +92,22 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
     event.preventDefault()
 
     const departement = event.target.value
+
     setProjectState({
       ...projectState,
       address: {
         ...projectState.address,
         department: departement
       }
+
     })
   }
 
   function handleVille(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
+
     const city = event.target.value
+
     setProjectState({
       ...projectState,
       address: {
@@ -111,6 +115,7 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
         city: city
       }
     })
+    
   }
 
   function handleCodePostal(event: React.ChangeEvent<HTMLInputElement>) {

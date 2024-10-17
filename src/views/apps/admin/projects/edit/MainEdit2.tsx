@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from 'react'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 
 import { CircularProgress, Button } from '@mui/material'
 
@@ -32,7 +32,6 @@ function MainEdit2() {
   const params = useParams()
   const projectId = parseInt(params?.edit as string)
 
-  const router = useRouter()
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType

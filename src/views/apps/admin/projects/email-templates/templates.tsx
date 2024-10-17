@@ -5,9 +5,10 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import type { FormEvent } from 'react'
 
-import { useForm, SubmitHandler } from 'react-hook-form'
-
 import { useParams, useRouter } from 'next/navigation'
+
+import { useForm,  type SubmitHandler } from 'react-hook-form'
+
 
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -77,7 +78,7 @@ const Templates = () => {
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
-  const [trigger_Reset, { error: template_reset_error, isLoading: template_reset_isloading }] =
+  const [trigger_Reset] =
     useProjectsTemplatesResetCreateMutation()
 
   useEffect(() => {
@@ -128,7 +129,7 @@ const Templates = () => {
     }
   }, [templateContent, reset])
 
-  const handleSave: SubmitHandler<templateSchemaType> = async data => {
+  const handleSave: SubmitHandler<templateSchemaType> = async () => {
     const updated_Data: EmailTemplateUpdateRequest = {
       name: new_template.name || '',
       subject_template: new_template.subject_template || '',
@@ -155,7 +156,9 @@ const Templates = () => {
   //TODO waiting saad to create the endpoints
   //Done
   const handleReset = async (event: FormEvent) => {
+
     event.preventDefault()
+
     try {
       const response = await trigger_Reset({ templateId }).unwrap()
 
@@ -178,12 +181,21 @@ const Templates = () => {
           })
         }
       }
+      
       setOpenSnackBar(true)
+
       setInfoAlert({ severity: 'success', message: 'Template has been reset successfully.' })
+
       window.location.reload()
-    } catch (error) {
+
+    } 
+    catch (error) 
+    {
+
       setOpenSnackBar(true)
+
       setInfoAlert({ severity: 'error', message: 'Failed to reset the template.' })
+
     }
   }
 
