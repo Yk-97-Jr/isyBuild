@@ -19,6 +19,8 @@ const TablePaginationComponent = ({
   const startRecord = (currentPage - 1) * pageSize + 1
   const endRecord = Math.min(currentPage * pageSize, totalRecord)
 
+
+  // this pagination is for server paginated system
   return (
     <div className='flex justify-between items-center flex-wrap pli-6 border-bs bs-auto plb-[12.5px] gap-2'>
       <Typography color='text.disabled'>
