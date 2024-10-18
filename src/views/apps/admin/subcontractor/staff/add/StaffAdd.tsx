@@ -2,12 +2,15 @@
 
 import React, { useContext } from 'react'
 
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+
 
 import Grid from '@mui/material/Grid'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+
+import { useAuth } from '@/contexts/AuthContext'
 
 import StaffAddHeader from '@/views/apps/admin/subcontractor/staff/add/StaffAddHeader'
 
@@ -32,9 +35,11 @@ const StaffAdd = () => {
 
   const [createStaff, { isLoading }] = useSubcontractorsStaffCreateCreateMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-
-  const { id } = useParams()
-
+  const router = useRouter();
+  const {user} =useAuth()
+  const { id} = useParams()
+  const userRole = user?.role
+  
   console.log(id)
 
   const handleBack = useHandleBack()
@@ -42,7 +47,7 @@ const StaffAdd = () => {
 
   const onSubmit: SubmitHandler<FormValidateStaffAddType> = async data => {
     try {
-      await createStaff({
+      const response = await createStaff({
         subcontractorStaffCreateRequest: {
           user: {
             first_name: data.first_name, // Correct field names
@@ -55,14 +60,19 @@ const StaffAdd = () => {
         subcontractorId: +id
       }).unwrap()
 
+
+
       setOpenSnackBar(true)
-      setInfoAlert({ severity: 'success', message: 'entreprise ajouté avec succès' })
+      setInfoAlert({ severity: 'success', message: 'Utilisateur ajouté avec succès' })
+      const staffId = response.id;
+
+      router.push(`/${userRole}/subcontractor/${id}/details/${staffId}`)
     } catch (err: any) {
-      console.error('Failed to add entreprise:', err)
+      console.error('Failed to add Utilisateur:', err)
       setOpenSnackBar(true)
       setInfoAlert({
         severity: 'error',
-        message: err.data?.message || 'Échec de la création de entreprise'
+        message: err.data?.message || 'Échec de la création de Utilisateur'
       })
     }
   }

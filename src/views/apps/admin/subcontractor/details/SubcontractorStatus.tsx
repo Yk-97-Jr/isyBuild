@@ -17,7 +17,7 @@ type ClientStatusProps = {
   selectedLotIds: LotSimpleRead[]
 }
 
-const SubcontractorStatus: React.FC<ClientStatusProps> = ({ register, setValue, errors, selectedLotIds }) => {
+const SubcontractorStatus: React.FC<ClientStatusProps> = ({ register, setValue, errors,  selectedLotIds }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false)
 
   const handleSelectToggle = (open: boolean) => {

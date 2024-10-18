@@ -4,7 +4,7 @@ import { Card, CardHeader, CardContent, Divider, Typography, Switch } from '@mui
 import type { FieldError, UseFormRegister, UseFormSetValue } from 'react-hook-form'
 
 import type { FormValidateSubcontractorEditType } from '@/views/apps/admin/subcontractor/details/schemaSubcontractorEdit'
-import type { LotSimpleRead, SubcontractorRead } from '@/services/IsyBuildApi'
+import type { LotSimpleRead} from '@/services/IsyBuildApi'
 import SelectMultiple from './SelectMultiple'
 
 type ClientStatusProps = {
@@ -13,7 +13,7 @@ type ClientStatusProps = {
   errors: {
     is_active?: FieldError
   }
-  subcontractorData: SubcontractorRead | undefined
+ 
   selectedLotIds: LotSimpleRead[]
 }
 

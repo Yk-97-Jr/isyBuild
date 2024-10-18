@@ -3,7 +3,7 @@
 // MUI Imports
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
+
 import CardContent from '@mui/material/CardContent'
 
 // Import for form handling types
@@ -28,7 +28,6 @@ type StaffInformationProps = {
 const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors }) => {
   return (
     <Card>
-      <CardHeader title='User Information' />
       <CardContent>
         <Grid container spacing={6} className='mbe-6'>
           {/* First Name */}
@@ -37,9 +36,9 @@ const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors })
               fullWidth
               label='Prénom'
               placeholder='Prénom'
-              {...register('first_name')} // Registering the first_name field from props
-              error={!!errors.first_name} // Error handling
-              helperText={errors.first_name?.message} // Error message
+              {...register('first_name')}
+              error={!!errors.first_name}
+              helperText={errors.first_name?.message}
             />
           </Grid>
 
@@ -49,9 +48,9 @@ const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors })
               fullWidth
               label='Nom de famille'
               placeholder='Nom de famille'
-              {...register('last_name')} // Registering the last_name field from props
-              error={!!errors.last_name} // Error handling
-              helperText={errors.last_name?.message} // Error message
+              {...register('last_name')}
+              error={!!errors.last_name}
+              helperText={errors.last_name?.message}
             />
           </Grid>
 
@@ -61,15 +60,15 @@ const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors })
               fullWidth
               label='E-mail'
               placeholder='email@example.com'
-              
-              
-
-             
+              {...register('email')} // Register the email field
+              error={!!errors.email} // Error handling
+              helperText={errors.email?.message} // Error message
+              disabled // Make it read-only if you don't want to edit
             />
           </Grid>
+
           <Grid item xs={12}>
             <Divider className='mlb-0' />
-
             <div className='flex items-center justify-between'>
               <Typography>Statut</Typography>
               <Switch {...register('is_active')} defaultChecked />

@@ -39,7 +39,7 @@ const StaffCLientDetails = () => {
     resolver: yupResolver(schemaStaffEdit)
   })
 
-  const { id: staffId } = useParams() // Get clientId from route parameters
+  const { staffId } = useParams() // Get clientId from route parameters
 
   const { data: subcontractorStaffData, isLoading: isLoadingQuery } = useSubcontractorsStaffRetrieveQuery({
     subcontractorStaffId: +staffId
@@ -49,11 +49,14 @@ const StaffCLientDetails = () => {
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
   const handleBack = useHandleBack()
 
-  useEffect(() => {
+  useEffect(() => {console.log('Updating form values...')
+
     if (subcontractorStaffData && subcontractorStaffData.user) {
+      console.log('User data:', subcontractorStaffData.user)
       setValue('first_name', subcontractorStaffData.user.first_name || '')
       setValue('last_name', subcontractorStaffData.user.last_name || '')
       setValue('is_active', subcontractorStaffData.user.is_active || false)
+      setValue('email', subcontractorStaffData.user.email || '')
     }
   }, [subcontractorStaffData, setValue])
 

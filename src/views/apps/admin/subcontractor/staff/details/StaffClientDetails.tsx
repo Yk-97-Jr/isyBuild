@@ -4,6 +4,7 @@ import React, { useContext, useEffect } from 'react'
 
 import { useParams } from 'next/navigation'
 
+
 import Grid from '@mui/material/Grid'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -23,11 +24,11 @@ import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import useHandleBack from '@/hooks/useHandleBack'
 
 import type { FormValidateStaffEditType } from './schemaStaffEdit'
-import StaffEditHeader from '@views/apps/client/subcontractor/staff/details/StaffEditHeader'
-import StaffCreatedBy from '@views/apps/client/subcontractor/staff/details/StaffCreatedBy'
+import StaffEditHeader from '@views/apps/admin/subcontractor/staff/details/StaffEditHeader'
+import StaffCreatedBy from '@views/apps/admin/subcontractor/staff/details/StaffCreatedBy'
 import { schemaStaffEdit } from './schemaStaffEdit'
 
-import StaffInformation from '@views/apps/client/subcontractor/staff/details/StaffInformation'
+import StaffInformation from '@views/apps/admin/subcontractor/staff/details/StaffInformation'
 
 const StaffCLientDetails = () => {
   const {
@@ -39,7 +40,9 @@ const StaffCLientDetails = () => {
     resolver: yupResolver(schemaStaffEdit)
   })
 
-  const { staffId } = useParams() // Get clientId from route parameters
+  const { staffId } = useParams()
+
+
 
   const { data: subcontractorStaffData, isLoading: isLoadingQuery } = useSubcontractorsStaffRetrieveQuery({
     subcontractorStaffId: +staffId
@@ -49,11 +52,14 @@ const StaffCLientDetails = () => {
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
   const handleBack = useHandleBack()
 
-  useEffect(() => {
+  useEffect(() => {console.log('Updating form values...')
+
     if (subcontractorStaffData && subcontractorStaffData.user) {
+      console.log('User data:', subcontractorStaffData.user)
       setValue('first_name', subcontractorStaffData.user.first_name || '')
       setValue('last_name', subcontractorStaffData.user.last_name || '')
       setValue('is_active', subcontractorStaffData.user.is_active || false)
+      setValue('email', subcontractorStaffData.user.email || '')
     }
   }, [subcontractorStaffData, setValue])
 
@@ -73,6 +79,7 @@ const StaffCLientDetails = () => {
       console.log('staff modifyed successfully!', response)
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'staff Modifié avec succès' })
+     
     } catch (err: any) {
       console.error('Failed to modify staff:', err)
       setOpenSnackBar(true)

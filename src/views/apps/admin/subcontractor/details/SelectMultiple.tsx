@@ -8,14 +8,19 @@ import Chip from '@mui/material/Chip'
 import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 
-// Component Imports
 import type { SelectChangeEvent } from '@mui/material'
-import type {  UseFormSetValue,UseFormRegister} from 'react-hook-form';
+
+import type {  UseFormSetValue , UseFormRegister } from 'react-hook-form'
 
 import CustomTextField from '@core/components/mui/TextField'
-import type { LotSimpleRead} from '@/services/IsyBuildApi';
-import { useLotsRetrieveQuery } from '@/services/IsyBuildApi'
-import {  type FormValidateSubcontractorEditType } from './schemaSubcontractorEdit'
+
+// Component Imports
+
+import {  useLotsRetrieveQuery } from '@/services/IsyBuildApi'
+import  type { FormValidateSubcontractorEditType } from './schemaSubcontractorEdit'
+
+
+import type { LotSimpleRead } from '@/services/IsyBuildApi'
 
 
 const ITEM_HEIGHT = 48
@@ -36,6 +41,7 @@ const MenuProps = {
 }
 
 const SelectMultiple = ({
+  
   onToggleMenu,
   register,
   selectedLotIds: initialSelectedIds,
@@ -45,7 +51,9 @@ const SelectMultiple = ({
   register: UseFormRegister<FormValidateSubcontractorEditType>
   selectedLotIds: LotSimpleRead[]
   setValue: UseFormSetValue<FormValidateSubcontractorEditType>
+
 }) => {
+
   const [page, setPage] = useState(1)
   const [pageSize] = useState(10)
   const [selectedIds, setSelectedIds] = useState<number[]>([])
@@ -116,7 +124,8 @@ const SelectMultiple = ({
               {(selected as number[]).map(value => {
                 const lot = lots.find(lot => lot.id === value)
 
-                return lot ? <Chip key={value} label={lot.name} size='small' /> : null
+                
+return lot ? <Chip key={value} label={lot.name} size='small' /> : null
               })}
             </div>
           )

@@ -105,7 +105,8 @@ const SelectMultiple = ({
               {(selected as number[]).map(value => {
                 const lot = lots.find(lot => lot.id === value)
 
-                return lot ? <Chip key={value} label={lot.name} size='small' /> : null
+                
+return lot ? <Chip key={value} label={lot.name} size='small' /> : null
               })}
             </div>
           )

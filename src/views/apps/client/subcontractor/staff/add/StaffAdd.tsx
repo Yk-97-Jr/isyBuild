@@ -2,7 +2,8 @@
 
 import React, { useContext } from 'react'
 
-import { useParams } from 'next/navigation'
+import { useParams} from 'next/navigation'
+
 
 import Grid from '@mui/material/Grid'
 import type { SubmitHandler } from 'react-hook-form'
@@ -32,9 +33,9 @@ const StaffAdd = () => {
 
   const [createStaff, { isLoading }] = useSubcontractorsStaffCreateCreateMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-
+ 
   const { id } = useParams()
-
+  
   console.log(id)
 
   const handleBack = useHandleBack()
@@ -57,6 +58,7 @@ const StaffAdd = () => {
 
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'entreprise ajouté avec succès' })
+      
     } catch (err: any) {
       console.error('Failed to add entreprise:', err)
       setOpenSnackBar(true)
