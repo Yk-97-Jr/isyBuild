@@ -3,9 +3,8 @@ import React from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { CircularProgress, IconButton } from '@mui/material'
+import { CircularProgress, IconButton, Card, CardContent, CardHeader, Typography } from '@mui/material'
 
-import { Card, CardContent, CardHeader, Typography } from '@mui/material'
 
 import type { ProjectEmailTemplateRead } from '@/services/IsyBuildApi'
 

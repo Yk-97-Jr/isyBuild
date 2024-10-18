@@ -28,20 +28,21 @@ import { CircularProgress, Button } from '@mui/material'
 import CustomTextField from '@core/components/mui/TextField'
 
 // API Types
-import type { ProjectEmailTemplateRead } from '@/services/IsyBuildApi'
 
 // API Hook
-import { useProjectsTemplatesRetrieveQuery } from '@/services/IsyBuildApi'
+import {
+  useProjectsTemplatesRetrieveQuery,
+  type ProjectEmailTemplateRead,
+  useProjectsTemplatesUpdateUpdateMutation,
+  type EmailTemplateUpdateRequest,
+  useProjectsTemplatesResetCreateMutation
+} from '@/services/IsyBuildApi'
 
-import { useProjectsTemplatesUpdateUpdateMutation } from '@/services/IsyBuildApi'
-
-import type { EmailTemplateUpdateRequest } from '@/services/IsyBuildApi'
 
 import type { templateSchemaType } from './templatesSchema'
 
 import { Schema } from './templatesSchema'
 
-import { useProjectsTemplatesResetCreateMutation } from '@/services/IsyBuildApi'
 
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
@@ -125,7 +126,7 @@ const Templates = () => {
         footer: templateContent.email_template.footer_template ?? ''
       })
     }
-  }, [templateContent, reset])
+  }, [templateContent, reset,new_template])
 
   const handleSave: SubmitHandler<templateSchemaType> = async () => {
     const updated_Data: EmailTemplateUpdateRequest = {
@@ -144,6 +145,7 @@ const Templates = () => {
     if (response) {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'Modification avec succe' })
+
       window.location.reload()
     } else {
       setOpenSnackBar(true)

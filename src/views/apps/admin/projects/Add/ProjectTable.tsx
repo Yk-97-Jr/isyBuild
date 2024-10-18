@@ -68,7 +68,7 @@ const UserList = () => {
 
   useEffect(() => {
     refetch()
-  }, [page, pageSize])
+  }, [page, pageSize,refetch])
 
   if (isLoading)
     return (

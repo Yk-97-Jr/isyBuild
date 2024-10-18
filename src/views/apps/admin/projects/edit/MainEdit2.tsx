@@ -20,13 +20,15 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
-import { useProjectsRetrieve2Query, useProjectsUpdateUpdateMutation } from '@/services/IsyBuildApi'
+import {
+  useProjectsRetrieve2Query,
+  useProjectsUpdateUpdateMutation,
+  type ProjectRead,
+  type ProjectUpdateRequest,
+  useProjectsTemplatesListQuery,
+  type ProjectEmailTemplateRead
+} from '@/services/IsyBuildApi'
 
-import type { ProjectRead, ProjectUpdateRequest } from '@/services/IsyBuildApi'
-
-import { useProjectsTemplatesListQuery } from '@/services/IsyBuildApi'
-
-import type { ProjectEmailTemplateRead } from '@/services/IsyBuildApi'
 
 function MainEdit2() {
   const params = useParams()
