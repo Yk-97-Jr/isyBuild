@@ -24,6 +24,12 @@ type Props = {
 
 };
 
+//
+// const redirectFolder = (id: number) => {
+//   console.log(id)
+//
+// }
+
 const AppeleOffresInformation: React.FC<Props> = ({projectLotData}) => {
   return (
     <Card>

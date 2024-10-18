@@ -130,6 +130,9 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.contactCreateUpdateRequest
       })
     }),
+    getFolderDetail: build.query<GetFolderDetailApiResponse, GetFolderDetailApiArg>({
+      query: queryArg => ({ url: `/folders/${queryArg.folderId}/` })
+    }),
     loginCreate: build.mutation<LoginCreateApiResponse, LoginCreateApiArg>({
       query: queryArg => ({ url: `/login/`, method: 'POST', body: queryArg.tokenObtainPairRequest })
     }),
@@ -154,6 +157,18 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'PUT',
         body: queryArg.lotCreateUpdateRequest
       })
+    }),
+    getInAppNotificationsList: build.query<GetInAppNotificationsListApiResponse, GetInAppNotificationsListApiArg>({
+      query: queryArg => ({
+        url: `/notifications/in-app/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
+    getInAppNotificationDetail: build.query<GetInAppNotificationDetailApiResponse, GetInAppNotificationDetailApiArg>({
+      query: queryArg => ({ url: `/notifications/in-app/${queryArg.notificationId}` })
+    }),
+    markNotificationAsRead: build.mutation<MarkNotificationAsReadApiResponse, MarkNotificationAsReadApiArg>({
+      query: queryArg => ({ url: `/notifications/in-app/${queryArg.notificationId}/read/`, method: 'POST' })
     }),
     passwordConfirmCreate: build.mutation<PasswordConfirmCreateApiResponse, PasswordConfirmCreateApiArg>({
       query: queryArg => ({ url: `/password-confirm/`, method: 'POST', body: queryArg.setNewPasswordRequest })
@@ -295,6 +310,12 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     projectsTemplatesRetrieve: build.query<ProjectsTemplatesRetrieveApiResponse, ProjectsTemplatesRetrieveApiArg>({
       query: queryArg => ({ url: `/projects/templates/${queryArg.templateId}/` })
+    }),
+    projectsTemplatesResetCreate: build.mutation<
+      ProjectsTemplatesResetCreateApiResponse,
+      ProjectsTemplatesResetCreateApiArg
+    >({
+      query: queryArg => ({ url: `/projects/templates/${queryArg.templateId}/reset/`, method: 'POST' })
     }),
     projectsTemplatesUpdateUpdate: build.mutation<
       ProjectsTemplatesUpdateUpdateApiResponse,
@@ -569,6 +590,10 @@ export type ContactsUpdateUpdateApiArg = {
   contactId: number
   contactCreateUpdateRequest: ContactCreateUpdateRequest
 }
+export type GetFolderDetailApiResponse = /** status 200  */ FolderRead
+export type GetFolderDetailApiArg = {
+  folderId: number
+}
 export type LoginCreateApiResponse = /** status 200  */ {
   [key: string]: any
 }
@@ -604,6 +629,24 @@ export type LotsUpdateUpdateApiResponse = /** status 200  */ LotRead
 export type LotsUpdateUpdateApiArg = {
   lotId: number
   lotCreateUpdateRequest: LotCreateUpdateRequest
+}
+export type GetInAppNotificationsListApiResponse = /** status 200  */ PaginatedInAppNotificationRead
+export type GetInAppNotificationsListApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type GetInAppNotificationDetailApiResponse =
+  /** status 200 Success: Notification retrieved */ InAppNotificationRead
+export type GetInAppNotificationDetailApiArg = {
+  notificationId: number
+}
+export type MarkNotificationAsReadApiResponse = unknown
+export type MarkNotificationAsReadApiArg = {
+  notificationId: number
 }
 export type PasswordConfirmCreateApiResponse = /** status 200  */ any
 export type PasswordConfirmCreateApiArg = {
@@ -740,6 +783,10 @@ export type ProjectsDeleteDestroyApiArg = {
 }
 export type ProjectsTemplatesRetrieveApiResponse = /** status 200  */ ProjectEmailTemplateRead
 export type ProjectsTemplatesRetrieveApiArg = {
+  templateId: number
+}
+export type ProjectsTemplatesResetCreateApiResponse = /** status 200  */ ProjectEmailTemplateRead
+export type ProjectsTemplatesResetCreateApiArg = {
   templateId: number
 }
 export type ProjectsTemplatesUpdateUpdateApiResponse = /** status 200  */ ProjectEmailTemplateRead
@@ -1091,6 +1138,34 @@ export type ContactCreateUpdateRequest = {
   last_name: string
   email: string
 }
+export type Folder = {
+  name: string
+}
+export type Document = {
+  name: string
+  tags?: string | null
+}
+export type DocumentVersion = {
+  version_number: number
+  notes?: string | null
+}
+export type DocumentVersionRead = {
+  version_number: number
+  file_url: string
+  notes?: string | null
+  created_at: string
+}
+export type DocumentRead = {
+  id: number
+  name: string
+  tags?: string | null
+  latest_version: DocumentVersionRead
+}
+export type FolderRead = {
+  id: number
+  name: string
+  documents: DocumentRead[]
+}
 export type TokenObtainPairRequest = {}
 export type TokenObtainPairRequestWrite = {
   email: string
@@ -1128,6 +1203,41 @@ export type LotCreateUpdateRequest = {
   name: string
   description?: string | null
 }
+export type InAppNotificationStatusEnum = 'pending' | 'Sent' | 'Failed' | 'read' | 'unread'
+export type ChannelEnum = 'Email' | 'sms' | 'whatsApp' | 'push' | 'in_app'
+export type InAppNotification = {
+  subject?: string | null
+  message: string
+  status?: InAppNotificationStatusEnum
+  channel: ChannelEnum
+  sent_at?: string | null
+  read_at?: string | null
+  redirect_url?: string | null
+  context_data?: any | null
+}
+export type InAppNotificationRead = {
+  id: number
+  subject?: string | null
+  message: string
+  status?: InAppNotificationStatusEnum
+  channel: ChannelEnum
+  sent_at?: string | null
+  read_at?: string | null
+  redirect_url?: string | null
+  context_data?: any | null
+}
+export type PaginatedInAppNotification = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: InAppNotification[]
+}
+export type PaginatedInAppNotificationRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: InAppNotificationRead[]
+}
 export type SetNewPasswordRequest = {}
 export type SetNewPasswordRequestWrite = {
   new_password: string
@@ -1156,34 +1266,6 @@ export type LotSimple = {
 export type LotSimpleRead = {
   id: number
   name: string
-}
-export type Folder = {
-  name: string
-}
-export type Document = {
-  name: string
-  tags?: string | null
-}
-export type DocumentVersion = {
-  version_number: number
-  notes?: string | null
-}
-export type DocumentVersionRead = {
-  version_number: number
-  file_url: string
-  notes?: string | null
-  created_at: string
-}
-export type DocumentRead = {
-  id: number
-  name: string
-  tags?: string | null
-  latest_version: DocumentVersionRead
-}
-export type FolderRead = {
-  id: number
-  name: string
-  documents: DocumentRead[]
 }
 export type ProjectLotRead = {
   id: number
@@ -1221,12 +1303,10 @@ export type SubcontractorSimpleRead = {
   name: string
   siren_number: string
 }
-export type SubcontractorStaffSimple = {
-  user: number
-}
+export type SubcontractorStaffSimple = {}
 export type SubcontractorStaffSimpleRead = {
   id: number
-  user: number
+  user: CreatedByRead
   subcontractor: SubcontractorSimpleRead
 }
 export type ProjectLotSubcontractorRead = {
@@ -1567,6 +1647,7 @@ export const {
   useContactsPhoneNumbersRetrieveQuery,
   useContactsPhoneNumbersCreateCreateMutation,
   useContactsUpdateUpdateMutation,
+  useGetFolderDetailQuery,
   useLoginCreateMutation,
   useLogoutCreateMutation,
   useLotsRetrieveQuery,
@@ -1574,6 +1655,9 @@ export const {
   useLotsCreateCreateMutation,
   useLotsDeleteDestroyMutation,
   useLotsUpdateUpdateMutation,
+  useGetInAppNotificationsListQuery,
+  useGetInAppNotificationDetailQuery,
+  useMarkNotificationAsReadMutation,
   usePasswordConfirmCreateMutation,
   usePasswordResetCreateMutation,
   usePhoneNumbersRetrieveQuery,
@@ -1599,6 +1683,7 @@ export const {
   useProjectsCreateCreateMutation,
   useProjectsDeleteDestroyMutation,
   useProjectsTemplatesRetrieveQuery,
+  useProjectsTemplatesResetCreateMutation,
   useProjectsTemplatesUpdateUpdateMutation,
   useProjectsUpdateUpdateMutation,
   useSetPasswordCreateMutation,
