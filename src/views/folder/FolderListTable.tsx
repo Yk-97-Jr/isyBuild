@@ -103,10 +103,10 @@ const FolderListTable = ({tableData}: { tableData?: DocumentRead[] }) => {
     }
   };
 
-  const previewFile = (fileUrl: string) => {
-    console.log(fileUrl)
-
-  };
+  // const previewFile = (fileUrl: string) => {
+  //   console.log(fileUrl)
+  //
+  // };
 
 
   // Hooks
@@ -150,7 +150,7 @@ const FolderListTable = ({tableData}: { tableData?: DocumentRead[] }) => {
             <IconButton onClick={() => openOrDownloadFile(row.original.latest_version.file_url)}>
               <i className='tabler-download text-textSecondary'/>
             </IconButton>
-            <IconButton onClick={() => previewFile(row.original.latest_version.file_url)}>
+            <IconButton onClick={() => openOrDownloadFile(row.original.latest_version.file_url)}>
               <i className='tabler-eye text-textSecondary'/>
             </IconButton>
 
