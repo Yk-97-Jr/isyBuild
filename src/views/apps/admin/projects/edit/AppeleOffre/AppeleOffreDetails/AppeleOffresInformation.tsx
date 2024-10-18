@@ -24,10 +24,11 @@ type Props = {
 
 };
 
-const redirectFolder = (id: number) => {
-  console.log(id)
-
-}
+//
+// const redirectFolder = (id: number) => {
+//   console.log(id)
+//
+// }
 
 const AppeleOffresInformation: React.FC<Props> = ({projectLotData}) => {
   return (
@@ -35,7 +36,7 @@ const AppeleOffresInformation: React.FC<Props> = ({projectLotData}) => {
       <CardHeader title='Détails'
                   titleTypographyProps={{variant: 'h3'}}
                   action={
-                    <Button variant="contained" color="primary" onClick={redirectFolder}>
+                    <Button variant="contained" color="primary">
                       Afficher le dossier
                     </Button>
                   }/>
