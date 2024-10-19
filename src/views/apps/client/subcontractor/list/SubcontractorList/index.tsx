@@ -45,7 +45,18 @@ const SubcontractorList = () => {
   const users = data?.results || [];
   const countRecords = data?.count;
 
-  return (
+  return isFetching ? (
+    <SubcontractorTable
+      pageSize={pageSize}
+      setPageSize={setPageSize}
+      page={page}
+      setPage={setPage}
+      data={users}
+      countRecords={countRecords}
+      isFetching={isFetching}
+      refetch={refetch}
+    />
+  ) : (
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <SubcontractorTable
@@ -60,7 +71,7 @@ const SubcontractorList = () => {
         />
       </Grid>
     </Grid>
-  );
+  )
 };
 
 export default SubcontractorList;

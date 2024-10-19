@@ -173,21 +173,7 @@ const SubcontractorTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('phone_number', {
-        header: 'téléphone',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-0'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.phone_number} `}
-              </Typography>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.clients} `}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+      
       columnHelper.accessor('siren_number', {
         header: 'numéro de sirène',
         cell: ({ row }) => (
@@ -201,7 +187,7 @@ const SubcontractorTable = ({
         )
       }),
       columnHelper.accessor('created_by.id', {
-        header: 'propriétaire',
+        header: 'Créé Par',
         cell: ({ row }) => (
           <div className='flex items-center gap-0'>
             <div className='flex flex-col'>

@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect } from 'react'
 
-import {useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 
 
@@ -15,7 +15,7 @@ import Box from '@mui/material/Box'
 
 import { CircularProgress } from '@mui/material'
 
-import {useAuth} from "@/contexts/AuthContext";
+
 
 import SubcontractorInformation from '@/views/apps/admin/subcontractor/details/subcontractorInformation'
 import SubcontractorStatus from '@/views/apps/admin/subcontractor/details/SubcontractorStatus'
@@ -47,9 +47,7 @@ const SubcontractorEdit = () => {
   })
 
   const { id } = useParams() // Get subcontractorId from route parameters
-  const router = useRouter();
-  const {user} = useAuth();  // Get the user from AuthContext
-  const userRole = user?.role
+
 
   const { data: subcontractorData, isLoading: isLoadingQuery } = useSubcontractorsRetrieve2Query({
     subcontractorId: +id
@@ -74,7 +72,7 @@ const SubcontractorEdit = () => {
       setValue('email', subcontractorData.contact_email)
       setValue('phoneNumber', subcontractorData.phone_number)
       setValue('is_active', subcontractorData.is_active as boolean)
-      setValue('lots_ids',subcontractorData.lots)
+      setValue('lots_ids',subcontractorData.lots || [])
     }
   }, [subcontractorData, setValue])
 
@@ -110,7 +108,7 @@ const SubcontractorEdit = () => {
 
       
 
-      router.push(`/${userRole}/subcontractor/list`);
+      
 
       // Optionally, redirect after successful submission
     } catch (err: any) {

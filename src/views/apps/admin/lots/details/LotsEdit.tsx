@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect } from 'react'
 
-import { useParams,useRouter  } from 'next/navigation'
+import { useParams  } from 'next/navigation'
 
 
 
@@ -15,7 +15,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import { CircularProgress } from '@mui/material'
 
-import { useAuth } from '@/contexts/AuthContext'
+
 
 import LotsCreatedBy from './LotsCreatedBy'
 import LotsEditInfo from '@/views/apps/admin/lots/details/LotsEditInfo'
@@ -28,8 +28,6 @@ import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import { schemaLotsEdit } from '@/views/apps/admin/lots/details/schemaLots'
-
-import useHandleBack from '@components/useHandleBack'
 
 import { useLotsRetrieve2Query, useLotsUpdateUpdateMutation } from '@/services/IsyBuildApi'
 
@@ -45,9 +43,8 @@ const LotsEdit = () => {
   })
 
   const { id } = useParams()
-  const router = useRouter();
-  const {user} = useAuth();  // Get the user from AuthContext
-  const userRole = user?.role
+
+  
 
   const { data: lotData, isLoading: isLoadingQuery } = useLotsRetrieve2Query({
     lotId: +id
@@ -56,7 +53,7 @@ const LotsEdit = () => {
   const [updateLots, { isLoading: isUpdating }] = useLotsUpdateUpdateMutation()
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-  const handleBack = useHandleBack()
+ 
 
   useEffect(() => {
     if (lotData) {
@@ -79,7 +76,7 @@ const LotsEdit = () => {
       setInfoAlert({ severity: 'success', message: 'lots modifié avec succès' })
       
 
-      router.push(`/${userRole}/lots/list`);
+      
 
     } catch (err: any) {
       console.error('Failed to update lots:', err)
@@ -102,7 +99,7 @@ const LotsEdit = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <LotsEditHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating} handleBack={handleBack} />
+          <LotsEditHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating}  />
         </Grid>
         <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
