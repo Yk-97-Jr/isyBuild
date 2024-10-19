@@ -13,13 +13,13 @@ import {useProjectLotsUploadDocumentCreateMutation} from '@/services/IsyBuildApi
 import DialogCloseButton from "@components/dialogs/DialogCloseButton";
 import {
   schemaFileUpload
-} from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/AddFileSchema";
+} from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/add/AddFileSchema";
 import type {
   FormValidateFileUploadType
-} from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/AddFileSchema";
+} from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/add/AddFileSchema";
 import CustomTextField from "@core/components/mui/TextField";
 import AddFileUpload
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/AddFileUpload";
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/add/AddFileUpload";
 
 interface AddProps {
   open: boolean;

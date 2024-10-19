@@ -45,7 +45,10 @@ import type {DocumentRead} from "@/services/IsyBuildApi";
 import TablePaginationComponentStandard from "@components/TablePaginationComponentStandard";
 
 import AddFileSub
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/AddFileSub";
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/add/AddFileSub";
+import OptionMenu from "@core/components/option-menu";
+import DeleteFile
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/delete/DeleteFile";
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -87,6 +90,10 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
 }) => {
   // States
   const [openAdd, setOpenAdd] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
+
+  // const [openHistory, setHistoryAdd] = useState(false)
+  const [id, setId] = useState(0)
   const [rowSelection, setRowSelection] = useState({})
   const [data] = useState(...[tableData])
   const [filteredData] = useState(data)
@@ -119,6 +126,23 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
   //   console.log(fileUrl)
   //
   // };
+
+  const handleDelete = (id: number) => {
+    console.log(id)
+
+    setOpenDelete(true)
+    setId(id)
+  }
+
+  const handleHistory = (id: number) => {
+    console.log(id)
+
+  }
+
+  const handleEdit = (id: number) => {
+    console.log(id)
+
+  }
 
 
   // Hooks
@@ -165,6 +189,33 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
             <IconButton onClick={() => openOrDownloadFile(row.original.latest_version.file_url)}>
               <i className='tabler-eye text-textSecondary'/>
             </IconButton>
+            <OptionMenu
+              iconButtonProps={{size: 'medium'}}
+              iconClassName='text-textSecondary'
+              options={[
+                {
+                  text: 'Modifier',
+                  menuItemProps: {
+                    className: 'flex items-center gap-1 text-textSecondary',
+                    onClick: () => handleEdit(row.original.id)
+                  }
+                },
+                {
+                  text: 'Historique',
+                  menuItemProps: {
+                    className: 'flex items-center gap-1 text-textSecondary',
+                    onClick: () => handleHistory(row.original.id)
+                  }
+                },
+                {
+                  text: 'Supprimer',
+                  menuItemProps: {
+                    className: 'flex items-center gap-1 text-textSecondary',
+                    onClick: () => handleDelete(row.original.id)
+                  }
+                }
+              ]}
+            />
 
           </div>
         ),
@@ -306,6 +357,12 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
           open={openAdd}
           setOpen={setOpenAdd}
           refetch={refetch}
+        />
+        <DeleteFile
+          open={openDelete}
+          setOpen={setOpenDelete}
+          refetch={refetch}
+          id={id}
         />
       </Card>
     </>
