@@ -23,20 +23,33 @@ function Page() {
   const [createProject] = useProjectsCreateCreateMutation()
 
   const [name, setName] = useState<string>('')
+
   const [code, setCode] = useState<string>('')
+
   const [date, setDate] = useState<Date>(new Date())
+
   const [description, setDescription] = useState<string>('')
+
   const [pays, setPays] = useState<string>('')
+
   const [roadNumber, setRoadNumber] = useState<string>('')
+
   const [roadName, setRoadName] = useState<string>('')
+
   const [departement, setDepartement] = useState<string>('')
+
   const [ville, setVille] = useState<string>('')
+
   const [codePostal, setCodePostal] = useState<number>(0)
+
   const [latitude, setLatitude] = useState<number | null>(null)
+
   const [longitude, setLongitude] = useState<number | null>(null)
+
   const [client, setClient] = useState({ id: null })
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
+
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const validateForm = (
@@ -133,7 +146,7 @@ function Page() {
       name,
       description,
 
-      // client_id: client.id,
+      client_id: client.id,
 
       start_date: date.toISOString().split('T')[0],
       address: {
@@ -160,9 +173,6 @@ function Page() {
         setInfoAlert({ severity: 'success', message: 'The project has been added correctly' })
         console.log(result)
       }
-
-      // window.location.reload()
-      //handle back end errors .
     } catch (error) {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'error', message: 'Error adding the project' })
@@ -174,9 +184,20 @@ function Page() {
     <div className=''>
       <div className='flex sm:flex-row flex-col gap-5 justify-between py-4'>
         <h1>Create a Project</h1>
-        <Button variant='contained' className='px-10' onClick={handleSubmit}>
-          Create
-        </Button>
+        <div className='flex flex-wrap max-sm:flex-col gap-4 px-5 w-full sm:w-auto'>
+          <Button
+            variant='tonal'
+            color='secondary'
+            onClick={() => {
+              router.back()
+            }}
+          >
+            Annuler
+          </Button>
+          <Button variant='contained' onClick={handleSubmit}>
+            Enregistrer
+          </Button>
+        </div>
       </div>
       <div className='flex md:flex-row flex-col gap-4'>
         <div className=' flex flex-col gap-4'>

@@ -7,12 +7,14 @@ import type { FormEvent } from 'react'
 
 import { useParams, useRouter } from 'next/navigation'
 
+import { useForm, type SubmitHandler } from 'react-hook-form'
+
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // MUI Imports
 import Grid from '@mui/material/Grid'
 
 import Card from '@mui/material/Card'
-
 
 import CardHeader from '@mui/material/CardHeader'
 
@@ -26,28 +28,43 @@ import { CircularProgress, Button } from '@mui/material'
 import CustomTextField from '@core/components/mui/TextField'
 
 // API Types
-import type { ProjectEmailTemplateRead } from '@/services/IsyBuildApi'
 
 // API Hook
-import { useProjectsTemplatesRetrieveQuery } from '@/services/IsyBuildApi'
+import {
+  useProjectsTemplatesRetrieveQuery,
+  type ProjectEmailTemplateRead,
+  useProjectsTemplatesUpdateUpdateMutation,
+  type EmailTemplateUpdateRequest,
+  useProjectsTemplatesResetCreateMutation
+} from '@/services/IsyBuildApi'
 
-import { useProjectsTemplatesUpdateUpdateMutation } from '@/services/IsyBuildApi'
 
-import type { EmailTemplateUpdateRequest } from '@/services/IsyBuildApi'
+import type { templateSchemaType } from './templatesSchema'
+
+import { Schema } from './templatesSchema'
+
 
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
-import type{ SnackBarContextType } from '@/types/apps/snackbarType'
-
+import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
 const Templates = () => {
   const params = useParams()
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<templateSchemaType>({
+    resolver: yupResolver(Schema)
+  })
 
   const templateId: number = parseInt(params?.templates.toString())
 
   const router = useRouter()
 
-  const [templateContent, setTemplateContent] = useState<ProjectEmailTemplateRead | undefined>()
+  const [templateContent, setTemplateContent] = useState<ProjectEmailTemplateRead | undefined>(undefined)
 
   const { data: projectTemplates, isLoading, error } = useProjectsTemplatesRetrieveQuery({ templateId: templateId })
 
@@ -61,13 +78,13 @@ const Templates = () => {
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
+  const [trigger_Reset] = useProjectsTemplatesResetCreateMutation()
+
   useEffect(() => {
     if (projectTemplates) {
       setTemplateContent(projectTemplates)
     }
   }, [projectTemplates])
-
- 
 
   const handlesubject_template = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault()
@@ -102,13 +119,16 @@ const Templates = () => {
         body_template: templateContent.email_template.body_template,
         footer_template: templateContent.email_template.footer_template
       })
+      reset({
+        subject: templateContent.email_template.subject_template ?? '',
+        header: templateContent.email_template.header_template ?? '',
+        body: templateContent.email_template.body_template ?? '',
+        footer: templateContent.email_template.footer_template ?? ''
+      })
     }
-  }, [templateContent])
+  }, [templateContent, reset,new_template])
 
-  const handleSave = async (event: FormEvent) => {
-
-    event.preventDefault()
-
+  const handleSave: SubmitHandler<templateSchemaType> = async () => {
     const updated_Data: EmailTemplateUpdateRequest = {
       name: new_template.name || '',
       subject_template: new_template.subject_template || '',
@@ -125,29 +145,61 @@ const Templates = () => {
     if (response) {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'Modification avec succe' })
-      router.back()
+
+      window.location.reload()
     } else {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'error', message: 'Error de modification' })
     }
   }
 
-  //TODO waiting saad to create the endponts
-  function handleReset(event: FormEvent) {
+  //TODO waiting saad to create the endpoints
+  //Done
+  const handleReset = async (event: FormEvent) => {
     event.preventDefault()
-    window.location.reload()
+
+    try {
+      const response = await trigger_Reset({ templateId }).unwrap()
+
+      if (isLoading) {
+        return (
+          <div className='flex justify-center items-center'>
+            <CircularProgress />
+          </div>
+        )
+      }
+
+      if (response) {
+        if (templateContent) {
+          set_new_template({
+            name: templateContent.email_template.name || '',
+            subject_template: templateContent.email_template.subject_template || '',
+            header_template: templateContent.email_template.header_template || '',
+            body_template: templateContent.email_template.body_template || '',
+            footer_template: templateContent.email_template.footer_template || ''
+          })
+        }
+      }
+
+      setOpenSnackBar(true)
+
+      setInfoAlert({ severity: 'success', message: 'Template has been reset successfully.' })
+
+      window.location.reload()
+    } catch (error) {
+      setOpenSnackBar(true)
+
+      setInfoAlert({ severity: 'error', message: 'Failed to reset the template.' })
+    }
   }
 
-  //TODO waiting saad to create the endpoints
+  //DONE
   function handleCancel(event: FormEvent) {
-
     event.preventDefault()
     router.back()
   }
 
-  
   if (isLoading) {
-  
     return (
       <div className='flex justify-center items-center h-full'>
         <CircularProgress />
@@ -168,7 +220,7 @@ const Templates = () => {
   return (
     <Card>
       <div className='flex sm:flex-row  flex-col w-full justify-between items-center '>
-        <CardHeader title='Templates des Emails' />
+        <CardHeader title={templateContent?.email_template.name} />
         <div className='flex flex-wrap max-sm:flex-col gap-4 px-5 w-full sm:w-auto'>
           <Button variant='tonal' color='secondary' onClick={handleCancel}>
             Annuler
@@ -176,7 +228,7 @@ const Templates = () => {
           <Button variant='tonal' onClick={handleReset}>
             Reinitialiser
           </Button>
-          <Button variant='contained' onClick={handleSave}>
+          <Button variant='contained' onClick={handleSubmit(handleSave)}>
             Modifier
           </Button>
         </div>
@@ -186,8 +238,11 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Objet du Modèle'
+              label='Objet'
+              {...register('subject')}
               defaultValue={templateContent?.email_template.subject_template}
+              error={!!errors.subject}
+              helperText={errors.subject?.message}
               onChange={handlesubject_template}
               multiline
             />
@@ -195,37 +250,40 @@ const Templates = () => {
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Modèle Modèle'
-              InputProps={{
-                style: { minHeight: '80px', padding: '12px' }
-              }}
+              label='Modèle'
+              {...register('header')}
               defaultValue={templateContent?.email_template.header_template}
+              error={!!errors.header}
+              helperText={errors.header?.message}
               onChange={handleheader_template}
               multiline
+              rows={3}
             />
           </Grid>
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Contenu de Page'
-              InputProps={{
-                style: { minHeight: '180px', padding: '12px' }
-              }}
+              label='Contenu'
+              {...register('body')}
               defaultValue={templateContent?.email_template.body_template}
+              error={!!errors.body}
+              helperText={errors.body?.message}
               onChange={handlebody_template}
               multiline
+              rows={8}
             />
           </Grid>
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='Pied de page'
-              InputProps={{
-                style: { minHeight: '80px', padding: '12px' }
-              }}
+              label='Pied'
+              {...register('footer')}
               defaultValue={templateContent?.email_template.footer_template}
+              error={!!errors.footer}
+              helperText={errors.footer?.message}
               onChange={handlefooter_template}
               multiline
+              rows={3}
             />
           </Grid>
         </Grid>

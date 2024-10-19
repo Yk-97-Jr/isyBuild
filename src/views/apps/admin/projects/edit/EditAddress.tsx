@@ -51,12 +51,9 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
 
     setProjectState({
       ...projectState,
-      client: {
-        ...projectState.client,
-        address: {
-          ...projectState.client.address,
-          country
-        }
+      address: {
+        ...projectState.address,
+        country
       }
     })
 
@@ -70,12 +67,9 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
 
     setProjectState({
       ...projectState,
-      client: {
-        ...projectState.client,
-        address: {
-          ...projectState.client.address,
-          street_number: roadNumber
-        }
+      address: {
+        ...projectState.address,
+        street_number: roadNumber
       }
     })
   }
@@ -87,12 +81,9 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
 
     setProjectState({
       ...projectState,
-      client: {
-        ...projectState.client,
-        address: {
-          ...projectState.client.address,
-          street_name: roadName
-        }
+      address: {
+        ...projectState.address,
+        street_name: roadName
       }
     })
   }
@@ -104,30 +95,27 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
 
     setProjectState({
       ...projectState,
-      client: {
-        ...projectState.client,
-        address: {
-          ...projectState.client.address,
-          street_name: departement
-        }
+      address: {
+        ...projectState.address,
+        department: departement
       }
+
     })
   }
 
   function handleVille(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault()
+
     const city = event.target.value
 
     setProjectState({
       ...projectState,
-      client: {
-        ...projectState.client,
-        address: {
-          ...projectState.client.address,
-          city: city
-        }
+      address: {
+        ...projectState.address,
+        city: city
       }
     })
+    
   }
 
   function handleCodePostal(event: React.ChangeEvent<HTMLInputElement>) {
@@ -137,12 +125,9 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
 
     setProjectState({
       ...projectState,
-      client: {
-        ...projectState.client,
-        address: {
-          ...projectState.client.address,
-          postal_code: postal_code
-        }
+      address: {
+        ...projectState.address,
+        postal_code: postal_code
       }
     })
   }
@@ -154,7 +139,7 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
         <Grid container spacing={6} className='mbe-6'>
           <Grid item xs={12}>
             <Select
-              value={projectState.client.address.country || ''}
+              value={projectState.address.country || ''}
               onChange={handleCountry}
               className='w-full'
               displayEmpty
@@ -171,7 +156,7 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
           <Grid item xs={12} sm={6}>
             <CustomTextField
               fullWidth
-              value={projectState?.client.address.street_number || ''}
+              value={projectState?.address.street_number || ''}
               label='Numero de Rue'
               placeholder='Numero de Rue'
               onChange={handleRoadNumber}
@@ -180,12 +165,11 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            
             <CustomTextField
               fullWidth
               label='Nom de Rue'
               placeholder='Nom de Rue'
-              value={projectState?.client.address.street_name || ''}
+              value={projectState?.address.street_name || ''}
               error={!!errors.roadName}
               helperText={errors.roadName}
               onChange={handleRoadName}
@@ -196,7 +180,7 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
               fullWidth
               label='Departement'
               placeholder='Departement'
-              value={projectState?.client.address.department || ''}
+              value={projectState?.address.department || ''}
               onChange={handleDepartement}
               error={!!errors.departement}
               helperText={errors.departement}
@@ -207,7 +191,7 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
               fullWidth
               label='Ville'
               placeholder='Ville'
-              value={projectState?.client.address.city || ''}
+              value={projectState?.address.city || ''}
               onChange={handleVille}
               error={!!errors.ville}
               helperText={errors.ville}
@@ -216,7 +200,7 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
           <Grid item xs={12} sm={6}>
             <CustomTextField
               fullWidth
-              value={projectState.client.address.postal_code}
+              value={projectState.address.postal_code}
               label='Code Postal'
               placeholder='Code Postal'
               type='number'
