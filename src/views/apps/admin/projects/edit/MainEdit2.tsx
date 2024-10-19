@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from 'react'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 
 import { CircularProgress, Button } from '@mui/material'
 
@@ -20,19 +20,20 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
-import { useProjectsRetrieve2Query, useProjectsUpdateUpdateMutation } from '@/services/IsyBuildApi'
+import {
+  useProjectsRetrieve2Query,
+  useProjectsUpdateUpdateMutation,
+  type ProjectRead,
+  type ProjectUpdateRequest,
+  useProjectsTemplatesListQuery,
+  type ProjectEmailTemplateRead
+} from '@/services/IsyBuildApi'
 
-import type { ProjectRead, ProjectUpdateRequest } from '@/services/IsyBuildApi'
-
-import { useProjectsTemplatesListQuery } from '@/services/IsyBuildApi'
-
-import type { ProjectEmailTemplateRead } from '@/services/IsyBuildApi'
 
 function MainEdit2() {
   const params = useParams()
   const projectId = parseInt(params?.edit as string)
 
-  const router = useRouter()
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
@@ -50,11 +51,8 @@ function MainEdit2() {
     }
 
     if (templates_data) {
-
       setTemplates(templates_data)
-      
     }
-
   }, [ProjectData, templates_data])
 
   console.log(templates)
@@ -167,7 +165,7 @@ function MainEdit2() {
       if (response) {
         setOpenSnackBar(true)
         setInfoAlert({ message: 'The Project has been Edited !!', severity: 'success' })
-        router.push('/admin/projects/list')
+        window.location.reload()
       }
     } catch (err) {
       setOpenSnackBar(true)
@@ -187,7 +185,7 @@ function MainEdit2() {
           <div className='flex justify-between items-center p-5'>
             <p className='text-xl'>Information Sur le Projet</p>
             <Button variant='contained' onClick={handleUpdate}>
-              Update Project
+              Modifier le Projet
             </Button>
           </div>
           <div className='flex flex-col sm:flex-row gap-5'>
