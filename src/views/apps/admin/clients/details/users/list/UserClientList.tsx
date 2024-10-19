@@ -35,7 +35,7 @@ const UserClientList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page,refetch]);
+  }, [page]);
 
 
   if (isLoading)
