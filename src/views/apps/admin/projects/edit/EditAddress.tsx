@@ -99,7 +99,6 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
         ...projectState.address,
         department: departement
       }
-
     })
   }
 
@@ -115,7 +114,6 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
         city: city
       }
     })
-    
   }
 
   function handleCodePostal(event: React.ChangeEvent<HTMLInputElement>) {
@@ -149,7 +147,6 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
                 Select a country
               </MenuItem>
               <MenuItem value='FR'>France</MenuItem>
-              <MenuItem value='DZ'>Algeria</MenuItem>
             </Select>
             {errors && <FormHelperText className='text-red-500'>{errors.pays}</FormHelperText>}
           </Grid>

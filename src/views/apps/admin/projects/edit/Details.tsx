@@ -13,7 +13,6 @@ import TextAlign from '@tiptap/extension-text-align'
 
 import Underline from '@tiptap/extension-underline'
 
-import LinearProgress from '@mui/material/LinearProgress'
 
 import type { ProjectRead } from '@/services/IsyBuildApi'
 
@@ -28,7 +27,7 @@ function Details({ projectState, isLoading }: DetialsProps) {
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: 'Write something here...'
+        placeholder: ''
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph']
@@ -63,7 +62,7 @@ function Details({ projectState, isLoading }: DetialsProps) {
               {projectState.status}
             </div>
           </Typography>
-          <Typography variant='h6' fontWeight='normal'>
+          {/* <Typography variant='h6' fontWeight='normal'>
             <div className='flex gap-2'>
               <strong>Niveau de Risque:</strong>
               {projectState.risk_level}
@@ -77,10 +76,10 @@ function Details({ projectState, isLoading }: DetialsProps) {
               <LinearProgress
                 variant='determinate'
                 className='w-full px-4  h-3 mt-1'
-                value={Number(projectState.percentage_complete) || 40}
+                value={Number(projectState.percentage_complete) }
               />
             </div>
-          </div>
+          </div> */}
         </>
         <div className='mt-2'>
           <Typography>Note:</Typography>

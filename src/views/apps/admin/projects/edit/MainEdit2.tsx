@@ -29,7 +29,6 @@ import {
   type ProjectEmailTemplateRead
 } from '@/services/IsyBuildApi'
 
-
 function MainEdit2() {
   const params = useParams()
   const projectId = parseInt(params?.edit as string)
@@ -184,9 +183,14 @@ function MainEdit2() {
         <div className='p'>
           <div className='flex justify-between items-center p-5'>
             <p className='text-xl'>Information Sur le Projet</p>
-            <Button variant='contained' onClick={handleUpdate}>
-              Modifier le Projet
-            </Button>
+            <div className=' flex flex-row-reverse gap-2'>
+              <Button variant='contained' onClick={handleUpdate}>
+                Modifier le Projet
+              </Button>
+              {/* <Button variant='tonal' color='secondary' >
+                Annuler
+              </Button> */}
+            </div>
           </div>
           <div className='flex flex-col sm:flex-row gap-5'>
             <div className='flex flex-col gap-5  sm:w-3/5'>

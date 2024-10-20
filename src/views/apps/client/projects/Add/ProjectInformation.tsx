@@ -141,14 +141,13 @@ const ProjectInformation = ({
   errors,
   setDate,
   description,
-  setDescription,
-  
+  setDescription
 }: ProjectInformationProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: 'Write something here...'
+        placeholder: ''
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph']
@@ -175,6 +174,7 @@ const ProjectInformation = ({
     const value = event.target.value
 
     setCode(value.toUpperCase())
+    
   }
 
   // const { isValid, error } = validateForm()
@@ -188,7 +188,7 @@ const ProjectInformation = ({
             <CustomTextField
               fullWidth
               label='Nom de Projet'
-              placeholder='Construction ADL'
+              placeholder='Nom de Projet'
               error={!!errors.name}
               helperText={errors.name}
               onChange={e => handleName(e)}
@@ -199,7 +199,7 @@ const ProjectInformation = ({
             <CustomTextField
               fullWidth
               label='Code de Projet'
-              placeholder='FXSK123U'
+              placeholder=' par exemple: FXSK123U'
               value={code}
               onChange={handleCode}
               error={!!errors.code}
