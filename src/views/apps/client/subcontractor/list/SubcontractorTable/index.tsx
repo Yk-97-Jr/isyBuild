@@ -145,6 +145,9 @@ const SubcontractorTable = ({
 
   const handleEditClient = (id: number) => {
     router.push(`/${userRole}/subcontractor/${id}/details`)
+
+    console.log(id);
+    
   }
 
   const handleDeleteCompany = (id: number) => {
