@@ -38,7 +38,6 @@ import {CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-import OptionMenu from '@core/components/option-menu'
 
 import CustomTextField from '@core/components/mui/TextField'
 
@@ -115,13 +114,14 @@ const LotsSubListTable = ({
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
-  const {id: clientId} = useParams();  // Renamed the route parameter variable
+  const {edit: edit} = useParams();  // Renamed the route parameter variable
+  const {id: lotId} = useParams();  // Renamed the route parameter variable
 
-
-  const handleEditUser = (id: number) => {
-    router.push(`/${userRole}/clients/${clientId}/details/${id}`);
-
-  }
+  //
+  // const handleEditUser = (id: number) => {
+  //   router.push(`/${userRole}/clients/${clientId}/details/${id}`);
+  //
+  // }
 
 
   const handleDeleteUser = (id: number) => {
@@ -129,6 +129,12 @@ const LotsSubListTable = ({
 
     setOpenDelete(true)
     setId(id)
+  }
+
+  const handleDetail = (idSub: number) => {
+    router.push(`/${userRole}/projects/${edit}/details/${lotId}/subcontractor/${idSub}`);
+
+
   }
 
   const handleAddUser = () => {
@@ -185,26 +191,10 @@ const LotsSubListTable = ({
             <IconButton onClick={() => handleDeleteUser(row.original.id)}>
               <i className='tabler-trash text-textSecondary'/>
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{size: 'medium'}}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleEditUser(row.original.id)
-                  }
-                }
+            <IconButton onClick={() => handleDetail(row.original.id)}>
+              <i className='tabler-eye text-textSecondary'/>
+            </IconButton>
 
-                // {
-                //   text: 'Suspendre',
-                //   icon: 'tabler-download',
-                //   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
-                // }
-              ]}
-            />
           </div>
         ),
         enableSorting: false
