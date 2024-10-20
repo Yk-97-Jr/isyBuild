@@ -23,11 +23,11 @@ const DeleteStaffContent = ({ handleClose, handleCloseWithoutRefresh, id }: Dele
 
       console.log('Staff deleted successfully')
       setOpenSnackBar(true)
-      setInfoAlert({ severity: 'success', message: 'Staff deleted successfully' })
+      setInfoAlert({ severity: 'success', message: 'User deleted successfully' })
     } catch (error) {
-      console.error('Failed to delete the Staff:', error)
+      console.error('Failed to delete the User:', error)
       setOpenSnackBar(true)
-      setInfoAlert({ severity: 'error', message: 'Failed to delete the Staff' })
+      setInfoAlert({ severity: 'error', message: 'Failed to delete the User' })
     }
   }
 
@@ -39,7 +39,7 @@ const DeleteStaffContent = ({ handleClose, handleCloseWithoutRefresh, id }: Dele
         onClick={handleDelete}
         disabled={isLoading} // Disable the button while loading
       >
-        {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Supprimer Staff'}
+        {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Supprimer User'}
       </Button>
       <Button onClick={handleCloseWithoutRefresh} variant='tonal' color='secondary' className='max-sm:mis-0'>
         Annuler

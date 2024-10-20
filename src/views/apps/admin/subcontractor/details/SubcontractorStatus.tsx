@@ -38,7 +38,7 @@ const SubcontractorStatus: React.FC<ClientStatusProps> = ({ register, setValue, 
         <SelectMultiple 
   onToggleMenu={handleSelectToggle} 
   register={register} 
-  selectedLotIds={selectedLotIds} 
+   selectedLotIds={selectedLotIds|| []} 
   setValue={setValue} 
 />
           <div style={{ flexGrow: 1 }}></div>

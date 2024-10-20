@@ -36,9 +36,9 @@ const StaffDialog = ({ open, setOpen, id, setId, refetch }: StaffDialogProps) =>
     return null // Return null if no condition is met
   }
 
-  const dialogTitle = isDelete && 'Supprimer Staff'
+  const dialogTitle = isDelete && 'Supprimer Utilisateur '
 
-  const dialogDescription = isDelete && 'Êtes-vous sûr de vouloir supprimer cet Staff ?'
+  const dialogDescription = isDelete && 'Êtes-vous sûr de vouloir supprimer cet Utilisateur  ?'
 
   // removing for now the logic to have multipe dialogs
   const ContentComponent = DeleteStaffContent

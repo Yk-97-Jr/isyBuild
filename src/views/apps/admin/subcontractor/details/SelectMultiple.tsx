@@ -97,12 +97,16 @@ const SelectMultiple = ({
   }, [initialSelectedIds])
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
-    const selectedIds = event.target.value as number[] // cast to number[]
+    const selectedIds = event.target.value as number[] // Cast to number[]
+
+    console.log(selectedIds);
+    
 
     setSelectedIds(selectedIds)
-    setValue('lots_ids', selectedIds)
+
+    // Ensure that if all lots are removed, an empty array is set
+    setValue('lots_ids', selectedIds.length ? selectedIds : [])
   }
-  
 
   return (
     <div className='flex gap-4 flex-col mbe-6'>
