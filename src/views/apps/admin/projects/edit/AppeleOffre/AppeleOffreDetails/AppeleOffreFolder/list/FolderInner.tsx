@@ -40,7 +40,7 @@ const FolderInnerList = () => {
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const documents = data?.folder.documents || []
+  const documents = data?.folder?.documents || []
 
   console.log(isFetching)
   console.log(documents)
