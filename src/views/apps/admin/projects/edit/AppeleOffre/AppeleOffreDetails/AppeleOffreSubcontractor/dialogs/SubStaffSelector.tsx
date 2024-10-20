@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography"; // Import the query hook
 
 import {skipToken} from "@reduxjs/toolkit/query";
 
-import {useSubcontractorsStaffRetrieve2Query} from '@/services/IsyBuildApi';
+import { useSubcontractorsStaffRetrieve3Query} from '@/services/IsyBuildApi';
 
 type LotSelectProps = {
   selectedSub: number | undefined;
@@ -28,7 +28,7 @@ export default function SubStaffSelect({selectedSub, selectedStaffSub, setSelect
   const [isWaitingData, setIsWaitingData] = useState(false); // Track waiting for data
 
   // Initialize the query but don't fetch automatically (skip: true)
-  const {data, isFetching, refetch} = useSubcontractorsStaffRetrieve2Query(
+  const {data, isFetching, refetch} = useSubcontractorsStaffRetrieve3Query(
     selectedSub ? {page, pageSize: 10, subcontractorId: selectedSub} : skipToken, // Only query if selectedSub is defined
     {skip: !isDropdownOpen || !selectedSub} // Skip if dropdown is closed or subcontractor is not selected
   );

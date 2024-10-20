@@ -3,6 +3,8 @@
 // MUI Imports
 import React from "react";
 
+import {useParams, useRouter} from "next/navigation";
+
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -16,6 +18,8 @@ import Chip from "@mui/material/Chip";
 
 import type {ProjectLotRead} from "@/services/IsyBuildApi";
 
+import {useAuth} from "@/contexts/AuthContext";
+
 // Type imports for form handling
 
 type Props = {
@@ -24,19 +28,24 @@ type Props = {
 
 };
 
-//
-// const redirectFolder = (id: number) => {
-//   console.log(id)
-//
-// }
-
 const AppeleOffresInformation: React.FC<Props> = ({projectLotData}) => {
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
+  const {edit: projectId} = useParams();
+  const {id: projectLotId} = useParams();
+
+  const redirectFolder = () => {
+    router.push(`/${userRole}/projects/${projectId}/details/${projectLotId}/folder`);
+
+  }
+
   return (
     <Card>
       <CardHeader title='Détails'
                   titleTypographyProps={{variant: 'h3'}}
                   action={
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary" onClick={redirectFolder}>
                       Afficher le dossier
                     </Button>
                   }/>

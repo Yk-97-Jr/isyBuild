@@ -4,6 +4,40 @@ info:
   version: 1.0.0
   description: API documentation for IsyBuild
 paths:
+  /Subcontractors/{subcontractor_id}/owner/delete/:
+    delete:
+      operationId: Subcontractors_owner_delete_destroy
+      description: Deletes an Subcontractor owner by ID. Requires administrative privileges.
+      summary: Delete Subcontractor owner
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: Subcontractor deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Subcontractor not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
   /admin-staff/:
     get:
       operationId: admin_staff_retrieve
@@ -949,6 +983,52 @@ paths:
                 description: Unspecified response body
           description: ''
         '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /document/{document_id}/:
+    get:
+      operationId: get_document_detail
+      description: 'Fetch detailed information about a specific document by its ID '
+      summary: Retrieve a Folder by ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folder Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
           content:
             application/json:
               schema:
@@ -2422,9 +2502,132 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subcontractor'
           description: ''
+  /subcontractors/{subcontractor_id}/owner/:
+    get:
+      operationId: subcontractors_owner_retrieve
+      description: Fetches the owner details of a Subcontractor by the Subcontractor's
+        ID.
+      summary: Retrieve Subcontractor Owner Details
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /subcontractors/{subcontractor_id}/owner/assign/:
+    put:
+      operationId: subcontractors_owner_assign_update
+      description: Assigns an owner to a Subcontractor by setting a user as the owner.
+      summary: Assign Owner to Subcontractor
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/{subcontractor_id}/owner/update/:
+    put:
+      operationId: subcontractors_owner_update_update
+      description: Update an owner to a Subcontractor by setting a user as the owner.
+      summary: Update Owner to Subcontractor
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /subcontractors/{subcontractor_id}/staff/:
     get:
-      operationId: subcontractors_staff_retrieve_2
+      operationId: subcontractors_staff_retrieve_3
       description: Retrieve a list of all subcontractor staff users with pagination.
       summary: List all Subcontractor staff
       parameters:
@@ -2564,9 +2767,36 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
-  /subcontractors/staff/{subcontractor_staff_id}/:
+  /subcontractors/staff/:
     get:
       operationId: subcontractors_staff_retrieve
+      description: Retrieve a list of all subcontractor staff users with pagination.
+      summary: List all Subcontractor staff
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Subcontractor Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubcontractorStaff'
+          description: ''
+  /subcontractors/staff/{subcontractor_staff_id}/:
+    get:
+      operationId: subcontractors_staff_retrieve_2
       description: Fetches detailed information about an subcontractor staff member
         by their unique identifier.
       summary: Retrieve Subcontractor Staff Details
@@ -2663,6 +2893,41 @@ paths:
                 description: Unspecified response body
           description: ''
         '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/staff/create/:
+    post:
+      operationId: create_subcontractor_by_subcontractor_user
+      description: Create a new subcontractor staff member by subcontractor .
+      tags:
+      - Subcontractor Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcontractorStaff'
+          description: ''
+        '400':
           content:
             application/json:
               schema:
@@ -4231,6 +4496,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/SubcontractorStaffSimple'
           readOnly: true
+        devis_document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          readOnly: true
         status:
           $ref: '#/components/schemas/Status841Enum'
         notes:
@@ -4251,6 +4520,7 @@ components:
       required:
       - created_at
       - created_by
+      - devis_document
       - id
       - project_lot
       - subcontractor
@@ -4524,6 +4794,20 @@ components:
       - name
       - phone_number
       - siren_number
+    SubcontractorOwnerCreateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreateRequest'
+      required:
+      - user
+    SubcontractorOwnerUpdateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserUpdateRequest'
+      required:
+      - user
     SubcontractorSimple:
       type: object
       properties:

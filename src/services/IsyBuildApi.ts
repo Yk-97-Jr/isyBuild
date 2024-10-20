@@ -2,6 +2,12 @@ import { IsyBuildClient as api } from '../apiClients/IsyBuildClient'
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
+    subcontractorsOwnerDeleteDestroy: build.mutation<
+      SubcontractorsOwnerDeleteDestroyApiResponse,
+      SubcontractorsOwnerDeleteDestroyApiArg
+    >({
+      query: queryArg => ({ url: `/Subcontractors/${queryArg.subcontractorId}/owner/delete/`, method: 'DELETE' })
+    }),
     adminStaffRetrieve: build.query<AdminStaffRetrieveApiResponse, AdminStaffRetrieveApiArg>({
       query: queryArg => ({ url: `/admin-staff/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
     }),
@@ -129,6 +135,9 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'PUT',
         body: queryArg.contactCreateUpdateRequest
       })
+    }),
+    getDocumentDetail: build.query<GetDocumentDetailApiResponse, GetDocumentDetailApiArg>({
+      query: queryArg => ({ url: `/document/${queryArg.documentId}/` })
     }),
     getFolderDetail: build.query<GetFolderDetailApiResponse, GetFolderDetailApiArg>({
       query: queryArg => ({ url: `/folders/${queryArg.folderId}/` })
@@ -343,9 +352,34 @@ const injectedRtkApi = api.injectEndpoints({
     subcontractorsRetrieve2: build.query<SubcontractorsRetrieve2ApiResponse, SubcontractorsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/subcontractors/${queryArg.subcontractorId}/` })
     }),
-    subcontractorsStaffRetrieve2: build.query<
-      SubcontractorsStaffRetrieve2ApiResponse,
-      SubcontractorsStaffRetrieve2ApiArg
+    subcontractorsOwnerRetrieve: build.query<SubcontractorsOwnerRetrieveApiResponse, SubcontractorsOwnerRetrieveApiArg>(
+      {
+        query: queryArg => ({ url: `/subcontractors/${queryArg.subcontractorId}/owner/` })
+      }
+    ),
+    subcontractorsOwnerAssignUpdate: build.mutation<
+      SubcontractorsOwnerAssignUpdateApiResponse,
+      SubcontractorsOwnerAssignUpdateApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/${queryArg.subcontractorId}/owner/assign/`,
+        method: 'PUT',
+        body: queryArg.subcontractorOwnerCreateRequest
+      })
+    }),
+    subcontractorsOwnerUpdateUpdate: build.mutation<
+      SubcontractorsOwnerUpdateUpdateApiResponse,
+      SubcontractorsOwnerUpdateUpdateApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/${queryArg.subcontractorId}/owner/update/`,
+        method: 'PUT',
+        body: queryArg.subcontractorOwnerUpdateRequest
+      })
+    }),
+    subcontractorsStaffRetrieve3: build.query<
+      SubcontractorsStaffRetrieve3ApiResponse,
+      SubcontractorsStaffRetrieve3ApiArg
     >({
       query: queryArg => ({
         url: `/subcontractors/${queryArg.subcontractorId}/staff/`,
@@ -379,9 +413,18 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     subcontractorsStaffRetrieve: build.query<SubcontractorsStaffRetrieveApiResponse, SubcontractorsStaffRetrieveApiArg>(
       {
-        query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
+        query: queryArg => ({
+          url: `/subcontractors/staff/`,
+          params: { page: queryArg.page, page_size: queryArg.pageSize }
+        })
       }
     ),
+    subcontractorsStaffRetrieve2: build.query<
+      SubcontractorsStaffRetrieve2ApiResponse,
+      SubcontractorsStaffRetrieve2ApiArg
+    >({
+      query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
+    }),
     subcontractorsStaffDeleteDestroy: build.mutation<
       SubcontractorsStaffDeleteDestroyApiResponse,
       SubcontractorsStaffDeleteDestroyApiArg
@@ -396,6 +439,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/update/`,
         method: 'PATCH',
         body: queryArg.patchedSubcontractorStaffUpdateRequest
+      })
+    }),
+    createSubcontractorBySubcontractorUser: build.mutation<
+      CreateSubcontractorBySubcontractorUserApiResponse,
+      CreateSubcontractorBySubcontractorUserApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/staff/create/`,
+        method: 'POST',
+        body: queryArg.subcontractorStaffCreateRequest
       })
     }),
     subcontractorsUpdateUpdate: build.mutation<SubcontractorsUpdateUpdateApiResponse, SubcontractorsUpdateUpdateApiArg>(
@@ -447,6 +500,10 @@ const injectedRtkApi = api.injectEndpoints({
 })
 
 export { injectedRtkApi as pIsyBuildApi }
+export type SubcontractorsOwnerDeleteDestroyApiResponse = /** status 204  */ any
+export type SubcontractorsOwnerDeleteDestroyApiArg = {
+  subcontractorId: number
+}
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
 
@@ -589,6 +646,10 @@ export type ContactsUpdateUpdateApiResponse = /** status 200  */ ContactRead
 export type ContactsUpdateUpdateApiArg = {
   contactId: number
   contactCreateUpdateRequest: ContactCreateUpdateRequest
+}
+export type GetDocumentDetailApiResponse = /** status 200  */ DocumentRead
+export type GetDocumentDetailApiArg = {
+  documentId: number
 }
 export type GetFolderDetailApiResponse = /** status 200  */ FolderRead
 export type GetFolderDetailApiArg = {
@@ -816,8 +877,22 @@ export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ Subcontracto
 export type SubcontractorsRetrieve2ApiArg = {
   subcontractorId: number
 }
-export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
-export type SubcontractorsStaffRetrieve2ApiArg = {
+export type SubcontractorsOwnerRetrieveApiResponse = /** status 200  */ UserRead
+export type SubcontractorsOwnerRetrieveApiArg = {
+  subcontractorId: number
+}
+export type SubcontractorsOwnerAssignUpdateApiResponse = /** status 200  */ SubcontractorRead
+export type SubcontractorsOwnerAssignUpdateApiArg = {
+  subcontractorId: number
+  subcontractorOwnerCreateRequest: SubcontractorOwnerCreateRequestWrite
+}
+export type SubcontractorsOwnerUpdateUpdateApiResponse = /** status 200  */ SubcontractorRead
+export type SubcontractorsOwnerUpdateUpdateApiArg = {
+  subcontractorId: number
+  subcontractorOwnerUpdateRequest: SubcontractorOwnerUpdateRequest
+}
+export type SubcontractorsStaffRetrieve3ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+export type SubcontractorsStaffRetrieve3ApiArg = {
 
   /** Page number of the results to fetch */
   page?: number
@@ -839,8 +914,17 @@ export type SubcontractorsDeleteDestroyApiResponse = /** status 204  */ any
 export type SubcontractorsDeleteDestroyApiArg = {
   subcontractorId: number
 }
-export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ SubcontractorStaffRead
+export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
 export type SubcontractorsStaffRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ SubcontractorStaffRead
+export type SubcontractorsStaffRetrieve2ApiArg = {
   subcontractorStaffId: number
 }
 export type SubcontractorsStaffDeleteDestroyApiResponse = /** status 204  */ any
@@ -851,6 +935,10 @@ export type SubcontractorsStaffUpdatePartialUpdateApiResponse = /** status 200  
 export type SubcontractorsStaffUpdatePartialUpdateApiArg = {
   subcontractorStaffId: number
   patchedSubcontractorStaffUpdateRequest: PatchedSubcontractorStaffUpdateRequest
+}
+export type CreateSubcontractorBySubcontractorUserApiResponse = /** status 201  */ SubcontractorStaffRead
+export type CreateSubcontractorBySubcontractorUserApiArg = {
+  subcontractorStaffCreateRequest: SubcontractorStaffCreateRequestWrite
 }
 export type SubcontractorsUpdateUpdateApiResponse = /** status 200  */ SubcontractorRead
 export type SubcontractorsUpdateUpdateApiArg = {
@@ -1138,9 +1226,6 @@ export type ContactCreateUpdateRequest = {
   last_name: string
   email: string
 }
-export type Folder = {
-  name: string
-}
 export type Document = {
   name: string
   tags?: string | null
@@ -1160,6 +1245,9 @@ export type DocumentRead = {
   name: string
   tags?: string | null
   latest_version: DocumentVersionRead
+}
+export type Folder = {
+  name: string
 }
 export type FolderRead = {
   id: number
@@ -1314,6 +1402,7 @@ export type ProjectLotSubcontractorRead = {
   project_lot: ProjectLotSimpleRead
   subcontractor: SubcontractorSimpleRead
   subcontractor_staff: SubcontractorStaffSimpleRead
+  devis_document: DocumentRead
   status?: Status841Enum
   notes?: string | null
   created_by: CreatedByRead
@@ -1548,6 +1637,15 @@ export type PaginatedSubcontractortRead = {
   previous: string | null
   results: SubcontractorRead[]
 }
+export type SubcontractorOwnerCreateRequest = {
+  user: UserCreateRequest
+}
+export type SubcontractorOwnerCreateRequestWrite = {
+  user: UserCreateRequestWrite
+}
+export type SubcontractorOwnerUpdateRequest = {
+  user: UserUpdateRequest
+}
 export type SubcontractorStaff = {}
 export type SubcontractorStaffRead = {
   id: number
@@ -1620,6 +1718,7 @@ export type AvatarUpdateRequest = {
   avatar: Blob
 }
 export const {
+  useSubcontractorsOwnerDeleteDestroyMutation,
   useAdminStaffRetrieveQuery,
   useAdminStaffRetrieve2Query,
   useAdminStaffCreateCreateMutation,
@@ -1647,6 +1746,7 @@ export const {
   useContactsPhoneNumbersRetrieveQuery,
   useContactsPhoneNumbersCreateCreateMutation,
   useContactsUpdateUpdateMutation,
+  useGetDocumentDetailQuery,
   useGetFolderDetailQuery,
   useLoginCreateMutation,
   useLogoutCreateMutation,
@@ -1689,13 +1789,18 @@ export const {
   useSetPasswordCreateMutation,
   useSubcontractorsRetrieveQuery,
   useSubcontractorsRetrieve2Query,
-  useSubcontractorsStaffRetrieve2Query,
+  useSubcontractorsOwnerRetrieveQuery,
+  useSubcontractorsOwnerAssignUpdateMutation,
+  useSubcontractorsOwnerUpdateUpdateMutation,
+  useSubcontractorsStaffRetrieve3Query,
   useSubcontractorsStaffCreateCreateMutation,
   useSubcontractorsCreateCreateMutation,
   useSubcontractorsDeleteDestroyMutation,
   useSubcontractorsStaffRetrieveQuery,
+  useSubcontractorsStaffRetrieve2Query,
   useSubcontractorsStaffDeleteDestroyMutation,
   useSubcontractorsStaffUpdatePartialUpdateMutation,
+  useCreateSubcontractorBySubcontractorUserMutation,
   useSubcontractorsUpdateUpdateMutation,
   useTokenRefreshCreateMutation,
   useUserChangePasswordCreateMutation,
