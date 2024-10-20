@@ -102,7 +102,7 @@ const EditInformation = ({ projectState, errors, setProjectState, isLoading }: P
               <CustomTextField
                 fullWidth
                 label='Nom de Projet'
-                placeholder='Construction ADL'
+                placeholder='Nom de Projet'
                 value={projectState.name}
                 onChange={handleName}
                 error={!!errors.name}
@@ -114,7 +114,7 @@ const EditInformation = ({ projectState, errors, setProjectState, isLoading }: P
               <CustomTextField
                 fullWidth
                 label='Code de Projet'
-                placeholder='FXSK123U'
+                placeholder='par exemple:FXSK123U'
                 value={projectState.code}
                 onChange={handleCode}
                 error={!!errors.code}

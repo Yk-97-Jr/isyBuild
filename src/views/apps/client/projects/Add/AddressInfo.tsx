@@ -136,7 +136,7 @@ const AddressInfo = ({
   departement,
   setDepartement,
   ville,
-  
+
   setVille,
 
   // codePostal,
@@ -206,7 +206,6 @@ const AddressInfo = ({
                 Select a country
               </MenuItem>
               <MenuItem value='FR'>France</MenuItem>
-              <MenuItem value='DZ'>Algeria</MenuItem>
             </Select>
             {errors && <FormHelperText className='text-red-500'>{errors.pays}</FormHelperText>}
           </Grid>

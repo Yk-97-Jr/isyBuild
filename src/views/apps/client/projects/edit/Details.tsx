@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default */
 
 // import Card from '@mui/material/Card'
-import { Card, CardHeader, CardContent, Typography,CircularProgress } from '@mui/material'
+import { Card, CardHeader, CardContent, Typography, CircularProgress } from '@mui/material'
 
 import { EditorContent, useEditor } from '@tiptap/react'
 
@@ -12,9 +12,6 @@ import Placeholder from '@tiptap/extension-placeholder'
 import TextAlign from '@tiptap/extension-text-align'
 
 import Underline from '@tiptap/extension-underline'
-
-import LinearProgress from '@mui/material/LinearProgress'
-
 
 
 import type { ProjectRead } from '@/services/IsyBuildApi'
@@ -51,27 +48,38 @@ function Details({ projectState, isLoading }: DetialsProps) {
   return (
     <Card>
       <CardHeader title='Détails De Projet' />
-      <CardContent className='flex flex-col gap-2'>
+      <CardContent className='flex flex-col gap-3'>
         <Typography variant='h6' className='mt-4 ' fontWeight='normal'>
-          Client:{projectState.client.name}
+          <div className=' flex gap-1'>
+            <strong>Client:</strong>
+            {projectState.client.name}
+          </div>
         </Typography>
         <>
           <Typography variant='h6' fontWeight='normal'>
-            Status:{projectState.status}
+            <div className='flex gap-1'>
+              <strong>Status:</strong>
+              {projectState.status}
+            </div>
           </Typography>
-          <Typography variant='h6' fontWeight='normal'>
-            Niveau de Risque:{projectState.risk_level}
+          {/* <Typography variant='h6' fontWeight='normal'>
+            <div className='flex gap-2'>
+              <strong>Niveau de Risque:</strong>
+              {projectState.risk_level}
+            </div>
           </Typography>
           <div className='flex w-full items-center  gap-2'>
             <Typography variant='h6' fontWeight='normal'>
-              Progress:
+              <strong>Progress:</strong>
             </Typography>
-            <LinearProgress
-              variant='determinate'
-              className='w-1/2  mt-1'
-              value={Number(projectState.percentage_complete) || 40}
-            />
-          </div>
+            <div className=' w-full  px-2'>
+              <LinearProgress
+                variant='determinate'
+                className='w-full px-4  h-3 mt-1'
+                value={Number(projectState.percentage_complete) }
+              />
+            </div>
+          </div> */}
         </>
         <div className='mt-2'>
           <Typography>Note:</Typography>

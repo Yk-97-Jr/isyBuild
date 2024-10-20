@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect, useContext } from 'react'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 
 import { CircularProgress, Button } from '@mui/material'
+
+import Templates from './Templates'
 
 import EditInformation from './EditInformation'
 
@@ -18,26 +20,41 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 
-import { useProjectsRetrieve2Query, useProjectsUpdateUpdateMutation } from '@/services/IsyBuildApi'
-
-import type { ProjectRead, ProjectUpdateRequest } from '@/services/IsyBuildApi'
+import {
+  useProjectsRetrieve2Query,
+  useProjectsUpdateUpdateMutation,
+  type ProjectRead,
+  type ProjectUpdateRequest,
+  useProjectsTemplatesListQuery,
+  type ProjectEmailTemplateRead
+} from '@/services/IsyBuildApi'
 
 function MainEdit2() {
   const params = useParams()
   const projectId = parseInt(params?.edit as string)
 
-  const router = useRouter()
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
   const { data: ProjectData, isLoading } = useProjectsRetrieve2Query({ projectId })
   const [projectState, setProjectState] = useState<ProjectRead>()
 
+  //state to store  Email Templates
+  const { data: templates_data, isLoading: templates_loading } = useProjectsTemplatesListQuery({ projectId })
+
+  const [templates, setTemplates] = useState<ProjectEmailTemplateRead[]>()
+
   useEffect(() => {
     if (ProjectData) {
       setProjectState(ProjectData)
     }
-  }, [ProjectData])
+
+    if (templates_data) {
+      setTemplates(templates_data)
+    }
+  }, [ProjectData, templates_data])
+
+  console.log(templates)
 
   const validateForm = (
     name: string,
@@ -147,7 +164,7 @@ function MainEdit2() {
       if (response) {
         setOpenSnackBar(true)
         setInfoAlert({ message: 'The Project has been Edited !!', severity: 'success' })
-        router.push('/admin/projects/list')
+        window.location.reload()
       }
     } catch (err) {
       setOpenSnackBar(true)
@@ -166,9 +183,14 @@ function MainEdit2() {
         <div className='p'>
           <div className='flex justify-between items-center p-5'>
             <p className='text-xl'>Information Sur le Projet</p>
-            <Button variant='contained' onClick={handleUpdate}>
-              Update Project
-            </Button>
+            <div className=' flex flex-row-reverse gap-2'>
+              <Button variant='contained' onClick={handleUpdate}>
+                Modifier le Projet
+              </Button>
+              {/* <Button variant='tonal' color='secondary' >
+                Annuler
+              </Button> */}
+            </div>
           </div>
           <div className='flex flex-col sm:flex-row gap-5'>
             <div className='flex flex-col gap-5  sm:w-3/5'>
@@ -196,6 +218,7 @@ function MainEdit2() {
                 setProjectState={setProjectState}
                 isLoading={isLoading}
               />
+              <Templates templates={templates || []} templates_loading={templates_loading} />
             </div>
           </div>
         </div>

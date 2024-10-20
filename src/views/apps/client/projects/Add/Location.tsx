@@ -45,7 +45,7 @@ const Location = ({  setLatitude, setLongitude, errors }: LocationProps) => {
         <CustomTextField
           fullWidth
           label='Latitude'
-          placeholder='For Example:37.7749'
+          placeholder='Par exemple:37.7749'
           className='mbe-6'
           onChange={handleLatitude}
           error={!!errors.latitude}
@@ -54,7 +54,7 @@ const Location = ({  setLatitude, setLongitude, errors }: LocationProps) => {
         <CustomTextField
           fullWidth
           label='Longitude'
-          placeholder='For Example:-122.4194'
+          placeholder='Par exemple:-122.4194'
           className='mbe-6'
           onChange={handleLongitude}
         error={!!errors.longitude} 
