@@ -377,9 +377,9 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.subcontractorOwnerUpdateRequest
       })
     }),
-    subcontractorsStaffRetrieve3: build.query<
-      SubcontractorsStaffRetrieve3ApiResponse,
-      SubcontractorsStaffRetrieve3ApiArg
+    subcontractorsStaffRetrieve2: build.query<
+      SubcontractorsStaffRetrieve2ApiResponse,
+      SubcontractorsStaffRetrieve2ApiArg
     >({
       query: queryArg => ({
         url: `/subcontractors/${queryArg.subcontractorId}/staff/`,
@@ -411,20 +411,17 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: queryArg => ({ url: `/subcontractors/delete/${queryArg.subcontractorId}/`, method: 'DELETE' })
     }),
+    getSubcontractorStaffList: build.query<GetSubcontractorStaffListApiResponse, GetSubcontractorStaffListApiArg>({
+      query: queryArg => ({
+        url: `/subcontractors/staff/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
     subcontractorsStaffRetrieve: build.query<SubcontractorsStaffRetrieveApiResponse, SubcontractorsStaffRetrieveApiArg>(
       {
-        query: queryArg => ({
-          url: `/subcontractors/staff/`,
-          params: { page: queryArg.page, page_size: queryArg.pageSize }
-        })
+        query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
       }
     ),
-    subcontractorsStaffRetrieve2: build.query<
-      SubcontractorsStaffRetrieve2ApiResponse,
-      SubcontractorsStaffRetrieve2ApiArg
-    >({
-      query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
-    }),
     subcontractorsStaffDeleteDestroy: build.mutation<
       SubcontractorsStaffDeleteDestroyApiResponse,
       SubcontractorsStaffDeleteDestroyApiArg
@@ -891,8 +888,8 @@ export type SubcontractorsOwnerUpdateUpdateApiArg = {
   subcontractorId: number
   subcontractorOwnerUpdateRequest: SubcontractorOwnerUpdateRequest
 }
-export type SubcontractorsStaffRetrieve3ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
-export type SubcontractorsStaffRetrieve3ApiArg = {
+export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+export type SubcontractorsStaffRetrieve2ApiArg = {
 
   /** Page number of the results to fetch */
   page?: number
@@ -914,8 +911,8 @@ export type SubcontractorsDeleteDestroyApiResponse = /** status 204  */ any
 export type SubcontractorsDeleteDestroyApiArg = {
   subcontractorId: number
 }
-export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
-export type SubcontractorsStaffRetrieveApiArg = {
+export type GetSubcontractorStaffListApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+export type GetSubcontractorStaffListApiArg = {
 
   /** Page number of the results to fetch */
   page?: number
@@ -923,8 +920,8 @@ export type SubcontractorsStaffRetrieveApiArg = {
   /** Number of results per page */
   pageSize?: number
 }
-export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ SubcontractorStaffRead
-export type SubcontractorsStaffRetrieve2ApiArg = {
+export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ SubcontractorStaffRead
+export type SubcontractorsStaffRetrieveApiArg = {
   subcontractorStaffId: number
 }
 export type SubcontractorsStaffDeleteDestroyApiResponse = /** status 204  */ any
@@ -1792,12 +1789,12 @@ export const {
   useSubcontractorsOwnerRetrieveQuery,
   useSubcontractorsOwnerAssignUpdateMutation,
   useSubcontractorsOwnerUpdateUpdateMutation,
-  useSubcontractorsStaffRetrieve3Query,
+  useSubcontractorsStaffRetrieve2Query,
   useSubcontractorsStaffCreateCreateMutation,
   useSubcontractorsCreateCreateMutation,
   useSubcontractorsDeleteDestroyMutation,
+  useGetSubcontractorStaffListQuery,
   useSubcontractorsStaffRetrieveQuery,
-  useSubcontractorsStaffRetrieve2Query,
   useSubcontractorsStaffDeleteDestroyMutation,
   useSubcontractorsStaffUpdatePartialUpdateMutation,
   useCreateSubcontractorBySubcontractorUserMutation,

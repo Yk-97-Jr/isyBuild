@@ -2627,7 +2627,7 @@ paths:
           description: ''
   /subcontractors/{subcontractor_id}/staff/:
     get:
-      operationId: subcontractors_staff_retrieve_3
+      operationId: subcontractors_staff_retrieve_2
       description: Retrieve a list of all subcontractor staff users with pagination.
       summary: List all Subcontractor staff
       parameters:
@@ -2769,7 +2769,7 @@ paths:
           description: ''
   /subcontractors/staff/:
     get:
-      operationId: subcontractors_staff_retrieve
+      operationId: get_subcontractor_staff_list
       description: Retrieve a list of all subcontractor staff users with pagination.
       summary: List all Subcontractor staff
       parameters:
@@ -2796,7 +2796,7 @@ paths:
           description: ''
   /subcontractors/staff/{subcontractor_staff_id}/:
     get:
-      operationId: subcontractors_staff_retrieve_2
+      operationId: subcontractors_staff_retrieve
       description: Fetches detailed information about an subcontractor staff member
         by their unique identifier.
       summary: Retrieve Subcontractor Staff Details
