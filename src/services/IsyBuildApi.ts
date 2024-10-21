@@ -2,6 +2,12 @@ import { IsyBuildClient as api } from '../apiClients/IsyBuildClient'
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
+    subcontractorsOwnerDeleteDestroy: build.mutation<
+      SubcontractorsOwnerDeleteDestroyApiResponse,
+      SubcontractorsOwnerDeleteDestroyApiArg
+    >({
+      query: queryArg => ({ url: `/Subcontractors/${queryArg.subcontractorId}/owner/delete/`, method: 'DELETE' })
+    }),
     adminStaffRetrieve: build.query<AdminStaffRetrieveApiResponse, AdminStaffRetrieveApiArg>({
       query: queryArg => ({ url: `/admin-staff/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
     }),
@@ -30,13 +36,33 @@ const injectedRtkApi = api.injectEndpoints({
     clientsRetrieve2: build.query<ClientsRetrieve2ApiResponse, ClientsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/clients/${queryArg.clientId}/` })
     }),
-    clientsStaffRetrieve2: build.query<ClientsStaffRetrieve2ApiResponse, ClientsStaffRetrieve2ApiArg>({
+    clientsOwnerRetrieve: build.query<ClientsOwnerRetrieveApiResponse, ClientsOwnerRetrieveApiArg>({
+      query: queryArg => ({ url: `/clients/${queryArg.clientId}/owner/` })
+    }),
+    clientsOwnerAssignUpdate: build.mutation<ClientsOwnerAssignUpdateApiResponse, ClientsOwnerAssignUpdateApiArg>({
+      query: queryArg => ({
+        url: `/clients/${queryArg.clientId}/owner/assign/`,
+        method: 'PUT',
+        body: queryArg.clientOwnerCreateRequest
+      })
+    }),
+    clientsOwnerDeleteDestroy: build.mutation<ClientsOwnerDeleteDestroyApiResponse, ClientsOwnerDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/clients/${queryArg.clientId}/owner/delete/`, method: 'DELETE' })
+    }),
+    clientsOwnerUpdateUpdate: build.mutation<ClientsOwnerUpdateUpdateApiResponse, ClientsOwnerUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/clients/${queryArg.clientId}/owner/update/`,
+        method: 'PUT',
+        body: queryArg.clientOwnerUpdateRequest
+      })
+    }),
+    clientsStaffRetrieve3: build.query<ClientsStaffRetrieve3ApiResponse, ClientsStaffRetrieve3ApiArg>({
       query: queryArg => ({
         url: `/clients/${queryArg.clientId}/staff/`,
         params: { page: queryArg.page, page_size: queryArg.pageSize }
       })
     }),
-    clientsStaffCreateCreate: build.mutation<ClientsStaffCreateCreateApiResponse, ClientsStaffCreateCreateApiArg>({
+    clientsStaffCreateCreate2: build.mutation<ClientsStaffCreateCreate2ApiResponse, ClientsStaffCreateCreate2ApiArg>({
       query: queryArg => ({
         url: `/clients/${queryArg.clientId}/staff/create/`,
         method: 'POST',
@@ -50,6 +76,9 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/clients/delete/${queryArg.clientId}/`, method: 'DELETE' })
     }),
     clientsStaffRetrieve: build.query<ClientsStaffRetrieveApiResponse, ClientsStaffRetrieveApiArg>({
+      query: queryArg => ({ url: `/clients/staff/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+    }),
+    clientsStaffRetrieve2: build.query<ClientsStaffRetrieve2ApiResponse, ClientsStaffRetrieve2ApiArg>({
       query: queryArg => ({ url: `/clients/staff/${queryArg.clientStaffId}/` })
     }),
     clientsStaffDeleteDestroy: build.mutation<ClientsStaffDeleteDestroyApiResponse, ClientsStaffDeleteDestroyApiArg>({
@@ -61,6 +90,9 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'PUT',
         body: queryArg.clientStaffUpdateRequest
       })
+    }),
+    clientsStaffCreateCreate: build.mutation<ClientsStaffCreateCreateApiResponse, ClientsStaffCreateCreateApiArg>({
+      query: queryArg => ({ url: `/clients/staff/create/`, method: 'POST', body: queryArg.clientStaffCreateRequest })
     }),
     clientsUpdateUpdate: build.mutation<ClientsUpdateUpdateApiResponse, ClientsUpdateUpdateApiArg>({
       query: queryArg => ({
@@ -104,6 +136,12 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.contactCreateUpdateRequest
       })
     }),
+    getDocumentDetail: build.query<GetDocumentDetailApiResponse, GetDocumentDetailApiArg>({
+      query: queryArg => ({ url: `/document/${queryArg.documentId}/` })
+    }),
+    getFolderDetail: build.query<GetFolderDetailApiResponse, GetFolderDetailApiArg>({
+      query: queryArg => ({ url: `/folders/${queryArg.folderId}/` })
+    }),
     loginCreate: build.mutation<LoginCreateApiResponse, LoginCreateApiArg>({
       query: queryArg => ({ url: `/login/`, method: 'POST', body: queryArg.tokenObtainPairRequest })
     }),
@@ -129,6 +167,18 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.lotCreateUpdateRequest
       })
     }),
+    getInAppNotificationsList: build.query<GetInAppNotificationsListApiResponse, GetInAppNotificationsListApiArg>({
+      query: queryArg => ({
+        url: `/notifications/in-app/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
+    getInAppNotificationDetail: build.query<GetInAppNotificationDetailApiResponse, GetInAppNotificationDetailApiArg>({
+      query: queryArg => ({ url: `/notifications/in-app/${queryArg.notificationId}` })
+    }),
+    markNotificationAsRead: build.mutation<MarkNotificationAsReadApiResponse, MarkNotificationAsReadApiArg>({
+      query: queryArg => ({ url: `/notifications/in-app/${queryArg.notificationId}/read/`, method: 'POST' })
+    }),
     passwordConfirmCreate: build.mutation<PasswordConfirmCreateApiResponse, PasswordConfirmCreateApiArg>({
       query: queryArg => ({ url: `/password-confirm/`, method: 'POST', body: queryArg.setNewPasswordRequest })
     }),
@@ -149,12 +199,6 @@ const injectedRtkApi = api.injectEndpoints({
       })
     }),
     projectLotsRetrieve: build.query<ProjectLotsRetrieveApiResponse, ProjectLotsRetrieveApiArg>({
-      query: queryArg => ({
-        url: `/project-lots/${queryArg.projectId}/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize }
-      })
-    }),
-    projectLotsRetrieve2: build.query<ProjectLotsRetrieve2ApiResponse, ProjectLotsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/` })
     }),
     projectLotsDeleteDestroy: build.mutation<ProjectLotsDeleteDestroyApiResponse, ProjectLotsDeleteDestroyApiArg>({
@@ -164,7 +208,10 @@ const injectedRtkApi = api.injectEndpoints({
       ProjectLotsSubcontractorsRetrieve2ApiResponse,
       ProjectLotsSubcontractorsRetrieve2ApiArg
     >({
-      query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/subcontractors/` })
+      query: queryArg => ({
+        url: `/project-lots/${queryArg.projectLotId}/subcontractors/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
     }),
     projectLotsSubcontractorsAssignCreate: build.mutation<
       ProjectLotsSubcontractorsAssignCreateApiResponse,
@@ -186,8 +233,34 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.projectLotUpdateRequest
       })
     }),
+    projectLotsUploadDocumentCreate: build.mutation<
+      ProjectLotsUploadDocumentCreateApiResponse,
+      ProjectLotsUploadDocumentCreateApiArg
+    >({
+      query: queryArg => ({
+        url: `/project-lots/${queryArg.projectLotId}/upload-document/`,
+        method: 'POST',
+        body: queryArg.documentUploadRequest
+      })
+    }),
     projectLotsCreateCreate: build.mutation<ProjectLotsCreateCreateApiResponse, ProjectLotsCreateCreateApiArg>({
       query: queryArg => ({ url: `/project-lots/create/`, method: 'POST', body: queryArg.projectLotCreateRequest })
+    }),
+    projectLotsDocumentsDeleteDestroy: build.mutation<
+      ProjectLotsDocumentsDeleteDestroyApiResponse,
+      ProjectLotsDocumentsDeleteDestroyApiArg
+    >({
+      query: queryArg => ({ url: `/project-lots/documents/${queryArg.documentId}/delete/`, method: 'DELETE' })
+    }),
+    projectLotsDocumentsUpdateCreate: build.mutation<
+      ProjectLotsDocumentsUpdateCreateApiResponse,
+      ProjectLotsDocumentsUpdateCreateApiArg
+    >({
+      query: queryArg => ({
+        url: `/project-lots/documents/${queryArg.documentId}/update/`,
+        method: 'POST',
+        body: queryArg.documentUploadRequest
+      })
     }),
     projectLotsSubcontractorsRetrieve: build.query<
       ProjectLotsSubcontractorsRetrieveApiResponse,
@@ -204,17 +277,64 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'DELETE'
       })
     }),
+    projectLotsSubcontractorsDocumentsDeleteDevisDestroy: build.mutation<
+      ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiResponse,
+      ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiArg
+    >({
+      query: queryArg => ({
+        url: `/project-lots/subcontractors/documents/${queryArg.documentId}/delete-devis/`,
+        method: 'DELETE'
+      })
+    }),
+    projectLotsSubcontractorsDocumentsUploadDevisCreate: build.mutation<
+      ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiResponse,
+      ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiArg
+    >({
+      query: queryArg => ({
+        url: `/project-lots/subcontractors/documents/${queryArg.projectLotSubcontractorId}/upload-devis/`,
+        method: 'POST',
+        body: queryArg.documentUploadRequest
+      })
+    }),
     projectsRetrieve: build.query<ProjectsRetrieveApiResponse, ProjectsRetrieveApiArg>({
       query: queryArg => ({ url: `/projects/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
     }),
     projectsRetrieve2: build.query<ProjectsRetrieve2ApiResponse, ProjectsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/projects/${queryArg.projectId}/` })
     }),
+    projectsLotsRetrieve: build.query<ProjectsLotsRetrieveApiResponse, ProjectsLotsRetrieveApiArg>({
+      query: queryArg => ({
+        url: `/projects/${queryArg.projectId}/lots/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
+    projectsTemplatesList: build.query<ProjectsTemplatesListApiResponse, ProjectsTemplatesListApiArg>({
+      query: queryArg => ({ url: `/projects/${queryArg.projectId}/templates/` })
+    }),
     projectsCreateCreate: build.mutation<ProjectsCreateCreateApiResponse, ProjectsCreateCreateApiArg>({
       query: queryArg => ({ url: `/projects/create/`, method: 'POST', body: queryArg.projectCreateRequest })
     }),
     projectsDeleteDestroy: build.mutation<ProjectsDeleteDestroyApiResponse, ProjectsDeleteDestroyApiArg>({
       query: queryArg => ({ url: `/projects/delete/${queryArg.projectId}/`, method: 'DELETE' })
+    }),
+    projectsTemplatesRetrieve: build.query<ProjectsTemplatesRetrieveApiResponse, ProjectsTemplatesRetrieveApiArg>({
+      query: queryArg => ({ url: `/projects/templates/${queryArg.templateId}/` })
+    }),
+    projectsTemplatesResetCreate: build.mutation<
+      ProjectsTemplatesResetCreateApiResponse,
+      ProjectsTemplatesResetCreateApiArg
+    >({
+      query: queryArg => ({ url: `/projects/templates/${queryArg.templateId}/reset/`, method: 'POST' })
+    }),
+    projectsTemplatesUpdateUpdate: build.mutation<
+      ProjectsTemplatesUpdateUpdateApiResponse,
+      ProjectsTemplatesUpdateUpdateApiArg
+    >({
+      query: queryArg => ({
+        url: `/projects/templates/${queryArg.templateId}/update/`,
+        method: 'PUT',
+        body: queryArg.projectEmailTemplateUpdateRequest
+      })
     }),
     projectsUpdateUpdate: build.mutation<ProjectsUpdateUpdateApiResponse, ProjectsUpdateUpdateApiArg>({
       query: queryArg => ({
@@ -231,6 +351,31 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     subcontractorsRetrieve2: build.query<SubcontractorsRetrieve2ApiResponse, SubcontractorsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/subcontractors/${queryArg.subcontractorId}/` })
+    }),
+    subcontractorsOwnerRetrieve: build.query<SubcontractorsOwnerRetrieveApiResponse, SubcontractorsOwnerRetrieveApiArg>(
+      {
+        query: queryArg => ({ url: `/subcontractors/${queryArg.subcontractorId}/owner/` })
+      }
+    ),
+    subcontractorsOwnerAssignUpdate: build.mutation<
+      SubcontractorsOwnerAssignUpdateApiResponse,
+      SubcontractorsOwnerAssignUpdateApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/${queryArg.subcontractorId}/owner/assign/`,
+        method: 'PUT',
+        body: queryArg.subcontractorOwnerCreateRequest
+      })
+    }),
+    subcontractorsOwnerUpdateUpdate: build.mutation<
+      SubcontractorsOwnerUpdateUpdateApiResponse,
+      SubcontractorsOwnerUpdateUpdateApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/${queryArg.subcontractorId}/owner/update/`,
+        method: 'PUT',
+        body: queryArg.subcontractorOwnerUpdateRequest
+      })
     }),
     subcontractorsStaffRetrieve2: build.query<
       SubcontractorsStaffRetrieve2ApiResponse,
@@ -266,6 +411,12 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: queryArg => ({ url: `/subcontractors/delete/${queryArg.subcontractorId}/`, method: 'DELETE' })
     }),
+    getSubcontractorStaffList: build.query<GetSubcontractorStaffListApiResponse, GetSubcontractorStaffListApiArg>({
+      query: queryArg => ({
+        url: `/subcontractors/staff/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
     subcontractorsStaffRetrieve: build.query<SubcontractorsStaffRetrieveApiResponse, SubcontractorsStaffRetrieveApiArg>(
       {
         query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
@@ -285,6 +436,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/update/`,
         method: 'PATCH',
         body: queryArg.patchedSubcontractorStaffUpdateRequest
+      })
+    }),
+    createSubcontractorBySubcontractorUser: build.mutation<
+      CreateSubcontractorBySubcontractorUserApiResponse,
+      CreateSubcontractorBySubcontractorUserApiArg
+    >({
+      query: queryArg => ({
+        url: `/subcontractors/staff/create/`,
+        method: 'POST',
+        body: queryArg.subcontractorStaffCreateRequest
       })
     }),
     subcontractorsUpdateUpdate: build.mutation<SubcontractorsUpdateUpdateApiResponse, SubcontractorsUpdateUpdateApiArg>(
@@ -336,11 +497,19 @@ const injectedRtkApi = api.injectEndpoints({
 })
 
 export { injectedRtkApi as pIsyBuildApi }
+
+export type SubcontractorsOwnerDeleteDestroyApiResponse = /** status 204  */ any
+export type SubcontractorsOwnerDeleteDestroyApiArg = {
+  subcontractorId: number
+}
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
+
   pageSize?: number
 }
 export type AdminStaffRetrieve2ApiResponse = /** status 200  */ AdminStaffRead
@@ -373,8 +542,26 @@ export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead
 export type ClientsRetrieve2ApiArg = {
   clientId: number
 }
-export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedClientStaffRead
-export type ClientsStaffRetrieve2ApiArg = {
+export type ClientsOwnerRetrieveApiResponse = /** status 200  */ UserRead
+export type ClientsOwnerRetrieveApiArg = {
+  clientId: number
+}
+export type ClientsOwnerAssignUpdateApiResponse = /** status 200  */ ClientRead
+export type ClientsOwnerAssignUpdateApiArg = {
+  clientId: number
+  clientOwnerCreateRequest: ClientOwnerCreateRequestWrite
+}
+export type ClientsOwnerDeleteDestroyApiResponse = /** status 204  */ any
+export type ClientsOwnerDeleteDestroyApiArg = {
+  clientId: number
+}
+export type ClientsOwnerUpdateUpdateApiResponse = /** status 200  */ ClientRead
+export type ClientsOwnerUpdateUpdateApiArg = {
+  clientId: number
+  clientOwnerUpdateRequest: ClientOwnerUpdateRequest
+}
+export type ClientsStaffRetrieve3ApiResponse = /** status 200  */ PaginatedClientStaffRead
+export type ClientsStaffRetrieve3ApiArg = {
   clientId: number
 
   /** Page number of the results to fetch */
@@ -383,8 +570,8 @@ export type ClientsStaffRetrieve2ApiArg = {
   /** Number of results per page */
   pageSize?: number
 }
-export type ClientsStaffCreateCreateApiResponse = /** status 201  */ ClientStaffRead
-export type ClientsStaffCreateCreateApiArg = {
+export type ClientsStaffCreateCreate2ApiResponse = /** status 201  */ ClientStaffRead
+export type ClientsStaffCreateCreate2ApiArg = {
   clientId: number
   clientStaffCreateRequest: ClientStaffCreateRequestWrite
 }
@@ -396,8 +583,17 @@ export type ClientsDeleteDestroyApiResponse = /** status 204  */ any
 export type ClientsDeleteDestroyApiArg = {
   clientId: number
 }
-export type ClientsStaffRetrieveApiResponse = /** status 200  */ ClientStaffRead
+export type ClientsStaffRetrieveApiResponse = /** status 200  */ PaginatedClientStaffRead
 export type ClientsStaffRetrieveApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ ClientStaffRead
+export type ClientsStaffRetrieve2ApiArg = {
   clientStaffId: number
 }
 export type ClientsStaffDeleteDestroyApiResponse = /** status 204  */ any
@@ -408,6 +604,10 @@ export type ClientsStaffUpdateUpdateApiResponse = /** status 200  */ ClientStaff
 export type ClientsStaffUpdateUpdateApiArg = {
   clientStaffId: number
   clientStaffUpdateRequest: ClientStaffUpdateRequest
+}
+export type ClientsStaffCreateCreateApiResponse = /** status 201  */ ClientStaffRead
+export type ClientsStaffCreateCreateApiArg = {
+  clientStaffCreateRequest: ClientStaffCreateRequestWrite
 }
 export type ClientsUpdateUpdateApiResponse = /** status 200  */ ClientRead
 export type ClientsUpdateUpdateApiArg = {
@@ -431,6 +631,7 @@ export type ContactsPhoneNumbersRetrieveApiArg = {
   contactId: number
 
   /** Page number of the results to fetch */
+
   page?: number
 
   /** Number of results per page */
@@ -446,6 +647,14 @@ export type ContactsUpdateUpdateApiArg = {
   contactId: number
   contactCreateUpdateRequest: ContactCreateUpdateRequest
 }
+export type GetDocumentDetailApiResponse = /** status 200  */ DocumentRead
+export type GetDocumentDetailApiArg = {
+  documentId: number
+}
+export type GetFolderDetailApiResponse = /** status 200  */ FolderRead
+export type GetFolderDetailApiArg = {
+  folderId: number
+}
 export type LoginCreateApiResponse = /** status 200  */ {
   [key: string]: any
 }
@@ -457,7 +666,6 @@ export type LogoutCreateApiArg = {
   tokenRefreshRequest: TokenRefreshRequest
 }
 export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead
-
 export type LotsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
@@ -483,6 +691,24 @@ export type LotsUpdateUpdateApiArg = {
   lotId: number
   lotCreateUpdateRequest: LotCreateUpdateRequest
 }
+export type GetInAppNotificationsListApiResponse = /** status 200  */ PaginatedInAppNotificationRead
+export type GetInAppNotificationsListApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type GetInAppNotificationDetailApiResponse =
+  /** status 200 Success: Notification retrieved */ InAppNotificationRead
+export type GetInAppNotificationDetailApiArg = {
+  notificationId: number
+}
+export type MarkNotificationAsReadApiResponse = unknown
+export type MarkNotificationAsReadApiArg = {
+  notificationId: number
+}
 export type PasswordConfirmCreateApiResponse = /** status 200  */ any
 export type PasswordConfirmCreateApiArg = {
   setNewPasswordRequest: SetNewPasswordRequestWrite
@@ -504,23 +730,8 @@ export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
-export type ProjectLotsRetrieveApiResponse =
-
-/** status 200  */
-
-PaginatedProjectLotRead
-
+export type ProjectLotsRetrieveApiResponse = /** status 200  */ ProjectLotRead
 export type ProjectLotsRetrieveApiArg = {
-
-  /** Page number of the results to fetch */
-  page?: number
-
-  /** Number of results per page */
-  pageSize?: number
-  projectId: number
-}
-export type ProjectLotsRetrieve2ApiResponse = /** status 200  */ ProjectLotRead
-export type ProjectLotsRetrieve2ApiArg = {
   projectLotId: number
 }
 export type ProjectLotsDeleteDestroyApiResponse = /** status 204  */ {
@@ -531,6 +742,12 @@ export type ProjectLotsDeleteDestroyApiArg = {
 }
 export type ProjectLotsSubcontractorsRetrieve2ApiResponse = /** status 200  */ PaginatedProjectLotSubcontractorRead
 export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
   projectLotId: number
 }
 export type ProjectLotsSubcontractorsAssignCreateApiResponse = /** status 201  */ ProjectLotSubcontractorRead
@@ -543,30 +760,56 @@ export type ProjectLotsUpdateStatusUpdateApiArg = {
   projectLotId: number
   projectLotUpdateRequest: ProjectLotUpdateRequest
 }
+export type ProjectLotsUploadDocumentCreateApiResponse = /** status 201  */ {
+  [key: string]: any
+}
+export type ProjectLotsUploadDocumentCreateApiArg = {
+  projectLotId: number
+  documentUploadRequest: DocumentUploadRequest
+}
 export type ProjectLotsCreateCreateApiResponse = /** status 201  */ ProjectLotRead
 export type ProjectLotsCreateCreateApiArg = {
   projectLotCreateRequest: ProjectLotCreateRequest
+}
+export type ProjectLotsDocumentsDeleteDestroyApiResponse = /** status 204  */ {
+  [key: string]: any
+}
+export type ProjectLotsDocumentsDeleteDestroyApiArg = {
+  documentId: number
+}
+export type ProjectLotsDocumentsUpdateCreateApiResponse = /** status 200  */ {
+  [key: string]: any
+}
+export type ProjectLotsDocumentsUpdateCreateApiArg = {
+  documentId: number
+  documentUploadRequest: DocumentUploadRequest
 }
 export type ProjectLotsSubcontractorsRetrieveApiResponse = /** status 200  */ ProjectLotSubcontractorRead
 export type ProjectLotsSubcontractorsRetrieveApiArg = {
   projectLotSubcontractorId: number
 }
-export type ProjectLotsSubcontractorsRemoveDestroyApiResponse =
-
- /** status 204  */
-
- {
+export type ProjectLotsSubcontractorsRemoveDestroyApiResponse = /** status 204  */ {
   [key: string]: any
 }
-
 export type ProjectLotsSubcontractorsRemoveDestroyApiArg = {
   projectLotSubcontractorId: number
 }
-
+export type ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiResponse = /** status 204  */ {
+  [key: string]: any
+}
+export type ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiArg = {
+  documentId: number
+}
+export type ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiResponse = /** status 200  */ {
+  [key: string]: any
+}
+export type ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiArg = {
+  projectLotSubcontractorId: number
+  documentUploadRequest: DocumentUploadRequest
+}
 export type ProjectsRetrieveApiResponse = /** status 200  */ PaginatedProjectRead
-
 export type ProjectsRetrieveApiArg = {
-
+  
   /** Page number of the results to fetch */
   page?: number
 
@@ -577,6 +820,21 @@ export type ProjectsRetrieve2ApiResponse = /** status 200  */ ProjectRead
 export type ProjectsRetrieve2ApiArg = {
   projectId: number
 }
+export type ProjectsLotsRetrieveApiResponse = /** status 200  */ PaginatedProjectLotRead
+export type ProjectsLotsRetrieveApiArg = {
+
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+  projectId: number
+}
+export type ProjectsTemplatesListApiResponse = /** status 200  */ ProjectEmailTemplateRead[]
+export type ProjectsTemplatesListApiArg = {
+  projectId: number
+}
 export type ProjectsCreateCreateApiResponse = /** status 201  */ ProjectRead
 export type ProjectsCreateCreateApiArg = {
   projectCreateRequest: ProjectCreateRequest
@@ -585,43 +843,58 @@ export type ProjectsDeleteDestroyApiResponse = /** status 204  */ any
 export type ProjectsDeleteDestroyApiArg = {
   projectId: number
 }
+export type ProjectsTemplatesRetrieveApiResponse = /** status 200  */ ProjectEmailTemplateRead
+export type ProjectsTemplatesRetrieveApiArg = {
+  templateId: number
+}
+export type ProjectsTemplatesResetCreateApiResponse = /** status 200  */ ProjectEmailTemplateRead
+export type ProjectsTemplatesResetCreateApiArg = {
+  templateId: number
+}
+export type ProjectsTemplatesUpdateUpdateApiResponse = /** status 200  */ ProjectEmailTemplateRead
+export type ProjectsTemplatesUpdateUpdateApiArg = {
+  templateId: number
+  projectEmailTemplateUpdateRequest: ProjectEmailTemplateUpdateRequest
+}
 export type ProjectsUpdateUpdateApiResponse = /** status 200  */ ProjectRead
 export type ProjectsUpdateUpdateApiArg = {
   projectId: number
   projectUpdateRequest: ProjectUpdateRequest
 }
 export type SetPasswordCreateApiResponse = /** status 200  */ any
-
 export type SetPasswordCreateApiArg = {
   setasswordRequest: SetasswordRequestWrite
 }
-
-export type SubcontractorsRetrieveApiResponse = PaginatedSubcontractortRead
-
+export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubcontractortRead
 export type SubcontractorsRetrieveApiArg = {
 
   /** Page number of the results to fetch */
   page?: number
 
-
   /** Number of results per page */
   pageSize?: number
 }
 export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ SubcontractorRead
-
 export type SubcontractorsRetrieve2ApiArg = {
   subcontractorId: number
 }
-
-export type SubcontractorsStaffRetrieve2ApiResponse =
-
- /** status 200  */
-
- PaginatedSubcontractorStaffRead
-
+export type SubcontractorsOwnerRetrieveApiResponse = /** status 200  */ UserRead
+export type SubcontractorsOwnerRetrieveApiArg = {
+  subcontractorId: number
+}
+export type SubcontractorsOwnerAssignUpdateApiResponse = /** status 200  */ SubcontractorRead
+export type SubcontractorsOwnerAssignUpdateApiArg = {
+  subcontractorId: number
+  subcontractorOwnerCreateRequest: SubcontractorOwnerCreateRequestWrite
+}
+export type SubcontractorsOwnerUpdateUpdateApiResponse = /** status 200  */ SubcontractorRead
+export type SubcontractorsOwnerUpdateUpdateApiArg = {
+  subcontractorId: number
+  subcontractorOwnerUpdateRequest: SubcontractorOwnerUpdateRequest
+}
+export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
 export type SubcontractorsStaffRetrieve2ApiArg = {
-
-
+  
   /** Page number of the results to fetch */
   page?: number
 
@@ -642,6 +915,15 @@ export type SubcontractorsDeleteDestroyApiResponse = /** status 204  */ any
 export type SubcontractorsDeleteDestroyApiArg = {
   subcontractorId: number
 }
+export type GetSubcontractorStaffListApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+export type GetSubcontractorStaffListApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
 export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ SubcontractorStaffRead
 export type SubcontractorsStaffRetrieveApiArg = {
   subcontractorStaffId: number
@@ -654,6 +936,10 @@ export type SubcontractorsStaffUpdatePartialUpdateApiResponse = /** status 200  
 export type SubcontractorsStaffUpdatePartialUpdateApiArg = {
   subcontractorStaffId: number
   patchedSubcontractorStaffUpdateRequest: PatchedSubcontractorStaffUpdateRequest
+}
+export type CreateSubcontractorBySubcontractorUserApiResponse = /** status 201  */ SubcontractorStaffRead
+export type CreateSubcontractorBySubcontractorUserApiArg = {
+  subcontractorStaffCreateRequest: SubcontractorStaffCreateRequestWrite
 }
 export type SubcontractorsUpdateUpdateApiResponse = /** status 200  */ SubcontractorRead
 export type SubcontractorsUpdateUpdateApiArg = {
@@ -695,7 +981,6 @@ export type UserUpdateAvatarCreateApiArg = {
 }
 export type AdminStaff = {}
 export type User = {
-  avatar: string
   email: string
   first_name?: string
   last_name?: string
@@ -713,14 +998,13 @@ export type UserRead = {
   role: string
 }
 export type CreatedBy = {
-  avatar?: string | null
   email: string
   first_name?: string
   last_name?: string
 }
 export type CreatedByRead = {
   id: number
-  avatar?: string | null
+  avatar: string
   email: string
   first_name?: string
   last_name?: string
@@ -799,11 +1083,11 @@ export type Client = {
   is_active?: boolean
 }
 export type ClientRead = {
-  [x: string]: any
   id: number
   name: string
   siren_number: string
   address: AddressRead
+  owner: CreatedByRead
   contact_email: string
   phone_number: string
   is_active?: boolean
@@ -822,6 +1106,20 @@ export type PaginatedClientRead = {
   next: string | null
   previous: string | null
   results: ClientRead[]
+}
+export type ClientOwnerCreateRequest = {
+  user: UserCreateRequest
+}
+export type ClientOwnerCreateRequestWrite = {
+  user: UserCreateRequestWrite
+}
+export type UserUpdateRequest = {
+  first_name: string
+  last_name: string
+  is_active?: boolean
+}
+export type ClientOwnerUpdateRequest = {
+  user: UserUpdateRequest
 }
 export type ClientStaff = {}
 export type ClientStaffRead = {
@@ -845,9 +1143,11 @@ export type PaginatedClientStaffRead = {
 }
 export type ClientStaffCreateRequest = {
   user: UserCreateRequest
+  client_id?: number | null
 }
 export type ClientStaffCreateRequestWrite = {
   user: UserCreateRequestWrite
+  client_id?: number | null
 }
 export type AddressCreateRequest = {
   street_number: string
@@ -864,11 +1164,6 @@ export type ClientCreateUpdateRequest = {
   address: AddressCreateRequest
   contact_email: string
   phone_number: string
-  is_active?: boolean
-}
-export type UserUpdateRequest = {
-  first_name: string
-  last_name: string
   is_active?: boolean
 }
 export type ClientStaffUpdateRequest = {
@@ -932,6 +1227,34 @@ export type ContactCreateUpdateRequest = {
   last_name: string
   email: string
 }
+export type Document = {
+  name: string
+  tags?: string | null
+}
+export type DocumentVersion = {
+  version_number: number
+  notes?: string | null
+}
+export type DocumentVersionRead = {
+  version_number: number
+  file_url: string
+  notes?: string | null
+  created_at: string
+}
+export type DocumentRead = {
+  id: number
+  name: string
+  tags?: string | null
+  latest_version: DocumentVersionRead
+}
+export type Folder = {
+  name: string
+}
+export type FolderRead = {
+  id: number
+  name: string
+  documents: DocumentRead[]
+}
 export type TokenObtainPairRequest = {}
 export type TokenObtainPairRequestWrite = {
   email: string
@@ -969,6 +1292,41 @@ export type LotCreateUpdateRequest = {
   name: string
   description?: string | null
 }
+export type InAppNotificationStatusEnum = 'pending' | 'Sent' | 'Failed' | 'read' | 'unread'
+export type ChannelEnum = 'Email' | 'sms' | 'whatsApp' | 'push' | 'in_app'
+export type InAppNotification = {
+  subject?: string | null
+  message: string
+  status?: InAppNotificationStatusEnum
+  channel: ChannelEnum
+  sent_at?: string | null
+  read_at?: string | null
+  redirect_url?: string | null
+  context_data?: any | null
+}
+export type InAppNotificationRead = {
+  id: number
+  subject?: string | null
+  message: string
+  status?: InAppNotificationStatusEnum
+  channel: ChannelEnum
+  sent_at?: string | null
+  read_at?: string | null
+  redirect_url?: string | null
+  context_data?: any | null
+}
+export type PaginatedInAppNotification = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: InAppNotification[]
+}
+export type PaginatedInAppNotificationRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: InAppNotificationRead[]
+}
 export type SetNewPasswordRequest = {}
 export type SetNewPasswordRequestWrite = {
   new_password: string
@@ -1003,22 +1361,11 @@ export type ProjectLotRead = {
   project: ProjectSimpleRead
   lot: LotSimpleRead
   status?: Status109Enum
+  folder: FolderRead
   notes?: string
   created_by: CreatedByRead
   created_at: string
   updated_at: string
-}
-export type PaginatedProjectLot = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectLot[]
-}
-export type PaginatedProjectLotRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectLotRead[]
 }
 export type Status841Enum = 'pending' | 'in_progress' | 'completed' | 'not_responding' | 'canceled'
 export type ProjectLotSubcontractor = {
@@ -1045,12 +1392,10 @@ export type SubcontractorSimpleRead = {
   name: string
   siren_number: string
 }
-export type SubcontractorStaffSimple = {
-  user: number
-}
+export type SubcontractorStaffSimple = {}
 export type SubcontractorStaffSimpleRead = {
   id: number
-  user: number
+  user: CreatedByRead
   subcontractor: SubcontractorSimpleRead
 }
 export type ProjectLotSubcontractorRead = {
@@ -1058,6 +1403,7 @@ export type ProjectLotSubcontractorRead = {
   project_lot: ProjectLotSimpleRead
   subcontractor: SubcontractorSimpleRead
   subcontractor_staff: SubcontractorStaffSimpleRead
+  devis_document: DocumentRead
   status?: Status841Enum
   notes?: string | null
   created_by: CreatedByRead
@@ -1085,6 +1431,12 @@ export type ProjectLotSubcontractorCreateRequest = {
 export type ProjectLotUpdateRequest = {
   status?: Status109Enum
 }
+export type DocumentUploadRequest = {
+  name?: string
+  file: Blob
+  tags?: string
+  notes?: string
+}
 export type ProjectLotCreateRequest = {
   lot_id: number
   project_id: number
@@ -1109,7 +1461,6 @@ export type MapCoordinate = {
   longitude: string
 }
 export type ProjectRead = {
-  address: any
   id: number
   code: string
   name: string
@@ -1124,6 +1475,7 @@ export type ProjectRead = {
   actual_cost?: string
   cost_variance?: string
   risk_level?: RiskLevelEnum
+  address: AddressRead
   manager: ClientStaffRead
   staff: ClientStaffRead[]
   created_by: CreatedByRead
@@ -1142,6 +1494,64 @@ export type PaginatedProjectRead = {
   previous: string | null
   results: ProjectRead[]
 }
+export type PaginatedProjectLot = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectLot[]
+}
+export type PaginatedProjectLotRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectLotRead[]
+}
+export type TemplateTypeEnum = 'upload_devis' | 'assign_subcontractor' | 'update_document'
+export type ProjectEmailTemplate = {
+  project: ProjectSimple
+  template_type: TemplateTypeEnum
+}
+export type EmailTemplate = {
+
+  /** Template name for internal reference */
+  name: string
+
+  /** Subject template with placeholders */
+  subject_template: string
+
+  /** Customizable header content with placeholders */
+  header_template?: string | null
+
+  /** Customizable body content with placeholders */
+  body_template: string
+
+  /** Customizable footer content with placeholders */
+  footer_template?: string | null
+}
+export type EmailTemplateRead = {
+  id: number
+
+  /** Template name for internal reference */
+  name: string
+
+  /** Subject template with placeholders */
+  subject_template: string
+
+  /** Customizable header content with placeholders */
+  header_template?: string | null
+
+  /** Customizable body content with placeholders */
+  body_template: string
+
+  /** Customizable footer content with placeholders */
+  footer_template?: string | null
+}
+export type ProjectEmailTemplateRead = {
+  id: number
+  project: ProjectSimpleRead
+  email_template: EmailTemplateRead
+  template_type: TemplateTypeEnum
+}
 export type MapCoordinateCreateOrUpdateRequest = {
   latitude: string
   longitude: string
@@ -1156,6 +1566,26 @@ export type ProjectCreateRequest = {
   address?: AddressCreateRequest
   map_coordinate?: MapCoordinateCreateOrUpdateRequest
   notes?: string
+}
+export type EmailTemplateUpdateRequest = {
+
+  /** Template name for internal reference */
+  name: string
+
+  /** Subject template with placeholders */
+  subject_template: string
+
+  /** Customizable header content with placeholders */
+  header_template?: string | null
+
+  /** Customizable body content with placeholders */
+  body_template: string
+  
+  /** Customizable footer content with placeholders */
+  footer_template?: string | null
+}
+export type ProjectEmailTemplateUpdateRequest = {
+  email_template: EmailTemplateUpdateRequest
 }
 export type ProjectUpdateRequest = {
   code: string
@@ -1207,6 +1637,15 @@ export type PaginatedSubcontractortRead = {
   next: string | null
   previous: string | null
   results: SubcontractorRead[]
+}
+export type SubcontractorOwnerCreateRequest = {
+  user: UserCreateRequest
+}
+export type SubcontractorOwnerCreateRequestWrite = {
+  user: UserCreateRequestWrite
+}
+export type SubcontractorOwnerUpdateRequest = {
+  user: UserUpdateRequest
 }
 export type SubcontractorStaff = {}
 export type SubcontractorStaffRead = {
@@ -1280,6 +1719,7 @@ export type AvatarUpdateRequest = {
   avatar: Blob
 }
 export const {
+  useSubcontractorsOwnerDeleteDestroyMutation,
   useAdminStaffRetrieveQuery,
   useAdminStaffRetrieve2Query,
   useAdminStaffCreateCreateMutation,
@@ -1287,13 +1727,19 @@ export const {
   useAdminUsersDeleteDestroyMutation,
   useClientsRetrieveQuery,
   useClientsRetrieve2Query,
-  useClientsStaffRetrieve2Query,
-  useClientsStaffCreateCreateMutation,
+  useClientsOwnerRetrieveQuery,
+  useClientsOwnerAssignUpdateMutation,
+  useClientsOwnerDeleteDestroyMutation,
+  useClientsOwnerUpdateUpdateMutation,
+  useClientsStaffRetrieve3Query,
+  useClientsStaffCreateCreate2Mutation,
   useClientsCreateCreateMutation,
   useClientsDeleteDestroyMutation,
   useClientsStaffRetrieveQuery,
+  useClientsStaffRetrieve2Query,
   useClientsStaffDeleteDestroyMutation,
   useClientsStaffUpdateUpdateMutation,
+  useClientsStaffCreateCreateMutation,
   useClientsUpdateUpdateMutation,
   useContactUsSendEmailCreateMutation,
   useContactsRetrieveQuery,
@@ -1301,6 +1747,8 @@ export const {
   useContactsPhoneNumbersRetrieveQuery,
   useContactsPhoneNumbersCreateCreateMutation,
   useContactsUpdateUpdateMutation,
+  useGetDocumentDetailQuery,
+  useGetFolderDetailQuery,
   useLoginCreateMutation,
   useLogoutCreateMutation,
   useLotsRetrieveQuery,
@@ -1308,35 +1756,52 @@ export const {
   useLotsCreateCreateMutation,
   useLotsDeleteDestroyMutation,
   useLotsUpdateUpdateMutation,
+  useGetInAppNotificationsListQuery,
+  useGetInAppNotificationDetailQuery,
+  useMarkNotificationAsReadMutation,
   usePasswordConfirmCreateMutation,
   usePasswordResetCreateMutation,
   usePhoneNumbersRetrieveQuery,
   usePhoneNumbersDeleteDestroyMutation,
   usePhoneNumbersUpdateUpdateMutation,
   useProjectLotsRetrieveQuery,
-  useProjectLotsRetrieve2Query,
   useProjectLotsDeleteDestroyMutation,
   useProjectLotsSubcontractorsRetrieve2Query,
   useProjectLotsSubcontractorsAssignCreateMutation,
   useProjectLotsUpdateStatusUpdateMutation,
+  useProjectLotsUploadDocumentCreateMutation,
   useProjectLotsCreateCreateMutation,
+  useProjectLotsDocumentsDeleteDestroyMutation,
+  useProjectLotsDocumentsUpdateCreateMutation,
   useProjectLotsSubcontractorsRetrieveQuery,
   useProjectLotsSubcontractorsRemoveDestroyMutation,
+  useProjectLotsSubcontractorsDocumentsDeleteDevisDestroyMutation,
+  useProjectLotsSubcontractorsDocumentsUploadDevisCreateMutation,
   useProjectsRetrieveQuery,
   useProjectsRetrieve2Query,
+  useProjectsLotsRetrieveQuery,
+  useProjectsTemplatesListQuery,
   useProjectsCreateCreateMutation,
   useProjectsDeleteDestroyMutation,
+  useProjectsTemplatesRetrieveQuery,
+  useProjectsTemplatesResetCreateMutation,
+  useProjectsTemplatesUpdateUpdateMutation,
   useProjectsUpdateUpdateMutation,
   useSetPasswordCreateMutation,
   useSubcontractorsRetrieveQuery,
   useSubcontractorsRetrieve2Query,
+  useSubcontractorsOwnerRetrieveQuery,
+  useSubcontractorsOwnerAssignUpdateMutation,
+  useSubcontractorsOwnerUpdateUpdateMutation,
   useSubcontractorsStaffRetrieve2Query,
   useSubcontractorsStaffCreateCreateMutation,
   useSubcontractorsCreateCreateMutation,
   useSubcontractorsDeleteDestroyMutation,
+  useGetSubcontractorStaffListQuery,
   useSubcontractorsStaffRetrieveQuery,
   useSubcontractorsStaffDeleteDestroyMutation,
   useSubcontractorsStaffUpdatePartialUpdateMutation,
+  useCreateSubcontractorBySubcontractorUserMutation,
   useSubcontractorsUpdateUpdateMutation,
   useTokenRefreshCreateMutation,
   useUserChangePasswordCreateMutation,

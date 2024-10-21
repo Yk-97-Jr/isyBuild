@@ -4,6 +4,40 @@ info:
   version: 1.0.0
   description: API documentation for IsyBuild
 paths:
+  /Subcontractors/{subcontractor_id}/owner/delete/:
+    delete:
+      operationId: Subcontractors_owner_delete_destroy
+      description: Deletes an Subcontractor owner by ID. Requires administrative privileges.
+      summary: Delete Subcontractor owner
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: Subcontractor deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Subcontractor not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
   /admin-staff/:
     get:
       operationId: admin_staff_retrieve
@@ -222,9 +256,165 @@ paths:
               schema:
                 $ref: '#/components/schemas/Client'
           description: ''
+  /clients/{client_id}/owner/:
+    get:
+      operationId: clients_owner_retrieve
+      description: Fetches the owner details of a client by the client's ID.
+      summary: Retrieve Client Owner Details
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /clients/{client_id}/owner/assign/:
+    put:
+      operationId: clients_owner_assign_update
+      description: Assigns an owner to a client by setting a user as the owner.
+      summary: Assign Owner to Client
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /clients/{client_id}/owner/delete/:
+    delete:
+      operationId: clients_owner_delete_destroy
+      description: Deletes an client owner by ID. Requires administrative privileges.
+      summary: Delete Client owner
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: client deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: client not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /clients/{client_id}/owner/update/:
+    put:
+      operationId: clients_owner_update_update
+      description: Update an owner to a client by setting a user as the owner.
+      summary: Update Owner to Client
+      parameters:
+      - in: path
+        name: client_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Client Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientOwnerUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Client'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /clients/{client_id}/staff/:
     get:
-      operationId: clients_staff_retrieve_2
+      operationId: clients_staff_retrieve_3
       description: Retrieve a list of all client staff users with pagination.
       summary: List all Client staff
       parameters:
@@ -256,7 +446,7 @@ paths:
           description: ''
   /clients/{client_id}/staff/create/:
     post:
-      operationId: clients_staff_create_create
+      operationId: clients_staff_create_create_2
       description: Create a new client staff member.
       parameters:
       - in: path
@@ -364,9 +554,36 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
-  /clients/staff/{client_staff_id}/:
+  /clients/staff/:
     get:
       operationId: clients_staff_retrieve
+      description: Retrieve a list of all client staff users with pagination.
+      summary: List all Client staff
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Client Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedClientStaff'
+          description: ''
+  /clients/staff/{client_staff_id}/:
+    get:
+      operationId: clients_staff_retrieve_2
       description: Fetches detailed information about an  client staff member by their
         unique identifier.
       summary: Retrieve  Client Staff Details
@@ -464,6 +681,41 @@ paths:
                 description: Unspecified response body
           description: ''
         '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /clients/staff/create/:
+    post:
+      operationId: clients_staff_create_create
+      description: Create a new client staff member.
+      tags:
+      - Client Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ClientStaffCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientStaff'
+          description: ''
+        '400':
           content:
             application/json:
               schema:
@@ -738,6 +990,99 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /document/{document_id}/:
+    get:
+      operationId: get_document_detail
+      description: 'Fetch detailed information about a specific document by its ID '
+      summary: Retrieve a Folder by ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folder Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /folders/{folder_id}/:
+    get:
+      operationId: get_folder_detail
+      description: 'Fetch detailed information about a specific Folder by its ID,
+        including documents '
+      summary: Retrieve a Folder by ID
+      parameters:
+      - in: path
+        name: folder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folder Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Folder'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /login/:
     post:
       operationId: login_create
@@ -987,6 +1332,79 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /notifications/in-app/:
+    get:
+      operationId: get_in_app_notifications_list
+      description: Retrieve a list of all unread notifications with pagination.
+      summary: List all unread notifications
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Notifications Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedInAppNotification'
+          description: ''
+  /notifications/in-app/{notification_id}:
+    get:
+      operationId: get_in_app_notification_detail
+      description: Retrieve details of a specific notification by its ID for the authenticated
+        user.
+      summary: 'Get a in app  notification detail '
+      parameters:
+      - in: path
+        name: notification_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Notifications Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InAppNotification'
+          description: 'Success: Notification retrieved'
+        '404':
+          description: 'Error: Notification not found'
+  /notifications/in-app/{notification_id}/read/:
+    post:
+      operationId: mark_notification_as_read
+      description: Marks a single notification as read for the authenticated user
+        by notification ID.
+      summary: Mark a notification as read
+      parameters:
+      - in: path
+        name: notification_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Notifications Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: 'Success: Notification marked as read'
+        '404':
+          description: 'Error: No matching notification found'
   /password-confirm/:
     post:
       operationId: password_confirm_create
@@ -1186,50 +1604,9 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
-  /project-lots/{project_id}/:
-    get:
-      operationId: project_lots_retrieve
-      description: Retrieve a list of all ProjectLots for a specific project with
-        pagination.
-      summary: List all Lots for a Project
-      parameters:
-      - in: query
-        name: page
-        schema:
-          type: integer
-        description: Page number of the results to fetch
-      - in: query
-        name: page_size
-        schema:
-          type: integer
-        description: Number of results per page
-      - in: path
-        name: project_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Appel d'offre Management
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedProjectLot'
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
   /project-lots/{project_lot_id}/:
     get:
-      operationId: project_lots_retrieve_2
+      operationId: project_lots_retrieve
       description: Fetch detailed information about a specific ProjectLot by its ID.
       summary: Retrieve a Project Lot by ID
       parameters:
@@ -1303,6 +1680,16 @@ paths:
       description: Retrieve a list of all subcontractors assigned to a specific ProjectLot.
       summary: List all Subcontractors for a ProjectLot
       parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
       - in: path
         name: project_lot_id
         schema:
@@ -1418,6 +1805,45 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /project-lots/{project_lot_id}/upload-document/:
+    post:
+      operationId: project_lots_upload_document_create
+      description: Upload a file to the folder associated with the given ProjectLot
+        ID.
+      summary: Upload a document to a ProjectLot's folder
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /project-lots/create/:
     post:
       operationId: project_lots_create_create
@@ -1445,6 +1871,86 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectLot'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/documents/{document_id}/delete/:
+    delete:
+      operationId: project_lots_documents_delete_destroy
+      description: Delete the document and all its associated versions by providing
+        the document ID.
+      summary: Delete a document by its ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/documents/{document_id}/update/:
+    post:
+      operationId: project_lots_documents_update_create
+      description: Upload a new version for an existing document and make it the latest
+        version.
+      summary: Update a document by adding a new version
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
           description: ''
         '400':
           content:
@@ -1517,6 +2023,86 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /project-lots/subcontractors/documents/{document_id}/delete-devis/:
+    delete:
+      operationId: project_lots_subcontractors_documents_delete_devis_destroy
+      description: Delete the document and all its associated versions by providing
+        the document ID.
+      summary: Delete a document by its ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/subcontractors/documents/{project_lot_subcontractor_id}/upload-devis/:
+    post:
+      operationId: project_lots_subcontractors_documents_upload_devis_create
+      description: Allows subcontractors to upload or update their Devis (pricing
+        proposal) document.
+      summary: Upload or update Devis document for ProjectLotSubcontractor
+      parameters:
+      - in: path
+        name: project_lot_subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /projects/:
     get:
       operationId: projects_retrieve
@@ -1566,6 +2152,71 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
+          description: ''
+  /projects/{project_id}/lots/:
+    get:
+      operationId: projects_lots_retrieve
+      description: Retrieve a list of all ProjectLots for a specific project with
+        pagination.
+      summary: List all Lots for a Project
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectLot'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /projects/{project_id}/templates/:
+    get:
+      operationId: projects_templates_list
+      description: Retrieve a list of all email templates associated with a project.
+      summary: List all email templates for a project
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectEmailTemplate'
           description: ''
   /projects/create/:
     post:
@@ -1635,6 +2286,85 @@ paths:
             application/json:
               schema:
                 description: Permission denied.
+          description: ''
+  /projects/templates/{template_id}/:
+    get:
+      operationId: projects_templates_retrieve
+      description: Fetch detailed information about an email template.
+      summary: Retrieve an Email Template by ID
+      parameters:
+      - in: path
+        name: template_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectEmailTemplate'
+          description: ''
+  /projects/templates/{template_id}/reset/:
+    post:
+      operationId: projects_templates_reset_create
+      description: Resets the specified email template for the given project to the
+        default settings.
+      summary: Reset a single email template to default
+      parameters:
+      - in: path
+        name: template_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectEmailTemplate'
+          description: ''
+  /projects/templates/{template_id}/update/:
+    put:
+      operationId: projects_templates_update_update
+      description: Updates an existing email template for a project.
+      summary: Update an email template for a project
+      parameters:
+      - in: path
+        name: template_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectEmailTemplateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectEmailTemplateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectEmailTemplateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectEmailTemplate'
           description: ''
   /projects/update/{project_id}/:
     put:
@@ -1771,6 +2501,129 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Subcontractor'
+          description: ''
+  /subcontractors/{subcontractor_id}/owner/:
+    get:
+      operationId: subcontractors_owner_retrieve
+      description: Fetches the owner details of a Subcontractor by the Subcontractor's
+        ID.
+      summary: Retrieve Subcontractor Owner Details
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /subcontractors/{subcontractor_id}/owner/assign/:
+    put:
+      operationId: subcontractors_owner_assign_update
+      description: Assigns an owner to a Subcontractor by setting a user as the owner.
+      summary: Assign Owner to Subcontractor
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/{subcontractor_id}/owner/update/:
+    put:
+      operationId: subcontractors_owner_update_update
+      description: Update an owner to a Subcontractor by setting a user as the owner.
+      summary: Update Owner to Subcontractor
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
           description: ''
   /subcontractors/{subcontractor_id}/staff/:
     get:
@@ -1914,6 +2767,33 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
+  /subcontractors/staff/:
+    get:
+      operationId: get_subcontractor_staff_list
+      description: Retrieve a list of all subcontractor staff users with pagination.
+      summary: List all Subcontractor staff
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Subcontractor Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubcontractorStaff'
+          description: ''
   /subcontractors/staff/{subcontractor_staff_id}/:
     get:
       operationId: subcontractors_staff_retrieve
@@ -2013,6 +2893,41 @@ paths:
                 description: Unspecified response body
           description: ''
         '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/staff/create/:
+    post:
+      operationId: create_subcontractor_by_subcontractor_user
+      description: Create a new subcontractor staff member by subcontractor .
+      tags:
+      - Subcontractor Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcontractorStaff'
+          description: ''
+        '400':
           content:
             application/json:
               schema:
@@ -2456,6 +3371,20 @@ components:
           format: binary
       required:
       - avatar
+    ChannelEnum:
+      enum:
+      - Email
+      - sms
+      - whatsApp
+      - push
+      - in_app
+      type: string
+      description: |-
+        * `Email` - Email
+        * `sms` - sms
+        * `whatsApp` - WhatsApp
+        * `push` - Push Notification
+        * `in_app` - In-App Notification
     Client:
       type: object
       properties:
@@ -2472,6 +3401,10 @@ components:
           maxLength: 9
         address:
           $ref: '#/components/schemas/Address'
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
         contact_email:
           type: string
           format: email
@@ -2503,6 +3436,7 @@ components:
       - created_by
       - id
       - name
+      - owner
       - phone_number
       - siren_number
       - updated_at
@@ -2541,6 +3475,20 @@ components:
       - name
       - phone_number
       - siren_number
+    ClientOwnerCreateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreateRequest'
+      required:
+      - user
+    ClientOwnerUpdateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserUpdateRequest'
+      required:
+      - user
     ClientStaff:
       type: object
       properties:
@@ -2574,6 +3522,9 @@ components:
       properties:
         user:
           $ref: '#/components/schemas/UserCreateRequest'
+        client_id:
+          type: integer
+          nullable: true
       required:
       - user
     ClientStaffUpdateRequest:
@@ -2693,8 +3644,7 @@ components:
           readOnly: true
         avatar:
           type: string
-          format: uri
-          nullable: true
+          readOnly: true
         email:
           type: string
           format: email
@@ -2707,8 +3657,194 @@ components:
           type: string
           maxLength: 30
       required:
+      - avatar
       - email
       - id
+    Document:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        tags:
+          type: string
+          nullable: true
+          maxLength: 255
+        latest_version:
+          allOf:
+          - $ref: '#/components/schemas/DocumentVersion'
+          readOnly: true
+      required:
+      - id
+      - latest_version
+      - name
+    DocumentUploadRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        file:
+          type: string
+          format: binary
+        tags:
+          type: string
+          maxLength: 255
+        notes:
+          type: string
+      required:
+      - file
+    DocumentVersion:
+      type: object
+      properties:
+        version_number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        file_url:
+          type: string
+          readOnly: true
+        notes:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - file_url
+      - version_number
+    EmailTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Template name for internal reference
+          maxLength: 255
+        subject_template:
+          type: string
+          description: Subject template with placeholders
+          maxLength: 255
+        header_template:
+          type: string
+          nullable: true
+          description: Customizable header content with placeholders
+        body_template:
+          type: string
+          description: Customizable body content with placeholders
+        footer_template:
+          type: string
+          nullable: true
+          description: Customizable footer content with placeholders
+      required:
+      - body_template
+      - id
+      - name
+      - subject_template
+    EmailTemplateUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Template name for internal reference
+          maxLength: 255
+        subject_template:
+          type: string
+          minLength: 1
+          description: Subject template with placeholders
+          maxLength: 255
+        header_template:
+          type: string
+          nullable: true
+          description: Customizable header content with placeholders
+        body_template:
+          type: string
+          minLength: 1
+          description: Customizable body content with placeholders
+        footer_template:
+          type: string
+          nullable: true
+          description: Customizable footer content with placeholders
+      required:
+      - body_template
+      - name
+      - subject_template
+    Folder:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+          readOnly: true
+      required:
+      - documents
+      - id
+      - name
+    InAppNotification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: string
+          nullable: true
+          maxLength: 255
+        message:
+          type: string
+        status:
+          $ref: '#/components/schemas/InAppNotificationStatusEnum'
+        channel:
+          $ref: '#/components/schemas/ChannelEnum'
+        sent_at:
+          type: string
+          format: date-time
+          nullable: true
+        read_at:
+          type: string
+          format: date-time
+          nullable: true
+        redirect_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        context_data:
+          nullable: true
+      required:
+      - channel
+      - id
+      - message
+    InAppNotificationStatusEnum:
+      enum:
+      - pending
+      - Sent
+      - Failed
+      - read
+      - unread
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `Sent` - Sent
+        * `Failed` - Failed
+        * `read` - Read
+        * `unread` - unread
     Lot:
       type: object
       properties:
@@ -2859,6 +3995,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClientStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedInAppNotification:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InAppNotification'
       required:
       - count
       - next
@@ -3150,6 +4308,10 @@ components:
           pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
         risk_level:
           $ref: '#/components/schemas/RiskLevelEnum'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          readOnly: true
         manager:
           allOf:
           - $ref: '#/components/schemas/ClientStaff'
@@ -3172,6 +4334,7 @@ components:
           format: date-time
           readOnly: true
       required:
+      - address
       - client
       - code
       - created_at
@@ -3215,6 +4378,32 @@ components:
       required:
       - code
       - name
+    ProjectEmailTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project:
+          $ref: '#/components/schemas/ProjectSimple'
+        email_template:
+          allOf:
+          - $ref: '#/components/schemas/EmailTemplate'
+          readOnly: true
+        template_type:
+          $ref: '#/components/schemas/TemplateTypeEnum'
+      required:
+      - email_template
+      - id
+      - project
+      - template_type
+    ProjectEmailTemplateUpdateRequest:
+      type: object
+      properties:
+        email_template:
+          $ref: '#/components/schemas/EmailTemplateUpdateRequest'
+      required:
+      - email_template
     ProjectLot:
       type: object
       properties:
@@ -3231,6 +4420,10 @@ components:
           readOnly: true
         status:
           $ref: '#/components/schemas/Status109Enum'
+        folder:
+          allOf:
+          - $ref: '#/components/schemas/Folder'
+          readOnly: true
         notes:
           type: string
         created_by:
@@ -3248,6 +4441,7 @@ components:
       required:
       - created_at
       - created_by
+      - folder
       - id
       - lot
       - project
@@ -3302,6 +4496,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/SubcontractorStaffSimple'
           readOnly: true
+        devis_document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          readOnly: true
         status:
           $ref: '#/components/schemas/Status841Enum'
         notes:
@@ -3322,6 +4520,7 @@ components:
       required:
       - created_at
       - created_by
+      - devis_document
       - id
       - project_lot
       - subcontractor
@@ -3595,6 +4794,20 @@ components:
       - name
       - phone_number
       - siren_number
+    SubcontractorOwnerCreateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreateRequest'
+      required:
+      - user
+    SubcontractorOwnerUpdateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserUpdateRequest'
+      required:
+      - user
     SubcontractorSimple:
       type: object
       properties:
@@ -3655,7 +4868,9 @@ components:
           type: integer
           readOnly: true
         user:
-          type: integer
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
         subcontractor:
           allOf:
           - $ref: '#/components/schemas/SubcontractorSimple'
@@ -3704,6 +4919,16 @@ components:
       - name
       - phone_number
       - siren_number
+    TemplateTypeEnum:
+      enum:
+      - upload_devis
+      - assign_subcontractor
+      - update_document
+      type: string
+      description: |-
+        * `upload_devis` - Upload Devis
+        * `assign_subcontractor` - Assign Subcontractor
+        * `update_document` - Update Document
     TokenObtainPairRequest:
       type: object
       properties:
@@ -3744,7 +4969,7 @@ components:
           readOnly: true
         avatar:
           type: string
-          format: uri
+          readOnly: true
         email:
           type: string
           format: email

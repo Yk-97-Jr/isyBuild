@@ -20,15 +20,16 @@ import SubcontractorAdresse from '@/views/apps/client/subcontractor/details/Subc
 import type { FormValidateSubcontractorEditType } from '@/views/apps/client/subcontractor/details/schemaSubcontractorEdit'
 import { schemaSubcontractorEdit } from '@/views/apps/client/subcontractor/details/schemaSubcontractorEdit'
 
-import useHandleBack from '@components/useHandleBack'
+
 
 import SubcontractorModifyHeader from '@/views/apps/client/subcontractor/details/SubcontractorModifyHeader'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 import { useSubcontractorsRetrieve2Query, useSubcontractorsUpdateUpdateMutation } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
-import Owner from './SubcontractorOwner'
-import SubcontractorListInfo from './ClientsListInfo'
+import SubcontractorOwner from './SubcontractorOwner'
+
+/* import SubcontractorListInfo from './ClientsListInfo' */
 import SubcontractorCreatedBy from './SubcontractorCreatedBy'
 import StaffList from '../staff/list/StaffList'
 
@@ -51,7 +52,7 @@ const SubcontractorEdit = () => {
   const [updateSubcontractor, { isLoading: isUpdating }] = useSubcontractorsUpdateUpdateMutation()
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-  const handleBack = useHandleBack()
+  
 
   useEffect(() => {
     if (subcontractorData) {
@@ -121,7 +122,7 @@ const SubcontractorEdit = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <SubcontractorModifyHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating} handleBack={handleBack} />
+          <SubcontractorModifyHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating}  />
         </Grid>
         <Grid item xs={12} md={8.5}>
           <Grid container spacing={6}>
@@ -139,14 +140,14 @@ const SubcontractorEdit = () => {
         <Grid item xs={12} md={3.5}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <Owner subcontractorData={subcontractorData} />
+              <SubcontractorOwner subcontractorData={subcontractorData} />
             </Grid>
             <Grid item xs={12}>
               <SubcontractorStatus register={register} errors={errors} setValue={setValue} selectedLotIds={[]}/>
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <SubcontractorListInfo subcontractorData={subcontractorData} />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <SubcontractorCreatedBy subcontractorData={subcontractorData} />
             </Grid>
