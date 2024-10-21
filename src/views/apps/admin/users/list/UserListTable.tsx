@@ -39,7 +39,6 @@ import {CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-import OptionMenu from '@core/components/option-menu'
 import UserDialog from '@components/dialogs/user-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
