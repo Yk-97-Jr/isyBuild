@@ -25,12 +25,15 @@ import AddDevisSub
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/add/AddDevisSub";
 import DeleteDevis
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/delete/DeleteDevis";
+import ModifyDevis
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/modify/ModifyDevis";
 
 const AppeleOffreSubDetail = () => {
 
   const {idSub} = useParams(); // Get clientId from route parameters
   const [openAdd, setOpenAdd] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
+  const [openModify, setOpenModify] = useState(false)
   const [id, setId] = useState(0)
 
 
@@ -63,7 +66,7 @@ const AppeleOffreSubDetail = () => {
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <DevisAppeleOffre projectLotSubcontractorData={projectLotSubcontractorData} setOpenAdd={setOpenAdd}
-                              setId={setId}  setOpenDelete={setOpenDelete}/>
+                              setId={setId} setOpenDelete={setOpenDelete} setOpenModify={setOpenModify}/>
           </Grid>
         </Grid>
       </Grid>
@@ -93,6 +96,13 @@ const AppeleOffreSubDetail = () => {
         setOpen={setOpenDelete}
         refetch={refetch}
         id={id}
+      />
+      <ModifyDevis
+        open={openModify}
+        setOpen={setOpenModify}
+        refetch={refetch}
+        id={id}
+        data={projectLotSubcontractorData}
       />
     </Grid>
   );

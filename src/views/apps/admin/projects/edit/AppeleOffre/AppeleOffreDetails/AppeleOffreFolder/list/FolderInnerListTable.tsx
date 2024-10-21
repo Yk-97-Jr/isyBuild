@@ -49,6 +49,8 @@ import AddFileSub
 import OptionMenu from "@core/components/option-menu";
 import DeleteFile
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/delete/DeleteFile";
+import ModifyFile
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/modify/ModifyFile";
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -91,6 +93,7 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
   // States
   const [openAdd, setOpenAdd] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
+  const [openModify, setOpenModify] = useState(false)
 
   // const [openHistory, setHistoryAdd] = useState(false)
   const [id, setId] = useState(0)
@@ -140,7 +143,8 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
   }
 
   const handleEdit = (id: number) => {
-    console.log(id)
+    setOpenModify(true)
+    setId(id)
 
   }
 
@@ -185,9 +189,6 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
           <div className='flex items-center'>
             <IconButton onClick={() => openOrDownloadFile(row.original.latest_version.file_url)}>
               <i className='tabler-download text-textSecondary'/>
-            </IconButton>
-            <IconButton onClick={() => openOrDownloadFile(row.original.latest_version.file_url)}>
-              <i className='tabler-eye text-textSecondary'/>
             </IconButton>
             <OptionMenu
               iconButtonProps={{size: 'medium'}}
@@ -361,6 +362,12 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
         <DeleteFile
           open={openDelete}
           setOpen={setOpenDelete}
+          refetch={refetch}
+          id={id}
+        />
+        <ModifyFile
+          open={openModify}
+          setOpen={setOpenModify}
           refetch={refetch}
           id={id}
         />
