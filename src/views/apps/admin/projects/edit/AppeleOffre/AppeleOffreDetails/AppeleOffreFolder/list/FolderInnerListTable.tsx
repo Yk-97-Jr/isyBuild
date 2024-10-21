@@ -161,11 +161,6 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
           </Typography>
         )
       }),
-      columnHelper.accessor('tags', {
-        header: 'Étiqueter',
-        cell: ({row}) =>
-          <Typography>{row.original.tags ? row.original.tags : 'tags not available'}</Typography>
-      }),
       columnHelper.accessor('latest_version.notes', {
         header: 'Notes',
         cell: ({row}) =>

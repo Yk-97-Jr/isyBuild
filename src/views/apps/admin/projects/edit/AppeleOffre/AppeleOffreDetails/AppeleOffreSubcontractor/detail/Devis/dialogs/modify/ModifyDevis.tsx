@@ -45,7 +45,7 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
     const [files, setFiles] = useState<File[]>([])
 
     useEffect(() => {
-      if (data) {
+      if (data && data.devis_document) {
         setValue('name', data.devis_document.name ?? '');
         setValue('tags', data.devis_document.tags ?? '');
         setValue('notes', data.devis_document.latest_version.notes ?? '');
@@ -144,16 +144,6 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
                       {...register('name')}
                       error={!!errors.name}
                       helperText={errors.name?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <CustomTextField
-                      fullWidth
-                      label="Étiqueté"
-                      placeholder="Étiqueté"
-                      {...register('tags')}
-                      error={!!errors.tags}
-                      helperText={errors.tags?.message}
                     />
                   </Grid>
                   <Grid item xs={12}>

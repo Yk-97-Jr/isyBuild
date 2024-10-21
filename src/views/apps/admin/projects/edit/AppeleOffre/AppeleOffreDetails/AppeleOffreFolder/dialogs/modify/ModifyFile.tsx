@@ -152,16 +152,6 @@ const ModifyFile = ({open, setOpen, refetch, id}: AddProps) => {
                     <Grid item xs={12}>
                       <CustomTextField
                         fullWidth
-                        label="Étiqueté"
-                        placeholder="Étiqueté"
-                        {...register('tags')}
-                        error={!!errors.tags}
-                        helperText={errors.tags?.message}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <CustomTextField
-                        fullWidth
                         label="Notes"
                         placeholder="Notes"
                         {...register('notes')}
