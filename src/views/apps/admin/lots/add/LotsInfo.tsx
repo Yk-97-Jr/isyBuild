@@ -39,7 +39,7 @@ const CompanyInfo = ({ register, errors }: { register: any; errors: any }) => {
               rows={3}
               placeholder='Entrez votre description'
               id='textarea-outlined'
-              className='mbe-2'
+               className='mbe-2'
               {...register('description')}
               error={!!errors.description}
               helperText={errors.description?.message}

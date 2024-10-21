@@ -1,61 +1,94 @@
-// MUI Imports
-import List from '@mui/material/List'
-import Avatar from '@mui/material/Avatar'
-import ListItem from '@mui/material/ListItem'
-import { Button, Card, CardContent, CardHeader, Typography } from '@mui/material'
-import ListItemText from '@mui/material/ListItemText'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
+import React from 'react';
 
-import type { SubcontractorRead } from '@/services/IsyBuildApi'
+import {useParams, useRouter} from "next/navigation";
 
-type OwnerStausProps = {
-  subcontractorData: SubcontractorRead | undefined
-}
+import {Card, CardHeader, CardContent, Divider, Typography} from '@mui/material';
 
-const Owner: React.FC<OwnerStausProps> = ({ subcontractorData }) => {
+import Avatar from "@mui/material/Avatar";
+
+
+import IconButton from "@mui/material/IconButton";
+
+import Tooltip from "@mui/material/Tooltip";
+
+import type {SubcontractorRead} from "@/services/IsyBuildApi";
+
+import {useAuth} from "@/contexts/AuthContext";
+
+
+type SubcontractorProprietaireProps = {
+  subcontractorData: SubcontractorRead | undefined; // Adjust the type as necessary
+};
+
+const SubcontractorOwner: React.FC<SubcontractorProprietaireProps> = ({subcontractorData}) => {
+  const router = useRouter();
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
+  const {id} = useParams(); // Get clientId from route parameters
+
+
+  const assignOwner = () => {
+    router.push(`/${userRole}/subcontractor/${id}/details/assign-owner`);
+
+
+  }
+
+
   return (
     <Card>
-      <CardHeader title='propriétaire' />
+      <CardHeader title='propriétaire'/>
       <CardContent>
-        <List>
-          {/* Remove padding from ListItem */}
-          <ListItem disableGutters className='flex justify-between items-center p-0'>
-            {/* Move ListItemAvatar to the left and add gap */}
-            <div className='flex items-center gap-3'>
-              {subcontractorData?.owner ? (
+        <Divider className='mlb-2'/>
+        {subcontractorData && subcontractorData.owner ? (
+          <div className='flex items-center justify-between'>
+            {/* Wrapper for the first two items with gap-2 */}
+            <div className='flex items-center gap-2'>
+              <Avatar alt={'User Avatar'} src='/images/avatars/1.png'/>
+              <div className='flex items-start flex-col'>
                 <>
-                  <ListItemAvatar className='p-0'>
-                    <Avatar
-                      src={subcontractorData?.owner?.avatar || '/images/avatars/1.png'}
-                      alt={subcontractorData?.owner?.first_name}
-                    />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={`${subcontractorData?.owner?.first_name} ${subcontractorData?.owner?.last_name}`}
-                    secondary={`${subcontractorData?.owner?.email}`}
-                  />
-                </>
-              ) : (
-                <>
-                  <Typography
-                    variant='body1'
-                    color='text.secondary'
-                    className=' font-medium text-[15px] leading-[22px] '
-                  >
-                    Aucune information disponible
+                  <Typography className='font-medium' color='text.primary'>
+                    {subcontractorData.owner.first_name} {subcontractorData.owner.last_name}
+                  </Typography>
+                  <Typography variant='caption'>
+                    {subcontractorData.owner.email}
                   </Typography>
                 </>
-              )}
+              </div>
             </div>
-            {/* Button on the far right */}
-            <Button variant='contained' size='medium'>
-              modifier
-            </Button>
-          </ListItem>
-        </List>
+            {/* Space between text and button, applying gap-6 */}
+            <div className='ml-12'>
+              {/*<Button variant='contained' onClick={assignOwner}>*/}
+              {/*  Modifier*/}
+              {/*</Button>*/}
+              <Tooltip title="Modifier" arrow>
+                <IconButton color="secondary" aria-label="modify" onClick={assignOwner}>
+                  <i className="tabler-pencil-cog"/>
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title="Supprimer" arrow>
+                <IconButton color="secondary" aria-label="delete" disabled>
+                  <i className="tabler-trash"/>
+                </IconButton>
+              </Tooltip>
+            </div>
+          </div>
+        ) : (
+          <div className='flex items-center justify-between'>
+
+            <Typography variant="body1" color="text.secondary">Aucune information disponible</Typography>
+            <Tooltip title="Ajouter un propriétaire" arrow>
+              <IconButton color="secondary" aria-label="delete" onClick={assignOwner}>
+                <i className="tabler-plus"/>
+              </IconButton>
+            </Tooltip>
+          </div>
+
+        )}
+
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default Owner
+export default SubcontractorOwner;

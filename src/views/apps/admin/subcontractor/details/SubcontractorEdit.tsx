@@ -24,7 +24,7 @@ import SubcontractorAdresse from '@/views/apps/admin/subcontractor/details/Subco
 import type { FormValidateSubcontractorEditType } from '@/views/apps/admin/subcontractor/details/schemaSubcontractorEdit'
 import { schemaSubcontractorEdit } from '@/views/apps/admin/subcontractor/details/schemaSubcontractorEdit'
 
-import useHandleBack from '@components/useHandleBack'
+
 
 import SubcontractorModifyHeader from '@/views/apps/admin/subcontractor/details/SubcontractorModifyHeader'
 
@@ -56,25 +56,30 @@ const SubcontractorEdit = () => {
   const [updateSubcontractor, { isLoading: isUpdating }] = useSubcontractorsUpdateUpdateMutation()
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-  const handleBack = useHandleBack()
+ 
 
-  useEffect(() => {
-    if (subcontractorData) {
-      // Populate form fields with fetched data
-      setValue('subcontractorName', subcontractorData.name)
-      setValue('sireneNumber', subcontractorData.siren_number)
-      setValue('address.streetNumber', subcontractorData.address?.street_number)
-      setValue('address.streetName', subcontractorData.address?.street_name)
-      setValue('address.postal_code', subcontractorData.address?.postal_code)
-      setValue('address.city', subcontractorData.address?.city)
-      setValue('address.department', subcontractorData.address?.department || '')
-      setValue('address.country', subcontractorData.address?.country || '')
-      setValue('email', subcontractorData.contact_email)
-      setValue('phoneNumber', subcontractorData.phone_number)
-      setValue('is_active', subcontractorData.is_active as boolean)
-      setValue('lots_ids',subcontractorData.lots || [])
-    }
-  }, [subcontractorData, setValue])
+useEffect(() => {
+  if (subcontractorData) {
+    // Set other fields
+    setValue('subcontractorName', subcontractorData.name);
+    setValue('sireneNumber', subcontractorData.siren_number);
+    setValue('address.streetNumber', subcontractorData.address?.street_number);
+    setValue('address.streetName', subcontractorData.address?.street_name);
+    setValue('address.postal_code', subcontractorData.address?.postal_code);
+    setValue('address.city', subcontractorData.address?.city);
+    setValue('address.department', subcontractorData.address?.department || '');
+    setValue('address.country', subcontractorData.address?.country || '');
+    setValue('email', subcontractorData.contact_email);
+    setValue('phoneNumber', subcontractorData.phone_number);
+    setValue('is_active', subcontractorData.is_active as boolean);
+
+    // Set the lots data if it exists
+    const lots = subcontractorData.lots ? subcontractorData.lots.map(lot => lot.id) : [];
+
+    setValue('lots_ids', lots); // Set the lot ids in the form
+  }
+}, [subcontractorData, setValue]);
+
 
   const onSubmit: SubmitHandler<FormValidateSubcontractorEditType> = async data => {
     try {
@@ -132,7 +137,7 @@ const SubcontractorEdit = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={6}>
         <Grid item xs={12}>
-          <SubcontractorModifyHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating} handleBack={handleBack} />
+          <SubcontractorModifyHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating}  />
         </Grid>
         <Grid item xs={12} md={8.5}>
           <Grid container spacing={6}>
@@ -157,7 +162,7 @@ const SubcontractorEdit = () => {
   register={register} 
   setValue={setValue} 
   errors={errors} 
-  subcontractorData={subcontractorData} 
+  
   selectedLotIds={subcontractorData?.lots || []} 
 />            </Grid>
             <Grid item xs={12}>
