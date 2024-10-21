@@ -232,23 +232,13 @@ const AppeleOffreTable = ({
         header: 'Action',
         cell: ({row}) => (
           <div className='flex items-center'>
+            <IconButton onClick={() => handleEdit(row.original.id)}>
+              <i className='tabler-eye text-textSecondary'/>
+            </IconButton>
             <IconButton onClick={() => handleDelete(row.original.id)}>
               <i className='tabler-trash text-textSecondary'/>
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{size: 'medium'}}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEdit(row.original.id)
-                  }
-                }
-              ]}
-            />
+
           </div>
         ),
         enableSorting: false

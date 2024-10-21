@@ -24,12 +24,19 @@ type Props = {
   projectLotSubcontractorData: ProjectLotSubcontractorRead | undefined; // Adjust the type as necessary
   setOpenAdd: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
   setOpenDelete: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
+  setOpenModify: React.Dispatch<React.SetStateAction<boolean>>;
   setId: React.Dispatch<React.SetStateAction<number>>; // This will be used to control a boolean state
 
 
 };
 
-const DevisAppeleOffre: React.FC<Props> = ({projectLotSubcontractorData, setOpenAdd, setId, setOpenDelete}) => {
+const DevisAppeleOffre: React.FC<Props> = ({
+                                             projectLotSubcontractorData,
+                                             setOpenAdd,
+                                             setId,
+                                             setOpenDelete,
+                                             setOpenModify
+                                           }) => {
 
   const handleAdd = () => {
     setOpenAdd(true)
@@ -46,6 +53,9 @@ const DevisAppeleOffre: React.FC<Props> = ({projectLotSubcontractorData, setOpen
   }
 
   const handleEdit = (id: number) => {
+    setOpenModify(true)
+    setId(id)
+
     console.log(id)
 
   }
@@ -86,7 +96,7 @@ const DevisAppeleOffre: React.FC<Props> = ({projectLotSubcontractorData, setOpen
                   text: 'Modifier',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleEdit(projectLotSubcontractorData?.devis_document.id)
+                    onClick: () => handleEdit(projectLotSubcontractorData?.id)
                   }
                 },
                 {
@@ -114,12 +124,6 @@ const DevisAppeleOffre: React.FC<Props> = ({projectLotSubcontractorData, setOpen
                   disableGutters
                   secondaryAction={
                     <div>
-                      {/* First Icon Button */}
-                      <IconButton
-                        onClick={() => openOrDownloadFile(projectLotSubcontractorData?.devis_document.latest_version.file_url)}>
-                        <i className='tabler-eye text-textSecondary'/>
-                      </IconButton>
-
                       {/* Second Icon Button */}
                       <IconButton
                         onClick={() => openOrDownloadFile(projectLotSubcontractorData?.devis_document.latest_version.file_url)}>
