@@ -234,29 +234,13 @@ const UserClientListTable = ({
         header: 'Action',
         cell: ({row}) => (
           <div className='flex items-center'>
+            <IconButton onClick={() => handleEditUser(row.original.id)}>
+              <i className='tabler-edit text-textSecondary'/>
+            </IconButton>
             <IconButton onClick={() => handleDeleteUser(row.original.id)}>
               <i className='tabler-trash text-textSecondary'/>
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{size: 'medium'}}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleEditUser(row.original.id)
-                  }
-                }
 
-                // {
-                //   text: 'Suspendre',
-                //   icon: 'tabler-download',
-                //   menuItemProps: {className: 'flex items-center gap-2 text-textSecondary'}
-                // }
-              ]}
-            />
           </div>
         ),
         enableSorting: false
