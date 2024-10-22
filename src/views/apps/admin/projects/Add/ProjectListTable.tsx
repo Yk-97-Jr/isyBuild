@@ -48,7 +48,6 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 // Custom Components
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-import OptionMenu from '@core/components/option-menu'
 
 import CustomTextField from '@core/components/mui/TextField'
 
