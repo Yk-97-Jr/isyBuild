@@ -212,13 +212,16 @@ const ClientListTable = ({
         )
       }),
       columnHelper.accessor('created_at', {
-        header: `Date de Creation`,
+        header: 'Date de Creation',
         cell: ({row}) => (
           <Typography>
-            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
+            {row.original.created_at
+              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
+              : 'Date not available'}
           </Typography>
         )
       }),
+
 
       columnHelper.accessor('action', {
         header: 'Action',

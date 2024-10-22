@@ -202,16 +202,17 @@ const ProjectListTable = ({
           />
         )
       }),
-      columnHelper.accessor('client.created_at', {
-        header: `Date de Creation`,
+      columnHelper.accessor('created_at', {
+        header: 'Date de Creation',
         cell: ({row}) => (
           <Typography>
-            {row.original.client?.created_at
-              ? new Date(row.original.client.created_at).toLocaleDateString()
+            {row.original.created_at
+              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
               : 'Date not available'}
           </Typography>
         )
       }),
+
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({row}) => (

@@ -192,16 +192,18 @@ const UserClientListTable = ({
         cell: ({row}) => (
           <Typography>
             {row.original.user.date_joined
-              ? new Date(row.original.user.date_joined).toLocaleDateString()
+              ? `${new Date(row.original.user.date_joined).toLocaleDateString()} ${new Date(row.original.user.date_joined).toLocaleTimeString()}`
               : 'Date not available'}
           </Typography>
         )
       }),
       columnHelper.accessor('created_at', {
-        header: `Date de Creation`,
+        header: 'Date de Creation',
         cell: ({row}) => (
           <Typography>
-            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
+            {row.original.created_at
+              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
+              : 'Date not available'}
           </Typography>
         )
       }),
