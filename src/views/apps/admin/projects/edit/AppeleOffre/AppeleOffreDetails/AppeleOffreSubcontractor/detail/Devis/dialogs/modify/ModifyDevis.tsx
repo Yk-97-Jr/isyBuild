@@ -139,16 +139,6 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
                   <Grid item xs={12}>
                     <CustomTextField
                       fullWidth
-                      label="Nom du fichier"
-                      placeholder="Nom"
-                      {...register('name')}
-                      error={!!errors.name}
-                      helperText={errors.name?.message}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <CustomTextField
-                      fullWidth
                       label="Notes"
                       placeholder="Notes"
                       {...register('notes')}

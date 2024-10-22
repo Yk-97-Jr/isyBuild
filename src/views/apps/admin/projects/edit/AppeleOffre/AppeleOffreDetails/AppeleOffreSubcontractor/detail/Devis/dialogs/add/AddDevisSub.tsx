@@ -122,16 +122,7 @@ const AddDevisSub = ({open, setOpen, refetch}: AddProps) => {
             <Grid container spacing={12}>
               <Grid item xs={12} md={6}>
                 <Grid container spacing={6}>
-                  <Grid item xs={12}>
-                    <CustomTextField
-                      fullWidth
-                      label='Nom du fichier'
-                      placeholder='Nom'
-                      {...register('name')}
-                      error={!!errors.name}
-                      helperText={errors.name?.message}
-                    />
-                  </Grid>
+
                   <Grid item xs={12}>
                     <CustomTextField
                       fullWidth
