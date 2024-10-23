@@ -10,7 +10,7 @@ import type { FieldError, UseFormRegister, UseFormSetValue } from 'react-hook-fo
 import CustomTextField from '@core/components/mui/TextField';
 import { useLotsRetrieveQuery } from '@/services/IsyBuildApi';
 import type { FormValidateSubcontractorEditType } from './schemaSubcontractorEdit';
-import type { LotSimpleRead } from '@/services/IsyBuildApi';
+import type { LotSimpleRead,/*  SubcontractorRead  */} from '@/services/IsyBuildApi';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -36,12 +36,14 @@ type CombinedComponentProps = {
         is_active?: FieldError;
     };
     selectedLotIds: LotSimpleRead[];
+    subcontractorData: any
 };
 
 const SubcontractorStatus: React.FC<CombinedComponentProps> = ({
     register,
     setValue,
     errors,
+    subcontractorData,
     selectedLotIds,
 }) => {
     const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -89,7 +91,11 @@ const SubcontractorStatus: React.FC<CombinedComponentProps> = ({
 
         setSelectedIds(selectedId); // Update selectedIds
         setValue('lots_ids', selectedId); // Ensure the form state is updated
+
+        console.log( "message",subcontractorData.is_active );
     };
+
+    
 
     return (
         <Card className='mbe-12'
@@ -144,7 +150,8 @@ return lot ? <Chip key={value} label={lot.name} size='small' /> : null;
                     <Divider className='mlb-2' />
                     <div className='flex items-center justify-between mbe-6'>
                         <Typography>Statut</Typography>
-                        <Switch {...register('is_active')} />
+                      
+                        <Switch {...register('is_active')} defaultChecked={subcontractorData ? subcontractorData.is_active : false}/>
                         {errors.is_active && <span>{errors.is_active.message}</span>}
                     </div>
                 </div>

@@ -2,7 +2,7 @@ import React from 'react';
 
 import {useParams, useRouter} from "next/navigation";
 
-import {Card, CardHeader, CardContent, Divider, Typography} from '@mui/material';
+import {Card, CardHeader, CardContent,  Typography} from '@mui/material';
 
 import Avatar from "@mui/material/Avatar";
 
@@ -38,9 +38,9 @@ const SubcontractorOwner: React.FC<SubcontractorProprietaireProps> = ({subcontra
     <Card>
       <CardHeader title='propriétaire'/>
       <CardContent>
-        <Divider className='mlb-2'/>
+        
         {subcontractorData && subcontractorData.owner ? (
-          <div className='flex items-center justify-between'>
+          <div className='flex items-center justify-between '>
             {/* Wrapper for the first two items with gap-2 */}
             <div className='flex items-center gap-2'>
               <Avatar alt={'User Avatar'} src='/images/avatars/1.png'/>
@@ -56,21 +56,23 @@ const SubcontractorOwner: React.FC<SubcontractorProprietaireProps> = ({subcontra
               </div>
             </div>
             {/* Space between text and button, applying gap-6 */}
-            <div className='ml-12'>
+            <div >
               {/*<Button variant='contained' onClick={assignOwner}>*/}
               {/*  Modifier*/}
               {/*</Button>*/}
-              <Tooltip title="Modifier" arrow>
-                <IconButton color="secondary" aria-label="modify" onClick={assignOwner}>
-                  <i className="tabler-pencil-cog"/>
-                </IconButton>
-              </Tooltip>
+              <div className='flex gap-1'>
+  <Tooltip title="Modifier" arrow>
+    <IconButton color="secondary" aria-label="modify" onClick={assignOwner}>
+      <i className="tabler-pencil-cog"/>
+    </IconButton>
+  </Tooltip>
 
-              <Tooltip title="Supprimer" arrow>
-                <IconButton color="secondary" aria-label="delete" disabled>
-                  <i className="tabler-trash"/>
-                </IconButton>
-              </Tooltip>
+  <Tooltip title="Supprimer" arrow>
+    <IconButton color="secondary" aria-label="delete" disabled>
+      <i className="tabler-trash"/>
+    </IconButton>
+  </Tooltip>
+</div>
             </div>
           </div>
         ) : (
