@@ -162,6 +162,7 @@ useEffect(() => {
   register={register} 
   setValue={setValue} 
   errors={errors} 
+  subcontractorData={subcontractorData}
   
   selectedLotIds={subcontractorData?.lots || []} 
 />            </Grid>
