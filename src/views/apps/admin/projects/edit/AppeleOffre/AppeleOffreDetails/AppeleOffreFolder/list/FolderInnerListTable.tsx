@@ -171,10 +171,12 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
 
       }),
       columnHelper.accessor('latest_version.created_at', {
-        header: `Date de Creation`,
+        header: 'Date de Creation',
         cell: ({row}) => (
           <Typography>
-            {row.original.latest_version.created_at ? new Date(row.original.latest_version.created_at).toLocaleDateString() : 'Date not available'}
+            {row.original.latest_version.created_at
+              ? `${new Date(row.original.latest_version.created_at).toLocaleDateString()} ${new Date(row.original.latest_version.created_at).toLocaleTimeString()}`
+              : 'Date not available'}
           </Typography>
         )
       }),
