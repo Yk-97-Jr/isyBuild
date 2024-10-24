@@ -45,6 +45,31 @@ paths:
       summary: List all admin staff
       parameters:
       - in: query
+        name: created_by__email
+        schema:
+          type: string
+        description: Filter by created by email (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -user__date_joined
+          - -user__email
+          - -user__first_name
+          - -user__last_name
+          - created_at
+          - created_by__email
+          - id
+          - user__date_joined
+          - user__email
+          - user__first_name
+          - user__last_name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
         name: page
         schema:
           type: integer
@@ -54,6 +79,26 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by first name, last name, or email
+      - in: query
+        name: user__email
+        schema:
+          type: string
+        description: Filter by email (contains match)
+      - in: query
+        name: user__first_name
+        schema:
+          type: string
+        description: Filter by first name (contains match)
+      - in: query
+        name: user__last_name
+        schema:
+          type: string
+        description: Filter by last name (contains match)
       tags:
       - Admin Staff Management
       security:
@@ -1011,6 +1056,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Document'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /document/{document_id}/history:
+    get:
+      operationId: get_document_history
+      description: 'Fetch history information about a specific docuemnt by its ID '
+      summary: Retrieve document history  by ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folder Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentVersion'
           description: ''
         '404':
           content:
@@ -2627,7 +2720,7 @@ paths:
           description: ''
   /subcontractors/{subcontractor_id}/staff/:
     get:
-      operationId: subcontractors_staff_retrieve_3
+      operationId: subcontractors_staff_retrieve_2
       description: Retrieve a list of all subcontractor staff users with pagination.
       summary: List all Subcontractor staff
       parameters:
@@ -2769,7 +2862,7 @@ paths:
           description: ''
   /subcontractors/staff/:
     get:
-      operationId: subcontractors_staff_retrieve
+      operationId: get_subcontractor_staff_list
       description: Retrieve a list of all subcontractor staff users with pagination.
       summary: List all Subcontractor staff
       parameters:
@@ -2796,7 +2889,7 @@ paths:
           description: ''
   /subcontractors/staff/{subcontractor_staff_id}/:
     get:
-      operationId: subcontractors_staff_retrieve_2
+      operationId: subcontractors_staff_retrieve
       description: Fetches detailed information about an subcontractor staff member
         by their unique identifier.
       summary: Retrieve Subcontractor Staff Details

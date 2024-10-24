@@ -16,16 +16,16 @@ import {
 
 import DialogCloseButton from "@components/dialogs/DialogCloseButton";
 
-interface AddProps {
+interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch?: () => void;
-  id: number;
+  id: number | undefined;
 }
 
-const DeleteFile = ({open, setOpen, id, refetch}: AddProps) => {
+const DeleteFile = ({open, setOpen, id, refetch}: Props) => {
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
-  const [deleteSubLotProject, {isLoading}] = useProjectLotsDocumentsDeleteDestroyMutation();
+  const [deleteSubLotDocumentProject, {isLoading}] = useProjectLotsDocumentsDeleteDestroyMutation();
 
   const handleClose = () => {
     setOpen(false);
@@ -45,21 +45,37 @@ const DeleteFile = ({open, setOpen, id, refetch}: AddProps) => {
 
 
     try {
-      await deleteSubLotProject({documentId: +id}).unwrap() // Passez l'identifiant de l'utilisateur à la mutation
+      if (id !== undefined) {
+        try {
+          await deleteSubLotDocumentProject({documentId: +id}).unwrap();
 
+          handleClose();
+          setOpenSnackBar(true);
+          setInfoAlert({severity: 'success', message: 'Fichier supprimé avec succès'});
+        } catch (error) {
+          // Handle error in the deletion process
+          const message = error && typeof error === 'object' && 'data' in error
+            ? JSON.stringify((error as { data?: unknown }).data)
+            : 'Une erreur inattendue est survenue.';
 
-      handleClose();
-      setOpenSnackBar(true);
-      setInfoAlert({severity: 'success', message: 'Fichier supprimer avec succès'});
+          setOpenSnackBar(true);
+          setInfoAlert({severity: 'error', message});
+        }
+      } else {
+        // Handle the case where id is undefined
+        setOpenSnackBar(true);
+        setInfoAlert({severity: 'error', message: 'L\'identifiant du document est manquant.'});
+      }
     } catch (error) {
-
+      // General catch block for any unexpected errors
       const message = error && typeof error === 'object' && 'data' in error
         ? JSON.stringify((error as { data?: unknown }).data)
         : 'Une erreur inattendue est survenue.';
 
       setOpenSnackBar(true);
-      setInfoAlert({severity: 'error', message: {message}});
+      setInfoAlert({severity: 'error', message});
     }
+
   };
 
 

@@ -25,7 +25,8 @@ type Props = {
   setOpenAdd: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
   setOpenDelete: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
   setOpenModify: React.Dispatch<React.SetStateAction<boolean>>;
-  setId: React.Dispatch<React.SetStateAction<number>>; // This will be used to control a boolean state
+  setOpenHistory: React.Dispatch<React.SetStateAction<boolean>>;
+  setId: React.Dispatch<React.SetStateAction<number | undefined>>; // This will be used to control a boolean state
 
 
 };
@@ -35,7 +36,9 @@ const DevisAppeleOffre: React.FC<Props> = ({
                                              setOpenAdd,
                                              setId,
                                              setOpenDelete,
-                                             setOpenModify
+                                             setOpenModify,
+                                             setOpenHistory
+
                                            }) => {
 
   const handleAdd = () => {
@@ -48,7 +51,9 @@ const DevisAppeleOffre: React.FC<Props> = ({
   }
 
   const handleHistory = (id: number) => {
-    console.log(id)
+    setOpenHistory(true)
+    setId(id)
+
 
   }
 

@@ -9,7 +9,19 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/Subcontractors/${queryArg.subcontractorId}/owner/delete/`, method: 'DELETE' })
     }),
     adminStaffRetrieve: build.query<AdminStaffRetrieveApiResponse, AdminStaffRetrieveApiArg>({
-      query: queryArg => ({ url: `/admin-staff/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+      query: queryArg => ({
+        url: `/admin-staff/`,
+        params: {
+          created_by__email: queryArg.createdByEmail,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
+          user__email: queryArg.userEmail,
+          user__first_name: queryArg.userFirstName,
+          user__last_name: queryArg.userLastName
+        }
+      })
     }),
     adminStaffRetrieve2: build.query<AdminStaffRetrieve2ApiResponse, AdminStaffRetrieve2ApiArg>({
       query: queryArg => ({ url: `/admin-staff/${queryArg.adminUserId}/` })
@@ -138,6 +150,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     getDocumentDetail: build.query<GetDocumentDetailApiResponse, GetDocumentDetailApiArg>({
       query: queryArg => ({ url: `/document/${queryArg.documentId}/` })
+    }),
+    getDocumentHistory: build.query<GetDocumentHistoryApiResponse, GetDocumentHistoryApiArg>({
+      query: queryArg => ({ url: `/document/${queryArg.documentId}/history` })
     }),
     getFolderDetail: build.query<GetFolderDetailApiResponse, GetFolderDetailApiArg>({
       query: queryArg => ({ url: `/folders/${queryArg.folderId}/` })
@@ -377,9 +392,9 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.subcontractorOwnerUpdateRequest
       })
     }),
-    subcontractorsStaffRetrieve3: build.query<
-      SubcontractorsStaffRetrieve3ApiResponse,
-      SubcontractorsStaffRetrieve3ApiArg
+    subcontractorsStaffRetrieve2: build.query<
+      SubcontractorsStaffRetrieve2ApiResponse,
+      SubcontractorsStaffRetrieve2ApiArg
     >({
       query: queryArg => ({
         url: `/subcontractors/${queryArg.subcontractorId}/staff/`,
@@ -411,20 +426,17 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: queryArg => ({ url: `/subcontractors/delete/${queryArg.subcontractorId}/`, method: 'DELETE' })
     }),
+    getSubcontractorStaffList: build.query<GetSubcontractorStaffListApiResponse, GetSubcontractorStaffListApiArg>({
+      query: queryArg => ({
+        url: `/subcontractors/staff/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
     subcontractorsStaffRetrieve: build.query<SubcontractorsStaffRetrieveApiResponse, SubcontractorsStaffRetrieveApiArg>(
       {
-        query: queryArg => ({
-          url: `/subcontractors/staff/`,
-          params: { page: queryArg.page, page_size: queryArg.pageSize }
-        })
+        query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
       }
     ),
-    subcontractorsStaffRetrieve2: build.query<
-      SubcontractorsStaffRetrieve2ApiResponse,
-      SubcontractorsStaffRetrieve2ApiArg
-    >({
-      query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
-    }),
     subcontractorsStaffDeleteDestroy: build.mutation<
       SubcontractorsStaffDeleteDestroyApiResponse,
       SubcontractorsStaffDeleteDestroyApiArg
@@ -507,11 +519,43 @@ export type SubcontractorsOwnerDeleteDestroyApiArg = {
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
 
+  /** Filter by created by email (contains match) */
+  createdByEmail?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-user__date_joined'
+    | '-user__email'
+    | '-user__first_name'
+    | '-user__last_name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'user__date_joined'
+    | 'user__email'
+    | 'user__first_name'
+    | 'user__last_name'
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Search by first name, last name, or email */
+  search?: string
+
+  /** Filter by email (contains match) */
+  userEmail?: string
+
+  /** Filter by first name (contains match) */
+  userFirstName?: string
+
+  /** Filter by last name (contains match) */
+  userLastName?: string
 }
 export type AdminStaffRetrieve2ApiResponse = /** status 200  */ AdminStaffRead
 export type AdminStaffRetrieve2ApiArg = {
@@ -649,6 +693,10 @@ export type ContactsUpdateUpdateApiArg = {
 }
 export type GetDocumentDetailApiResponse = /** status 200  */ DocumentRead
 export type GetDocumentDetailApiArg = {
+  documentId: number
+}
+export type GetDocumentHistoryApiResponse = /** status 200  */ DocumentVersionRead[]
+export type GetDocumentHistoryApiArg = {
   documentId: number
 }
 export type GetFolderDetailApiResponse = /** status 200  */ FolderRead
@@ -891,8 +939,8 @@ export type SubcontractorsOwnerUpdateUpdateApiArg = {
   subcontractorId: number
   subcontractorOwnerUpdateRequest: SubcontractorOwnerUpdateRequest
 }
-export type SubcontractorsStaffRetrieve3ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
-export type SubcontractorsStaffRetrieve3ApiArg = {
+export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+export type SubcontractorsStaffRetrieve2ApiArg = {
 
   /** Page number of the results to fetch */
   page?: number
@@ -914,8 +962,8 @@ export type SubcontractorsDeleteDestroyApiResponse = /** status 204  */ any
 export type SubcontractorsDeleteDestroyApiArg = {
   subcontractorId: number
 }
-export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
-export type SubcontractorsStaffRetrieveApiArg = {
+export type GetSubcontractorStaffListApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+export type GetSubcontractorStaffListApiArg = {
 
   /** Page number of the results to fetch */
   page?: number
@@ -923,8 +971,8 @@ export type SubcontractorsStaffRetrieveApiArg = {
   /** Number of results per page */
   pageSize?: number
 }
-export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ SubcontractorStaffRead
-export type SubcontractorsStaffRetrieve2ApiArg = {
+export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ SubcontractorStaffRead
+export type SubcontractorsStaffRetrieveApiArg = {
   subcontractorStaffId: number
 }
 export type SubcontractorsStaffDeleteDestroyApiResponse = /** status 204  */ any
@@ -1747,6 +1795,7 @@ export const {
   useContactsPhoneNumbersCreateCreateMutation,
   useContactsUpdateUpdateMutation,
   useGetDocumentDetailQuery,
+  useGetDocumentHistoryQuery,
   useGetFolderDetailQuery,
   useLoginCreateMutation,
   useLogoutCreateMutation,
@@ -1792,12 +1841,12 @@ export const {
   useSubcontractorsOwnerRetrieveQuery,
   useSubcontractorsOwnerAssignUpdateMutation,
   useSubcontractorsOwnerUpdateUpdateMutation,
-  useSubcontractorsStaffRetrieve3Query,
+  useSubcontractorsStaffRetrieve2Query,
   useSubcontractorsStaffCreateCreateMutation,
   useSubcontractorsCreateCreateMutation,
   useSubcontractorsDeleteDestroyMutation,
+  useGetSubcontractorStaffListQuery,
   useSubcontractorsStaffRetrieveQuery,
-  useSubcontractorsStaffRetrieve2Query,
   useSubcontractorsStaffDeleteDestroyMutation,
   useSubcontractorsStaffUpdatePartialUpdateMutation,
   useCreateSubcontractorBySubcontractorUserMutation,
