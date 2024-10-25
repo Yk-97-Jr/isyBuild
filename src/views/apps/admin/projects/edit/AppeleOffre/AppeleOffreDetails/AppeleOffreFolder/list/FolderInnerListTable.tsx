@@ -51,6 +51,8 @@ import DeleteFile
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/delete/DeleteFile";
 import ModifyFile
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/modify/ModifyFile";
+import HistoryFile
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/history/HistoryFile";
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -94,9 +96,9 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
   const [openAdd, setOpenAdd] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [openModify, setOpenModify] = useState(false)
+  const [openHistory, setOpenHistory] = useState(false)
 
-  // const [openHistory, setHistoryAdd] = useState(false)
-  const [id, setId] = useState(0)
+  const [id, setId] = useState<number | undefined>();
   const [rowSelection, setRowSelection] = useState({})
   const [data] = useState(...[tableData])
   const [filteredData] = useState(data)
@@ -131,15 +133,17 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
   // };
 
   const handleDelete = (id: number) => {
-    console.log(id)
+    console.log("handleDelete")
 
     setOpenDelete(true)
     setId(id)
   }
 
   const handleHistory = (id: number) => {
-    console.log(id)
+    console.log("handleHistory")
 
+    setOpenHistory(true)
+    setId(id)
   }
 
   const handleEdit = (id: number) => {
@@ -367,6 +371,12 @@ const FolderInnerListTable = ({tableData, refetch, isFetching}: {
           setOpen={setOpenModify}
           refetch={refetch}
           id={id}
+        />
+        <HistoryFile
+          open={openHistory}
+          setOpen={setOpenHistory}
+          id={id}
+
         />
       </Card>
     </>

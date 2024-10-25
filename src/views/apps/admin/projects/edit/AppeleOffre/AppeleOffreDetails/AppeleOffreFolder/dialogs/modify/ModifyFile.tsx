@@ -29,16 +29,22 @@ interface AddProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch?: () => void;
-  id: number;
+  id: number | undefined;
 }
 
 const ModifyFile = ({open, setOpen, refetch, id}: AddProps) => {
+
+
     const {register, handleSubmit, setValue, formState: {errors}} = useForm<FormValidateFileUploadType>({
       resolver: yupResolver(schemaFileUpload),
     });
 
     const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
-    const {data, isLoading: isLoadingFirst} = useGetDocumentDetailQuery({documentId: +id});
+
+    const {data, isLoading: isLoadingFirst} = useGetDocumentDetailQuery(
+      {documentId: id ? +id : 0},
+      {skip: id === undefined || !open,});
+
     const [updateDocument, {isLoading}] = useProjectLotsDocumentsUpdateCreateMutation();
     const [files, setFiles] = useState<File[]>([])
 
@@ -67,46 +73,47 @@ const ModifyFile = ({open, setOpen, refetch, id}: AddProps) => {
     };
 
     const onSubmit: SubmitHandler<FormValidateFileUploadType> = async (data) => {
-
       try {
+        if (id !== undefined) {
+          // Create a FormData object to hold the avatar file
+          const formDataToSend = new FormData();
 
-        // Create a FormData object to hold the avatar file
-        const formDataToSend = new FormData();
+          formDataToSend.append('file', files[0]); // Append the file directly
 
-        formDataToSend.append('file', files[0]); // Append the file directly
+          // Only append if `data.name` is not undefined or null
+          if (data.name) {
+            formDataToSend.append('name', data.name);
+          }
 
-        // Only append if `data.name` is not undefined or null
-        if (data.name) {
-          formDataToSend.append('name', data.name);
-        }
+          if (data.tags) {
+            formDataToSend.append('tags', data.tags);
+          }
 
-        if (data.tags) {
-          formDataToSend.append('tags', data.tags);
-        }
+          if (data.notes) {
+            formDataToSend.append('notes', data.notes);
+          }
 
-        if (data.notes) {
-          formDataToSend.append('notes', data.notes);
-        }
-
-
-        // Now send the FormData ( need to disable eslint here cause we have a picutre to pass ( surpass the eslint error )
-
-
-        await updateDocument(
-          {
+          // Send the FormData
+          await updateDocument({
             documentId: +id,
 
             // @ts-expect-error
-            documentUploadRequest: formDataToSend
+            documentUploadRequest: formDataToSend,
           }).unwrap();
 
-        handleClose();
-        setOpenSnackBar(true);
-        setInfoAlert({severity: 'success', message: 'Fichier ajouté avec succès'});
+          handleClose();
+          setOpenSnackBar(true);
+          setInfoAlert({severity: 'success', message: 'Fichier ajouté avec succès'});
+        } else {
+          // Handle the case where id is undefined
+          setOpenSnackBar(true);
+          setInfoAlert({severity: 'error', message: 'L\'identifiant du document est manquant.'});
+        }
       } catch (error) {
-        const message = error && typeof error === 'object' && 'data' in error
-          ? JSON.stringify((error as { data?: unknown }).data)
-          : 'Une erreur inattendue est survenue.';
+        const message =
+          error && typeof error === 'object' && 'data' in error
+            ? JSON.stringify((error as { data?: unknown }).data)
+            : 'Une erreur inattendue est survenue.';
 
         setOpenSnackBar(true);
         setInfoAlert({severity: 'error', message});

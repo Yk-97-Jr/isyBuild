@@ -9,7 +9,19 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/Subcontractors/${queryArg.subcontractorId}/owner/delete/`, method: 'DELETE' })
     }),
     adminStaffRetrieve: build.query<AdminStaffRetrieveApiResponse, AdminStaffRetrieveApiArg>({
-      query: queryArg => ({ url: `/admin-staff/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+      query: queryArg => ({
+        url: `/admin-staff/`,
+        params: {
+          created_by__email: queryArg.createdByEmail,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
+          user__email: queryArg.userEmail,
+          user__first_name: queryArg.userFirstName,
+          user__last_name: queryArg.userLastName
+        }
+      })
     }),
     adminStaffRetrieve2: build.query<AdminStaffRetrieve2ApiResponse, AdminStaffRetrieve2ApiArg>({
       query: queryArg => ({ url: `/admin-staff/${queryArg.adminUserId}/` })
@@ -138,6 +150,9 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     getDocumentDetail: build.query<GetDocumentDetailApiResponse, GetDocumentDetailApiArg>({
       query: queryArg => ({ url: `/document/${queryArg.documentId}/` })
+    }),
+    getDocumentHistory: build.query<GetDocumentHistoryApiResponse, GetDocumentHistoryApiArg>({
+      query: queryArg => ({ url: `/document/${queryArg.documentId}/history` })
     }),
     getFolderDetail: build.query<GetFolderDetailApiResponse, GetFolderDetailApiArg>({
       query: queryArg => ({ url: `/folders/${queryArg.folderId}/` })
@@ -504,11 +519,43 @@ export type SubcontractorsOwnerDeleteDestroyApiArg = {
 export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
 export type AdminStaffRetrieveApiArg = {
 
+  /** Filter by created by email (contains match) */
+  createdByEmail?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-user__date_joined'
+    | '-user__email'
+    | '-user__first_name'
+    | '-user__last_name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'user__date_joined'
+    | 'user__email'
+    | 'user__first_name'
+    | 'user__last_name'
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Search by first name, last name, or email */
+  search?: string
+
+  /** Filter by email (contains match) */
+  userEmail?: string
+
+  /** Filter by first name (contains match) */
+  userFirstName?: string
+
+  /** Filter by last name (contains match) */
+  userLastName?: string
 }
 export type AdminStaffRetrieve2ApiResponse = /** status 200  */ AdminStaffRead
 export type AdminStaffRetrieve2ApiArg = {
@@ -646,6 +693,10 @@ export type ContactsUpdateUpdateApiArg = {
 }
 export type GetDocumentDetailApiResponse = /** status 200  */ DocumentRead
 export type GetDocumentDetailApiArg = {
+  documentId: number
+}
+export type GetDocumentHistoryApiResponse = /** status 200  */ DocumentVersionRead[]
+export type GetDocumentHistoryApiArg = {
   documentId: number
 }
 export type GetFolderDetailApiResponse = /** status 200  */ FolderRead
@@ -1744,6 +1795,7 @@ export const {
   useContactsPhoneNumbersCreateCreateMutation,
   useContactsUpdateUpdateMutation,
   useGetDocumentDetailQuery,
+  useGetDocumentHistoryQuery,
   useGetFolderDetailQuery,
   useLoginCreateMutation,
   useLogoutCreateMutation,

@@ -27,6 +27,8 @@ import DeleteDevis
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/delete/DeleteDevis";
 import ModifyDevis
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/modify/ModifyDevis";
+import HistoryDevis
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/history/HistoryDevis";
 
 const AppeleOffreSubDetail = () => {
 
@@ -34,7 +36,8 @@ const AppeleOffreSubDetail = () => {
   const [openAdd, setOpenAdd] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [openModify, setOpenModify] = useState(false)
-  const [id, setId] = useState(0)
+  const [openHistory, setOpenHistory] = useState(false)
+  const [id, setId] = useState<number>();
 
 
   const {
@@ -66,7 +69,8 @@ const AppeleOffreSubDetail = () => {
         <Grid container spacing={6}>
           <Grid item xs={12}>
             <DevisAppeleOffre projectLotSubcontractorData={projectLotSubcontractorData} setOpenAdd={setOpenAdd}
-                              setId={setId} setOpenDelete={setOpenDelete} setOpenModify={setOpenModify}/>
+                              setId={setId} setOpenDelete={setOpenDelete} setOpenModify={setOpenModify}
+                              setOpenHistory={setOpenHistory}/>
           </Grid>
         </Grid>
       </Grid>
@@ -103,6 +107,11 @@ const AppeleOffreSubDetail = () => {
         refetch={refetch}
         id={id}
         data={projectLotSubcontractorData}
+      />
+      <HistoryDevis
+        open={openHistory}
+        setOpen={setOpenHistory}
+        id={id}
       />
     </Grid>
   );

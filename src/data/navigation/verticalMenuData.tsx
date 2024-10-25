@@ -24,7 +24,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Utilisateurs',
     href: '/role/users/list', // Use role as a placeholder
     icon: 'tabler-user',
-    roles: ['admin', 'client'], // Only for 'admin'
+    roles: ['admin', 'client', 'subcontractor'],
     isSection: false,
     children: []
   },
@@ -60,7 +60,7 @@ const verticalMenuData = (userRole: string | undefined): VerticalMenuDataType[] 
   if (userRole === undefined) {
     // Handle the case for undefined userRole ( need to work on this )
 
-return []; // or some default menu data
+    return []; // or some default menu data
   }
 
   // Filter menu items based on the user's role and replace 'role' in href

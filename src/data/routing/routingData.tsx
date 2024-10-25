@@ -3,24 +3,20 @@ import type {rountingDataType} from '@/types/menuTypes'
 
 const rountingData = (): rountingDataType[] => [
   {
-    path: 'role/admin',
-    roles: ['admin'],
-  },
-  {
     path: 'role/dashboard',
     roles: ['admin', 'client'],
   },
   {
     path: 'role/users/list',
-    roles: ['admin', 'client'],
+    roles: ['admin', 'client', 'subcontractor'],
   },
   {
     path: 'role/users/add',
-    roles: ['admin', 'client'],
+    roles: ['admin', 'client', 'subcontractor'],
   },
   {
     path: 'role/users/[id]/details',
-    roles: ['admin', 'client'],
+    roles: ['admin', 'client', 'subcontractor'],
   },
   {
     path: 'role/clients/list',
@@ -64,6 +60,14 @@ const rountingData = (): rountingDataType[] => [
   },
   {
     path: 'role/projects/add',
+    roles: ['admin','client']
+  },
+  {
+    path: 'role/projects/[edit]/details',
+    roles: ['admin','client']
+  },
+  {
+    path: 'role/projects/[edit]/details/[id]',
     roles: ['admin','client']
   },
   {

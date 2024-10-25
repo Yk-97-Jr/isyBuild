@@ -31,7 +31,7 @@ interface AddProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch?: () => void;
-  id: number;
+  id: number | undefined;
   data: ProjectLotSubcontractorRead | undefined
 }
 
@@ -69,15 +69,23 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
     };
 
     const onSubmit: SubmitHandler<FormValidateFileUploadType> = async (data) => {
-
       try {
+        // Ensure the `id` is defined before proceeding with the document upload
+        if (typeof id === 'undefined' || id === null) {
+          throw new Error("L'identifiant du projet est manquant.");
+        }
 
         // Create a FormData object to hold the avatar file
         const formDataToSend = new FormData();
 
-        formDataToSend.append('file', files[0]); // Append the file directly
+        // Append the file directly (ensure that files[0] exists)
+        if (files && files.length > 0) {
+          formDataToSend.append('file', files[0]);
+        } else {
+          throw new Error("Aucun fichier sélectionné.");
+        }
 
-        // Only append if `data.name` is not undefined or null
+        // Conditionally append other form fields if they are provided
         if (data.name) {
           formDataToSend.append('name', data.name);
         }
@@ -90,25 +98,25 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
           formDataToSend.append('notes', data.notes);
         }
 
+        // Send the FormData with a valid projectLotSubcontractorId
+        await updateDocument({
+          projectLotSubcontractorId: +id,
 
-        // Now send the FormData ( need to disable eslint here cause we have a picutre to pass ( surpass the eslint error )
+          // @ts-expect-error
+          documentUploadRequest: formDataToSend
+        }).unwrap();
 
-
-        await updateDocument(
-          {
-            projectLotSubcontractorId: +id,
-
-            // @ts-expect-error
-            documentUploadRequest: formDataToSend
-          }).unwrap();
-
+        // Handle successful submission
         handleClose();
         setOpenSnackBar(true);
         setInfoAlert({severity: 'success', message: 'Fichier ajouté avec succès'});
       } catch (error) {
+        // Handle errors, e.g., missing ID or file
         const message = error && typeof error === 'object' && 'data' in error
           ? JSON.stringify((error as { data?: unknown }).data)
-          : 'Une erreur inattendue est survenue.';
+          : error instanceof Error
+            ? error.message
+            : 'Une erreur inattendue est survenue.';
 
         setOpenSnackBar(true);
         setInfoAlert({severity: 'error', message});

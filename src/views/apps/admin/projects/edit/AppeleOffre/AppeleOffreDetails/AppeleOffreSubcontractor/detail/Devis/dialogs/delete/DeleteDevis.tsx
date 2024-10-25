@@ -20,7 +20,7 @@ interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch?: () => void;
-  id: number;
+  id: number | undefined;
 }
 
 const DeleteDevis = ({open, setOpen, id, refetch}: Props) => {
@@ -43,24 +43,37 @@ const DeleteDevis = ({open, setOpen, id, refetch}: Props) => {
   // Handle deleting the user (you can customize this part)
   const handleDelete = async () => {
 
-
     try {
-      await deletedDevisProject({documentId: +id}).unwrap() // Passez l'identifiant de l'utilisateur à la mutation
+      if (id !== undefined) {
+        try {
+          await deletedDevisProject({documentId: +id}).unwrap();
+          handleClose();
+          setOpenSnackBar(true);
+          setInfoAlert({severity: 'success', message: 'Fichier supprimé avec succès'});
+        } catch (error) {
+          // Handle error in the deletion process
+          const message = error && typeof error === 'object' && 'data' in error
+            ? JSON.stringify((error as { data?: unknown }).data)
+            : 'Une erreur inattendue est survenue.';
 
-
-      handleClose();
-      setOpenSnackBar(true);
-      setInfoAlert({severity: 'success', message: 'Fichier supprimer avec succès'});
+          setOpenSnackBar(true);
+          setInfoAlert({severity: 'error', message});
+        }
+      } else {
+        // Handle the case where id is undefined
+        setOpenSnackBar(true);
+        setInfoAlert({severity: 'error', message: 'L\'identifiant du document est manquant.'});
+      }
     } catch (error) {
-
+      // General catch block for any unexpected errors
       const message = error && typeof error === 'object' && 'data' in error
         ? JSON.stringify((error as { data?: unknown }).data)
         : 'Une erreur inattendue est survenue.';
 
       setOpenSnackBar(true);
-      setInfoAlert({severity: 'error', message: {message}});
+      setInfoAlert({severity: 'error', message});
     }
-  };
+  }
 
 
   return (
