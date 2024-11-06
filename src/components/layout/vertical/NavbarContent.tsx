@@ -7,6 +7,7 @@ import classnames from 'classnames'
 import NavToggle from './NavToggle'
 import ModeDropdown from '@components/layout/shared/ModeDropdown'
 import UserDropdown from '@components/layout/shared/UserDropdown'
+import NotificationsDropdown from '@components/layout/shared/NotificationDropdown'
 
 // Util Imports
 import {verticalLayoutClasses} from '@layouts/utils/layoutClasses'
@@ -20,6 +21,7 @@ const NavbarContent = () => {
         <BackButton/>
       </div>
       <div className='flex items-center'>
+        <NotificationsDropdown/>
         <ModeDropdown/>
         <UserDropdown/>
 

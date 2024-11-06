@@ -3,6 +3,7 @@
 // components/UserList.js
 import React, {useEffect, useState} from 'react'
 
+import type {SortingState} from '@tanstack/react-table';
 import Grid from '@mui/material/Grid'
 
 import {CircularProgress} from '@mui/material'
@@ -16,15 +17,24 @@ const UserList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [isActive, setIsActive] = useState<string | null>(null);
 
+  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   // Pass parameters to the query hook
-  const {data, error, isLoading, isFetching, refetch} = useAdminStaffRetrieveQuery({page, pageSize})
+  const {data, error, isLoading, isFetching, refetch} = useAdminStaffRetrieveQuery({
+    page,
+    pageSize,
+    isActive: Boolean(isActive),
+    ordering: sorting
+      .map((s) => `${s.desc ? '-' : ''}${s.id}`)
+      .join(',') as any
+  });
 
   useEffect(() => {
     refetch();
     setPage(1)
-  }, [pageSize]);
+  }, [pageSize, sorting]);
 
 
   useEffect(() => {
@@ -48,10 +58,6 @@ const UserList = () => {
   const users = data?.results || []
   const countRecords = data?.count
 
-  console.log('countRecords1' + countRecords)
-  console.log('users' + users)
-  console.log('isFetching' + isFetching)
-  console.log('isloading' + isLoading)
 
   return isFetching ? (
     <UserListTable
@@ -63,6 +69,10 @@ const UserList = () => {
       countRecords={countRecords}
       isFetching={isFetching}
       refetch={refetch}
+      setIsActive={setIsActive}
+      isActive={isActive}
+      setSorting={setSorting}
+      sorting={sorting}
     />
   ) : (
     <Grid container spacing={6}>
@@ -76,6 +86,10 @@ const UserList = () => {
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
+          setIsActive={setIsActive}
+          isActive={isActive}
+          setSorting={setSorting}
+          sorting={sorting}
         />
       </Grid>
     </Grid>

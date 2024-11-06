@@ -7,6 +7,7 @@ import React, {useEffect, useState, useMemo} from 'react'
 import {useRouter} from "next/navigation";
 
 import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader';
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
@@ -27,9 +28,9 @@ import {
   getFacetedUniqueValues,
   getFacetedMinMaxValues,
   getPaginationRowModel,
-  getSortedRowModel
+  getSortedRowModel,
 } from '@tanstack/react-table'
-import type {ColumnDef, FilterFn} from '@tanstack/react-table'
+import type {ColumnDef, FilterFn, SortingState} from '@tanstack/react-table'
 import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
@@ -47,6 +48,7 @@ import CustomTextField from '@core/components/mui/TextField'
 import tableStyles from '@core/styles/table.module.css'
 import type {UsersType} from '@/types/apps/usersType'
 import {useAuth} from "@/contexts/AuthContext";
+import TableFilters from "@views/apps/admin/users/list/TableFilters";
 
 
 declare module '@tanstack/table-core' {
@@ -116,9 +118,14 @@ const UserListTable = ({
                          pageSize,
                          countRecords,
                          isFetching,
-                         refetch
+                         refetch,
+                         setIsActive,
+                         isActive,
+                         setSorting,
+                         sorting
                        }: {
   data?: UsersType[]
+
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -126,6 +133,10 @@ const UserListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
+  setIsActive: React.Dispatch<React.SetStateAction<string | null>>
+  isActive: string | null
+  sorting: SortingState
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -137,11 +148,6 @@ const UserListTable = ({
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
 
-  console.log('datalist' + data)
-  console.log('pagelist' + page)
-
-
-  console.log('countRecords' + countRecords)
 
   const handleEditUser = (id: number) => {
     console.log(id)
@@ -217,7 +223,7 @@ const UserListTable = ({
               </Typography>
             </div>
           </div>
-        )
+        ),
       }),
       columnHelper.accessor('user.is_active', {
         header: 'Status',
@@ -252,18 +258,21 @@ const UserListTable = ({
   const table = useReactTable({
     data: filteredData as UsersType[],
     columns,
+    onSortingChange: setSorting,
     filterFns: {
       fuzzy: fuzzyFilter
     },
     state: {
       rowSelection,
-      globalFilter
+      globalFilter,
+      sorting
     },
     initialState: {
       pagination: {
         pageSize: pageSize
       }
     },
+    manualSorting: true,
     enableRowSelection: true, //enable row selection for all rows
     // enableRowSelection: row => row.original.age > 18, // or enable row selection conditionally per row
     globalFilterFn: fuzzyFilter,
@@ -281,8 +290,8 @@ const UserListTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
+        <CardHeader title='Filters' className='pbe-4'/>
+        <TableFilters setIsActive={setIsActive} isActive={isActive}/>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
