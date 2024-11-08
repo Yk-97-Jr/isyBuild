@@ -11,13 +11,14 @@ import { CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import ProjectListTable from './ProjectListTable'
+
+import TeamTable from './teamTable'
 
 import { useProjectsDeleteDestroyMutation, useProjectsRetrieveQuery } from '@/services/IsyBuildApi'
 
 import type { ProjectRead } from '@/services/IsyBuildApi'
 
-const UserList = () => {
+const TeamData = () => {
   const router = useRouter()
 
   const [tableRows, setTableRows] = useState<Partial<ProjectRead>[]>([])
@@ -28,6 +29,8 @@ const UserList = () => {
   const [status, setStatus] = useState<string>('')
 
   const [deleteProject] = useProjectsDeleteDestroyMutation()
+
+  
 
   const handleDelete = async (id: number) => {
     try {
@@ -61,21 +64,19 @@ const UserList = () => {
   const [searchValue, setSearchValue] = useState<string>('')
 
   console.log('page' + page)
-
+  
   // Pass parameters to the query hook
-
 
   const { data, error, isLoading, isFetching, refetch } = useProjectsRetrieveQuery(
 
     {
       status: status as 'canceled' | 'completed' | 'in_progress' | 'pending' | 'draft' | 'on_hold' | undefined,
-      search:searchValue as string,
+      search: searchValue as string,
       page,
       pageSize
     },
-
     { refetchOnMountOrArgChange: true }
-    
+
   )
 
   useEffect(() => {
@@ -102,10 +103,8 @@ const UserList = () => {
     router.push(`${rowId}/details`)
   }
 
-  
-
   return isFetching ? (
-    <ProjectListTable
+    <TeamTable
       pageSize={pageSize}
       setPageSize={setPageSize}
       page={page}
@@ -123,9 +122,9 @@ const UserList = () => {
       setSearchValue={setSearchValue}
     />
   ) : (
-    <Grid container spacing={6}>
+    <Grid container spacing={2}>
       <Grid item xs={12}>
-        <ProjectListTable
+        <TeamTable
           pageSize={pageSize}
           setPageSize={setPageSize}
           page={page}
@@ -147,4 +146,4 @@ const UserList = () => {
   )
 }
 
-export default UserList
+export default TeamData

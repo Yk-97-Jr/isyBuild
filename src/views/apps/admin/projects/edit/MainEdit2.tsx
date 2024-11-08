@@ -8,6 +8,7 @@ import { CircularProgress, Button } from '@mui/material'
 
 import Templates from './Templates'
 
+
 import EditInformation from './EditInformation'
 
 import EditAddress from './EditAddress'
@@ -28,6 +29,7 @@ import {
   useProjectsTemplatesListQuery,
   type ProjectEmailTemplateRead
 } from '@/services/IsyBuildApi'
+import Team from './Team/Team'
 
 function MainEdit2() {
   const params = useParams()
@@ -206,6 +208,7 @@ function MainEdit2() {
                 isLoading={isLoading}
                 errors={errors}
               />
+              <Team/>
             </div>
             <div className='sm:w-2/5 flex flex-col gap-5'>
               <Details
@@ -218,7 +221,9 @@ function MainEdit2() {
                 setProjectState={setProjectState}
                 isLoading={isLoading}
               />
+
               <Templates templates={templates || []} templates_loading={templates_loading} />
+       
             </div>
           </div>
         </div>

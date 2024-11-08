@@ -4,12 +4,76 @@ info:
   version: 1.0.0
   description: API documentation for IsyBuild
 paths:
+  /Subcontractors/{subcontractor_id}/owner/delete/:
+    delete:
+      operationId: Subcontractors_owner_delete_destroy
+      description: Deletes an Subcontractor owner by ID. Requires administrative privileges.
+      summary: Delete Subcontractor owner
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: Subcontractor deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Subcontractor not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
   /admin-staff/:
     get:
       operationId: admin_staff_retrieve
       description: Retrieve a list of all admin staff users with pagination.
       summary: List all admin staff
       parameters:
+      - in: query
+        name: created_by__email
+        schema:
+          type: string
+        description: Filter by created by email (contains match)
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+        description: Filter by active status (True or False)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -user__date_joined
+          - -user__email
+          - -user__first_name
+          - -user__last_name
+          - created_at
+          - created_by__email
+          - id
+          - user__date_joined
+          - user__email
+          - user__first_name
+          - user__last_name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
       - in: query
         name: page
         schema:
@@ -20,6 +84,26 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by first name, last name, or email
+      - in: query
+        name: user__email
+        schema:
+          type: string
+        description: Filter by email (contains match)
+      - in: query
+        name: user__first_name
+        schema:
+          type: string
+        description: Filter by first name (contains match)
+      - in: query
+        name: user__last_name
+        schema:
+          type: string
+        description: Filter by last name (contains match)
       tags:
       - Admin Staff Management
       security:
@@ -179,6 +263,55 @@ paths:
       summary: List all Client
       parameters:
       - in: query
+        name: contact_email
+        schema:
+          type: string
+        description: Filter by contact email (contains match)
+      - in: query
+        name: created_by__email
+        schema:
+          type: string
+        description: Filter by the email of the creator
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+        description: Filter by active status (True or False)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by client name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -contact_email
+          - -created_at
+          - -created_by__email
+          - -id
+          - -is_active
+          - -name
+          - -owner__email
+          - -phone_number
+          - -siren_number
+          - contact_email
+          - created_at
+          - created_by__email
+          - id
+          - is_active
+          - name
+          - owner__email
+          - phone_number
+          - siren_number
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
+        name: owner__email
+        schema:
+          type: string
+        description: Filter by the owner's email
+      - in: query
         name: page
         schema:
           type: integer
@@ -188,6 +321,21 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: phone_number
+        schema:
+          type: string
+        description: Filter by phone number (contains match)
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by client name, email, or phone number
+      - in: query
+        name: siren_number
+        schema:
+          type: string
+        description: Filter by SIREN number (contains match)
       tags:
       - Client Management
       security:
@@ -390,6 +538,46 @@ paths:
           type: integer
         required: true
       - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by created by email (contains match)
+      - in: query
+        name: email
+        schema:
+          type: string
+        description: Filter by email (contains match)
+      - in: query
+        name: first_name
+        schema:
+          type: string
+        description: Filter by first name (contains match)
+      - in: query
+        name: last_name
+        schema:
+          type: string
+        description: Filter by last name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -user__date_joined
+          - -user__email
+          - -user__first_name
+          - -user__last_name
+          - created_at
+          - created_by__email
+          - id
+          - user__date_joined
+          - user__email
+          - user__first_name
+          - user__last_name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
         name: page
         schema:
           type: integer
@@ -399,6 +587,11 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by first name, last name, or email
       tags:
       - Client Staff Management
       security:
@@ -527,6 +720,46 @@ paths:
       summary: List all Client staff
       parameters:
       - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by created by email (contains match)
+      - in: query
+        name: email
+        schema:
+          type: string
+        description: Filter by email (contains match)
+      - in: query
+        name: first_name
+        schema:
+          type: string
+        description: Filter by first name (contains match)
+      - in: query
+        name: last_name
+        schema:
+          type: string
+        description: Filter by last name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -user__date_joined
+          - -user__email
+          - -user__first_name
+          - -user__last_name
+          - created_at
+          - created_by__email
+          - id
+          - user__date_joined
+          - user__email
+          - user__first_name
+          - user__last_name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
         name: page
         schema:
           type: integer
@@ -536,6 +769,11 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by first name, last name, or email
       tags:
       - Client Staff Management
       security:
@@ -956,6 +1194,100 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /document/{document_id}/:
+    get:
+      operationId: get_document_detail
+      description: 'Fetch detailed information about a specific document by its ID '
+      summary: Retrieve a Folder by ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folder Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /document/{document_id}/history:
+    get:
+      operationId: get_document_history
+      description: 'Fetch history information about a specific docuemnt by its ID '
+      summary: Retrieve document history  by ID
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folder Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentVersion'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /folders/{folder_id}/:
     get:
       operationId: get_folder_detail
@@ -1089,6 +1421,44 @@ paths:
       description: Retrieve a list of all Lots with pagination.
       summary: List all Lot
       parameters:
+      - in: query
+        name: client_ids
+        schema:
+          type: string
+        description: Filter by Client IDs (comma-separated)
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by creator's email (contains match)
+      - in: query
+        name: description
+        schema:
+          type: string
+        description: Filter by lot description (contains match)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by lot name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -client__name
+          - -created_at
+          - -created_by__email
+          - -description
+          - -id
+          - -name
+          - client__name
+          - created_at
+          - created_by__email
+          - description
+          - id
+          - name
+        description: Order results by fields (e.g., 'name', '-created_at')
       - in: query
         name: page
         schema:
@@ -1601,6 +1971,27 @@ paths:
       summary: List all Subcontractors for a ProjectLot
       parameters:
       - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by creator's email (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -id
+          - -status
+          - -subcontractor__name
+          - -subcontractor_staff__user__first_name
+          - created_at
+          - id
+          - status
+          - subcontractor__name
+          - subcontractor_staff__user__first_name
+        description: Order results by fields (e.g., 'subcontractor__name', '-created_at')
+      - in: query
         name: page
         schema:
           type: integer
@@ -1615,6 +2006,38 @@ paths:
         schema:
           type: integer
         required: true
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by subcontractor name, status, or subcontractor staff
+          email/first name
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - canceled
+          - completed
+          - in_progress
+          - not_responding
+          - pending
+        description: Filter by subcontractor status
+      - in: query
+        name: subcontractor_name
+        schema:
+          type: string
+        description: Filter by subcontractor name (contains match)
+      - in: query
+        name: subcontractor_staff_email
+        schema:
+          type: string
+        description: Filter by subcontractor staff email (contains match)
+      - in: query
+        name: subcontractor_staff_first_name
+        schema:
+          type: string
+        description: Filter by subcontractor staff first name (contains match)
       tags:
       - Appel d'offre Management
       security:
@@ -2030,6 +2453,59 @@ paths:
       summary: List all Project
       parameters:
       - in: query
+        name: client_ids
+        schema:
+          type: string
+        description: Filter by Client IDs (comma-separated)
+      - in: query
+        name: code
+        schema:
+          type: string
+        description: Filter by project code (contains match)
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by creator's email (contains match)
+      - in: query
+        name: description
+        schema:
+          type: string
+        description: Filter by project description (contains match)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by project name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -client__name
+          - -code
+          - -created_at
+          - -created_by__email
+          - -description
+          - -id
+          - -manager__user__email
+          - -name
+          - -percentage_complete
+          - -start_date
+          - -status
+          - client__name
+          - code
+          - created_at
+          - created_by__email
+          - description
+          - id
+          - manager__user__email
+          - name
+          - percentage_complete
+          - start_date
+          - status
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
         name: page
         schema:
           type: integer
@@ -2039,6 +2515,35 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: percentage_complete_max
+        schema:
+          type: number
+          format: double
+        description: Maximum completion percentage
+      - in: query
+        name: percentage_complete_min
+        schema:
+          type: number
+          format: double
+        description: Minimum completion percentage
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by code, name,description ,client name
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - canceled
+          - completed
+          - draft
+          - in_progress
+          - on_hold
+          - pending
+        description: Filter by project status
       tags:
       - Project Management
       security:
@@ -2073,6 +2578,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/Project'
           description: ''
+  /projects/{project_id}/assign-staff/:
+    post:
+      operationId: assignProjectStaff
+      description: Assigns a staff member to a project with a specific role and supervisor.
+      summary: Assign Staff to Project
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectStaffAssignRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectStaffAssignRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectStaffAssignRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStaff'
+          description: ''
   /projects/{project_id}/lots/:
     get:
       operationId: projects_lots_retrieve
@@ -2080,6 +2619,30 @@ paths:
         pagination.
       summary: List all Lots for a Project
       parameters:
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by creator's email (contains match)
+      - in: query
+        name: lot_name
+        schema:
+          type: string
+        description: Filter by lot name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -id
+          - -lot__name
+          - -status
+          - created_at
+          - id
+          - lot__name
+          - status
+        description: Order results by fields (e.g., 'lot__name', '-created_at')
       - in: query
         name: page
         schema:
@@ -2095,6 +2658,22 @@ paths:
         schema:
           type: integer
         required: true
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by lot name or status
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - canceled
+          - completed
+          - in_progress
+          - pending
+          - review
+        description: Filter by project lot status
       tags:
       - Appel d'offre Management
       security:
@@ -2113,6 +2692,107 @@ paths:
                 type: object
                 additionalProperties: {}
                 description: Unspecified response body
+          description: ''
+  /projects/{project_id}/staff/:
+    get:
+      operationId: listProjectStaff
+      description: Retrieve a list of all staff members assigned to a specific project
+        with pagination.
+      summary: List all Staff for a Project
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectStaff'
+          description: ''
+  /projects/{project_id}/staff/reorder/:
+    put:
+      operationId: projects_staff_reorder_update
+      description: Reorders project staff by updating the supervisor relationships
+        in a single request.
+      summary: Reorder Project Staff
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectStaffReorderRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectStaffReorderRequest'
+          multipart/form-data:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectStaffReorderRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /projects/{project_id}/staff/tree/:
+    get:
+      operationId: getProjectStaffTree
+      description: Returns the project staff organized as a tree structure, reflecting
+        hierarchical relationships.
+      summary: Retrieve Project Staff as a Hierarchical Tree
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStaffTree'
           description: ''
   /projects/{project_id}/templates/:
     get:
@@ -2206,6 +2886,87 @@ paths:
             application/json:
               schema:
                 description: Permission denied.
+          description: ''
+  /projects/staff/{project_staff_id}/:
+    get:
+      operationId: getProjectStaffById
+      description: Fetches detailed information about a project staff member by their
+        unique ID.
+      summary: Retrieve Project Staff by ID
+      parameters:
+      - in: path
+        name: project_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStaff'
+          description: ''
+  /projects/staff/{project_staff_id}/remove/:
+    delete:
+      operationId: removeProjectStaffById
+      description: Removes a specific project staff member by their unique ID.
+      summary: Remove Project Staff
+      parameters:
+      - in: path
+        name: project_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /projects/staff/{project_staff_id}/update/:
+    put:
+      operationId: updateProjectStaffById
+      description: Updates details (e.g., role, supervisor) of a specific project
+        staff member.
+      summary: Update Project Staff
+      parameters:
+      - in: path
+        name: project_staff_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectStaffUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectStaffUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectStaffUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectStaff'
           description: ''
   /projects/templates/{template_id}/:
     get:
@@ -2379,6 +3140,65 @@ paths:
       summary: List all Subcontractor
       parameters:
       - in: query
+        name: client_ids
+        schema:
+          type: string
+        description: Filter by Client IDs (comma-separated)
+      - in: query
+        name: contact_email
+        schema:
+          type: string
+        description: Filter by contact email (contains match)
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by the creator's email
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+        description: Filter by active status (True or False)
+      - in: query
+        name: lot_ids
+        schema:
+          type: string
+        description: Filter by Lot IDs (comma-separated)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by subcontractor name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -contact_email
+          - -created_at
+          - -created_by__email
+          - -id
+          - -is_active
+          - -name
+          - -owner__email
+          - -phone_number
+          - -siren_number
+          - contact_email
+          - created_at
+          - created_by__email
+          - id
+          - is_active
+          - name
+          - owner__email
+          - phone_number
+          - siren_number
+        description: Comma-separated fields to order by (e.g., 'name', '-created_at')
+      - in: query
+        name: owner_email
+        schema:
+          type: string
+        description: Filter by the owner's email
+      - in: query
         name: page
         schema:
           type: integer
@@ -2388,6 +3208,16 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: phone_number
+        schema:
+          type: string
+        description: Filter by phone number (contains match)
+      - in: query
+        name: siren_number
+        schema:
+          type: string
+        description: Filter by SIREN number (contains match)
       tags:
       - Subcontractor Management
       security:
@@ -2422,12 +3252,175 @@ paths:
               schema:
                 $ref: '#/components/schemas/Subcontractor'
           description: ''
+  /subcontractors/{subcontractor_id}/owner/:
+    get:
+      operationId: subcontractors_owner_retrieve
+      description: Fetches the owner details of a Subcontractor by the Subcontractor's
+        ID.
+      summary: Retrieve Subcontractor Owner Details
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /subcontractors/{subcontractor_id}/owner/assign/:
+    put:
+      operationId: subcontractors_owner_assign_update
+      description: Assigns an owner to a Subcontractor by setting a user as the owner.
+      summary: Assign Owner to Subcontractor
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/{subcontractor_id}/owner/update/:
+    put:
+      operationId: subcontractors_owner_update_update
+      description: Update an owner to a Subcontractor by setting a user as the owner.
+      summary: Update Owner to Subcontractor
+      parameters:
+      - in: path
+        name: subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Subcontractor Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorOwnerUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /subcontractors/{subcontractor_id}/staff/:
     get:
       operationId: subcontractors_staff_retrieve_2
       description: Retrieve a list of all subcontractor staff users with pagination.
       summary: List all Subcontractor staff
       parameters:
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by created by email (contains match)
+      - in: query
+        name: email
+        schema:
+          type: string
+        description: Filter by email (contains match)
+      - in: query
+        name: first_name
+        schema:
+          type: string
+        description: Filter by first name (contains match)
+      - in: query
+        name: last_name
+        schema:
+          type: string
+        description: Filter by last name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -user__date_joined
+          - -user__email
+          - -user__first_name
+          - -user__last_name
+          - created_at
+          - created_by__email
+          - id
+          - user__date_joined
+          - user__email
+          - user__first_name
+          - user__last_name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
       - in: query
         name: page
         schema:
@@ -2438,6 +3431,11 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by first name, last name, or email
       - in: path
         name: subcontractor_id
         schema:
@@ -2564,6 +3562,78 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
+  /subcontractors/staff/:
+    get:
+      operationId: get_subcontractor_staff_list
+      description: Retrieve a list of all subcontractor staff users with pagination.
+      summary: List all Subcontractor staff
+      parameters:
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by created by email (contains match)
+      - in: query
+        name: email
+        schema:
+          type: string
+        description: Filter by email (contains match)
+      - in: query
+        name: first_name
+        schema:
+          type: string
+        description: Filter by first name (contains match)
+      - in: query
+        name: last_name
+        schema:
+          type: string
+        description: Filter by last name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -user__date_joined
+          - -user__email
+          - -user__first_name
+          - -user__last_name
+          - created_at
+          - created_by__email
+          - id
+          - user__date_joined
+          - user__email
+          - user__first_name
+          - user__last_name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by first name, last name, or email
+      tags:
+      - Subcontractor Staff Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSubcontractorStaff'
+          description: ''
   /subcontractors/staff/{subcontractor_staff_id}/:
     get:
       operationId: subcontractors_staff_retrieve
@@ -2663,6 +3733,41 @@ paths:
                 description: Unspecified response body
           description: ''
         '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /subcontractors/staff/create/:
+    post:
+      operationId: create_subcontractor_by_subcontractor_user
+      description: Create a new subcontractor staff member by subcontractor .
+      tags:
+      - Subcontractor Staff Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SubcontractorStaffCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubcontractorStaff'
+          description: ''
+        '400':
           content:
             application/json:
               schema:
@@ -3261,6 +4366,19 @@ components:
           type: integer
           nullable: true
       required:
+      - user
+    ClientStaffSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserSimple'
+          readOnly: true
+      required:
+      - id
       - user
     ClientStaffUpdateRequest:
       type: object
@@ -3867,6 +4985,28 @@ components:
       - next
       - previous
       - results
+    PaginatedProjectStaff:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PaginatedSubcontractorStaff:
       type: object
       properties:
@@ -4051,11 +5191,14 @@ components:
           allOf:
           - $ref: '#/components/schemas/ClientStaff'
           readOnly: true
-        staff:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClientStaff'
-          readOnly: true
+        notification_frequency:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        max_notifications:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
         created_by:
           allOf:
           - $ref: '#/components/schemas/CreatedBy'
@@ -4078,7 +5221,6 @@ components:
       - manager
       - map_coordinate
       - name
-      - staff
       - updated_at
     ProjectCreateRequest:
       type: object
@@ -4231,10 +5373,22 @@ components:
           allOf:
           - $ref: '#/components/schemas/SubcontractorStaffSimple'
           readOnly: true
+        devis_document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          readOnly: true
         status:
           $ref: '#/components/schemas/Status841Enum'
         notes:
           type: string
+          nullable: true
+        notifications_sent:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        last_notification_date:
+          type: string
+          format: date-time
           nullable: true
         created_by:
           allOf:
@@ -4251,6 +5405,7 @@ components:
       required:
       - created_at
       - created_by
+      - devis_document
       - id
       - project_lot
       - subcontractor
@@ -4288,6 +5443,105 @@ components:
       required:
       - id
       - name
+    ProjectStaff:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        staff:
+          allOf:
+          - $ref: '#/components/schemas/ClientStaffSimple'
+          readOnly: true
+        role:
+          type: string
+          maxLength: 100
+        supervisor:
+          allOf:
+          - $ref: '#/components/schemas/ClientStaffSimple'
+          readOnly: true
+          nullable: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - role
+      - staff
+      - supervisor
+      - updated_at
+    ProjectStaffAssignRequest:
+      type: object
+      properties:
+        staff_id:
+          type: integer
+        role:
+          type: string
+          minLength: 1
+          maxLength: 100
+        supervisor_id:
+          type: integer
+          nullable: true
+      required:
+      - role
+      - staff_id
+    ProjectStaffReorderRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        supervisor_id:
+          type: integer
+          nullable: true
+        children:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+      - id
+    ProjectStaffTree:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        staff:
+          allOf:
+          - $ref: '#/components/schemas/ClientStaffSimple'
+          readOnly: true
+        role:
+          type: string
+          maxLength: 100
+        children:
+          type: string
+          readOnly: true
+      required:
+      - children
+      - id
+      - role
+      - staff
+    ProjectStaffUpdateRequest:
+      type: object
+      properties:
+        role:
+          type: string
+          minLength: 1
+          maxLength: 100
+        supervisor_id:
+          type: integer
+          nullable: true
     ProjectStatusEnum:
       enum:
       - draft
@@ -4331,6 +5585,12 @@ components:
           $ref: '#/components/schemas/MapCoordinateCreateOrUpdateRequest'
         notes:
           type: string
+        notification_frequency:
+          type: integer
+          nullable: true
+        max_notifications:
+          type: integer
+          nullable: true
       required:
       - address
       - code
@@ -4524,6 +5784,20 @@ components:
       - name
       - phone_number
       - siren_number
+    SubcontractorOwnerCreateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreateRequest'
+      required:
+      - user
+    SubcontractorOwnerUpdateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserUpdateRequest'
+      required:
+      - user
     SubcontractorSimple:
       type: object
       properties:
@@ -4640,11 +5914,15 @@ components:
       - upload_devis
       - assign_subcontractor
       - update_document
+      - rappel_client
+      - rappel_subcontractor
       type: string
       description: |-
         * `upload_devis` - Upload Devis
         * `assign_subcontractor` - Assign Subcontractor
         * `update_document` - Update Document
+        * `rappel_client` - Rappel Client
+        * `rappel_subcontractor` - Rappel Subcontractor
     TokenObtainPairRequest:
       type: object
       properties:
@@ -4778,6 +6056,30 @@ components:
       - new_email
       - password
       - redirect_uri
+    UserSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        avatar:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+      required:
+      - avatar
+      - email
+      - id
     UserUpdateRequest:
       type: object
       properties:

@@ -8,9 +8,10 @@ import Card from '@mui/material/Card'
 
 import Button from '@mui/material/Button'
 
+import type { ButtonProps } from "@mui/material/Button"
+
 import Typography from '@mui/material/Typography'
 
-import Chip from '@mui/material/Chip'
 
 import IconButton from '@mui/material/IconButton'
 
@@ -27,6 +28,7 @@ import classnames from 'classnames'
 
 import { rankItem } from '@tanstack/match-sorter-utils'
 
+// import { Status109Enum } from '@/services/IsyBuildApi'
 
 import {
   createColumnHelper,
@@ -52,17 +54,21 @@ import OptionMenu from '@core/components/option-menu'
 
 import CustomTextField from '@core/components/mui/TextField'
 
-import ProjectDialog from './ProjectDialog'
+import ProjectDialog from '../../Add/ProjectDialog'
+
+import OpenDialogOnElementClick from './OpenComboBox'
+
+import DialogTeam from './DialogTeam'
 
 // Styles
 import tableStyles from '@core/styles/table.module.css'
 
 // Types
-
 import type { ProjectRead } from '@/services/IsyBuildApi'
 
-// Context
+import   type  { ThemeColor } from '@/@core/types'
 
+// Context
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -115,7 +121,7 @@ const DebouncedInput = ({
 
 const columnHelper = createColumnHelper<ClientTypeWithAction>()
 
-const ProjectListTable = ({
+const TeamTable = ({
   data,
   page,
   setPage,
@@ -127,7 +133,7 @@ const ProjectListTable = ({
   handleEdit,
   handleDelete,
   status,
-  setStatus,
+  // setStatus,
   searchValue,
   setSearchValue
 }: {
@@ -143,82 +149,64 @@ const ProjectListTable = ({
   handleDelete: any
   setTableRows: any
   status: any
-  setStatus: any,
-  searchValue:any,
-  setSearchValue:any
+  setStatus: any
+  searchValue: any
+  setSearchValue: any
 }) => {
   const [rowSelection, setRowSelection] = useState({})
-  const [id, setId] = useState(0)
-  const [open, setOpen] = useState(false)
-  const [filteredData] = useState(data)
-  const [globalFilter, setGlobalFilter] = useState('')
 
+  const [id, setId] = useState(0)
+
+  const [open, setOpen] = useState(false)
+
+  const [globalFilter, setGlobalFilter] = useState('')
 
   useEffect(() => {
 
     console.log(status)
-
-  }, [status])
-
-
-  const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     
+  }, [status])
+  const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('code', {
-        header: 'Code',
+      columnHelper.accessor('client.name', {
+        header: 'User',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.code}`}
+                {/* {`${row.original.code}`} */}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('name', {
-        header: 'Name',
+      columnHelper.accessor('client.phone_number', {
+        header: 'Phone',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name}`}
+                {/* {`${row.original.name}`} */}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('client.address.country', {
-        header: 'Address',
+      columnHelper.accessor('manager.created_by', {
+        header: 'Created_By',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {row.original.address?.country || 'N/A'}
+                {/* {row.original.address?.country || 'N/A'} */}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('status', {
-        header: 'status',
-        cell: ({ row }) => (
-          <Chip
-            variant='tonal'
-            label={row.original.status ? 'pending' : 'completed'}
-            color={row.original.status ? 'warning' : 'secondary'}
-          />
-        )
-      }),
-      columnHelper.accessor('client.created_at', {
-        header: `Date de Creation`,
-        cell: ({ row }) => (
-          <Typography>
-            {row.original.client?.created_at
-              ? new Date(row.original.client.created_at).toLocaleDateString()
-              : 'Date not available'}
-          </Typography>
-        )
+      columnHelper.accessor('manager.created_at', {
+        header: 'time',
+        cell: ({ row }) => <Typography></Typography>
       }),
       columnHelper.accessor('action', {
         header: 'Action',
@@ -250,7 +238,7 @@ const ProjectListTable = ({
   )
 
   const table = useReactTable({
-    data: filteredData as ProjectRead[],
+    data: [], // find what data  to use here
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -276,43 +264,27 @@ const ProjectListTable = ({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
+  
+  const buttonProps = (children: string, color: ThemeColor, variant: ButtonProps['variant']): ButtonProps => ({
+    children,
+    color,
+    variant
+  })
 
   return (
     <>
       <Card>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
-          <div className='flex gap-4 w-1/2 '>
-            <div>
-              <CustomTextField
-                select
-                value={table.getState().pagination.pageSize}
-                onChange={e => setPageSize(Number(e.target.value))}
-                className='max-sm:is-full sm:is-[70px]'
-              >
-                <MenuItem value='10'>10</MenuItem>
-                <MenuItem value='25'>25</MenuItem>
-                <MenuItem value='50'>50</MenuItem>
-              </CustomTextField>
-            </div>
-            <div className='w-1/2 flex gap-2'>
-              <CustomTextField
-                select
-                fullWidth
-                id='select-role'
-                value={status}
-                onChange={e => setStatus(e.target.value)}
-                SelectProps={{ displayEmpty: true }}
-              >
-                <MenuItem value=''>Select Status</MenuItem>
-                <MenuItem value='pending'>pending</MenuItem>
-                <MenuItem value='on_hold'>on_hold</MenuItem>
-                <MenuItem value='in_progress'>in_progress</MenuItem>
-                <MenuItem value='draft'>draft</MenuItem>
-                <MenuItem value='completed'>completed</MenuItem>
-                <MenuItem value='canceled'>canceled</MenuItem>
-              </CustomTextField>
-            </div>
-          </div>
+          <CustomTextField
+            select
+            value={table.getState().pagination.pageSize}
+            onChange={e => setPageSize(Number(e.target.value))}
+            className='max-sm:is-full sm:is-[70px]'
+          >
+            <MenuItem value='10'>10</MenuItem>
+            <MenuItem value='25'>25</MenuItem>
+            <MenuItem value='50'>50</MenuItem>
+          </CustomTextField>
 
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
@@ -320,11 +292,16 @@ const ProjectListTable = ({
               onChange={value => setSearchValue(String(value))}
               placeholder={`chercher un Projet`}
               className='max-sm:is-full'
-              
             />
-            <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus' />} href='add'>
+            {/* <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus' />} href='add'>
               Ajouter Projet
-            </Button>
+            </Button> */}
+            <OpenDialogOnElementClick
+              element={Button}
+              elementProps={buttonProps('Add Member', 'primary', 'tonal')}
+              dialog={DialogTeam}
+              dialogProps={{ type: 'delete-customer' }}
+            />
           </div>
         </div>
         <div className='overflow-x-auto'>
@@ -403,4 +380,4 @@ const ProjectListTable = ({
   )
 }
 
-export default ProjectListTable
+export default TeamTable

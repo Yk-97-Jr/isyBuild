@@ -108,8 +108,8 @@ const Templates = () => {
     event.preventDefault()
 
     try {
+        //no need to await the response 
       const response = await trigger_Reset({ templateId }).unwrap()
-
       if (response) {
         reset({
           subject: projectTemplates?.email_template.subject_template ?? '',
@@ -124,6 +124,7 @@ const Templates = () => {
       }
     } catch (error) {
       setOpenSnackBar(true)
+      
       setInfoAlert({ severity: 'error', message: 'Failed to reset the template.' })
     }
   }
@@ -153,21 +154,21 @@ const Templates = () => {
 
   return (
     <div>
-      <Card>
-        <div className='flex sm:flex-row flex-col w-full justify-between items-center '>
-          <CardHeader title={projectTemplates?.email_template.name} />
-          <div className='flex flex-wrap max-sm:flex-col gap-4 px-5 w-full sm:w-auto'>
-            <Button variant='tonal' color='secondary' onClick={handleCancel}>
-              Annuler
-            </Button>
-            <Button variant='tonal' onClick={handleReset}>
-              Réinitialiser
-            </Button>
-            <Button variant='contained' onClick={handleSubmit(handleSave)}>
-              Modifier
-            </Button>
-          </div>
+      <div className='flex sm:flex-row flex-col w-full justify-between items-center '>
+        <CardHeader title={projectTemplates?.email_template.name} />
+        <div className='flex flex-wrap max-sm:flex-col gap-4 px-5 w-full sm:w-auto'>
+          <Button variant='tonal' color='secondary' onClick={handleCancel}>
+            Annuler
+          </Button>
+          <Button variant='tonal' onClick={handleReset}>
+            Réinitialiser
+          </Button>
+          <Button variant='contained' onClick={handleSubmit(handleSave)}>
+            Modifier
+          </Button>
         </div>
+      </div>
+      <Card>
         <CardContent>
           <Grid container spacing={6} className='mbe-6'>
             <Grid item xs={12}>
