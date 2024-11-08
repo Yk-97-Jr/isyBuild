@@ -13,6 +13,7 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/admin-staff/`,
         params: {
           created_by__email: queryArg.createdByEmail,
+          is_active: queryArg.isActive,
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
@@ -43,7 +44,22 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/admin-users/delete/${queryArg.adminUserId}/`, method: 'DELETE' })
     }),
     clientsRetrieve: build.query<ClientsRetrieveApiResponse, ClientsRetrieveApiArg>({
-      query: queryArg => ({ url: `/clients/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+      query: queryArg => ({
+        url: `/clients/`,
+        params: {
+          contact_email: queryArg.contactEmail,
+          created_by__email: queryArg.createdByEmail,
+          is_active: queryArg.isActive,
+          name: queryArg.name,
+          ordering: queryArg.ordering,
+          owner__email: queryArg.ownerEmail,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          phone_number: queryArg.phoneNumber,
+          search: queryArg.search,
+          siren_number: queryArg.sirenNumber
+        }
+      })
     }),
     clientsRetrieve2: build.query<ClientsRetrieve2ApiResponse, ClientsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/clients/${queryArg.clientId}/` })
@@ -71,7 +87,16 @@ const injectedRtkApi = api.injectEndpoints({
     clientsStaffRetrieve3: build.query<ClientsStaffRetrieve3ApiResponse, ClientsStaffRetrieve3ApiArg>({
       query: queryArg => ({
         url: `/clients/${queryArg.clientId}/staff/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize }
+        params: {
+          created_by: queryArg.createdBy,
+          email: queryArg.email,
+          first_name: queryArg.firstName,
+          last_name: queryArg.lastName,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search
+        }
       })
     }),
     clientsStaffCreateCreate2: build.mutation<ClientsStaffCreateCreate2ApiResponse, ClientsStaffCreateCreate2ApiArg>({
@@ -88,7 +113,19 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/clients/delete/${queryArg.clientId}/`, method: 'DELETE' })
     }),
     clientsStaffRetrieve: build.query<ClientsStaffRetrieveApiResponse, ClientsStaffRetrieveApiArg>({
-      query: queryArg => ({ url: `/clients/staff/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+      query: queryArg => ({
+        url: `/clients/staff/`,
+        params: {
+          created_by: queryArg.createdBy,
+          email: queryArg.email,
+          first_name: queryArg.firstName,
+          last_name: queryArg.lastName,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search
+        }
+      })
     }),
     clientsStaffRetrieve2: build.query<ClientsStaffRetrieve2ApiResponse, ClientsStaffRetrieve2ApiArg>({
       query: queryArg => ({ url: `/clients/staff/${queryArg.clientStaffId}/` })
@@ -164,7 +201,18 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/logout/`, method: 'POST', body: queryArg.tokenRefreshRequest })
     }),
     lotsRetrieve: build.query<LotsRetrieveApiResponse, LotsRetrieveApiArg>({
-      query: queryArg => ({ url: `/lots/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+      query: queryArg => ({
+        url: `/lots/`,
+        params: {
+          client_ids: queryArg.clientIds,
+          created_by: queryArg.createdBy,
+          description: queryArg.description,
+          name: queryArg.name,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize
+        }
+      })
     }),
     lotsRetrieve2: build.query<LotsRetrieve2ApiResponse, LotsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/lots/${queryArg.lotId}/` })
@@ -225,7 +273,17 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: queryArg => ({
         url: `/project-lots/${queryArg.projectLotId}/subcontractors/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize }
+        params: {
+          created_by: queryArg.createdBy,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
+          status: queryArg.status,
+          subcontractor_name: queryArg.subcontractorName,
+          subcontractor_staff_email: queryArg.subcontractorStaffEmail,
+          subcontractor_staff_first_name: queryArg.subcontractorStaffFirstName
+        }
       })
     }),
     projectLotsSubcontractorsAssignCreate: build.mutation<
@@ -312,16 +370,65 @@ const injectedRtkApi = api.injectEndpoints({
       })
     }),
     projectsRetrieve: build.query<ProjectsRetrieveApiResponse, ProjectsRetrieveApiArg>({
-      query: queryArg => ({ url: `/projects/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+      query: queryArg => ({
+        url: `/projects/`,
+        params: {
+          client_ids: queryArg.clientIds,
+          code: queryArg.code,
+          created_by: queryArg.createdBy,
+          description: queryArg.description,
+          name: queryArg.name,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          percentage_complete_max: queryArg.percentageCompleteMax,
+          percentage_complete_min: queryArg.percentageCompleteMin,
+          search: queryArg.search,
+          status: queryArg.status
+        }
+      })
     }),
     projectsRetrieve2: build.query<ProjectsRetrieve2ApiResponse, ProjectsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/projects/${queryArg.projectId}/` })
     }),
+    assignProjectStaff: build.mutation<AssignProjectStaffApiResponse, AssignProjectStaffApiArg>({
+      query: queryArg => ({
+        url: `/projects/${queryArg.projectId}/assign-staff/`,
+        method: 'POST',
+        body: queryArg.projectStaffAssignRequest
+      })
+    }),
     projectsLotsRetrieve: build.query<ProjectsLotsRetrieveApiResponse, ProjectsLotsRetrieveApiArg>({
       query: queryArg => ({
         url: `/projects/${queryArg.projectId}/lots/`,
+        params: {
+          created_by: queryArg.createdBy,
+          lot_name: queryArg.lotName,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
+          status: queryArg.status
+        }
+      })
+    }),
+    listProjectStaff: build.query<ListProjectStaffApiResponse, ListProjectStaffApiArg>({
+      query: queryArg => ({
+        url: `/projects/${queryArg.projectId}/staff/`,
         params: { page: queryArg.page, page_size: queryArg.pageSize }
       })
+    }),
+    projectsStaffReorderUpdate: build.mutation<ProjectsStaffReorderUpdateApiResponse, ProjectsStaffReorderUpdateApiArg>(
+      {
+        query: queryArg => ({
+          url: `/projects/${queryArg.projectId}/staff/reorder/`,
+          method: 'PUT',
+          body: queryArg.body
+        })
+      }
+    ),
+    getProjectStaffTree: build.query<GetProjectStaffTreeApiResponse, GetProjectStaffTreeApiArg>({
+      query: queryArg => ({ url: `/projects/${queryArg.projectId}/staff/tree/` })
     }),
     projectsTemplatesList: build.query<ProjectsTemplatesListApiResponse, ProjectsTemplatesListApiArg>({
       query: queryArg => ({ url: `/projects/${queryArg.projectId}/templates/` })
@@ -331,6 +438,19 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     projectsDeleteDestroy: build.mutation<ProjectsDeleteDestroyApiResponse, ProjectsDeleteDestroyApiArg>({
       query: queryArg => ({ url: `/projects/delete/${queryArg.projectId}/`, method: 'DELETE' })
+    }),
+    getProjectStaffById: build.query<GetProjectStaffByIdApiResponse, GetProjectStaffByIdApiArg>({
+      query: queryArg => ({ url: `/projects/staff/${queryArg.projectStaffId}/` })
+    }),
+    removeProjectStaffById: build.mutation<RemoveProjectStaffByIdApiResponse, RemoveProjectStaffByIdApiArg>({
+      query: queryArg => ({ url: `/projects/staff/${queryArg.projectStaffId}/remove/`, method: 'DELETE' })
+    }),
+    updateProjectStaffById: build.mutation<UpdateProjectStaffByIdApiResponse, UpdateProjectStaffByIdApiArg>({
+      query: queryArg => ({
+        url: `/projects/staff/${queryArg.projectStaffId}/update/`,
+        method: 'PUT',
+        body: queryArg.projectStaffUpdateRequest
+      })
     }),
     projectsTemplatesRetrieve: build.query<ProjectsTemplatesRetrieveApiResponse, ProjectsTemplatesRetrieveApiArg>({
       query: queryArg => ({ url: `/projects/templates/${queryArg.templateId}/` })
@@ -362,7 +482,23 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/set-password/`, method: 'POST', body: queryArg.setasswordRequest })
     }),
     subcontractorsRetrieve: build.query<SubcontractorsRetrieveApiResponse, SubcontractorsRetrieveApiArg>({
-      query: queryArg => ({ url: `/subcontractors/`, params: { page: queryArg.page, page_size: queryArg.pageSize } })
+      query: queryArg => ({
+        url: `/subcontractors/`,
+        params: {
+          client_ids: queryArg.clientIds,
+          contact_email: queryArg.contactEmail,
+          created_by: queryArg.createdBy,
+          is_active: queryArg.isActive,
+          lot_ids: queryArg.lotIds,
+          name: queryArg.name,
+          ordering: queryArg.ordering,
+          owner_email: queryArg.ownerEmail,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          phone_number: queryArg.phoneNumber,
+          siren_number: queryArg.sirenNumber
+        }
+      })
     }),
     subcontractorsRetrieve2: build.query<SubcontractorsRetrieve2ApiResponse, SubcontractorsRetrieve2ApiArg>({
       query: queryArg => ({ url: `/subcontractors/${queryArg.subcontractorId}/` })
@@ -398,7 +534,16 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: queryArg => ({
         url: `/subcontractors/${queryArg.subcontractorId}/staff/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize }
+        params: {
+          created_by: queryArg.createdBy,
+          email: queryArg.email,
+          first_name: queryArg.firstName,
+          last_name: queryArg.lastName,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search
+        }
       })
     }),
     subcontractorsStaffCreateCreate: build.mutation<
@@ -429,7 +574,16 @@ const injectedRtkApi = api.injectEndpoints({
     getSubcontractorStaffList: build.query<GetSubcontractorStaffListApiResponse, GetSubcontractorStaffListApiArg>({
       query: queryArg => ({
         url: `/subcontractors/staff/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize }
+        params: {
+          created_by: queryArg.createdBy,
+          email: queryArg.email,
+          first_name: queryArg.firstName,
+          last_name: queryArg.lastName,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search
+        }
       })
     }),
     subcontractorsStaffRetrieve: build.query<SubcontractorsStaffRetrieveApiResponse, SubcontractorsStaffRetrieveApiArg>(
@@ -522,6 +676,9 @@ export type AdminStaffRetrieveApiArg = {
   /** Filter by created by email (contains match) */
   createdByEmail?: string
 
+  /** Filter by active status (True or False) */
+  isActive?: boolean
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | '-created_at'
@@ -577,11 +734,56 @@ export type AdminUsersDeleteDestroyApiArg = {
 export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedClientRead
 export type ClientsRetrieveApiArg = {
 
+  /** Filter by contact email (contains match) */
+  contactEmail?: string
+
+  /** Filter by the email of the creator */
+  createdByEmail?: string
+
+  /** Filter by active status (True or False) */
+  isActive?: boolean
+
+  /** Filter by client name (contains match) */
+  name?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | '-contact_email'
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-is_active'
+    | '-name'
+    | '-owner__email'
+    | '-phone_number'
+    | '-siren_number'
+    | 'contact_email'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'is_active'
+    | 'name'
+    | 'owner__email'
+    | 'phone_number'
+    | 'siren_number'
+
+  /** Filter by the owner's email */
+  ownerEmail?: string
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Filter by phone number (contains match) */
+  phoneNumber?: string
+
+  /** Search by client name, email, or phone number */
+  search?: string
+
+  /** Filter by SIREN number (contains match) */
+  sirenNumber?: string
 }
 export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead
 export type ClientsRetrieve2ApiArg = {
@@ -609,11 +811,43 @@ export type ClientsStaffRetrieve3ApiResponse = /** status 200  */ PaginatedClien
 export type ClientsStaffRetrieve3ApiArg = {
   clientId: number
 
+  /** Filter by created by email (contains match) */
+  createdBy?: string
+
+  /** Filter by email (contains match) */
+  email?: string
+
+  /** Filter by first name (contains match) */
+  firstName?: string
+
+  /** Filter by last name (contains match) */
+  lastName?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-user__date_joined'
+    | '-user__email'
+    | '-user__first_name'
+    | '-user__last_name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'user__date_joined'
+    | 'user__email'
+    | 'user__first_name'
+    | 'user__last_name'
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Search by first name, last name, or email */
+  search?: string
 }
 export type ClientsStaffCreateCreate2ApiResponse = /** status 201  */ ClientStaffRead
 export type ClientsStaffCreateCreate2ApiArg = {
@@ -631,11 +865,43 @@ export type ClientsDeleteDestroyApiArg = {
 export type ClientsStaffRetrieveApiResponse = /** status 200  */ PaginatedClientStaffRead
 export type ClientsStaffRetrieveApiArg = {
 
+  /** Filter by created by email (contains match) */
+  createdBy?: string
+
+  /** Filter by email (contains match) */
+  email?: string
+
+  /** Filter by first name (contains match) */
+  firstName?: string
+
+  /** Filter by last name (contains match) */
+  lastName?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-user__date_joined'
+    | '-user__email'
+    | '-user__first_name'
+    | '-user__last_name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'user__date_joined'
+    | 'user__email'
+    | 'user__first_name'
+    | 'user__last_name'
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Search by first name, last name, or email */
+  search?: string
 }
 export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ ClientStaffRead
 export type ClientsStaffRetrieve2ApiArg = {
@@ -716,6 +982,33 @@ export type LogoutCreateApiArg = {
 export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead
 export type LotsRetrieveApiArg = {
 
+  /** Filter by Client IDs (comma-separated) */
+  clientIds?: string
+
+  /** Filter by creator's email (contains match) */
+  createdBy?: string
+
+  /** Filter by lot description (contains match) */
+  description?: string
+
+  /** Filter by lot name (contains match) */
+  name?: string
+
+  /** Order results by fields (e.g., 'name', '-created_at') */
+  ordering?:
+    | '-client__name'
+    | '-created_at'
+    | '-created_by__email'
+    | '-description'
+    | '-id'
+    | '-name'
+    | 'client__name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'description'
+    | 'id'
+    | 'name'
+
   /** Page number of the results to fetch */
   page?: number
 
@@ -791,12 +1084,43 @@ export type ProjectLotsDeleteDestroyApiArg = {
 export type ProjectLotsSubcontractorsRetrieve2ApiResponse = /** status 200  */ PaginatedProjectLotSubcontractorRead
 export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
 
+  /** Filter by creator's email (contains match) */
+  createdBy?: string
+
+  /** Order results by fields (e.g., 'subcontractor__name', '-created_at') */
+  ordering?:
+    | '-created_at'
+    | '-id'
+    | '-status'
+    | '-subcontractor__name'
+    | '-subcontractor_staff__user__first_name'
+    | 'created_at'
+    | 'id'
+    | 'status'
+    | 'subcontractor__name'
+    | 'subcontractor_staff__user__first_name'
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
   projectLotId: number
+
+  /** Search by subcontractor name, status, or subcontractor staff email/first name */
+  search?: string
+
+  /** Filter by subcontractor status */
+  status?: 'canceled' | 'completed' | 'in_progress' | 'not_responding' | 'pending'
+
+  /** Filter by subcontractor name (contains match) */
+  subcontractorName?: string
+
+  /** Filter by subcontractor staff email (contains match) */
+  subcontractorStaffEmail?: string
+
+  /** Filter by subcontractor staff first name (contains match) */
+  subcontractorStaffFirstName?: string
 }
 export type ProjectLotsSubcontractorsAssignCreateApiResponse = /** status 201  */ ProjectLotSubcontractorRead
 export type ProjectLotsSubcontractorsAssignCreateApiArg = {
@@ -858,24 +1182,117 @@ export type ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiArg = {
 export type ProjectsRetrieveApiResponse = /** status 200  */ PaginatedProjectRead
 export type ProjectsRetrieveApiArg = {
 
+  /** Filter by Client IDs (comma-separated) */
+  clientIds?: string
+
+  /** Filter by project code (contains match) */
+  code?: string
+
+  /** Filter by creator's email (contains match) */
+  createdBy?: string
+
+  /** Filter by project description (contains match) */
+  description?: string
+
+  /** Filter by project name (contains match) */
+  name?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | '-client__name'
+    | '-code'
+    | '-created_at'
+    | '-created_by__email'
+    | '-description'
+    | '-id'
+    | '-manager__user__email'
+    | '-name'
+    | '-percentage_complete'
+    | '-start_date'
+    | '-status'
+    | 'client__name'
+    | 'code'
+    | 'created_at'
+    | 'created_by__email'
+    | 'description'
+    | 'id'
+    | 'manager__user__email'
+    | 'name'
+    | 'percentage_complete'
+    | 'start_date'
+    | 'status'
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Maximum completion percentage */
+  percentageCompleteMax?: number
+
+  /** Minimum completion percentage */
+  percentageCompleteMin?: number
+
+  /** Search by code, name,description ,client name */
+  search?: string
+
+  /** Filter by project status */
+  status?: 'canceled' | 'completed' | 'draft' | 'in_progress' | 'on_hold' | 'pending'
 }
 export type ProjectsRetrieve2ApiResponse = /** status 200  */ ProjectRead
 export type ProjectsRetrieve2ApiArg = {
   projectId: number
 }
+export type AssignProjectStaffApiResponse = /** status 201  */ ProjectStaffRead
+export type AssignProjectStaffApiArg = {
+  projectId: number
+  projectStaffAssignRequest: ProjectStaffAssignRequest
+}
 export type ProjectsLotsRetrieveApiResponse = /** status 200  */ PaginatedProjectLotRead
 export type ProjectsLotsRetrieveApiArg = {
+
+  /** Filter by creator's email (contains match) */
+  createdBy?: string
+
+  /** Filter by lot name (contains match) */
+  lotName?: string
+
+  /** Order results by fields (e.g., 'lot__name', '-created_at') */
+  ordering?: '-created_at' | '-id' | '-lot__name' | '-status' | 'created_at' | 'id' | 'lot__name' | 'status'
 
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+  projectId: number
+
+  /** Search by lot name or status */
+  search?: string
+
+  /** Filter by project lot status */
+  status?: 'canceled' | 'completed' | 'in_progress' | 'pending' | 'review'
+}
+export type ListProjectStaffApiResponse = /** status 200  */ PaginatedProjectStaffRead
+export type ListProjectStaffApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+  projectId: number
+}
+export type ProjectsStaffReorderUpdateApiResponse = /** status 200  */ {
+  [key: string]: any
+}
+export type ProjectsStaffReorderUpdateApiArg = {
+  projectId: number
+  body: ProjectStaffReorderRequest[]
+}
+export type GetProjectStaffTreeApiResponse = /** status 200  */ ProjectStaffTreeRead[]
+export type GetProjectStaffTreeApiArg = {
   projectId: number
 }
 export type ProjectsTemplatesListApiResponse = /** status 200  */ ProjectEmailTemplateRead[]
@@ -889,6 +1306,21 @@ export type ProjectsCreateCreateApiArg = {
 export type ProjectsDeleteDestroyApiResponse = /** status 204  */ any
 export type ProjectsDeleteDestroyApiArg = {
   projectId: number
+}
+export type GetProjectStaffByIdApiResponse = /** status 200  */ ProjectStaffRead
+export type GetProjectStaffByIdApiArg = {
+  projectStaffId: number
+}
+export type RemoveProjectStaffByIdApiResponse = /** status 204  */ {
+  [key: string]: any
+}
+export type RemoveProjectStaffByIdApiArg = {
+  projectStaffId: number
+}
+export type UpdateProjectStaffByIdApiResponse = /** status 200  */ ProjectStaffRead
+export type UpdateProjectStaffByIdApiArg = {
+  projectStaffId: number
+  projectStaffUpdateRequest: ProjectStaffUpdateRequest
 }
 export type ProjectsTemplatesRetrieveApiResponse = /** status 200  */ ProjectEmailTemplateRead
 export type ProjectsTemplatesRetrieveApiArg = {
@@ -915,11 +1347,59 @@ export type SetPasswordCreateApiArg = {
 export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubcontractortRead
 export type SubcontractorsRetrieveApiArg = {
 
+  /** Filter by Client IDs (comma-separated) */
+  clientIds?: string
+
+  /** Filter by contact email (contains match) */
+  contactEmail?: string
+
+  /** Filter by the creator's email */
+  createdBy?: string
+
+  /** Filter by active status (True or False) */
+  isActive?: boolean
+
+  /** Filter by Lot IDs (comma-separated) */
+  lotIds?: string
+
+  /** Filter by subcontractor name (contains match) */
+  name?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-created_at') */
+  ordering?:
+    | '-contact_email'
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-is_active'
+    | '-name'
+    | '-owner__email'
+    | '-phone_number'
+    | '-siren_number'
+    | 'contact_email'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'is_active'
+    | 'name'
+    | 'owner__email'
+    | 'phone_number'
+    | 'siren_number'
+
+  /** Filter by the owner's email */
+  ownerEmail?: string
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Filter by phone number (contains match) */
+  phoneNumber?: string
+
+  /** Filter by SIREN number (contains match) */
+  sirenNumber?: string
 }
 export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ SubcontractorRead
 export type SubcontractorsRetrieve2ApiArg = {
@@ -942,11 +1422,43 @@ export type SubcontractorsOwnerUpdateUpdateApiArg = {
 export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
 export type SubcontractorsStaffRetrieve2ApiArg = {
 
+  /** Filter by created by email (contains match) */
+  createdBy?: string
+
+  /** Filter by email (contains match) */
+  email?: string
+
+  /** Filter by first name (contains match) */
+  firstName?: string
+
+  /** Filter by last name (contains match) */
+  lastName?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-user__date_joined'
+    | '-user__email'
+    | '-user__first_name'
+    | '-user__last_name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'user__date_joined'
+    | 'user__email'
+    | 'user__first_name'
+    | 'user__last_name'
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Search by first name, last name, or email */
+  search?: string
   subcontractorId: number
 }
 export type SubcontractorsStaffCreateCreateApiResponse = /** status 201  */ SubcontractorStaffRead
@@ -965,11 +1477,43 @@ export type SubcontractorsDeleteDestroyApiArg = {
 export type GetSubcontractorStaffListApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
 export type GetSubcontractorStaffListApiArg = {
 
+  /** Filter by created by email (contains match) */
+  createdBy?: string
+
+  /** Filter by email (contains match) */
+  email?: string
+
+  /** Filter by first name (contains match) */
+  firstName?: string
+
+  /** Filter by last name (contains match) */
+  lastName?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-user__date_joined'
+    | '-user__email'
+    | '-user__first_name'
+    | '-user__last_name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'user__date_joined'
+    | 'user__email'
+    | 'user__first_name'
+    | 'user__last_name'
+
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Search by first name, last name, or email */
+  search?: string
 }
 export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ SubcontractorStaffRead
 export type SubcontractorsStaffRetrieveApiArg = {
@@ -1418,6 +1962,8 @@ export type Status841Enum = 'pending' | 'in_progress' | 'completed' | 'not_respo
 export type ProjectLotSubcontractor = {
   status?: Status841Enum
   notes?: string | null
+  notifications_sent?: number
+  last_notification_date?: string | null
 }
 export type ProjectLotSimple = {
   status?: Status109Enum
@@ -1453,6 +1999,8 @@ export type ProjectLotSubcontractorRead = {
   devis_document: DocumentRead
   status?: Status841Enum
   notes?: string | null
+  notifications_sent?: number
+  last_notification_date?: string | null
   created_by: CreatedByRead
   created_at: string
   updated_at: string
@@ -1502,6 +2050,8 @@ export type Project = {
   actual_cost?: string
   cost_variance?: string
   risk_level?: RiskLevelEnum
+  notification_frequency?: number
+  max_notifications?: number
 }
 export type MapCoordinate = {
   latitude: string
@@ -1524,7 +2074,8 @@ export type ProjectRead = {
   risk_level?: RiskLevelEnum
   address: AddressRead
   manager: ClientStaffRead
-  staff: ClientStaffRead[]
+  notification_frequency?: number
+  max_notifications?: number
   created_by: CreatedByRead
   created_at: string
   updated_at: string
@@ -1541,6 +2092,40 @@ export type PaginatedProjectRead = {
   previous: string | null
   results: ProjectRead[]
 }
+export type ProjectStaff = {
+  role: string
+}
+export type ClientStaffSimple = {}
+export type UserSimple = {
+  email: string
+  first_name?: string
+  last_name?: string
+}
+export type UserSimpleRead = {
+  id: number
+  avatar: string
+  email: string
+  first_name?: string
+  last_name?: string
+}
+export type ClientStaffSimpleRead = {
+  id: number
+  user: UserSimpleRead
+}
+export type ProjectStaffRead = {
+  id: number
+  staff: ClientStaffSimpleRead
+  role: string
+  supervisor: ClientStaffSimpleRead | null
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type ProjectStaffAssignRequest = {
+  staff_id: number
+  role: string
+  supervisor_id?: number | null
+}
 export type PaginatedProjectLot = {
   count: number
   next: string | null
@@ -1553,7 +2138,40 @@ export type PaginatedProjectLotRead = {
   previous: string | null
   results: ProjectLotRead[]
 }
-export type TemplateTypeEnum = 'upload_devis' | 'assign_subcontractor' | 'update_document'
+export type PaginatedProjectStaff = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectStaff[]
+}
+export type PaginatedProjectStaffRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectStaffRead[]
+}
+export type ProjectStaffReorderRequest = {
+  id: number
+  supervisor_id?: number | null
+  children?: {
+    [key: string]: any
+  }[]
+}
+export type ProjectStaffTree = {
+  role: string
+}
+export type ProjectStaffTreeRead = {
+  id: number
+  staff: ClientStaffSimpleRead
+  role: string
+  children: string
+}
+export type TemplateTypeEnum =
+  | 'upload_devis'
+  | 'assign_subcontractor'
+  | 'update_document'
+  | 'rappel_client'
+  | 'rappel_subcontractor'
 export type ProjectEmailTemplate = {
   project: ProjectSimple
   template_type: TemplateTypeEnum
@@ -1614,6 +2232,10 @@ export type ProjectCreateRequest = {
   map_coordinate?: MapCoordinateCreateOrUpdateRequest
   notes?: string
 }
+export type ProjectStaffUpdateRequest = {
+  role?: string
+  supervisor_id?: number | null
+}
 export type EmailTemplateUpdateRequest = {
 
   /** Template name for internal reference */
@@ -1643,6 +2265,8 @@ export type ProjectUpdateRequest = {
   address: AddressCreateRequest
   map_coordinate: MapCoordinateCreateOrUpdateRequest
   notes?: string
+  notification_frequency?: number | null
+  max_notifications?: number | null
 }
 export type SetasswordRequest = {}
 export type SetasswordRequestWrite = {
@@ -1827,10 +2451,17 @@ export const {
   useProjectLotsSubcontractorsDocumentsUploadDevisCreateMutation,
   useProjectsRetrieveQuery,
   useProjectsRetrieve2Query,
+  useAssignProjectStaffMutation,
   useProjectsLotsRetrieveQuery,
+  useListProjectStaffQuery,
+  useProjectsStaffReorderUpdateMutation,
+  useGetProjectStaffTreeQuery,
   useProjectsTemplatesListQuery,
   useProjectsCreateCreateMutation,
   useProjectsDeleteDestroyMutation,
+  useGetProjectStaffByIdQuery,
+  useRemoveProjectStaffByIdMutation,
+  useUpdateProjectStaffByIdMutation,
   useProjectsTemplatesRetrieveQuery,
   useProjectsTemplatesResetCreateMutation,
   useProjectsTemplatesUpdateUpdateMutation,
