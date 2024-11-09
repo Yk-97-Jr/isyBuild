@@ -5,6 +5,7 @@ import { verifyToken } from '@/utils/verifyToken'
 import rountingData from '@/data/routing/routingData'
 
 export function middleware(req: NextRequest) {
+  console.log("midlllllllllllllll")
   const { pathname } = req.nextUrl
 
   // Get the access token from the cookies
@@ -35,15 +36,15 @@ export function middleware(req: NextRequest) {
   }))
 
   // Check if the current path is a dynamic detail route
-  const detailPathRegex = /^\/([^/]+)\/([^/]+)\/\d+\/details$/ 
-  
+  const detailPathRegex = /^\/([^/]+)\/([^/]+)\/\d+\/details$/
+
   // Matches /role/type/:id/details
 
   const isDetailRoute = detailPathRegex.test(pathname)
 
   // Check if the current path matches any of the route rules
   const routeRule = updatedRountingData.find(rule => {
-   
+
    const rulePath = `/${rule.path}`
 
     return pathname === rulePath || (isDetailRoute && rule.path.includes('/[id]/details'))
@@ -58,8 +59,8 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/unauthorized', req.url))
 
   }
-  
-  
+
+
   // Allow access to the route if the user has the correct role
 
   return NextResponse.next()
@@ -68,10 +69,9 @@ export function middleware(req: NextRequest) {
 // Specify which routes this middleware should apply to
 export const config = {
   matcher: [
-    '/:role/admin', // Matches /admin paths for any role
     '/:role/dashboard',
     '/:role/:type/list', // Match dynamic list routes
     '/:role/:type/add', //  Match dynamic add routes
-    '/:role/:type/:id/details' // Match dynamic detail routes,
+    // '/:role/:type/:id/details/:path*' // Match dynamic detail routes and it's sub-routes
   ]
 }

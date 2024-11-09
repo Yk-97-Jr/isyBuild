@@ -11,6 +11,8 @@ import Dialog from "@mui/material/Dialog";
 
 import {SnackBarContext} from '@/contexts/SnackBarContextProvider';
 import type {SnackBarContextType} from '@/types/apps/snackbarType';
+import type {
+  ProjectLotRead} from '@/services/IsyBuildApi';
 import {
   useProjectLotsSubcontractorsAssignCreateMutation
 } from '@/services/IsyBuildApi';
@@ -26,9 +28,10 @@ interface AddProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch?: () => void;
+  projectLotData: ProjectLotRead | undefined;
 }
 
-const AddLotSub = ({open, setOpen, refetch}: AddProps) => {
+const AddLotSub = ({open, setOpen, refetch, projectLotData}: AddProps) => {
   const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
   const [selectedSub, setSelectedSub] = useState<number | undefined>(undefined);
   const [selectedStaffSub, setSelectedStaffSub] = useState<number | undefined>(undefined);
@@ -107,7 +110,7 @@ const AddLotSub = ({open, setOpen, refetch}: AddProps) => {
         <div className="flex flex-col w-full">
           {/* LotSelect component with lazy loading (fetches on open) */}
           <div className="flex flex-col w-full gap-8 ">
-            <SubSelect selectedSub={selectedSub} setSelectedSub={setSelectedSub}/>
+            <SubSelect selectedSub={selectedSub} setSelectedSub={setSelectedSub} projectLotData={projectLotData}/>
 
             <SubStaffSelect selectedSub={selectedSub} selectedStaffSub={selectedStaffSub}
                             setSelectedStaffSub={setSelectedStaffSub}/>

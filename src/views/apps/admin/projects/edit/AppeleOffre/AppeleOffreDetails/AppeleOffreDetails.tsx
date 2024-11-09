@@ -57,7 +57,7 @@ const AppeleOffreDetails = () => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <AppeleOffreSub/>
+        <AppeleOffreSub projectLotData={projectLotData}/>
       </Grid>
     </Grid>
   );
