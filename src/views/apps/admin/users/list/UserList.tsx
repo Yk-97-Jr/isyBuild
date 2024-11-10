@@ -25,16 +25,17 @@ const UserList = () => {
   const {data, error, isLoading, isFetching, refetch} = useAdminStaffRetrieveQuery({
     page,
     pageSize,
-    isActive: Boolean(isActive),
+    isActive: isActive === 'true' ? true : isActive === 'false' ? false : null,
     ordering: sorting
       .map((s) => `${s.desc ? '-' : ''}${s.id}`)
       .join(',') as any
   });
 
   useEffect(() => {
+    console.log(isActive)
     refetch();
     setPage(1)
-  }, [pageSize, sorting]);
+  }, [pageSize, sorting, isActive]);
 
 
   useEffect(() => {
