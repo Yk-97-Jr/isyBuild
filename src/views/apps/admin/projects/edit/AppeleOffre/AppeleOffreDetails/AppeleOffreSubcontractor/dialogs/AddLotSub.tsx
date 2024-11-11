@@ -28,7 +28,7 @@ interface AddProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch?: () => void;
-  projectLotData: ProjectLotRead | undefined;
+  projectLotData?: ProjectLotRead | undefined;
 }
 
 const AddLotSub = ({open, setOpen, refetch, projectLotData}: AddProps) => {

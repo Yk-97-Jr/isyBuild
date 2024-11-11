@@ -16,7 +16,7 @@ import {useSubcontractorsRetrieveQuery} from '@/services/IsyBuildApi';
 type LotSelectProps = {
   selectedSub: number | undefined;
   setSelectedSub: React.Dispatch<React.SetStateAction<number | undefined>>;
-  projectLotData: ProjectLotRead | undefined;
+  projectLotData?: ProjectLotRead | undefined;
 };
 
 export default function SubSelect({selectedSub, setSelectedSub, projectLotData}: LotSelectProps) {

@@ -103,7 +103,7 @@ const LotsSubListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
-  projectLotData: ProjectLotRead | undefined;
+  projectLotData?: ProjectLotRead | undefined;
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})

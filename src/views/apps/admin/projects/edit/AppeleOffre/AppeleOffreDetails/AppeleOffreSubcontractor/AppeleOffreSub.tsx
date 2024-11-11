@@ -9,7 +9,7 @@ import type {ProjectLotRead} from "@/services/IsyBuildApi";
 
 
 type Props = {
-  projectLotData: ProjectLotRead | undefined; // Adjust the type as necessary
+  projectLotData?: ProjectLotRead | undefined; // Adjust the type as necessary
 };
 
 const AppeleOffreSub: React.FC<Props> = ({ projectLotData }) => {
