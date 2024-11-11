@@ -146,7 +146,6 @@ const UserListTable = ({
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [open, setOpen] = useState(false)
-  const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
@@ -280,7 +279,6 @@ const UserListTable = ({
     globalFilterFn: fuzzyFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
