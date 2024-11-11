@@ -10,6 +10,8 @@ import {CircularProgress} from '@mui/material'
 
 import Box from '@mui/material/Box'
 
+import {useDebounce} from "@uidotdev/usehooks";
+
 import UserListTable from './UserListTable'
 import {useAdminStaffRetrieveQuery} from '@/services/IsyBuildApi'
 
@@ -17,9 +19,12 @@ const UserList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [search, setSearch] = useState<string>("");
   const [isActive, setIsActive] = useState<string | null>(null);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const debouncedSearch = useDebounce(search, 500);
 
   // Pass parameters to the query hook
   const {data, error, isLoading, isFetching, refetch} = useAdminStaffRetrieveQuery({
@@ -28,14 +33,16 @@ const UserList = () => {
     isActive: isActive === 'true' ? true : isActive === 'false' ? false : null,
     ordering: sorting
       .map((s) => `${s.desc ? '-' : ''}${s.id}`)
-      .join(',') as any
+      .join(',') as any,
+    search: debouncedSearch,
+
+    skip: debouncedSearch == ""
   });
 
   useEffect(() => {
-    console.log(isActive)
     refetch();
     setPage(1)
-  }, [pageSize, sorting, isActive]);
+  }, [pageSize, sorting, isActive, debouncedSearch]);
 
 
   useEffect(() => {
@@ -60,22 +67,8 @@ const UserList = () => {
   const countRecords = data?.count
 
 
-  return isFetching ? (
-    <UserListTable
-      pageSize={pageSize}
-      setPageSize={setPageSize}
-      page={page}
-      setPage={setPage}
-      data={users}
-      countRecords={countRecords}
-      isFetching={isFetching}
-      refetch={refetch}
-      setIsActive={setIsActive}
-      isActive={isActive}
-      setSorting={setSorting}
-      sorting={sorting}
-    />
-  ) : (
+  return (
+
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <UserListTable
@@ -87,14 +80,15 @@ const UserList = () => {
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
+          setSearch={setSearch}
           setIsActive={setIsActive}
           isActive={isActive}
           setSorting={setSorting}
           sorting={sorting}
+          search={search}
         />
       </Grid>
-    </Grid>
-  )
+    </Grid>)
 }
 
 export default UserList
