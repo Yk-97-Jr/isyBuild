@@ -11,11 +11,16 @@ import {CircularProgress} from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import {useProjectLotsSubcontractorsRetrieve2Query} from '@/services/IsyBuildApi'
+import type {ProjectLotRead} from '@/services/IsyBuildApi';
+import { useProjectLotsSubcontractorsRetrieve2Query} from '@/services/IsyBuildApi'
 import LotsSubListTable
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/list/LotsSubListTable";
 
-const LotsSubList = () => {
+type Props = {
+  projectLotData: ProjectLotRead | undefined; // Adjust the type as necessary
+};
+
+const LotsSubList: React.FC<Props> = ({projectLotData}) => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -52,7 +57,7 @@ const LotsSubList = () => {
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const users = data?.results || []
+  const projectLotsSubs = data?.results || []
   const countRecords = data?.count
 
 
@@ -62,10 +67,11 @@ const LotsSubList = () => {
       setPageSize={setPageSize}
       page={page}
       setPage={setPage}
-      data={users}
+      data={projectLotsSubs}
       countRecords={countRecords}
       isFetching={isFetching}
       refetch={refetch}
+      projectLotData={projectLotData}
     />
   ) : (
     <Grid container spacing={6}>
@@ -75,10 +81,11 @@ const LotsSubList = () => {
           setPageSize={setPageSize}
           page={page}
           setPage={setPage}
-          data={users}
+          data={projectLotsSubs}
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
+          projectLotData={projectLotData}
         />
       </Grid>
     </Grid>

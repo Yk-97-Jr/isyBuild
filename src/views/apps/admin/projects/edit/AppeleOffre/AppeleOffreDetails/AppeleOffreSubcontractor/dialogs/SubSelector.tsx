@@ -8,14 +8,18 @@ import type {SelectChangeEvent} from '@mui/material/Select';
 import Select from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import {useSubcontractorsRetrieveQuery} from '@/services/IsyBuildApi'; // Import the query hook
+import Typography from "@mui/material/Typography"; // Import the query hook
+
+import type {ProjectLotRead} from '@/services/IsyBuildApi';
+import {useSubcontractorsRetrieveQuery} from '@/services/IsyBuildApi';
 
 type LotSelectProps = {
   selectedSub: number | undefined;
   setSelectedSub: React.Dispatch<React.SetStateAction<number | undefined>>;
+  projectLotData: ProjectLotRead | undefined;
 };
 
-export default function SubSelect({selectedSub, setSelectedSub}: LotSelectProps) {
+export default function SubSelect({selectedSub, setSelectedSub, projectLotData}: LotSelectProps) {
   const [page, setPage] = useState(1); // Track the current page
   const [subs, setSubs] = useState<any[]>([]); // Store fetched subs
   const [hasMore, setHasMore] = useState(true); // Indicates if more pages are available
@@ -23,8 +27,15 @@ export default function SubSelect({selectedSub, setSelectedSub}: LotSelectProps)
   const [isWaitingData, setIsWaitingData] = useState(false); // Track waiting for data
 
   // Initialize the query but don't fetch automatically (skip: true)
+  // we apply some filters here for subcontractors
   const {data, isFetching} = useSubcontractorsRetrieveQuery(
-    {page, pageSize: 10},
+    {
+      page,
+      pageSize: 10,
+      clientIds: String(projectLotData?.project?.id ),
+      lotIds: String(projectLotData?.lot?.id ),
+
+    },
     {skip: !isDropdownOpen} // Do not fetch initially, only when dropdown opens
   );
 
@@ -91,13 +102,17 @@ export default function SubSelect({selectedSub, setSelectedSub}: LotSelectProps)
           ))}
 
           {/* Show loading spinner at the bottom when fetching more data */}
-          {isWaitingData && (
+          {!isWaitingData ? (
             <MenuItem disabled>
-              <Box sx={{display: 'flex', justifyContent: 'center', width: '100%'}}>
-                <CircularProgress size={24}/>
-              </Box>
+              <Typography variant="body2" color="textSecondary">
+                Liste des entreprise non disponible
+              </Typography>
             </MenuItem>
-          )}
+          ) : <MenuItem disabled>
+            <Box sx={{display: 'flex', justifyContent: 'center', width: '100%'}}>
+              <CircularProgress size={24}/>
+            </Box>
+          </MenuItem>}
         </Select>
       </FormControl>
     </Box>

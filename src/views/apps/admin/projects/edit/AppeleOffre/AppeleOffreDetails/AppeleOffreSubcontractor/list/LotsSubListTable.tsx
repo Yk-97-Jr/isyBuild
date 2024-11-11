@@ -44,7 +44,7 @@ import CustomTextField from '@core/components/mui/TextField'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import {useAuth} from "@/contexts/AuthContext";
-import type {ProjectLotSubcontractorRead, Status841Enum} from "@/services/IsyBuildApi";
+import type {ProjectLotSubcontractorRead, Status841Enum,ProjectLotRead} from "@/services/IsyBuildApi";
 import {Status841Mapping} from "@/utils/statusEnums";
 import {getStatusProps} from "@/utils/statusHelper";
 import AddLotSub
@@ -92,7 +92,8 @@ const LotsSubListTable = ({
                             pageSize,
                             countRecords,
                             isFetching,
-                            refetch
+                            refetch,
+                            projectLotData
                           }: {
   data?: ProjectLotSubcontractorRead[]
   page: number
@@ -102,6 +103,7 @@ const LotsSubListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
+  projectLotData: ProjectLotRead | undefined;
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -338,6 +340,7 @@ const LotsSubListTable = ({
         open={openAdd}
         setOpen={setOpenAdd}
         refetch={refetch}
+        projectLotData={projectLotData}
       />
       <DeleteLotSub
         open={openDelete}

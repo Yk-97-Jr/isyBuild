@@ -34,7 +34,6 @@ import type {ColumnDef, FilterFn, SortingState} from '@tanstack/react-table'
 import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import Box from '@mui/material/Box'
 
 import {CircularProgress} from '@mui/material'
 
@@ -119,6 +118,8 @@ const UserListTable = ({
                          countRecords,
                          isFetching,
                          refetch,
+                         setSearch,
+                         search,
                          setIsActive,
                          isActive,
                          setSorting,
@@ -133,6 +134,8 @@ const UserListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
+  setSearch: React.Dispatch<React.SetStateAction<string>>
+  search: string
   setIsActive: React.Dispatch<React.SetStateAction<string | null>>
   isActive: string | null
   sorting: SortingState
@@ -142,8 +145,6 @@ const UserListTable = ({
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [open, setOpen] = useState(false)
-  const [filteredData] = useState(data)
-  const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
@@ -252,11 +253,11 @@ const UserListTable = ({
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, filteredData]
+    [data, data]
   )
 
   const table = useReactTable({
-    data: filteredData as UsersType[],
+    data: data as UsersType[],
     columns,
     onSortingChange: setSorting,
     filterFns: {
@@ -264,7 +265,6 @@ const UserListTable = ({
     },
     state: {
       rowSelection,
-      globalFilter,
       sorting
     },
     initialState: {
@@ -278,7 +278,6 @@ const UserListTable = ({
     globalFilterFn: fuzzyFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -305,8 +304,10 @@ const UserListTable = ({
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
+              value={search}
+              onChange={value => {
+                setSearch(String(value))
+              }}
               placeholder='Rechercher un utilisateur'
               className='max-sm:is-full'
             />
@@ -321,65 +322,68 @@ const UserListTable = ({
           </div>
         </div>
         <div className='overflow-x-auto'>
-          {isFetching ? (
-            <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
-              <CircularProgress/>
-            </Box>
-          ) : (
-            <table className={tableStyles.table}>
-              <thead>
-              {table.getHeaderGroups().map(headerGroup => (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: <i className='tabler-chevron-up text-xl'/>,
-                              desc: <i className='tabler-chevron-down text-xl'/>
-                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                          </div>
-                        </>
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-              </thead>
-              {table.getFilteredRowModel().rows.length === 0 ? (
-                <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No data available
-                  </td>
-                </tr>
-                </tbody>
-              ) : (
-                <tbody>
-                {table
-                  .getRowModel()
-                  .rows.slice(0, table.getState().pagination.pageSize)
-                  .map(row => {
-                    return (
-                      <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
-                        {row.getVisibleCells().map(cell => (
-                          <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                        ))}
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              )}
-            </table>
-          )}
+          <table className={tableStyles.table}>
+            <thead>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={classnames({
+                            'flex items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <i className='tabler-chevron-up text-xl'/>,
+                            desc: <i className='tabler-chevron-down text-xl'/>
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      </>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+            </thead>
+            {isFetching ? (
+              <tbody>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  <CircularProgress/>
+                </td>
+              </tr>
+              </tbody>
+            ) : (table.getFilteredRowModel().rows.length === 0 ? (
+              <tbody>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  No data available
+                </td>
+              </tr>
+              </tbody>
+            ) : (
+              <tbody>
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
+                  return (
+                    <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  )
+                })}
+              </tbody>
+            ))}
+          </table>
+
         </div>
 
         <TablePaginationComponent
