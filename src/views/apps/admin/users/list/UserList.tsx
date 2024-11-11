@@ -28,16 +28,15 @@ const UserList = () => {
 
   // Pass parameters to the query hook
   const {data, error, isLoading, isFetching, refetch} = useAdminStaffRetrieveQuery({
-    page,
-    pageSize,
-    isActive: isActive === 'true' ? true : isActive === 'false' ? false : null,
-    ordering: sorting
-      .map((s) => `${s.desc ? '-' : ''}${s.id}`)
-      .join(',') as any,
-    search: debouncedSearch,
-
-    skip: debouncedSearch == ""
-  });
+      page,
+      pageSize,
+      isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
+      ordering: sorting
+        .map((s) => `${s.desc ? '-' : ''}${s.id}`)
+        .join(',') as any,
+      search: debouncedSearch
+    },
+  );
 
   useEffect(() => {
     refetch();

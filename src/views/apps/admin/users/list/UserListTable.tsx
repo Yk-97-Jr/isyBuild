@@ -34,7 +34,6 @@ import type {ColumnDef, FilterFn, SortingState} from '@tanstack/react-table'
 import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import Box from '@mui/material/Box'
 
 import {CircularProgress} from '@mui/material'
 
@@ -135,7 +134,7 @@ const UserListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
-  setSearch: React.Dispatch<React.SetStateAction<string | null>>
+  setSearch: React.Dispatch<React.SetStateAction<string>>
   search: string
   setIsActive: React.Dispatch<React.SetStateAction<string | null>>
   isActive: string | null
@@ -305,7 +304,7 @@ const UserListTable = ({
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
-              value={search ?? ''}
+              value={search}
               onChange={value => {
                 setSearch(String(value))
               }}
@@ -352,9 +351,13 @@ const UserListTable = ({
             ))}
             </thead>
             {isFetching ? (
-              <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
-                <CircularProgress/>
-              </Box>
+              <tbody>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  <CircularProgress/>
+                </td>
+              </tr>
+              </tbody>
             ) : (table.getFilteredRowModel().rows.length === 0 ? (
               <tbody>
               <tr>
