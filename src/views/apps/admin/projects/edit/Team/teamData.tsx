@@ -3,6 +3,8 @@
 // components/UserList.js
 import React, { useEffect, useState } from 'react'
 
+import { useParams } from 'next/navigation'
+
 import { useRouter } from 'next/navigation'
 
 import Grid from '@mui/material/Grid'
@@ -11,26 +13,37 @@ import { CircularProgress } from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-
 import TeamTable from './teamTable'
 
-import { useProjectsDeleteDestroyMutation, useProjectsRetrieveQuery } from '@/services/IsyBuildApi'
+import {
+  useClientsRetrieveQuery,
+  useListProjectStaffQuery,
+  useProjectsDeleteDestroyMutation,
+  useProjectsRetrieveQuery
+} from '@/services/IsyBuildApi'
 
-import type { ProjectRead } from '@/services/IsyBuildApi'
+import type { ProjectStaffRead } from '@/services/IsyBuildApi'
 
 const TeamData = () => {
   const router = useRouter()
 
-  const [tableRows, setTableRows] = useState<Partial<ProjectRead>[]>([])
+  const params = useParams()
+
+  const projectId = parseInt(params.edit.toString())
+
+  //List all staf for a projectQ
+  const {data: stafData,} = useListProjectStaffQuery({ projectId: projectId })
+
+
+  const { data: client_project } = useClientsRetrieveQuery({ page: 1, pageSize: 50 })
+
+  const [tableRows, setTableRows] = useState<Partial<ProjectStaffRead>[]>([])
 
   //retrive the data from the backend
-  const { data: Project } = useProjectsRetrieveQuery({ page: 1, pageSize: 100 })
 
   const [status, setStatus] = useState<string>('')
 
   const [deleteProject] = useProjectsDeleteDestroyMutation()
-
-  
 
   const handleDelete = async (id: number) => {
     try {
@@ -44,31 +57,34 @@ const TeamData = () => {
     }
   }
 
-  React.useEffect(() => {
-    if (Project && Project.results) {
+  useEffect(() => {
+    if (stafData && stafData.results) {
       setTableRows(
-        Project.results.map(project => ({
-          id: project.id,
-          name: project.name,
-          'start-date': project.start_date,
-          budget: project.budget,
-          status: project.status
+        stafData.results.map(staffItem => ({
+          id: staffItem.id,
+          staff: staffItem.staff,
+          role: staffItem.role,
+          supervisor: staffItem.supervisor,
+          created_by: staffItem.created_by,
+          created_at: staffItem.created_at,
+          updated_at: staffItem.updated_at
         }))
       )
     }
-  }, [Project])
+  }, [stafData])
+
 
   // States for pagination or other parameters
+
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [searchValue, setSearchValue] = useState<string>('')
 
   console.log('page' + page)
-  
+
   // Pass parameters to the query hook
 
   const { data, error, isLoading, isFetching, refetch } = useProjectsRetrieveQuery(
-
     {
       status: status as 'canceled' | 'completed' | 'in_progress' | 'pending' | 'draft' | 'on_hold' | undefined,
       search: searchValue as string,
@@ -76,7 +92,6 @@ const TeamData = () => {
       pageSize
     },
     { refetchOnMountOrArgChange: true }
-
   )
 
   useEffect(() => {
@@ -93,15 +108,20 @@ const TeamData = () => {
     return (
       <div>
         Error fetching Project data:{' '}
+        
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
   const projects = data?.results || []
+  const project_Staf = stafData?.results || []
+  const client_staf_project = client_project?.results || []
   const countRecords = data?.count
 
   const handleEdit = (rowId: any) => {
     router.push(`${rowId}/details`)
   }
+
+  console.log(project_Staf)
 
   return isFetching ? (
     <TeamTable
@@ -109,17 +129,17 @@ const TeamData = () => {
       setPageSize={setPageSize}
       page={page}
       setPage={setPage}
-      data={projects}
+      data={project_Staf}
       countRecords={countRecords}
       isFetching={isFetching}
       refetch={refetch}
       handleEdit={handleEdit}
       status={status}
-      setStatus={setStatus}
       handleDelete={handleDelete}
       setTableRows={setTableRows}
       searchValue={searchValue}
       setSearchValue={setSearchValue}
+      client_staf_project={client_staf_project}
     />
   ) : (
     <Grid container spacing={2}>
@@ -130,8 +150,7 @@ const TeamData = () => {
           page={page}
           setPage={setPage}
           status={status}
-          setStatus={setStatus}
-          data={projects}
+          data={project_Staf}
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
@@ -140,6 +159,7 @@ const TeamData = () => {
           handleEdit={handleEdit}
           handleDelete={handleDelete}
           setTableRows={setTableRows}
+          client_staf_project={client_staf_project}
         />
       </Grid>
     </Grid>

@@ -110,13 +110,16 @@ const Templates = () => {
     try {
         //no need to await the response 
       const response = await trigger_Reset({ templateId }).unwrap()
+      
       if (response) {
+
         reset({
           subject: projectTemplates?.email_template.subject_template ?? '',
           header: projectTemplates?.email_template.header_template ?? '',
           body: projectTemplates?.email_template.body_template ?? '',
           footer: projectTemplates?.email_template.footer_template ?? ''
         })
+
         setOpenSnackBar(true)
         setInfoAlert({ severity: 'success', message: 'Template has been reset successfully.' })
 

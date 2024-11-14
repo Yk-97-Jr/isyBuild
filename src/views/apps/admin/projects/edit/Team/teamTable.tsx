@@ -8,10 +8,7 @@ import Card from '@mui/material/Card'
 
 import Button from '@mui/material/Button'
 
-import type { ButtonProps } from "@mui/material/Button"
-
 import Typography from '@mui/material/Typography'
-
 
 import IconButton from '@mui/material/IconButton'
 
@@ -50,23 +47,15 @@ import type { RankingInfo } from '@tanstack/match-sorter-utils'
 // Custom Components
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-import OptionMenu from '@core/components/option-menu'
-
 import CustomTextField from '@core/components/mui/TextField'
 
-import ProjectDialog from '../../Add/ProjectDialog'
-
-import OpenDialogOnElementClick from './OpenComboBox'
-
-import DialogTeam from './DialogTeam'
+import TeamDialogue from './teamDialogue'
 
 // Styles
 import tableStyles from '@core/styles/table.module.css'
 
 // Types
-import type { ProjectRead } from '@/services/IsyBuildApi'
-
-import   type  { ThemeColor } from '@/@core/types'
+import type { ProjectStaffRead } from '@/services/IsyBuildApi'
 
 // Context
 
@@ -80,7 +69,7 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ClientTypeWithAction = ProjectRead & {
+type ClientTypeWithAction = ProjectStaffRead & {
   action?: string
 }
 
@@ -133,11 +122,11 @@ const TeamTable = ({
   handleEdit,
   handleDelete,
   status,
-  // setStatus,
   searchValue,
-  setSearchValue
+  setSearchValue,
+  client_staf_project
 }: {
-  data?: ProjectRead[]
+  data?: ProjectStaffRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -149,64 +138,94 @@ const TeamTable = ({
   handleDelete: any
   setTableRows: any
   status: any
-  setStatus: any
   searchValue: any
   setSearchValue: any
+  client_staf_project: any
 }) => {
   const [rowSelection, setRowSelection] = useState({})
 
-  const [id, setId] = useState(0)
-
   const [open, setOpen] = useState(false)
 
+  const [filteredData] = useState(data)
+
+  console.log(filteredData)
   const [globalFilter, setGlobalFilter] = useState('')
 
-  useEffect(() => {
+  const [id, setId] = useState<number | undefined>(undefined)
 
+  console.log(client_staf_project)
+
+  const handleAdd = () => {
+    setOpen(true)
+  }
+
+  useEffect(() => {
     console.log(status)
-    
   }, [status])
+
+  if (!filteredData) return <CircularProgress />
+
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('client.name', {
+      columnHelper.accessor('id', {
         header: 'User',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {/* {`${row.original.code}`} */}
+                {`${row.original.id}`}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('client.phone_number', {
-        header: 'Phone',
+
+      columnHelper.accessor('staff.user.first_name', {
+        header: 'User',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {/* {`${row.original.name}`} */}
+                {`${row.original.staff.user?.first_name || 'First Name'} ${row.original.staff.user?.last_name || 'Last Name'}`}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('manager.created_by', {
-        header: 'Created_By',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {/* {row.original.address?.country || 'N/A'} */}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('manager.created_at', {
+
+      // columnHelper.accessor('created_by', {
+      //   header: 'Created By',
+      //   cell: ({ row }) => (
+      //     <div className='flex items-center gap-4'>
+      //       <div className='flex flex-col'>
+      //         <Typography color='text.primary' className='font-medium'>
+      //           {/* problem in the back end it does not return the created_by object it has been returned as null */}
+      //           {/* `${row.original.created_by?.id} */}
+      //           back end returns Null
+      //         </Typography>
+      //       </div>
+      //     </div>
+      //   )
+      // }),
+
+      columnHelper.accessor('role', {
         header: 'time',
-        cell: ({ row }) => <Typography></Typography>
+        cell: ({ row }) => {
+          return (
+            <Typography color='text.primary' className='font-medium'>
+              {row.original.role}
+            </Typography>
+          )
+        }
+      }),
+
+      columnHelper.accessor('created_at', {
+        header: 'time',
+        cell: ({ row }) => {
+          const formattedDate = new Date(row.original.created_at).toLocaleString()
+
+          return <Typography>{formattedDate}</Typography>
+        }
       }),
       columnHelper.accessor('action', {
         header: 'Action',
@@ -215,20 +234,6 @@ const TeamTable = ({
             <IconButton onClick={() => handleDelete(row.original.id)}>
               <i className='tabler-trash text-textSecondary' />
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEdit(row.original.id)
-                  }
-                }
-              ]}
-            />
           </div>
         ),
         enableSorting: false
@@ -238,7 +243,7 @@ const TeamTable = ({
   )
 
   const table = useReactTable({
-    data: [], // find what data  to use here
+    data: filteredData as ProjectStaffRead[], // find what data  to use here
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -264,12 +269,6 @@ const TeamTable = ({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
-  
-  const buttonProps = (children: string, color: ThemeColor, variant: ButtonProps['variant']): ButtonProps => ({
-    children,
-    color,
-    variant
-  })
 
   return (
     <>
@@ -290,18 +289,17 @@ const TeamTable = ({
             <DebouncedInput
               value={searchValue ?? ''}
               onChange={value => setSearchValue(String(value))}
-              placeholder={`chercher un Projet`}
+              placeholder={`Search for staff`}
               className='max-sm:is-full'
             />
-            {/* <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus' />} href='add'>
+            <Button
+              variant='contained'
+              className='max-sm=is-full'
+              startIcon={<i className='tabler-plus' />}
+              onClick={handleAdd}
+            >
               Ajouter Projet
-            </Button> */}
-            <OpenDialogOnElementClick
-              element={Button}
-              elementProps={buttonProps('Add Member', 'primary', 'tonal')}
-              dialog={DialogTeam}
-              dialogProps={{ type: 'delete-customer' }}
-            />
+            </Button>
           </div>
         </div>
         <div className='overflow-x-auto'>
@@ -375,7 +373,14 @@ const TeamTable = ({
           }}
         />
       </Card>
-      <ProjectDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch} />
+      <TeamDialogue
+        open={open}
+        setOpen={setOpen}
+        id={id}
+        setId={setId}
+        refetch={refetch}
+        client_staf_project={client_staf_project}
+      />
     </>
   )
 }

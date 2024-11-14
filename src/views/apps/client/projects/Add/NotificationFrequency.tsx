@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { Card, CardHeader, CardContent, Divider } from '@mui/material'
+
+import { Card, CardHeader, CardContent } from '@mui/material'
+
 import CustomTextField from '@/@core/components/mui/TextField'
 
-import { Select, MenuItem } from '@mui/material'
 
 //TODO ask 90% the frequency card is in the  details of the project not when we are creating the project
 //ask saad to move it  (because in created project no feilds for them)

@@ -14,7 +14,6 @@ import Location from '@/views/apps/client/projects/Add/Location'
 import AddressInfo from '@/views/apps/client/projects/Add/AddressInfo'
 import Details from '@/views/apps/client/projects/Add/Details'
 
-import NotificationFrequency from '@/views/apps/client/projects/Add/NotificationFrequency'
 
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
@@ -54,9 +53,7 @@ function Page() {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const [notificationFrequency, setNotificationFrequency] = useState<number | null>(null)
-
-  const [maxNotification, setMaxNotification] = useState<number | null>(null)
+ 
 
   const validateForm = (
     name: string,
@@ -186,26 +183,7 @@ function Page() {
     }
   }
 
-  const handleFrequency = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value
-
-
-    setNotificationFrequency(parseInt(value))
-
-    console.log(notificationFrequency)
-    
-  }
-
-
-  const handleMaxFrequency = (event: React.ChangeEvent<HTMLInputElement>) => {
-
-    const value = event.target.value
-
-    setMaxNotification(parseInt(value))
-
-    console.log(maxNotification)
-  }
-
+ 
   return (
     <div className=''>
       <div className='flex sm:flex-row flex-col gap-5 justify-between py-4'>
@@ -263,12 +241,7 @@ function Page() {
             errors={errors}
           />
           <Details client={client} setClient={setClient} errors={errors} />
-          <NotificationFrequency
-            notificationFrequency={notificationFrequency}
-            handleFrequency={handleFrequency}
-            setNotificationFrequency={setNotificationFrequency}
-            handleMaxFrequency={handleMaxFrequency}
-          />
+          
         </div>
       </div>
     </div>
