@@ -142,6 +142,8 @@ const TeamTable = ({
   setSearchValue: any
   client_staf_project: any
 }) => {
+
+  
   const [rowSelection, setRowSelection] = useState({})
 
   const [open, setOpen] = useState(false)
@@ -162,8 +164,6 @@ const TeamTable = ({
   useEffect(() => {
     console.log(status)
   }, [status])
-
-  if (!filteredData) return <CircularProgress />
 
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
@@ -241,6 +241,7 @@ const TeamTable = ({
     ],
     [handleDelete, handleEdit]
   )
+
 
   const table = useReactTable({
     data: filteredData as ProjectStaffRead[], // find what data  to use here

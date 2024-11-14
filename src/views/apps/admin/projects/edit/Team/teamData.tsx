@@ -41,7 +41,7 @@ const TeamData = () => {
 
   //retrive the data from the backend
 
-  const [status, setStatus] = useState<string>('')
+  const [status] = useState<string>('')
 
   const [deleteProject] = useProjectsDeleteDestroyMutation()
 
@@ -112,7 +112,6 @@ const TeamData = () => {
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const projects = data?.results || []
   const project_Staf = stafData?.results || []
   const client_staf_project = client_project?.results || []
   const countRecords = data?.count
