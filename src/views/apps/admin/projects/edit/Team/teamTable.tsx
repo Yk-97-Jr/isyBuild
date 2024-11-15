@@ -143,7 +143,7 @@ const TeamTable = ({
   client_staf_project: any
 }) => {
 
-  
+    
   const [rowSelection, setRowSelection] = useState({})
 
   const [open, setOpen] = useState(false)

@@ -32,7 +32,7 @@ const TeamData = () => {
   const projectId = parseInt(params.edit.toString())
 
   //List all staf for a projectQ
-  const {data: stafData,} = useListProjectStaffQuery({ projectId: projectId })
+  const {data: stafData,isFetching:IsStaffFetching} = useListProjectStaffQuery({ projectId: projectId })
 
 
   const { data: client_project } = useClientsRetrieveQuery({ page: 1, pageSize: 50 })
@@ -84,7 +84,7 @@ const TeamData = () => {
 
   // Pass parameters to the query hook
 
-  const { data, error, isLoading, isFetching, refetch } = useProjectsRetrieveQuery(
+  const { data, error, isLoading,refetch } = useProjectsRetrieveQuery(
     {
       status: status as 'canceled' | 'completed' | 'in_progress' | 'pending' | 'draft' | 'on_hold' | undefined,
       search: searchValue as string,
@@ -122,7 +122,7 @@ const TeamData = () => {
 
   console.log(project_Staf)
 
-  return isFetching ? (
+  return IsStaffFetching ? (
     <TeamTable
       pageSize={pageSize}
       setPageSize={setPageSize}
@@ -130,7 +130,7 @@ const TeamData = () => {
       setPage={setPage}
       data={project_Staf}
       countRecords={countRecords}
-      isFetching={isFetching}
+      isFetching={IsStaffFetching}
       refetch={refetch}
       handleEdit={handleEdit}
       status={status}
@@ -151,7 +151,7 @@ const TeamData = () => {
           status={status}
           data={project_Staf}
           countRecords={countRecords}
-          isFetching={isFetching}
+          isFetching={IsStaffFetching}
           refetch={refetch}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
