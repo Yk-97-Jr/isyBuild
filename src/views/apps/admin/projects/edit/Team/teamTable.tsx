@@ -55,7 +55,7 @@ import TeamDialogue from './teamDialogue'
 import tableStyles from '@core/styles/table.module.css'
 
 // Types
-import type { ProjectStaffRead } from '@/services/IsyBuildApi'
+import { useRemoveProjectStaffByIdMutation, type ProjectStaffRead } from '@/services/IsyBuildApi'
 
 // Context
 
@@ -142,8 +142,6 @@ const TeamTable = ({
   setSearchValue: any
   client_staf_project: any
 }) => {
-
-    
   const [rowSelection, setRowSelection] = useState({})
 
   const [open, setOpen] = useState(false)
@@ -161,24 +159,43 @@ const TeamTable = ({
     setOpen(true)
   }
 
+  const [DeleteTrigger] = useRemoveProjectStaffByIdMutation()
+
+  const hanldeDelete = async (id: number) => {
+
+    try {
+
+      const response = await DeleteTrigger({ projectStaffId: id }).unwrap()
+
+      window.location.reload()
+
+      console.log(response)
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     console.log(status)
   }, [status])
 
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('id', {
-        header: 'User',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.id}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+
+
+      // columnHelper.accessor('id', {
+      //   header: 'User',
+      //   cell: ({ row }) => (
+      //     <div className='flex items-center gap-4'>
+      //       <div className='flex flex-col'>
+      //         <Typography color='text.primary' className='font-medium'>
+      //           {`${row.original.id}`}
+      //         </Typography>
+      //       </div>
+      //     </div>
+      //   )
+      // }),
 
       columnHelper.accessor('staff.user.first_name', {
         header: 'User',
@@ -209,7 +226,7 @@ const TeamTable = ({
       // }),
 
       columnHelper.accessor('role', {
-        header: 'time',
+        header: 'Role',
         cell: ({ row }) => {
           return (
             <Typography color='text.primary' className='font-medium'>
@@ -231,7 +248,7 @@ const TeamTable = ({
         header: 'Action',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDelete(row.original.id)}>
+            <IconButton onClick={() => hanldeDelete(row.original.id)}>
               <i className='tabler-trash text-textSecondary' />
             </IconButton>
           </div>
@@ -241,7 +258,6 @@ const TeamTable = ({
     ],
     [handleDelete, handleEdit]
   )
-
 
   const table = useReactTable({
     data: filteredData as ProjectStaffRead[], // find what data  to use here

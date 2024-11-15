@@ -15,11 +15,10 @@ import Typography from '@mui/material/Typography'
 
 import DialogCloseButton from '@/components/dialogs/DialogCloseButton'
 
-
-
 import CustomTextField from '@/@core/components/mui/TextField'
 
 import { useAssignProjectStaffMutation } from '@/services/IsyBuildApi'
+
 
 import type { ProjectStaffAssignRequest } from '@/services/IsyBuildApi'
 
@@ -36,6 +35,8 @@ const TeamDialogue = ({ open, setOpen, id, setId, refetch, client_staf_project }
   const params = useParams()
   const projectId = parseInt(params.edit.toString())
   const router = useRouter()
+
+  //route to Delete ProjectStaff
 
   // const handleClose = () => {
   //   setOpen(false)
@@ -111,10 +112,7 @@ const TeamDialogue = ({ open, setOpen, id, setId, refetch, client_staf_project }
       window.location.reload()
 
       return response
-
-    } 
-    
-    catch (error) {
+    } catch (error) {
       console.error('Error assigning staff:', error)
     }
   }
@@ -123,6 +121,8 @@ const TeamDialogue = ({ open, setOpen, id, setId, refetch, client_staf_project }
   const dialogDescription = id ? 'Êtes-vous sûr de vouloir supprimer ce lot ?' : ''
 
   // const ContentComponent = id ? DeleteLotProjectContent : AddLotProjectContent
+
+
 
   if (!client_staf_project) return <div>Loading....</div>
 

@@ -32,8 +32,7 @@ const TeamData = () => {
   const projectId = parseInt(params.edit.toString())
 
   //List all staf for a projectQ
-  const {data: stafData,isFetching:IsStaffFetching} = useListProjectStaffQuery({ projectId: projectId })
-
+  const { data: stafData, isFetching: IsStaffFetching } = useListProjectStaffQuery({ projectId: projectId })
 
   const { data: client_project } = useClientsRetrieveQuery({ page: 1, pageSize: 50 })
 
@@ -73,7 +72,6 @@ const TeamData = () => {
     }
   }, [stafData])
 
-
   // States for pagination or other parameters
 
   const [page, setPage] = useState(1)
@@ -84,7 +82,7 @@ const TeamData = () => {
 
   // Pass parameters to the query hook
 
-  const { data, error, isLoading,refetch } = useProjectsRetrieveQuery(
+  const { data, error, isLoading, refetch } = useProjectsRetrieveQuery(
     {
       status: status as 'canceled' | 'completed' | 'in_progress' | 'pending' | 'draft' | 'on_hold' | undefined,
       search: searchValue as string,
@@ -108,7 +106,6 @@ const TeamData = () => {
     return (
       <div>
         Error fetching Project data:{' '}
-        
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
