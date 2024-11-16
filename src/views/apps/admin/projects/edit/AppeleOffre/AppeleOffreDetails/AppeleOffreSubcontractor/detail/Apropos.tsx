@@ -27,13 +27,13 @@ const Apropos: React.FC<Props> = ({projectLotSubcontractorData}) => {
     <Card>
       <CardContent className='flex flex-col gap-6'>
         <Typography variant='subtitle2' fontWeight='normal'>
-          Responsable
+          À Propos
         </Typography>
         <Grid container spacing={6} className='mbe-6'>
           {projectLotSubcontractorData ? (
             <>
               <Grid item xs={12} sm={12}>
-                <Typography variant="h5" color="text.primary">
+                <Typography className='font-medium' color='text.primary'>
                   Entreprise:
                   <Typography variant="body1" component="span" color="text.secondary" sx={{marginLeft: 1}}>
                     {projectLotSubcontractorData?.subcontractor.name}
@@ -41,8 +41,9 @@ const Apropos: React.FC<Props> = ({projectLotSubcontractorData}) => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={12}>
-                <Typography variant="h5" color='text.primary'>Staus:
+                <Typography className='font-medium' color='text.primary'>Status:
                   {
+
                     <Chip
                       sx={{marginLeft: 1}}
                       variant='tonal'

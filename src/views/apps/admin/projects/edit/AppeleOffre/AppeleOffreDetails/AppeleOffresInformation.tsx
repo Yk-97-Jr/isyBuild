@@ -16,9 +16,11 @@ import {Button} from "@mui/material";
 
 import Chip from "@mui/material/Chip";
 
-import type {ProjectLotRead} from "@/services/IsyBuildApi";
+import type {ProjectLotRead, Status109Enum} from "@/services/IsyBuildApi";
 
 import {useAuth} from "@/contexts/AuthContext";
+import {getStatusProps} from "@/utils/statusHelper";
+import {Status109Mapping} from "@/utils/statusEnums";
 
 // Type imports for form handling
 
@@ -40,6 +42,13 @@ const AppeleOffresInformation: React.FC<Props> = ({projectLotData}) => {
 
   }
 
+
+  const {
+    label,
+    color
+  } = getStatusProps<Status109Enum>(projectLotData?.status, Status109Mapping);
+
+
   return (
     <Card>
       <CardHeader title='Détails'
@@ -53,16 +62,18 @@ const AppeleOffresInformation: React.FC<Props> = ({projectLotData}) => {
         <Grid container spacing={6} className='mbe-6'>
           {projectLotData ? (
             <>
+              {/*<Typography className='font-medium' color='text.primary'>Créé à:</Typography>*/}
+              {/*<Typography>{formatDate(projectLotData.created_at)}</Typography>*/}
               <Grid item xs={12} sm={12}>
-                <Typography variant="h5" color="text.primary">
+                <Typography className='font-medium' color='text.primary'>
                   Lot:
-                  <Typography variant="body1" component="span" color="text.secondary" sx={{marginLeft: 1}}>
+                  <Typography component="span" sx={{marginLeft: 1}}>
                     {projectLotData?.lot.name}
                   </Typography>
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={12}>
-                <Typography variant="h5" color='text.primary'>Document téléchargé:
+                <Typography className='font-medium' color='text.primary'>Document téléchargé:
                   {
                     <Chip
                       sx={{marginLeft: 1}}
@@ -74,14 +85,10 @@ const AppeleOffresInformation: React.FC<Props> = ({projectLotData}) => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={12}>
-                <Typography variant="h5" color='text.primary'>Staus:
+                <Typography className='font-medium' color='text.primary'>Status:
                   {
-                    <Chip
-                      sx={{marginLeft: 1}}
-                      variant='tonal'
-                      label={projectLotData.status ? projectLotData.status : 'completed'}
-                      color={projectLotData.status ? 'warning' : 'secondary'}
-                    />
+                    <Chip sx={{marginLeft: 1}} variant="tonal" label={label}
+                          color={color as any}/>
                   }
                 </Typography>
               </Grid>

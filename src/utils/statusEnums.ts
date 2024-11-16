@@ -1,12 +1,20 @@
 // statusEnums.ts
 
-import type {Status841Enum} from "@/services/IsyBuildApi";
+import type {Status109Enum, Status841Enum} from "@/services/IsyBuildApi";
 
 export const Status841Mapping: Record<Status841Enum, { label: string, color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning' }> = {
   pending: { label: 'Pending', color: 'warning' },
   in_progress: { label: 'In Progress', color: 'primary' },
   completed: { label: 'Completed', color: 'success' },
   not_responding: { label: 'Not Responding', color: 'error' },
+  canceled: { label: 'Canceled', color: 'secondary' },
+};
+
+export const Status109Mapping: Record<Status109Enum, { label: string; color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning' }> = {
+  pending: { label: 'Pending', color: 'warning' },
+  in_progress: { label: 'In Progress', color: 'primary' },
+  review: { label: 'Review', color: 'default' },
+  completed: { label: 'Completed', color: 'success' },
   canceled: { label: 'Canceled', color: 'secondary' },
 };
 
