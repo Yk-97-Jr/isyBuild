@@ -19,8 +19,6 @@ import CreatedBy
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/CreatedBy";
 import Responsable
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Responsable";
-import Apropos
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Apropos";
 import AddDevisSub
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/add/AddDevisSub";
 import DeleteDevis
@@ -29,6 +27,10 @@ import ModifyDevis
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/modify/ModifyDevis";
 import HistoryDevis
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/history/HistoryDevis";
+import AproposEntreprise
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/AproposEntreprise";
+import AproposStatus
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/AproposStatus";
 
 const AppeleOffreSubDetail = () => {
 
@@ -80,7 +82,10 @@ const AppeleOffreSubDetail = () => {
             <Responsable projectLotSubcontractorData={projectLotSubcontractorData}/>
           </Grid>
           <Grid item xs={12}>
-            <Apropos projectLotSubcontractorData={projectLotSubcontractorData}/>
+            <AproposStatus projectLotSubcontractorData={projectLotSubcontractorData}/>
+          </Grid>
+          <Grid item xs={12}>
+            <AproposEntreprise projectLotSubcontractorData={projectLotSubcontractorData}/>
           </Grid>
           <Grid item xs={12}>
             <CreatedBy projectLotSubcontractorData={projectLotSubcontractorData}/>

@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography'
 // Util Imports
 import Grid from "@mui/material/Grid";
 
-import Chip from "@mui/material/Chip";
 
 import type {ProjectLotSubcontractorRead} from "@/services/IsyBuildApi";
 
@@ -20,14 +19,14 @@ type Props = {
 
 // Vars
 
-const Apropos: React.FC<Props> = ({projectLotSubcontractorData}) => {
+const AproposEntreprise: React.FC<Props> = ({projectLotSubcontractorData}) => {
   // Vars
 
   return (
     <Card>
       <CardContent className='flex flex-col gap-6'>
         <Typography variant='subtitle2' fontWeight='normal'>
-          À Propos
+          À Propos Entreprise
         </Typography>
         <Grid container spacing={6} className='mbe-6'>
           {projectLotSubcontractorData ? (
@@ -40,19 +39,7 @@ const Apropos: React.FC<Props> = ({projectLotSubcontractorData}) => {
                   </Typography>
                 </Typography>
               </Grid>
-              <Grid item xs={12} sm={12}>
-                <Typography className='font-medium' color='text.primary'>Status:
-                  {
 
-                    <Chip
-                      sx={{marginLeft: 1}}
-                      variant='tonal'
-                      label={projectLotSubcontractorData.status ? projectLotSubcontractorData.status : 'completed'}
-                      color={projectLotSubcontractorData.status ? 'warning' : 'secondary'}
-                    />
-                  }
-                </Typography>
-              </Grid>
             </>
           ) : (
             <Typography variant="body1" color="text.secondary">Aucune information disponible</Typography>
@@ -65,4 +52,4 @@ const Apropos: React.FC<Props> = ({projectLotSubcontractorData}) => {
   )
 }
 
-export default Apropos
+export default AproposEntreprise
