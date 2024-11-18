@@ -1,11 +1,9 @@
 import React from "react";
 
+import UserStaffDetails from "@views/apps/subcontractor/users/details/UserStaffDetails";
 
-
-
-
-const UserPage = () => {
-   return <div>this detail page for sub user</div>
+const UserStaffPage = () => {
+    return <UserStaffDetails/>
 }
 
-export default UserPage
+export default UserStaffPage
