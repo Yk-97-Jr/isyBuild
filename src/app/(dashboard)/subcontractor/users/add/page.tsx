@@ -1,13 +1,16 @@
 // React Imports
 import React from 'react'
 
+import UserStaffAdd from "@views/apps/subcontractor/users/add/UserStaffAdd";
 
 
 
-const ClientAddApp = () => {
+const UserStaffAddApp = () => {
 
-   return <div>this add page for sub user</div>
 
+  return (
+    <UserStaffAdd/>
+  )
 }
 
-export default ClientAddApp
+export default UserStaffAddApp

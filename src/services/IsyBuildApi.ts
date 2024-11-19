@@ -43,6 +43,34 @@ const injectedRtkApi = api.injectEndpoints({
     adminUsersDeleteDestroy: build.mutation<AdminUsersDeleteDestroyApiResponse, AdminUsersDeleteDestroyApiArg>({
       query: queryArg => ({ url: `/admin-users/delete/${queryArg.adminUserId}/`, method: 'DELETE' })
     }),
+    categoriesRetrieve: build.query<CategoriesRetrieveApiResponse, CategoriesRetrieveApiArg>({
+      query: queryArg => ({
+        url: `/categories/`,
+        params: {
+          created_by: queryArg.createdBy,
+          description: queryArg.description,
+          name: queryArg.name,
+          page: queryArg.page,
+          page_size: queryArg.pageSize
+        }
+      })
+    }),
+    categoriesRetrieve2: build.query<CategoriesRetrieve2ApiResponse, CategoriesRetrieve2ApiArg>({
+      query: queryArg => ({ url: `/categories/${queryArg.categoryId}/` })
+    }),
+    categoriesCreateCreate: build.mutation<CategoriesCreateCreateApiResponse, CategoriesCreateCreateApiArg>({
+      query: queryArg => ({ url: `/categories/create/`, method: 'POST', body: queryArg.categoryRequest })
+    }),
+    categoriesDeleteDestroy: build.mutation<CategoriesDeleteDestroyApiResponse, CategoriesDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/categories/delete/${queryArg.categoryId}/`, method: 'DELETE' })
+    }),
+    categoriesUpdateUpdate: build.mutation<CategoriesUpdateUpdateApiResponse, CategoriesUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/categories/update/${queryArg.categoryId}/`,
+        method: 'PUT',
+        body: queryArg.categoryRequest
+      })
+    }),
     clientsRetrieve: build.query<ClientsRetrieveApiResponse, ClientsRetrieveApiArg>({
       query: queryArg => ({
         url: `/clients/`,
@@ -194,6 +222,9 @@ const injectedRtkApi = api.injectEndpoints({
     getFolderDetail: build.query<GetFolderDetailApiResponse, GetFolderDetailApiArg>({
       query: queryArg => ({ url: `/folders/${queryArg.folderId}/` })
     }),
+    intervenantRolesRetrieve: build.query<IntervenantRolesRetrieveApiResponse, IntervenantRolesRetrieveApiArg>({
+      query: () => ({ url: `/intervenant/roles/` })
+    }),
     loginCreate: build.mutation<LoginCreateApiResponse, LoginCreateApiArg>({
       query: queryArg => ({ url: `/login/`, method: 'POST', body: queryArg.tokenObtainPairRequest })
     }),
@@ -259,6 +290,45 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/phone-numbers/${queryArg.phoneNumberId}/update/`,
         method: 'PUT',
         body: queryArg.phoneNumberCreateUpdateRequest
+      })
+    }),
+    productsRetrieve: build.query<ProductsRetrieveApiResponse, ProductsRetrieveApiArg>({
+      query: queryArg => ({
+        url: `/products/`,
+        params: {
+          created_by: queryArg.createdBy,
+          description: queryArg.description,
+          name: queryArg.name,
+          page: queryArg.page,
+          page_size: queryArg.pageSize
+        }
+      })
+    }),
+    productsRetrieve2: build.query<ProductsRetrieve2ApiResponse, ProductsRetrieve2ApiArg>({
+      query: queryArg => ({ url: `/products/${queryArg.productId}/` })
+    }),
+    productsCreateCreate: build.mutation<ProductsCreateCreateApiResponse, ProductsCreateCreateApiArg>({
+      query: queryArg => ({ url: `/products/create/`, method: 'POST', body: queryArg.productRequest })
+    }),
+    productsDeleteDestroy: build.mutation<ProductsDeleteDestroyApiResponse, ProductsDeleteDestroyApiArg>({
+      query: queryArg => ({ url: `/products/delete/${queryArg.productId}/`, method: 'DELETE' })
+    }),
+    productsMediaRetrieve: build.query<ProductsMediaRetrieveApiResponse, ProductsMediaRetrieveApiArg>({
+      query: queryArg => ({ url: `/products/media/${queryArg.productMediaId}/` })
+    }),
+    productsMediaCreateCreate: build.mutation<ProductsMediaCreateCreateApiResponse, ProductsMediaCreateCreateApiArg>({
+      query: queryArg => ({ url: `/products/media/create/`, method: 'POST', body: queryArg.productMediaRequest })
+    }),
+    productsMediaDeleteDestroy: build.mutation<ProductsMediaDeleteDestroyApiResponse, ProductsMediaDeleteDestroyApiArg>(
+      {
+        query: queryArg => ({ url: `/products/media/delete/${queryArg.productMediaId}/`, method: 'DELETE' })
+      }
+    ),
+    productsUpdateUpdate: build.mutation<ProductsUpdateUpdateApiResponse, ProductsUpdateUpdateApiArg>({
+      query: queryArg => ({
+        url: `/products/update/${queryArg.productId}/`,
+        method: 'PUT',
+        body: queryArg.productRequest
       })
     }),
     projectLotsRetrieve: build.query<ProjectLotsRetrieveApiResponse, ProjectLotsRetrieveApiArg>({
@@ -350,6 +420,16 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'DELETE'
       })
     }),
+    updateProjectLotSubcontractorStatus: build.mutation<
+      UpdateProjectLotSubcontractorStatusApiResponse,
+      UpdateProjectLotSubcontractorStatusApiArg
+    >({
+      query: queryArg => ({
+        url: `/project-lots/subcontractors/${queryArg.projectLotSubcontractorId}/update-status/`,
+        method: 'PUT',
+        body: queryArg.projectLotSubcontractorUpdateRequest
+      })
+    }),
     projectLotsSubcontractorsDocumentsDeleteDevisDestroy: build.mutation<
       ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiResponse,
       ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiArg
@@ -398,6 +478,25 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.projectStaffAssignRequest
       })
     }),
+    projectIntervenantList: build.query<ProjectIntervenantListApiResponse, ProjectIntervenantListApiArg>({
+      query: queryArg => ({
+        url: `/projects/${queryArg.projectId}/intervenants/`,
+        params: {
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          role: queryArg.role,
+          search: queryArg.search
+        }
+      })
+    }),
+    projectIntervenantCreate: build.mutation<ProjectIntervenantCreateApiResponse, ProjectIntervenantCreateApiArg>({
+      query: queryArg => ({
+        url: `/projects/${queryArg.projectId}/intervenants/add/`,
+        method: 'POST',
+        body: queryArg.intervenantCreateRequest
+      })
+    }),
     projectsLotsRetrieve: build.query<ProjectsLotsRetrieveApiResponse, ProjectsLotsRetrieveApiArg>({
       query: queryArg => ({
         url: `/projects/${queryArg.projectId}/lots/`,
@@ -430,6 +529,18 @@ const injectedRtkApi = api.injectEndpoints({
     getProjectStaffTree: build.query<GetProjectStaffTreeApiResponse, GetProjectStaffTreeApiArg>({
       query: queryArg => ({ url: `/projects/${queryArg.projectId}/staff/tree/` })
     }),
+    listSuiviAdministrative: build.query<ListSuiviAdministrativeApiResponse, ListSuiviAdministrativeApiArg>({
+      query: queryArg => ({
+        url: `/projects/${queryArg.projectId}/suivi-administrative/`,
+        params: {
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
+          status: queryArg.status
+        }
+      })
+    }),
     projectsTemplatesList: build.query<ProjectsTemplatesListApiResponse, ProjectsTemplatesListApiArg>({
       query: queryArg => ({ url: `/projects/${queryArg.projectId}/templates/` })
     }),
@@ -438,6 +549,19 @@ const injectedRtkApi = api.injectEndpoints({
     }),
     projectsDeleteDestroy: build.mutation<ProjectsDeleteDestroyApiResponse, ProjectsDeleteDestroyApiArg>({
       query: queryArg => ({ url: `/projects/delete/${queryArg.projectId}/`, method: 'DELETE' })
+    }),
+    projectIntervenantDetail: build.query<ProjectIntervenantDetailApiResponse, ProjectIntervenantDetailApiArg>({
+      query: queryArg => ({ url: `/projects/intervenants/${queryArg.projectIntervenantId}/` })
+    }),
+    projectIntervenantDelete: build.mutation<ProjectIntervenantDeleteApiResponse, ProjectIntervenantDeleteApiArg>({
+      query: queryArg => ({ url: `/projects/intervenants/${queryArg.projectIntervenantId}/delete/`, method: 'DELETE' })
+    }),
+    projectIntervenantUpdate: build.mutation<ProjectIntervenantUpdateApiResponse, ProjectIntervenantUpdateApiArg>({
+      query: queryArg => ({
+        url: `/projects/intervenants/${queryArg.projectIntervenantId}/update/`,
+        method: 'PUT',
+        body: queryArg.intervenantUpdateRequest
+      })
     }),
     getProjectStaffById: build.query<GetProjectStaffByIdApiResponse, GetProjectStaffByIdApiArg>({
       query: queryArg => ({ url: `/projects/staff/${queryArg.projectStaffId}/` })
@@ -626,6 +750,22 @@ const injectedRtkApi = api.injectEndpoints({
         })
       }
     ),
+    retrieveSuiviAdministrativeDetail: build.query<
+      RetrieveSuiviAdministrativeDetailApiResponse,
+      RetrieveSuiviAdministrativeDetailApiArg
+    >({
+      query: queryArg => ({ url: `/suivi-administrative/${queryArg.suiviAdministrativeId}/` })
+    }),
+    updateSuiviAdministrativeStep: build.mutation<
+      UpdateSuiviAdministrativeStepApiResponse,
+      UpdateSuiviAdministrativeStepApiArg
+    >({
+      query: queryArg => ({
+        url: `/suivi-administrative/steps/${queryArg.stepId}/update/`,
+        method: 'PATCH',
+        body: queryArg.patchedSuiviAdministrativeStepUpdateRequest
+      })
+    }),
     tokenRefreshCreate: build.mutation<TokenRefreshCreateApiResponse, TokenRefreshCreateApiArg>({
       query: queryArg => ({ url: `/token_refresh/`, method: 'POST', body: queryArg.tokenRefreshRequest })
     }),
@@ -687,6 +827,7 @@ export type AdminStaffRetrieveApiArg = {
     | '-user__date_joined'
     | '-user__email'
     | '-user__first_name'
+    | '-user__is_active'
     | '-user__last_name'
     | 'created_at'
     | 'created_by__email'
@@ -694,6 +835,7 @@ export type AdminStaffRetrieveApiArg = {
     | 'user__date_joined'
     | 'user__email'
     | 'user__first_name'
+    | 'user__is_active'
     | 'user__last_name'
 
   /** Page number of the results to fetch */
@@ -730,6 +872,41 @@ export type AdminStaffUpdatePartialUpdateApiArg = {
 export type AdminUsersDeleteDestroyApiResponse = /** status 204  */ any
 export type AdminUsersDeleteDestroyApiArg = {
   adminUserId: number
+}
+export type CategoriesRetrieveApiResponse = /** status 200  */ PaginatedProductRead
+export type CategoriesRetrieveApiArg = {
+
+  /** Filter by creator's email (contains match) */
+  createdBy?: string
+
+  /** Filter by category description (contains match) */
+  description?: string
+
+  /** Filter by category name (contains match) */
+  name?: string
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type CategoriesRetrieve2ApiResponse = /** status 200  */ CategoryRead
+export type CategoriesRetrieve2ApiArg = {
+  categoryId: number
+}
+export type CategoriesCreateCreateApiResponse = /** status 201  */ CategoryRead
+export type CategoriesCreateCreateApiArg = {
+  categoryRequest: CategoryRequest
+}
+export type CategoriesDeleteDestroyApiResponse = /** status 204  */ any
+export type CategoriesDeleteDestroyApiArg = {
+  categoryId: number
+}
+export type CategoriesUpdateUpdateApiResponse = /** status 200  */ CategoryRead
+export type CategoriesUpdateUpdateApiArg = {
+  categoryId: number
+  categoryRequest: CategoryRequest
 }
 export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedClientRead
 export type ClientsRetrieveApiArg = {
@@ -831,6 +1008,7 @@ export type ClientsStaffRetrieve3ApiArg = {
     | '-user__date_joined'
     | '-user__email'
     | '-user__first_name'
+    | '-user__is_active'
     | '-user__last_name'
     | 'created_at'
     | 'created_by__email'
@@ -838,6 +1016,7 @@ export type ClientsStaffRetrieve3ApiArg = {
     | 'user__date_joined'
     | 'user__email'
     | 'user__first_name'
+    | 'user__is_active'
     | 'user__last_name'
 
   /** Page number of the results to fetch */
@@ -885,6 +1064,7 @@ export type ClientsStaffRetrieveApiArg = {
     | '-user__date_joined'
     | '-user__email'
     | '-user__first_name'
+    | '-user__is_active'
     | '-user__last_name'
     | 'created_at'
     | 'created_by__email'
@@ -892,6 +1072,7 @@ export type ClientsStaffRetrieveApiArg = {
     | 'user__date_joined'
     | 'user__email'
     | 'user__first_name'
+    | 'user__is_active'
     | 'user__last_name'
 
   /** Page number of the results to fetch */
@@ -969,6 +1150,10 @@ export type GetFolderDetailApiResponse = /** status 200  */ FolderRead
 export type GetFolderDetailApiArg = {
   folderId: number
 }
+export type IntervenantRolesRetrieveApiResponse = /** status 200 Available roles for Intervenants */ {
+  [key: string]: any
+}
+export type IntervenantRolesRetrieveApiArg = void
 export type LoginCreateApiResponse = /** status 200  */ {
   [key: string]: any
 }
@@ -1071,6 +1256,53 @@ export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
+export type ProductsRetrieveApiResponse = /** status 200  */ PaginatedProductRead
+export type ProductsRetrieveApiArg = {
+
+  /** Filter by creator's email (contains match) */
+  createdBy?: string
+
+  /** Filter by product description (contains match) */
+  description?: string
+
+  /** Filter by product name (contains match) */
+  name?: string
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+}
+export type ProductsRetrieve2ApiResponse = /** status 200  */ ProductRead
+export type ProductsRetrieve2ApiArg = {
+  productId: number
+}
+export type ProductsCreateCreateApiResponse = /** status 201  */ ProductRead
+export type ProductsCreateCreateApiArg = {
+  productRequest: ProductRequest
+}
+export type ProductsDeleteDestroyApiResponse = /** status 204  */ any
+export type ProductsDeleteDestroyApiArg = {
+  productId: number
+}
+export type ProductsMediaRetrieveApiResponse = /** status 200  */ ProductMediaRead
+export type ProductsMediaRetrieveApiArg = {
+  productMediaId: number
+}
+export type ProductsMediaCreateCreateApiResponse = /** status 200  */ ProductRead
+export type ProductsMediaCreateCreateApiArg = {
+  productMediaRequest: ProductMediaRequest
+}
+export type ProductsMediaDeleteDestroyApiResponse = /** status 204  */ any
+export type ProductsMediaDeleteDestroyApiArg = {
+  productMediaId: number
+}
+export type ProductsUpdateUpdateApiResponse = /** status 200  */ ProductRead
+export type ProductsUpdateUpdateApiArg = {
+  productId: number
+  productRequest: ProductRequest
+}
 export type ProjectLotsRetrieveApiResponse = /** status 200  */ ProjectLotRead
 export type ProjectLotsRetrieveApiArg = {
   projectLotId: number
@@ -1166,6 +1398,11 @@ export type ProjectLotsSubcontractorsRemoveDestroyApiResponse = /** status 204  
 export type ProjectLotsSubcontractorsRemoveDestroyApiArg = {
   projectLotSubcontractorId: number
 }
+export type UpdateProjectLotSubcontractorStatusApiResponse = /** status 200  */ ProjectLotSubcontractorRead
+export type UpdateProjectLotSubcontractorStatusApiArg = {
+  projectLotSubcontractorId: number
+  projectLotSubcontractorUpdateRequest: ProjectLotSubcontractorUpdateRequest
+}
 export type ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiResponse = /** status 204  */ {
   [key: string]: any
 }
@@ -1249,6 +1486,52 @@ export type AssignProjectStaffApiArg = {
   projectId: number
   projectStaffAssignRequest: ProjectStaffAssignRequest
 }
+export type ProjectIntervenantListApiResponse = /** status 200  */ PaginatedProjectIntervenantRead
+export type ProjectIntervenantListApiArg = {
+
+  /** Order results by fields (e.g., 'name', '-created_at') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-intervenant__role'
+    | '-intervenant__user__date_joined'
+    | '-intervenant__user__email'
+    | '-intervenant__user__first_name'
+    | '-intervenant__user__last_name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'intervenant__role'
+    | 'intervenant__user__date_joined'
+    | 'intervenant__user__email'
+    | 'intervenant__user__first_name'
+    | 'intervenant__user__last_name'
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+  projectId: number
+
+  /** Filter by  role */
+  role?:
+    | 'Architecte'
+    | 'Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement'
+    | "Bureau d'\u00E9tude technique"
+    | 'Bureau de contr\u00F4le'
+    | 'Client'
+    | 'Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9'
+
+  /** Search by first name, last name, or email */
+  search?: string
+}
+export type ProjectIntervenantCreateApiResponse = /** status 201  */ ProjectIntervenantRead
+export type ProjectIntervenantCreateApiArg = {
+  projectId: number
+  intervenantCreateRequest: IntervenantCreateRequestWrite
+}
 export type ProjectsLotsRetrieveApiResponse = /** status 200  */ PaginatedProjectLotRead
 export type ProjectsLotsRetrieveApiArg = {
 
@@ -1295,6 +1578,35 @@ export type GetProjectStaffTreeApiResponse = /** status 200  */ ProjectStaffTree
 export type GetProjectStaffTreeApiArg = {
   projectId: number
 }
+export type ListSuiviAdministrativeApiResponse = /** status 200  */ PaginatedSuiviAdministrativeRead
+export type ListSuiviAdministrativeApiArg = {
+
+  /** Order results by fields (e.g., 'lot__name', '-created_at') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-id'
+    | '-project_lot__lot__name'
+    | '-status'
+    | 'created_at'
+    | 'created_by__email'
+    | 'id'
+    | 'project_lot__lot__name'
+    | 'status'
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+  projectId: number
+
+  /** Search by administrative status or related intervenant */
+  search?: string
+
+  /** Filter by status */
+  status?: 'completed' | 'in_progress' | 'not_started'
+}
 export type ProjectsTemplatesListApiResponse = /** status 200  */ ProjectEmailTemplateRead[]
 export type ProjectsTemplatesListApiArg = {
   projectId: number
@@ -1306,6 +1618,20 @@ export type ProjectsCreateCreateApiArg = {
 export type ProjectsDeleteDestroyApiResponse = /** status 204  */ any
 export type ProjectsDeleteDestroyApiArg = {
   projectId: number
+}
+export type ProjectIntervenantDetailApiResponse =
+  /** status 200 Project Intervenant details retrieved successfully. */ ProjectIntervenantRead
+export type ProjectIntervenantDetailApiArg = {
+  projectIntervenantId: number
+}
+export type ProjectIntervenantDeleteApiResponse = unknown
+export type ProjectIntervenantDeleteApiArg = {
+  projectIntervenantId: number
+}
+export type ProjectIntervenantUpdateApiResponse = unknown
+export type ProjectIntervenantUpdateApiArg = {
+  projectIntervenantId: number
+  intervenantUpdateRequest: IntervenantUpdateRequest
 }
 export type GetProjectStaffByIdApiResponse = /** status 200  */ ProjectStaffRead
 export type GetProjectStaffByIdApiArg = {
@@ -1442,6 +1768,7 @@ export type SubcontractorsStaffRetrieve2ApiArg = {
     | '-user__date_joined'
     | '-user__email'
     | '-user__first_name'
+    | '-user__is_active'
     | '-user__last_name'
     | 'created_at'
     | 'created_by__email'
@@ -1449,6 +1776,7 @@ export type SubcontractorsStaffRetrieve2ApiArg = {
     | 'user__date_joined'
     | 'user__email'
     | 'user__first_name'
+    | 'user__is_active'
     | 'user__last_name'
 
   /** Page number of the results to fetch */
@@ -1497,6 +1825,7 @@ export type GetSubcontractorStaffListApiArg = {
     | '-user__date_joined'
     | '-user__email'
     | '-user__first_name'
+    | '-user__is_active'
     | '-user__last_name'
     | 'created_at'
     | 'created_by__email'
@@ -1504,6 +1833,7 @@ export type GetSubcontractorStaffListApiArg = {
     | 'user__date_joined'
     | 'user__email'
     | 'user__first_name'
+    | 'user__is_active'
     | 'user__last_name'
 
   /** Page number of the results to fetch */
@@ -1536,6 +1866,15 @@ export type SubcontractorsUpdateUpdateApiResponse = /** status 200  */ Subcontra
 export type SubcontractorsUpdateUpdateApiArg = {
   subcontractorId: number
   subcontractorUpdateRequest: SubcontractorUpdateRequest
+}
+export type RetrieveSuiviAdministrativeDetailApiResponse = /** status 200  */ SuiviAdministrativeRead
+export type RetrieveSuiviAdministrativeDetailApiArg = {
+  suiviAdministrativeId: number
+}
+export type UpdateSuiviAdministrativeStepApiResponse = unknown
+export type UpdateSuiviAdministrativeStepApiArg = {
+  stepId: number
+  patchedSuiviAdministrativeStepUpdateRequest: PatchedSuiviAdministrativeStepUpdateRequest
 }
 export type TokenRefreshCreateApiResponse = /** status 200  */ {
   [key: string]: any
@@ -1642,6 +1981,65 @@ export type PatchedAdminStaffUpdateRequest = {
   first_name?: string
   last_name?: string
   is_active?: boolean
+}
+export type Product = {
+  name: string
+  description?: string | null
+  category: number
+  technical_sheet?: string | null
+}
+export type ProductMedia = {
+  image: string
+  product: number
+  created_by?: number | null
+}
+export type ProductMediaRead = {
+  id: number
+  image: string
+  product: number
+  created_by?: number | null
+  created_at: string
+  updated_at: string
+}
+export type ProductRead = {
+  id: number
+  name: string
+  description?: string | null
+  category: number
+  technical_sheet?: string | null
+  media: ProductMediaRead[]
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type PaginatedProduct = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Product[]
+}
+export type PaginatedProductRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProductRead[]
+}
+export type Category = {
+  name: string
+  description?: string | null
+}
+export type CategoryRead = {
+  id: number
+  name: string
+  products: ProductRead[]
+  description?: string | null
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type CategoryRequest = {
+  name: string
+  description?: string | null
 }
 export type Address = {
   street_number: string
@@ -1928,6 +2326,17 @@ export type PasswordResetRequestRequest = {
   email: string
   redirect_uri: string
 }
+export type ProductRequest = {
+  name: string
+  description?: string | null
+  category: number
+  technical_sheet?: string | null
+}
+export type ProductMediaRequest = {
+  image: Blob
+  product: number
+  created_by?: number | null
+}
 export type Status109Enum = 'pending' | 'in_progress' | 'review' | 'completed' | 'canceled'
 export type ProjectLot = {
   status?: Status109Enum
@@ -1936,9 +2345,23 @@ export type ProjectLot = {
 export type ProjectSimple = {
   name: string
 }
+export type ClientSimple = {
+  name: string
+  siren_number: string
+  contact_email: string
+  phone_number: string
+}
+export type ClientSimpleRead = {
+  id: number
+  name: string
+  siren_number: string
+  contact_email: string
+  phone_number: string
+}
 export type ProjectSimpleRead = {
   id: number
   name: string
+  client: ClientSimpleRead
 }
 export type LotSimple = {
   name: string
@@ -2036,6 +2459,9 @@ export type ProjectLotCreateRequest = {
   lot_id: number
   project_id: number
 }
+export type ProjectLotSubcontractorUpdateRequest = {
+  status?: Status841Enum
+}
 export type ProjectStatusEnum = 'draft' | 'pending' | 'in_progress' | 'completed' | 'on_hold' | 'canceled'
 export type RiskLevelEnum = 'low' | 'medium' | 'high' | 'critical'
 export type Project = {
@@ -2126,6 +2552,52 @@ export type ProjectStaffAssignRequest = {
   role: string
   supervisor_id?: number | null
 }
+export type ProjectIntervenant = {}
+export type RoleEnum =
+  | 'Architecte'
+  | 'Bureau de contr\u00F4le'
+  | "Bureau d'\u00E9tude technique"
+  | 'Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9'
+  | 'Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement'
+  | 'Client'
+export type Intervenant = {
+  role: RoleEnum
+}
+export type IntervenantRead = {
+  id: number
+  user: UserRead
+  role: RoleEnum
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type ProjectIntervenantRead = {
+  id: number
+  intervenant: IntervenantRead
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type PaginatedProjectIntervenant = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectIntervenant[]
+}
+export type PaginatedProjectIntervenantRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectIntervenantRead[]
+}
+export type IntervenantCreateRequest = {
+  user: UserCreateRequest
+  role: RoleEnum
+}
+export type IntervenantCreateRequestWrite = {
+  user: UserCreateRequestWrite
+  role: RoleEnum
+}
 export type PaginatedProjectLot = {
   count: number
   next: string | null
@@ -2165,6 +2637,96 @@ export type ProjectStaffTreeRead = {
   staff: ClientStaffSimpleRead
   role: string
   children: string
+}
+export type SuiviAdministrativeStatusEnum = 'not_started' | 'in_progress' | 'completed'
+export type SuiviAdministrative = {
+
+  /** Overall status of the administrative process.
+    
+    * `not_started` - Not Started
+    * `in_progress` - In Progress
+    * `completed` - Completed */
+  status?: SuiviAdministrativeStatusEnum
+}
+export type Status3BfEnum =
+  | 'not_started'
+  | 'in_progress'
+  | 'completed'
+  | 'on_hold'
+  | 'canceled'
+  | 'rejected'
+  | 'temporarily_done'
+export type SuiviAdministrativeStep = {
+  step_name: string
+  order?: number
+
+  /** Number of days before or after the project start date. */
+  nbr_of_days: number
+  target_date?: string | null
+  actual_date?: string | null
+
+  /** Status of the step in the suivi administrative process.
+    
+    * `not_started` - Not Started
+    * `in_progress` - In Progress
+    * `completed` - Completed
+    * `on_hold` - On Hold
+    * `canceled` - Canceled
+    * `rejected` - Rejected
+    * `temporarily_done` - Temporarily Done */
+  status?: Status3BfEnum
+}
+export type SuiviAdministrativeStepRead = {
+  id: number
+  step_name: string
+  order?: number
+
+  /** Number of days before or after the project start date. */
+  nbr_of_days: number
+  target_date?: string | null
+  actual_date?: string | null
+
+  /** Status of the step in the suivi administrative process.
+    
+    * `not_started` - Not Started
+    * `in_progress` - In Progress
+    * `completed` - Completed
+    * `on_hold` - On Hold
+    * `canceled` - Canceled
+    * `rejected` - Rejected
+    * `temporarily_done` - Temporarily Done */
+  status?: Status3BfEnum
+  assigned_to: ProjectIntervenantRead
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type SuiviAdministrativeRead = {
+  id: number
+  project_lot: ProjectLotRead
+
+  /** Overall status of the administrative process.
+    
+    * `not_started` - Not Started
+    * `in_progress` - In Progress
+    * `completed` - Completed */
+  status?: SuiviAdministrativeStatusEnum
+  steps: SuiviAdministrativeStepRead[]
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type PaginatedSuiviAdministrative = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: SuiviAdministrative[]
+}
+export type PaginatedSuiviAdministrativeRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: SuiviAdministrativeRead[]
 }
 export type TemplateTypeEnum =
   | 'upload_devis'
@@ -2231,6 +2793,10 @@ export type ProjectCreateRequest = {
   address?: AddressCreateRequest
   map_coordinate?: MapCoordinateCreateOrUpdateRequest
   notes?: string
+}
+export type IntervenantUpdateRequest = {
+  user: UserUpdateRequest
+  role: RoleEnum
 }
 export type ProjectStaffUpdateRequest = {
   role?: string
@@ -2366,6 +2932,22 @@ export type SubcontractorUpdateRequest = {
   is_active?: boolean
   lots_ids?: number[] | null
 }
+export type PatchedSuiviAdministrativeStepUpdateRequest = {
+
+  /** Status of the step in the suivi administrative process.
+    
+    * `not_started` - Not Started
+    * `in_progress` - In Progress
+    * `completed` - Completed
+    * `on_hold` - On Hold
+    * `canceled` - Canceled
+    * `rejected` - Rejected
+    * `temporarily_done` - Temporarily Done */
+  status?: Status3BfEnum
+
+  /** Number of days before or after the project start date. */
+  nbr_of_days?: number
+}
 export type UserChangePasswordRequest = {
   old_password: string
   new_password: string
@@ -2396,6 +2978,11 @@ export const {
   useAdminStaffCreateCreateMutation,
   useAdminStaffUpdatePartialUpdateMutation,
   useAdminUsersDeleteDestroyMutation,
+  useCategoriesRetrieveQuery,
+  useCategoriesRetrieve2Query,
+  useCategoriesCreateCreateMutation,
+  useCategoriesDeleteDestroyMutation,
+  useCategoriesUpdateUpdateMutation,
   useClientsRetrieveQuery,
   useClientsRetrieve2Query,
   useClientsOwnerRetrieveQuery,
@@ -2421,6 +3008,7 @@ export const {
   useGetDocumentDetailQuery,
   useGetDocumentHistoryQuery,
   useGetFolderDetailQuery,
+  useIntervenantRolesRetrieveQuery,
   useLoginCreateMutation,
   useLogoutCreateMutation,
   useLotsRetrieveQuery,
@@ -2436,6 +3024,14 @@ export const {
   usePhoneNumbersRetrieveQuery,
   usePhoneNumbersDeleteDestroyMutation,
   usePhoneNumbersUpdateUpdateMutation,
+  useProductsRetrieveQuery,
+  useProductsRetrieve2Query,
+  useProductsCreateCreateMutation,
+  useProductsDeleteDestroyMutation,
+  useProductsMediaRetrieveQuery,
+  useProductsMediaCreateCreateMutation,
+  useProductsMediaDeleteDestroyMutation,
+  useProductsUpdateUpdateMutation,
   useProjectLotsRetrieveQuery,
   useProjectLotsDeleteDestroyMutation,
   useProjectLotsSubcontractorsRetrieve2Query,
@@ -2447,18 +3043,25 @@ export const {
   useProjectLotsDocumentsUpdateCreateMutation,
   useProjectLotsSubcontractorsRetrieveQuery,
   useProjectLotsSubcontractorsRemoveDestroyMutation,
+  useUpdateProjectLotSubcontractorStatusMutation,
   useProjectLotsSubcontractorsDocumentsDeleteDevisDestroyMutation,
   useProjectLotsSubcontractorsDocumentsUploadDevisCreateMutation,
   useProjectsRetrieveQuery,
   useProjectsRetrieve2Query,
   useAssignProjectStaffMutation,
+  useProjectIntervenantListQuery,
+  useProjectIntervenantCreateMutation,
   useProjectsLotsRetrieveQuery,
   useListProjectStaffQuery,
   useProjectsStaffReorderUpdateMutation,
   useGetProjectStaffTreeQuery,
+  useListSuiviAdministrativeQuery,
   useProjectsTemplatesListQuery,
   useProjectsCreateCreateMutation,
   useProjectsDeleteDestroyMutation,
+  useProjectIntervenantDetailQuery,
+  useProjectIntervenantDeleteMutation,
+  useProjectIntervenantUpdateMutation,
   useGetProjectStaffByIdQuery,
   useRemoveProjectStaffByIdMutation,
   useUpdateProjectStaffByIdMutation,
@@ -2482,6 +3085,8 @@ export const {
   useSubcontractorsStaffUpdatePartialUpdateMutation,
   useCreateSubcontractorBySubcontractorUserMutation,
   useSubcontractorsUpdateUpdateMutation,
+  useRetrieveSuiviAdministrativeDetailQuery,
+  useUpdateSuiviAdministrativeStepMutation,
   useTokenRefreshCreateMutation,
   useUserChangePasswordCreateMutation,
   useUserConfirmEmailChangeCreateMutation,
