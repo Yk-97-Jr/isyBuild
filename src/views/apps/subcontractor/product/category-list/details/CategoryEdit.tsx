@@ -20,7 +20,7 @@ import { CircularProgress } from '@mui/material'
 import CategoryCreatedBy from './CategoryCreatedBy'
 import CategoryEditInfo from '@/views/apps/subcontractor/product/category-list/details/CategoryEditInfo'
 import CategoryEditHeader from '@/views/apps/subcontractor/product/category-list/details/CategoryEditHeader'
-import CategoryAbout from '@/views/apps/subcontractor/product/category-list/details/CategoryAbout'
+
 
 import type { FormValidateCategoryEditType } from '@/views/apps/subcontractor/product/category-list/details/schemaCategory'
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
@@ -109,9 +109,6 @@ const CategoryEdit = () => {
         </Grid>
         <Grid item xs={12} md={4}>
           <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <CategoryAbout categoryData={categoryData} />
-            </Grid>
             <Grid item xs={12}>
               <CategoryCreatedBy categoryData={categoryData} />
             </Grid>
