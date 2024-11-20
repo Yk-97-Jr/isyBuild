@@ -51,7 +51,15 @@ const allMenuData = (): VerticalMenuDataType[] => [
     roles: ['admin', 'client'],
     isSection: false,
     children: []
-  }
+  },
+  {
+    label: 'Produit',
+    href: '/role/product/list',  // Use role as a placeholder
+    icon: 'tabler-box',
+    roles: ['admin', 'client', 'subcontractor'],
+    isSection: false,
+    children: []
+  },
 ]
 
 // Function to get menu items based on user role and replace 'role' in href
