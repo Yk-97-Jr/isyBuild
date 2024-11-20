@@ -7,9 +7,9 @@ import Typography from '@mui/material/Typography';
 
 
 import DialogCloseButton from '../DialogCloseButton';
-import DeleteCategoryContent from "@/components/dialogs/category-dialog/DeleteCategoryContent";
+import DeleteProductContent from "@/components/dialogs/product-dialog/DeleteProductContent";
 
-type CategoryDialogProps = {
+type ProductDialogProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   id?: number;
@@ -17,13 +17,13 @@ type CategoryDialogProps = {
   refetch?: () => void;
 };
 
-const CategoryDialog = ({
+const ProductDialog = ({
                       open,
                       setOpen,
                       id,
                       setId,
                       refetch
-                    }: CategoryDialogProps) => {
+                    }: ProductDialogProps) => {
 
   const handleClose = () => {
     setOpen(false);
@@ -40,12 +40,12 @@ const CategoryDialog = ({
   };
 
 
-  const dialogTitle = 'Supprimer Catégorie  '
+  const dialogTitle = 'Supprimer Produit  '
 
-  const dialogDescription = 'Êtes-vous sûr de vouloir supprimer cet Catégorie ?'
+  const dialogDescription = 'Êtes-vous sûr de vouloir supprimer cet Produit ?'
 
 
-  const ContentComponent = DeleteCategoryContent
+  const ContentComponent = DeleteProductContent
 
   return (
     <Dialog open={open} onClose={handleCloseWithoutRefresh} sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}>
@@ -69,4 +69,4 @@ const CategoryDialog = ({
   );
 };
 
-export default CategoryDialog;
+export default ProductDialog;

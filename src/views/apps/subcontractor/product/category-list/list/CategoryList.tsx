@@ -1,6 +1,6 @@
 'use client'
 
-// components/UserList.js
+// components/CategoryList.js
 import React, {useEffect, useState} from 'react'
 
 import type {SortingState} from '@tanstack/react-table';
@@ -15,10 +15,10 @@ import {useDebounce} from "@uidotdev/usehooks";
 import CategoryTable from './CategoryTable'
 import {useCategoriesListQuery} from '@/services/IsyBuildApi'
 
-const UserList = () => {
+const CategoryList = () => {
   // States for pagination or other parameters
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
 
 
@@ -61,11 +61,11 @@ const UserList = () => {
   if (error)
     return (
       <div>
-        Error fetching user data:{' '}
+        Error fetching Category data:{' '}
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const users = data?.results || []
+  const Category = data?.results || []
   const countRecords = data?.count
 
 
@@ -78,12 +78,11 @@ const UserList = () => {
           setPageSize={setPageSize}
           page={page}
           setPage={setPage}
-          data={users}
+          data={Category}
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
           setSearch={setSearch}
-          
           setSorting={setSorting}
           sorting={sorting}
           search={search}
@@ -92,4 +91,4 @@ const UserList = () => {
     </Grid>)
 }
 
-export default UserList
+export default CategoryList
