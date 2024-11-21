@@ -38,6 +38,12 @@ const Tabilation = ({ tabContentList }: { tabContentList: { [key: string]: React
               iconPosition='start'
               value='Appelle Offre'
             />
+            <Tab
+              label='Gestion Administartive'
+              icon={<i className='tabler-brand-google-analytics' />}
+              iconPosition='start'
+              value='Gestion Administartive'
+            />
           </CustomTabList>
         </Grid>
         <Grid item xs={12}>

@@ -7,11 +7,14 @@ import MainEdit2 from './MainEdit2'
 
 import Tabilation from './Tabilation'
 import AppeleOffre from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreList/AppeleOffre";
+import GestionAdministrativeList
+  from "@views/apps/admin/projects/edit/GestionAdministartive/GestionAdministrativeList/GestionAdministrativeList";
 
 
 const tabContentList: { [key: string]: ReactElement } = {
   'Informations Generales': <MainEdit2 />,
-  'Appelle Offre': <AppeleOffre />
+  'Appelle Offre': <AppeleOffre />,
+  'Gestion Administartive': <GestionAdministrativeList />
 }
 
 

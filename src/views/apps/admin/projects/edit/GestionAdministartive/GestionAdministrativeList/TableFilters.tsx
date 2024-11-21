@@ -8,9 +8,9 @@ import MenuItem from '@mui/material/MenuItem'
 // Component Imports
 import CustomTextField from '@core/components/mui/TextField'
 
-const TableFilters = ({setIsActive, isActive}: {
-  setIsActive: React.Dispatch<React.SetStateAction<string | null>>
-  isActive: string | null
+const TableFilters = ({setStatus, status}: {
+  setStatus: React.Dispatch<React.SetStateAction<string | undefined>>
+  status: string | undefined
 }) => {
 
 
@@ -22,14 +22,15 @@ const TableFilters = ({setIsActive, isActive}: {
             select
             fullWidth
             id='select-role'
-            value={isActive || ""}
-            onChange={e => setIsActive(e.target.value as string)}
+            value={status || ""}
+            onChange={e => setStatus(e.target.value as string)}
             SelectProps={{displayEmpty: true}}
           >
             {/* eslint-disable-next-line react/no-unescaped-entities */}
             <MenuItem value="">Tout</MenuItem>
-            <MenuItem value="true">Actif</MenuItem>
-            <MenuItem value="false">Inactif</MenuItem>
+            <MenuItem value="not_started">Non démarré</MenuItem>
+            <MenuItem value="in_progress">En cours</MenuItem>
+            <MenuItem value="completed">Terminé</MenuItem>
           </CustomTextField>
         </Grid>
       </Grid>

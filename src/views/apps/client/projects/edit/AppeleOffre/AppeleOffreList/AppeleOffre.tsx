@@ -18,7 +18,7 @@ const AppeleOffre = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
-  const {edit} = useParams(); // Get clientId from route parameters
+  const {edit} = useParams();
 
 
   // Pass parameters to the query hook

@@ -65,6 +65,7 @@ paths:
           - -user__date_joined
           - -user__email
           - -user__first_name
+          - -user__is_active
           - -user__last_name
           - created_at
           - created_by__email
@@ -72,6 +73,7 @@ paths:
           - user__date_joined
           - user__email
           - user__first_name
+          - user__is_active
           - user__last_name
         description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
       - in: query
@@ -255,6 +257,189 @@ paths:
             application/json:
               schema:
                 description: Permission denied.
+          description: ''
+  /categories/:
+    get:
+      operationId: categories_retrieve
+      description: Retrieve a list of all the categories with pagination.
+      summary: List all the categories.
+      parameters:
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by creator's email (contains match)
+      - in: query
+        name: description
+        schema:
+          type: string
+        description: Filter by category description (contains match)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by category name (contains match)
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProduct'
+          description: ''
+  /categories/{category_id}/:
+    get:
+      operationId: categories_retrieve_2
+      description: Fetches detailed information about a category by their ID.
+      summary: Retrieve category Details
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /categories/create/:
+    post:
+      operationId: categories_create_create
+      description: Create a new category.
+      tags:
+      - Product Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /categories/delete/{category_id}/:
+    delete:
+      operationId: categories_delete_destroy
+      description: Deletes a Category by ID. Requires administrative privileges.
+      summary: Delete Category
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: Category deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Category not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /categories/update/{category_id}/:
+    put:
+      operationId: categories_update_update
+      description: Updates informations for an existing category .
+      summary: Update category
+      parameters:
+      - in: path
+        name: category_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
           description: ''
   /clients/:
     get:
@@ -568,6 +753,7 @@ paths:
           - -user__date_joined
           - -user__email
           - -user__first_name
+          - -user__is_active
           - -user__last_name
           - created_at
           - created_by__email
@@ -575,6 +761,7 @@ paths:
           - user__date_joined
           - user__email
           - user__first_name
+          - user__is_active
           - user__last_name
         description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
       - in: query
@@ -750,6 +937,7 @@ paths:
           - -user__date_joined
           - -user__email
           - -user__first_name
+          - -user__is_active
           - -user__last_name
           - created_at
           - created_by__email
@@ -757,6 +945,7 @@ paths:
           - user__date_joined
           - user__email
           - user__first_name
+          - user__is_active
           - user__last_name
         description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
       - in: query
@@ -1335,6 +1524,24 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /intervenant/roles/:
+    get:
+      operationId: intervenant_roles_retrieve
+      description: Fetches the available roles for Intervenants, including each role's
+        value and label.
+      summary: Retrieve Intervenant Role Options
+      tags:
+      - Project Intervenant Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: Available roles for Intervenants
   /login/:
     post:
       operationId: login_create
@@ -1894,6 +2101,271 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /products/:
+    get:
+      operationId: products_retrieve
+      description: Retrieve a list of all the products with pagination.
+      summary: List all the products.
+      parameters:
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by creator's email (contains match)
+      - in: query
+        name: description
+        schema:
+          type: string
+        description: Filter by product description (contains match)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by product name (contains match)
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProduct'
+          description: ''
+  /products/{product_id}/:
+    get:
+      operationId: products_retrieve_2
+      description: Fetches detailed information about a product by their ID.
+      summary: Retrieve product Details
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+  /products/create/:
+    post:
+      operationId: products_create_create
+      description: Create a new product.
+      tags:
+      - Product Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /products/delete/{product_id}/:
+    delete:
+      operationId: products_delete_destroy
+      description: Deletes a Product by ID. Requires administrative privileges.
+      summary: Delete Product
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: product deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: product not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /products/media/{product_media_id}/:
+    get:
+      operationId: products_media_retrieve
+      description: Fetches detailed information about a product media by their ID.
+      summary: Retrieve product media details
+      parameters:
+      - in: path
+        name: product_media_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductMedia'
+          description: ''
+  /products/media/create/:
+    post:
+      operationId: products_media_create_create
+      description: Upload a Product Media.
+      tags:
+      - Product Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductMediaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              examples:
+                Success:
+                  value:
+                    message: Product Media created successfully!
+                  description: Successfully created the product media
+          description: ''
+  /products/media/delete/{product_media_id}/:
+    delete:
+      operationId: products_media_delete_destroy
+      description: Deletes a Product Media by ID. Requires administrative privileges.
+      summary: Delete Product Media
+      parameters:
+      - in: path
+        name: product_media_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: product media deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: product media not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /products/update/{product_id}/:
+    put:
+      operationId: products_update_update
+      description: Updates information for an existing product .
+      summary: Update product
+      parameters:
+      - in: path
+        name: product_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /project-lots/{project_lot_id}/:
     get:
       operationId: project_lots_retrieve
@@ -2366,6 +2838,56 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /project-lots/subcontractors/{project_lot_subcontractor_id}/update-status/:
+    put:
+      operationId: update_project_lot_subcontractor_status
+      description: Update the status of a ProjectLot Subcontractor by providing the
+        new status.
+      summary: Update Status of Project Lot Subcontractor
+      parameters:
+      - in: path
+        name: project_lot_subcontractor_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectLotSubcontractorUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectLotSubcontractorUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectLotSubcontractorUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLotSubcontractor'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /project-lots/subcontractors/documents/{document_id}/delete-devis/:
     delete:
       operationId: project_lots_subcontractors_documents_delete_devis_destroy
@@ -2612,6 +3134,111 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProjectStaff'
           description: ''
+  /projects/{project_id}/intervenants/:
+    get:
+      operationId: project_intervenant_list
+      description: Retrieve a list of all Intervenants for a specific project.
+      summary: List all Intervenants in a project
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -intervenant__role
+          - -intervenant__user__date_joined
+          - -intervenant__user__email
+          - -intervenant__user__first_name
+          - -intervenant__user__last_name
+          - created_at
+          - created_by__email
+          - id
+          - intervenant__role
+          - intervenant__user__date_joined
+          - intervenant__user__email
+          - intervenant__user__first_name
+          - intervenant__user__last_name
+        description: Order results by fields (e.g., 'name', '-created_at')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: role
+        schema:
+          type: string
+          enum:
+          - Architecte
+          - Assistance maîtrise d’ouvrage hygiène et environnement
+          - Bureau d'étude technique
+          - Bureau de contrôle
+          - Client
+          - Coordonnateur sécurité et protection de la santé
+        description: Filter by  role
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by first name, last name, or email
+      tags:
+      - Project Intervenant Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectIntervenant'
+          description: ''
+  /projects/{project_id}/intervenants/add/:
+    post:
+      operationId: project_intervenant_create
+      description: Creates a new Intervenant and assigns them to a Project.
+      summary: Add an Intervenant to a Project
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Intervenant Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntervenantCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IntervenantCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IntervenantCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIntervenant'
+          description: ''
   /projects/{project_id}/lots/:
     get:
       operationId: projects_lots_retrieve
@@ -2794,6 +3421,69 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProjectStaffTree'
           description: ''
+  /projects/{project_id}/suivi-administrative/:
+    get:
+      operationId: list_suivi_administrative
+      description: Retrieve a list of Suivi Administrative processes for each project
+        lot in a project, with pagination and filtering.
+      summary: List all administrative processes grouped by project lot
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -project_lot__lot__name
+          - -status
+          - created_at
+          - created_by__email
+          - id
+          - project_lot__lot__name
+          - status
+        description: Order results by fields (e.g., 'lot__name', '-created_at')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by administrative status or related intervenant
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - completed
+          - in_progress
+          - not_started
+        description: Filter by status
+      tags:
+      - Suivi Administrative Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSuiviAdministrative'
+          description: ''
   /projects/{project_id}/templates/:
     get:
       operationId: projects_templates_list
@@ -2887,6 +3577,86 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
+  /projects/intervenants/{project_intervenant_id}/:
+    get:
+      operationId: project_intervenant_detail
+      description: Fetches detailed information about a specific Project Intervenant
+        by ID.
+      summary: Retrieve Project Intervenant Details
+      parameters:
+      - in: path
+        name: project_intervenant_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Intervenant Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIntervenant'
+          description: Project Intervenant details retrieved successfully.
+        '404':
+          description: Project Intervenant not found.
+  /projects/intervenants/{project_intervenant_id}/delete/:
+    delete:
+      operationId: project_intervenant_delete
+      description: Delete an Intervenant from a specific project.
+      summary: Remove an Intervenant from a project
+      parameters:
+      - in: path
+        name: project_intervenant_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Intervenant Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Intervenant removed successfully.
+        '404':
+          description: ProjectIntervenant not found.
+        '500':
+          description: An unexpected error occurred.
+  /projects/intervenants/{project_intervenant_id}/update/:
+    put:
+      operationId: project_intervenant_update
+      description: Update user information (excluding email) and role of an Intervenant
+        assigned to a project.
+      summary: Update an Intervenant's data and role in a project
+      parameters:
+      - in: path
+        name: project_intervenant_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Intervenant Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntervenantUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IntervenantUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IntervenantUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Intervenant updated successfully.
+        '404':
+          description: ProjectIntervenant not found.
   /projects/staff/{project_staff_id}/:
     get:
       operationId: getProjectStaffById
@@ -3397,6 +4167,11 @@ paths:
           type: string
         description: Filter by first name (contains match)
       - in: query
+        name: is_active
+        schema:
+          type: boolean
+        description: Filter by active status (True or False)
+      - in: query
         name: last_name
         schema:
           type: string
@@ -3412,6 +4187,7 @@ paths:
           - -user__date_joined
           - -user__email
           - -user__first_name
+          - -user__is_active
           - -user__last_name
           - created_at
           - created_by__email
@@ -3419,6 +4195,7 @@ paths:
           - user__date_joined
           - user__email
           - user__first_name
+          - user__is_active
           - user__last_name
         description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
       - in: query
@@ -3599,6 +4376,7 @@ paths:
           - -user__date_joined
           - -user__email
           - -user__first_name
+          - -user__is_active
           - -user__last_name
           - created_at
           - created_by__email
@@ -3606,6 +4384,7 @@ paths:
           - user__date_joined
           - user__email
           - user__first_name
+          - user__is_active
           - user__last_name
         description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
       - in: query
@@ -3825,6 +4604,63 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /suivi-administrative/{suivi_administrative_id}/:
+    get:
+      operationId: retrieve_suivi_administrative_detail
+      description: Fetches detailed information about a specific Suivi Administrative
+        record by ID.
+      summary: Retrieve details of a specific Suivi Administrative record
+      parameters:
+      - in: path
+        name: suivi_administrative_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuiviAdministrative'
+          description: ''
+        '404':
+          description: Suivi Administrative record not found.
+  /suivi-administrative/steps/{step_id}/update/:
+    patch:
+      operationId: update_suivi_administrative_step
+      description: Update the status and nbr_of_days for a specific administrative
+        step, with automatic calculation of target_date.
+      summary: Update specific fields of a Suivi Administrative Step
+      parameters:
+      - in: path
+        name: step_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSuiviAdministrativeStepUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSuiviAdministrativeStepUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSuiviAdministrativeStepUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Step updated successfully.
+        '404':
+          description: Step not found.
   /token_refresh/:
     post:
       operationId: token_refresh_create
@@ -4211,6 +5047,56 @@ components:
           format: binary
       required:
       - avatar
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+          readOnly: true
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - name
+      - products
+      - updated_at
+    CategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - name
     ChannelEnum:
       enum:
       - Email
@@ -4329,6 +5215,35 @@ components:
           $ref: '#/components/schemas/UserUpdateRequest'
       required:
       - user
+    ClientSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Nom de l'entreprise
+          maxLength: 255
+        siren_number:
+          type: string
+          title: Numéro SIREN
+          maxLength: 9
+        contact_email:
+          type: string
+          format: email
+          title: Email de contact
+          maxLength: 254
+        phone_number:
+          type: string
+          title: Numéro de téléphone
+          maxLength: 20
+      required:
+      - contact_email
+      - id
+      - name
+      - phone_number
+      - siren_number
     ClientStaff:
       type: object
       properties:
@@ -4513,6 +5428,23 @@ components:
       - avatar
       - email
       - id
+    CreatedByRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 30
+      required:
+      - email
     Document:
       type: object
       properties:
@@ -4698,6 +5630,57 @@ components:
         * `Failed` - Failed
         * `read` - Read
         * `unread` - unread
+    Intervenant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - role
+      - updated_at
+      - user
+    IntervenantCreateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserCreateRequest'
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+      required:
+      - role
+      - user
+    IntervenantUpdateRequest:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/UserUpdateRequest'
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+      required:
+      - role
+      - user
     Lot:
       type: object
       properties:
@@ -4919,6 +5902,28 @@ components:
       - next
       - previous
       - results
+    PaginatedProduct:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PaginatedProject:
       type: object
       properties:
@@ -4936,6 +5941,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Project'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedProjectIntervenant:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectIntervenant'
       required:
       - count
       - next
@@ -5051,6 +6078,28 @@ components:
       - next
       - previous
       - results
+    PaginatedSuiviAdministrative:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SuiviAdministrative'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PasswordResetRequestRequest:
       type: object
       properties:
@@ -5081,6 +6130,27 @@ components:
       properties:
         user:
           $ref: '#/components/schemas/UserUpdateRequest'
+    PatchedSuiviAdministrativeStepUpdateRequest:
+      type: object
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status3bfEnum'
+          description: |-
+            Status of the step in the suivi administrative process.
+
+            * `not_started` - Not Started
+            * `in_progress` - In Progress
+            * `completed` - Completed
+            * `on_hold` - On Hold
+            * `canceled` - Canceled
+            * `rejected` - Rejected
+            * `temporarily_done` - Temporarily Done
+        nbr_of_days:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          description: Number of days before or after the project start date.
     PatchedUserProfileUpdateRequest:
       type: object
       properties:
@@ -5133,6 +6203,114 @@ components:
       required:
       - number
       - type
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        category:
+          type: integer
+        technical_sheet:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductMedia'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - created_at
+      - created_by
+      - id
+      - media
+      - name
+      - updated_at
+    ProductMedia:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+        product:
+          type: integer
+        created_by:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - image
+      - product
+      - updated_at
+    ProductMediaRequest:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+        product:
+          type: integer
+        created_by:
+          type: integer
+          nullable: true
+      required:
+      - image
+      - product
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        category:
+          type: integer
+        technical_sheet:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+      required:
+      - category
+      - name
     Project:
       type: object
       properties:
@@ -5281,6 +6459,34 @@ components:
           $ref: '#/components/schemas/EmailTemplateUpdateRequest'
       required:
       - email_template
+    ProjectIntervenant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        intervenant:
+          allOf:
+          - $ref: '#/components/schemas/Intervenant'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - intervenant
+      - updated_at
     ProjectLot:
       type: object
       properties:
@@ -5426,6 +6632,11 @@ components:
       required:
       - subcontractor_id
       - subcontractor_staff_id
+    ProjectLotSubcontractorUpdateRequest:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status841Enum'
     ProjectLotUpdateRequest:
       type: object
       properties:
@@ -5440,7 +6651,12 @@ components:
         name:
           type: string
           maxLength: 255
+        client:
+          allOf:
+          - $ref: '#/components/schemas/ClientSimple'
+          readOnly: true
       required:
+      - client
       - id
       - name
     ProjectStaff:
@@ -5608,6 +6824,22 @@ components:
         * `medium` - Medium
         * `high` - High
         * `critical` - Critical
+    RoleEnum:
+      enum:
+      - Architecte
+      - Bureau de contrôle
+      - Bureau d'étude technique
+      - Coordonnateur sécurité et protection de la santé
+      - Assistance maîtrise d’ouvrage hygiène et environnement
+      - Client
+      type: string
+      description: |-
+        * `Architecte` - Architecte
+        * `Bureau de contrôle` - Bureau de contrôle
+        * `Bureau d'étude technique` - Bureau d'étude technique
+        * `Coordonnateur sécurité et protection de la santé` - Coordonnateur sécurité et protection de la santé
+        * `Assistance maîtrise d’ouvrage hygiène et environnement` - Assistance maîtrise d’ouvrage hygiène et environnement
+        * `Client` - Client
     SetNewPasswordRequest:
       type: object
       properties:
@@ -5660,6 +6892,24 @@ components:
         * `review` - Under Review
         * `completed` - Completed
         * `canceled` - Canceled
+    Status3bfEnum:
+      enum:
+      - not_started
+      - in_progress
+      - completed
+      - on_hold
+      - canceled
+      - rejected
+      - temporarily_done
+      type: string
+      description: |-
+        * `not_started` - Not Started
+        * `in_progress` - In Progress
+        * `completed` - Completed
+        * `on_hold` - On Hold
+        * `canceled` - Canceled
+        * `rejected` - Rejected
+        * `temporarily_done` - Temporarily Done
     Status841Enum:
       enum:
       - pending
@@ -5909,6 +7159,123 @@ components:
       - name
       - phone_number
       - siren_number
+    SuiviAdministrative:
+      type: object
+      description: Serializer for the overall suivi administrative process.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project_lot:
+          allOf:
+          - $ref: '#/components/schemas/ProjectLot'
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/SuiviAdministrativeStatusEnum'
+          description: |-
+            Overall status of the administrative process.
+
+            * `not_started` - Not Started
+            * `in_progress` - In Progress
+            * `completed` - Completed
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/SuiviAdministrativeStep'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - project_lot
+      - steps
+      - updated_at
+    SuiviAdministrativeStatusEnum:
+      enum:
+      - not_started
+      - in_progress
+      - completed
+      type: string
+      description: |-
+        * `not_started` - Not Started
+        * `in_progress` - In Progress
+        * `completed` - Completed
+    SuiviAdministrativeStep:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        step_name:
+          type: string
+          maxLength: 255
+        order:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        nbr_of_days:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          description: Number of days before or after the project start date.
+        target_date:
+          type: string
+          format: date
+          nullable: true
+        actual_date:
+          type: string
+          format: date
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status3bfEnum'
+          description: |-
+            Status of the step in the suivi administrative process.
+
+            * `not_started` - Not Started
+            * `in_progress` - In Progress
+            * `completed` - Completed
+            * `on_hold` - On Hold
+            * `canceled` - Canceled
+            * `rejected` - Rejected
+            * `temporarily_done` - Temporarily Done
+        assigned_to:
+          allOf:
+          - $ref: '#/components/schemas/ProjectIntervenant'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - assigned_to
+      - created_at
+      - created_by
+      - id
+      - nbr_of_days
+      - step_name
+      - updated_at
     TemplateTypeEnum:
       enum:
       - upload_devis
