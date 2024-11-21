@@ -6,7 +6,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Tableau de bord',
     href: '/role/dashboard',  // Use role as a placeholder
     icon: 'tabler-smart-home',
-    roles: ['admin', 'client'],
+    roles: ['admin', 'client','subcontractor'],
     permissions: ['view dashboard'],
     isSection: false,
     children: []
@@ -15,7 +15,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Projects',
     href: '/role/projects/list', // Use role as a placeholder
     icon: 'tabler-clipboard-list',
-    roles: ['admin', 'client'],
+    roles: ['admin', 'client','subcontractor'],
     isSection: false,
     children: []
   },
