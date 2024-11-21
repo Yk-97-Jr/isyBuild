@@ -14,6 +14,7 @@ import type { FormValidateProductAddType } from './schemaProductAdd';
 
 import type { CategoryRead} from '@/services/IsyBuildApi';
 import { useCategoriesListQuery } from '@/services/IsyBuildApi';
+import CustomIconButton from '@/@core/components/mui/IconButton';
 
 
 
@@ -80,7 +81,7 @@ const SelectMultiple = ({
   };
 
   return (
-    <div className="flex gap-4 flex-col mbe-6">
+    <div className="flex gap-4  mbe-6  items-end ">
       <CustomTextField
         select
         fullWidth
@@ -115,6 +116,9 @@ return category ? <Chip label={category.name} size="small" /> : null;
         ))}
         {!data?.results?.length && <MenuItem disabled>Loading categories...</MenuItem>}
       </CustomTextField>
+      <CustomIconButton variant='tonal' color='primary' className='min-is-fit'>
+              <i className='tabler-plus' />
+            </CustomIconButton>
     </div>
   );
 };

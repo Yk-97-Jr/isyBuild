@@ -12,7 +12,7 @@ const CategoryAddHeader = ({ onSubmit, isLoading }: { onSubmit: () => void; isLo
   const userRole = user?.role
 
   const handleDiscard = () => {
-    router.push(`/${userRole}/product/list`) 
+    router.push(`/${userRole}/product/list`)     
   }
 
   return (
