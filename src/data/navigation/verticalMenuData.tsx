@@ -56,7 +56,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Produit',
     href: '/role/product/list',  // Use role as a placeholder
     icon: 'tabler-box',
-    roles: ['admin', 'client', 'subcontractor'],
+    roles: ['subcontractor'],
     isSection: false,
     children: []
   },

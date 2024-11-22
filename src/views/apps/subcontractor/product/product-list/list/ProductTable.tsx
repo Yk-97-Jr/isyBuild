@@ -172,7 +172,7 @@ const ProductTable = ({
         header: 'Nom',
         cell: ({row}) => (
           <div className='flex items-center gap-3'>
-            <img src={row.original.media.at(id)?.image ??  '/images/avatars/2.png'} width={38} height={38} className='rounded bg-actionHover' />
+            <img src={row.original.media.at(-1)?.image ??  '/images/avatars/2.png'} width={38} height={38} className='rounded bg-actionHover' />
             <div className='flex flex-col items-start'>
               <Typography color='text.primary' className='font-medium'>
                 {`${row.original.name} `}
