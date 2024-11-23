@@ -24,6 +24,7 @@ import { schemaProductEdit } from './schemaProductEdit'
 import { useProductDetailQuery, useProductUpdateMutation } from '@/services/IsyBuildApi'
 import { useAuth } from '@/contexts/AuthContext'
 import ProductImage from './Productmage'
+import ProductCreatedBy from './ ProductCreatedBy'
 
 const ProductUpdate = () => {
   const { id } = useParams()
@@ -108,8 +109,15 @@ const ProductUpdate = () => {
               <ProductStatus register={register} />
             </Grid>
           </Grid>
+          
+          <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <ProductCreatedBy productData={productData} />
+            </Grid>
+          </Grid>
         </Grid>
-      </Grid>
+        </Grid>
+      
     </form>
   )
 }
