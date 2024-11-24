@@ -4,7 +4,7 @@ import type {ReactElement} from 'react'
 // Next Imports
 import dynamic from 'next/dynamic'
 
-// Component Imports
+// Component Imports 
 import ClientDetails from "@views/apps/admin/clients/details/ClientDetails";
 
 const InfosClient = dynamic(() => import('@views/apps/admin/clients/details/info'))

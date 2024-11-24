@@ -1,15 +1,21 @@
-import { IsyBuildClient as api } from '../apiClients/IsyBuildClient'
+import { IsyBuildClient as api } from "../apiClients/IsyBuildClient";
 
 const injectedRtkApi = api.injectEndpoints({
-  endpoints: build => ({
+  endpoints: (build) => ({
     subcontractorsOwnerDeleteDestroy: build.mutation<
       SubcontractorsOwnerDeleteDestroyApiResponse,
       SubcontractorsOwnerDeleteDestroyApiArg
     >({
-      query: queryArg => ({ url: `/Subcontractors/${queryArg.subcontractorId}/owner/delete/`, method: 'DELETE' })
+      query: (queryArg) => ({
+        url: `/Subcontractors/${queryArg.subcontractorId}/owner/delete/`,
+        method: "DELETE",
+      }),
     }),
-    adminStaffRetrieve: build.query<AdminStaffRetrieveApiResponse, AdminStaffRetrieveApiArg>({
-      query: queryArg => ({
+    adminStaffRetrieve: build.query<
+      AdminStaffRetrieveApiResponse,
+      AdminStaffRetrieveApiArg
+    >({
+      query: (queryArg) => ({
         url: `/admin-staff/`,
         params: {
           created_by__email: queryArg.createdByEmail,
@@ -20,34 +26,51 @@ const injectedRtkApi = api.injectEndpoints({
           search: queryArg.search,
           user__email: queryArg.userEmail,
           user__first_name: queryArg.userFirstName,
-          user__last_name: queryArg.userLastName
-        }
-      })
+          user__last_name: queryArg.userLastName,
+        },
+      }),
     }),
-    adminStaffRetrieve2: build.query<AdminStaffRetrieve2ApiResponse, AdminStaffRetrieve2ApiArg>({
-      query: queryArg => ({ url: `/admin-staff/${queryArg.adminUserId}/` })
+    adminStaffRetrieve2: build.query<
+      AdminStaffRetrieve2ApiResponse,
+      AdminStaffRetrieve2ApiArg
+    >({
+      query: (queryArg) => ({ url: `/admin-staff/${queryArg.adminUserId}/` }),
     }),
-    adminStaffCreateCreate: build.mutation<AdminStaffCreateCreateApiResponse, AdminStaffCreateCreateApiArg>({
-      query: queryArg => ({ url: `/admin-staff/create/`, method: 'POST', body: queryArg.adminStaffCreateRequest })
+    adminStaffCreateCreate: build.mutation<
+      AdminStaffCreateCreateApiResponse,
+      AdminStaffCreateCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/admin-staff/create/`,
+        method: "POST",
+        body: queryArg.adminStaffCreateRequest,
+      }),
     }),
     adminStaffUpdatePartialUpdate: build.mutation<
       AdminStaffUpdatePartialUpdateApiResponse,
       AdminStaffUpdatePartialUpdateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/admin-staff/update/${queryArg.adminUserId}/`,
-        method: 'PATCH',
-        body: queryArg.patchedAdminStaffUpdateRequest
-      })
+        method: "PATCH",
+        body: queryArg.patchedAdminStaffUpdateRequest,
+      }),
     }),
-    adminUsersDeleteDestroy: build.mutation<AdminUsersDeleteDestroyApiResponse, AdminUsersDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/admin-users/delete/${queryArg.adminUserId}/`, method: 'DELETE' })
+    adminUsersDeleteDestroy: build.mutation<
+      AdminUsersDeleteDestroyApiResponse,
+      AdminUsersDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/admin-users/delete/${queryArg.adminUserId}/`,
+        method: "DELETE",
+      }),
     }),
     categoriesList: build.query<CategoriesListApiResponse, CategoriesListApiArg>({
       query: queryArg => ({
         url: `/categories/`,
         params: {
           name: queryArg.name,
+          ordering: queryArg.ordering,
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
@@ -85,35 +108,56 @@ const injectedRtkApi = api.injectEndpoints({
           page_size: queryArg.pageSize,
           phone_number: queryArg.phoneNumber,
           search: queryArg.search,
-          siren_number: queryArg.sirenNumber
-        }
-      })
+          siren_number: queryArg.sirenNumber,
+        },
+      }),
     }),
-    clientsRetrieve2: build.query<ClientsRetrieve2ApiResponse, ClientsRetrieve2ApiArg>({
-      query: queryArg => ({ url: `/clients/${queryArg.clientId}/` })
+    clientsRetrieve2: build.query<
+      ClientsRetrieve2ApiResponse,
+      ClientsRetrieve2ApiArg
+    >({
+      query: (queryArg) => ({ url: `/clients/${queryArg.clientId}/` }),
     }),
-    clientsOwnerRetrieve: build.query<ClientsOwnerRetrieveApiResponse, ClientsOwnerRetrieveApiArg>({
-      query: queryArg => ({ url: `/clients/${queryArg.clientId}/owner/` })
+    clientsOwnerRetrieve: build.query<
+      ClientsOwnerRetrieveApiResponse,
+      ClientsOwnerRetrieveApiArg
+    >({
+      query: (queryArg) => ({ url: `/clients/${queryArg.clientId}/owner/` }),
     }),
-    clientsOwnerAssignUpdate: build.mutation<ClientsOwnerAssignUpdateApiResponse, ClientsOwnerAssignUpdateApiArg>({
-      query: queryArg => ({
+    clientsOwnerAssignUpdate: build.mutation<
+      ClientsOwnerAssignUpdateApiResponse,
+      ClientsOwnerAssignUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/clients/${queryArg.clientId}/owner/assign/`,
-        method: 'PUT',
-        body: queryArg.clientOwnerCreateRequest
-      })
+        method: "PUT",
+        body: queryArg.clientOwnerCreateRequest,
+      }),
     }),
-    clientsOwnerDeleteDestroy: build.mutation<ClientsOwnerDeleteDestroyApiResponse, ClientsOwnerDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/clients/${queryArg.clientId}/owner/delete/`, method: 'DELETE' })
+    clientsOwnerDeleteDestroy: build.mutation<
+      ClientsOwnerDeleteDestroyApiResponse,
+      ClientsOwnerDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/clients/${queryArg.clientId}/owner/delete/`,
+        method: "DELETE",
+      }),
     }),
-    clientsOwnerUpdateUpdate: build.mutation<ClientsOwnerUpdateUpdateApiResponse, ClientsOwnerUpdateUpdateApiArg>({
-      query: queryArg => ({
+    clientsOwnerUpdateUpdate: build.mutation<
+      ClientsOwnerUpdateUpdateApiResponse,
+      ClientsOwnerUpdateUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/clients/${queryArg.clientId}/owner/update/`,
-        method: 'PUT',
-        body: queryArg.clientOwnerUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.clientOwnerUpdateRequest,
+      }),
     }),
-    clientsStaffRetrieve3: build.query<ClientsStaffRetrieve3ApiResponse, ClientsStaffRetrieve3ApiArg>({
-      query: queryArg => ({
+    clientsStaffRetrieve3: build.query<
+      ClientsStaffRetrieve3ApiResponse,
+      ClientsStaffRetrieve3ApiArg
+    >({
+      query: (queryArg) => ({
         url: `/clients/${queryArg.clientId}/staff/`,
         params: {
           created_by: queryArg.createdBy,
@@ -123,25 +167,44 @@ const injectedRtkApi = api.injectEndpoints({
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
-          search: queryArg.search
-        }
-      })
+          search: queryArg.search,
+        },
+      }),
     }),
-    clientsStaffCreateCreate2: build.mutation<ClientsStaffCreateCreate2ApiResponse, ClientsStaffCreateCreate2ApiArg>({
-      query: queryArg => ({
+    clientsStaffCreateCreate2: build.mutation<
+      ClientsStaffCreateCreate2ApiResponse,
+      ClientsStaffCreateCreate2ApiArg
+    >({
+      query: (queryArg) => ({
         url: `/clients/${queryArg.clientId}/staff/create/`,
-        method: 'POST',
-        body: queryArg.clientStaffCreateRequest
-      })
+        method: "POST",
+        body: queryArg.clientStaffCreateRequest,
+      }),
     }),
-    clientsCreateCreate: build.mutation<ClientsCreateCreateApiResponse, ClientsCreateCreateApiArg>({
-      query: queryArg => ({ url: `/clients/create/`, method: 'POST', body: queryArg.clientCreateUpdateRequest })
+    clientsCreateCreate: build.mutation<
+      ClientsCreateCreateApiResponse,
+      ClientsCreateCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/clients/create/`,
+        method: "POST",
+        body: queryArg.clientCreateUpdateRequest,
+      }),
     }),
-    clientsDeleteDestroy: build.mutation<ClientsDeleteDestroyApiResponse, ClientsDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/clients/delete/${queryArg.clientId}/`, method: 'DELETE' })
+    clientsDeleteDestroy: build.mutation<
+      ClientsDeleteDestroyApiResponse,
+      ClientsDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/clients/delete/${queryArg.clientId}/`,
+        method: "DELETE",
+      }),
     }),
-    clientsStaffRetrieve: build.query<ClientsStaffRetrieveApiResponse, ClientsStaffRetrieveApiArg>({
-      query: queryArg => ({
+    clientsStaffRetrieve: build.query<
+      ClientsStaffRetrieveApiResponse,
+      ClientsStaffRetrieveApiArg
+    >({
+      query: (queryArg) => ({
         url: `/clients/staff/`,
         params: {
           created_by: queryArg.createdBy,
@@ -151,76 +214,130 @@ const injectedRtkApi = api.injectEndpoints({
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
-          search: queryArg.search
-        }
-      })
+          search: queryArg.search,
+        },
+      }),
     }),
-    clientsStaffRetrieve2: build.query<ClientsStaffRetrieve2ApiResponse, ClientsStaffRetrieve2ApiArg>({
-      query: queryArg => ({ url: `/clients/staff/${queryArg.clientStaffId}/` })
+    clientsStaffRetrieve2: build.query<
+      ClientsStaffRetrieve2ApiResponse,
+      ClientsStaffRetrieve2ApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/clients/staff/${queryArg.clientStaffId}/`,
+      }),
     }),
-    clientsStaffDeleteDestroy: build.mutation<ClientsStaffDeleteDestroyApiResponse, ClientsStaffDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/clients/staff/${queryArg.clientStaffId}/delete/`, method: 'DELETE' })
+    clientsStaffDeleteDestroy: build.mutation<
+      ClientsStaffDeleteDestroyApiResponse,
+      ClientsStaffDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/clients/staff/${queryArg.clientStaffId}/delete/`,
+        method: "DELETE",
+      }),
     }),
-    clientsStaffUpdateUpdate: build.mutation<ClientsStaffUpdateUpdateApiResponse, ClientsStaffUpdateUpdateApiArg>({
-      query: queryArg => ({
+    clientsStaffUpdateUpdate: build.mutation<
+      ClientsStaffUpdateUpdateApiResponse,
+      ClientsStaffUpdateUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/clients/staff/${queryArg.clientStaffId}/update/`,
-        method: 'PUT',
-        body: queryArg.clientStaffUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.clientStaffUpdateRequest,
+      }),
     }),
-    clientsStaffCreateCreate: build.mutation<ClientsStaffCreateCreateApiResponse, ClientsStaffCreateCreateApiArg>({
-      query: queryArg => ({ url: `/clients/staff/create/`, method: 'POST', body: queryArg.clientStaffCreateRequest })
+    clientsStaffCreateCreate: build.mutation<
+      ClientsStaffCreateCreateApiResponse,
+      ClientsStaffCreateCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/clients/staff/create/`,
+        method: "POST",
+        body: queryArg.clientStaffCreateRequest,
+      }),
     }),
-    clientsUpdateUpdate: build.mutation<ClientsUpdateUpdateApiResponse, ClientsUpdateUpdateApiArg>({
-      query: queryArg => ({
+    clientsUpdateUpdate: build.mutation<
+      ClientsUpdateUpdateApiResponse,
+      ClientsUpdateUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/clients/update/${queryArg.clientId}/`,
-        method: 'PUT',
-        body: queryArg.clientCreateUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.clientCreateUpdateRequest,
+      }),
     }),
-    contactUsSendEmailCreate: build.mutation<ContactUsSendEmailCreateApiResponse, ContactUsSendEmailCreateApiArg>({
-      query: queryArg => ({ url: `/contact-us/send-email/`, method: 'POST', body: queryArg.contactUsEmailRequest })
+    contactUsSendEmailCreate: build.mutation<
+      ContactUsSendEmailCreateApiResponse,
+      ContactUsSendEmailCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/contact-us/send-email/`,
+        method: "POST",
+        body: queryArg.contactUsEmailRequest,
+      }),
     }),
-    contactsRetrieve: build.query<ContactsRetrieveApiResponse, ContactsRetrieveApiArg>({
-      query: queryArg => ({ url: `/contacts/${queryArg.contactId}/` })
+    contactsRetrieve: build.query<
+      ContactsRetrieveApiResponse,
+      ContactsRetrieveApiArg
+    >({
+      query: (queryArg) => ({ url: `/contacts/${queryArg.contactId}/` }),
     }),
-    contactsDeleteDestroy: build.mutation<ContactsDeleteDestroyApiResponse, ContactsDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/contacts/${queryArg.contactId}/delete/`, method: 'DELETE' })
+    contactsDeleteDestroy: build.mutation<
+      ContactsDeleteDestroyApiResponse,
+      ContactsDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/contacts/${queryArg.contactId}/delete/`,
+        method: "DELETE",
+      }),
     }),
     contactsPhoneNumbersRetrieve: build.query<
       ContactsPhoneNumbersRetrieveApiResponse,
       ContactsPhoneNumbersRetrieveApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/contacts/${queryArg.contactId}/phone-numbers/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize }
-      })
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
     }),
     contactsPhoneNumbersCreateCreate: build.mutation<
       ContactsPhoneNumbersCreateCreateApiResponse,
       ContactsPhoneNumbersCreateCreateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/contacts/${queryArg.contactId}/phone-numbers/create/`,
-        method: 'POST',
-        body: queryArg.phoneNumberCreateUpdateRequest
-      })
+        method: "POST",
+        body: queryArg.phoneNumberCreateUpdateRequest,
+      }),
     }),
-    contactsUpdateUpdate: build.mutation<ContactsUpdateUpdateApiResponse, ContactsUpdateUpdateApiArg>({
-      query: queryArg => ({
+    contactsUpdateUpdate: build.mutation<
+      ContactsUpdateUpdateApiResponse,
+      ContactsUpdateUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/contacts/${queryArg.contactId}/update/`,
-        method: 'PUT',
-        body: queryArg.contactCreateUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.contactCreateUpdateRequest,
+      }),
     }),
-    getDocumentDetail: build.query<GetDocumentDetailApiResponse, GetDocumentDetailApiArg>({
-      query: queryArg => ({ url: `/document/${queryArg.documentId}/` })
+    getDocumentDetail: build.query<
+      GetDocumentDetailApiResponse,
+      GetDocumentDetailApiArg
+    >({
+      query: (queryArg) => ({ url: `/document/${queryArg.documentId}/` }),
     }),
-    getDocumentHistory: build.query<GetDocumentHistoryApiResponse, GetDocumentHistoryApiArg>({
-      query: queryArg => ({ url: `/document/${queryArg.documentId}/history` })
+    getDocumentHistory: build.query<
+      GetDocumentHistoryApiResponse,
+      GetDocumentHistoryApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document/${queryArg.documentId}/history`,
+      }),
     }),
-    getFolderDetail: build.query<GetFolderDetailApiResponse, GetFolderDetailApiArg>({
-      query: queryArg => ({ url: `/folders/${queryArg.folderId}/` })
+    getFolderDetail: build.query<
+      GetFolderDetailApiResponse,
+      GetFolderDetailApiArg
+    >({
+      query: (queryArg) => ({ url: `/folders/${queryArg.folderId}/` }),
     }),
     intervenantRolesRetrieve: build.query<IntervenantRolesRetrieveApiResponse, IntervenantRolesRetrieveApiArg>({
       query: () => ({ url: `/intervenant/roles/` })
@@ -257,13 +374,21 @@ const injectedRtkApi = api.injectEndpoints({
       query: queryArg => ({ url: `/localisations/create/`, method: 'POST', body: queryArg.localisationRequest })
     }),
     loginCreate: build.mutation<LoginCreateApiResponse, LoginCreateApiArg>({
-      query: queryArg => ({ url: `/login/`, method: 'POST', body: queryArg.tokenObtainPairRequest })
+      query: (queryArg) => ({
+        url: `/login/`,
+        method: "POST",
+        body: queryArg.tokenObtainPairRequest,
+      }),
     }),
     logoutCreate: build.mutation<LogoutCreateApiResponse, LogoutCreateApiArg>({
-      query: queryArg => ({ url: `/logout/`, method: 'POST', body: queryArg.tokenRefreshRequest })
+      query: (queryArg) => ({
+        url: `/logout/`,
+        method: "POST",
+        body: queryArg.tokenRefreshRequest,
+      }),
     }),
     lotsRetrieve: build.query<LotsRetrieveApiResponse, LotsRetrieveApiArg>({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/lots/`,
         params: {
           client_ids: queryArg.clientIds,
@@ -272,52 +397,110 @@ const injectedRtkApi = api.injectEndpoints({
           name: queryArg.name,
           ordering: queryArg.ordering,
           page: queryArg.page,
-          page_size: queryArg.pageSize
-        }
-      })
+          page_size: queryArg.pageSize,
+        },
+      }),
     }),
     lotsRetrieve2: build.query<LotsRetrieve2ApiResponse, LotsRetrieve2ApiArg>({
-      query: queryArg => ({ url: `/lots/${queryArg.lotId}/` })
+      query: (queryArg) => ({ url: `/lots/${queryArg.lotId}/` }),
     }),
-    lotsCreateCreate: build.mutation<LotsCreateCreateApiResponse, LotsCreateCreateApiArg>({
-      query: queryArg => ({ url: `/lots/create/`, method: 'POST', body: queryArg.lotCreateUpdateRequest })
+    lotsCreateCreate: build.mutation<
+      LotsCreateCreateApiResponse,
+      LotsCreateCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/lots/create/`,
+        method: "POST",
+        body: queryArg.lotCreateUpdateRequest,
+      }),
     }),
-    lotsDeleteDestroy: build.mutation<LotsDeleteDestroyApiResponse, LotsDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/lots/delete/${queryArg.lotId}/`, method: 'DELETE' })
+    lotsDeleteDestroy: build.mutation<
+      LotsDeleteDestroyApiResponse,
+      LotsDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/lots/delete/${queryArg.lotId}/`,
+        method: "DELETE",
+      }),
     }),
-    lotsUpdateUpdate: build.mutation<LotsUpdateUpdateApiResponse, LotsUpdateUpdateApiArg>({
-      query: queryArg => ({
+    lotsUpdateUpdate: build.mutation<
+      LotsUpdateUpdateApiResponse,
+      LotsUpdateUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/lots/update/${queryArg.lotId}/`,
-        method: 'PUT',
-        body: queryArg.lotCreateUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.lotCreateUpdateRequest,
+      }),
     }),
-    getInAppNotificationsList: build.query<GetInAppNotificationsListApiResponse, GetInAppNotificationsListApiArg>({
-      query: queryArg => ({
+    getInAppNotificationsList: build.query<
+      GetInAppNotificationsListApiResponse,
+      GetInAppNotificationsListApiArg
+    >({
+      query: (queryArg) => ({
         url: `/notifications/in-app/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize }
-      })
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
     }),
-    getInAppNotificationDetail: build.query<GetInAppNotificationDetailApiResponse, GetInAppNotificationDetailApiArg>({
-      query: queryArg => ({ url: `/notifications/in-app/${queryArg.notificationId}` })
+    getInAppNotificationDetail: build.query<
+      GetInAppNotificationDetailApiResponse,
+      GetInAppNotificationDetailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/notifications/in-app/${queryArg.notificationId}`,
+      }),
     }),
-    markNotificationAsRead: build.mutation<MarkNotificationAsReadApiResponse, MarkNotificationAsReadApiArg>({
-      query: queryArg => ({ url: `/notifications/in-app/${queryArg.notificationId}/read/`, method: 'POST' })
+    markNotificationAsRead: build.mutation<
+      MarkNotificationAsReadApiResponse,
+      MarkNotificationAsReadApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/notifications/in-app/${queryArg.notificationId}/read/`,
+        method: "POST",
+      }),
     }),
-    passwordConfirmCreate: build.mutation<PasswordConfirmCreateApiResponse, PasswordConfirmCreateApiArg>({
-      query: queryArg => ({ url: `/password-confirm/`, method: 'POST', body: queryArg.setNewPasswordRequest })
+    passwordConfirmCreate: build.mutation<
+      PasswordConfirmCreateApiResponse,
+      PasswordConfirmCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/password-confirm/`,
+        method: "POST",
+        body: queryArg.setNewPasswordRequest,
+      }),
     }),
-    passwordResetCreate: build.mutation<PasswordResetCreateApiResponse, PasswordResetCreateApiArg>({
-      query: queryArg => ({ url: `/password-reset/`, method: 'POST', body: queryArg.passwordResetRequestRequest })
+    passwordResetCreate: build.mutation<
+      PasswordResetCreateApiResponse,
+      PasswordResetCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/password-reset/`,
+        method: "POST",
+        body: queryArg.passwordResetRequestRequest,
+      }),
     }),
-    phoneNumbersRetrieve: build.query<PhoneNumbersRetrieveApiResponse, PhoneNumbersRetrieveApiArg>({
-      query: queryArg => ({ url: `/phone-numbers/${queryArg.phoneNumberId}/` })
+    phoneNumbersRetrieve: build.query<
+      PhoneNumbersRetrieveApiResponse,
+      PhoneNumbersRetrieveApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/phone-numbers/${queryArg.phoneNumberId}/`,
+      }),
     }),
-    phoneNumbersDeleteDestroy: build.mutation<PhoneNumbersDeleteDestroyApiResponse, PhoneNumbersDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/phone-numbers/${queryArg.phoneNumberId}/delete/`, method: 'DELETE' })
+    phoneNumbersDeleteDestroy: build.mutation<
+      PhoneNumbersDeleteDestroyApiResponse,
+      PhoneNumbersDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/phone-numbers/${queryArg.phoneNumberId}/delete/`,
+        method: "DELETE",
+      }),
     }),
-    phoneNumbersUpdateUpdate: build.mutation<PhoneNumbersUpdateUpdateApiResponse, PhoneNumbersUpdateUpdateApiArg>({
-      query: queryArg => ({
+    phoneNumbersUpdateUpdate: build.mutation<
+      PhoneNumbersUpdateUpdateApiResponse,
+      PhoneNumbersUpdateUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/phone-numbers/${queryArg.phoneNumberId}/update/`,
         method: 'PUT',
         body: queryArg.phoneNumberCreateUpdateRequest
@@ -328,7 +511,9 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/products/`,
         params: {
           category: queryArg.category,
+          category: queryArg.category,
           name: queryArg.name,
+          ordering: queryArg.ordering,
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
@@ -364,14 +549,20 @@ const injectedRtkApi = api.injectEndpoints({
     projectLotsRetrieve: build.query<ProjectLotsRetrieveApiResponse, ProjectLotsRetrieveApiArg>({
       query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/` })
     }),
-    projectLotsDeleteDestroy: build.mutation<ProjectLotsDeleteDestroyApiResponse, ProjectLotsDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/delete/`, method: 'DELETE' })
+    projectLotsDeleteDestroy: build.mutation<
+      ProjectLotsDeleteDestroyApiResponse,
+      ProjectLotsDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/project-lots/${queryArg.projectLotId}/delete/`,
+        method: "DELETE",
+      }),
     }),
     projectLotsSubcontractorsRetrieve2: build.query<
       ProjectLotsSubcontractorsRetrieve2ApiResponse,
       ProjectLotsSubcontractorsRetrieve2ApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/${queryArg.projectLotId}/subcontractors/`,
         params: {
           created_by: queryArg.createdBy,
@@ -382,105 +573,120 @@ const injectedRtkApi = api.injectEndpoints({
           status: queryArg.status,
           subcontractor_name: queryArg.subcontractorName,
           subcontractor_staff_email: queryArg.subcontractorStaffEmail,
-          subcontractor_staff_first_name: queryArg.subcontractorStaffFirstName
-        }
-      })
+          subcontractor_staff_first_name: queryArg.subcontractorStaffFirstName,
+        },
+      }),
     }),
     projectLotsSubcontractorsAssignCreate: build.mutation<
       ProjectLotsSubcontractorsAssignCreateApiResponse,
       ProjectLotsSubcontractorsAssignCreateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/${queryArg.projectLotId}/subcontractors/assign/`,
-        method: 'POST',
-        body: queryArg.projectLotSubcontractorCreateRequest
-      })
+        method: "POST",
+        body: queryArg.projectLotSubcontractorCreateRequest,
+      }),
     }),
     projectLotsUpdateStatusUpdate: build.mutation<
       ProjectLotsUpdateStatusUpdateApiResponse,
       ProjectLotsUpdateStatusUpdateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/${queryArg.projectLotId}/update-status/`,
-        method: 'PUT',
-        body: queryArg.projectLotUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.projectLotUpdateRequest,
+      }),
     }),
     projectLotsUploadDocumentCreate: build.mutation<
       ProjectLotsUploadDocumentCreateApiResponse,
       ProjectLotsUploadDocumentCreateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/${queryArg.projectLotId}/upload-document/`,
-        method: 'POST',
-        body: queryArg.documentUploadRequest
-      })
+        method: "POST",
+        body: queryArg.documentUploadRequest,
+      }),
     }),
-    projectLotsCreateCreate: build.mutation<ProjectLotsCreateCreateApiResponse, ProjectLotsCreateCreateApiArg>({
-      query: queryArg => ({ url: `/project-lots/create/`, method: 'POST', body: queryArg.projectLotCreateRequest })
+    projectLotsCreateCreate: build.mutation<
+      ProjectLotsCreateCreateApiResponse,
+      ProjectLotsCreateCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/project-lots/create/`,
+        method: "POST",
+        body: queryArg.projectLotCreateRequest,
+      }),
     }),
     projectLotsDocumentsDeleteDestroy: build.mutation<
       ProjectLotsDocumentsDeleteDestroyApiResponse,
       ProjectLotsDocumentsDeleteDestroyApiArg
     >({
-      query: queryArg => ({ url: `/project-lots/documents/${queryArg.documentId}/delete/`, method: 'DELETE' })
+      query: (queryArg) => ({
+        url: `/project-lots/documents/${queryArg.documentId}/delete/`,
+        method: "DELETE",
+      }),
     }),
     projectLotsDocumentsUpdateCreate: build.mutation<
       ProjectLotsDocumentsUpdateCreateApiResponse,
       ProjectLotsDocumentsUpdateCreateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/documents/${queryArg.documentId}/update/`,
-        method: 'POST',
-        body: queryArg.documentUploadRequest
-      })
+        method: "POST",
+        body: queryArg.documentUploadRequest,
+      }),
     }),
     projectLotsSubcontractorsRetrieve: build.query<
       ProjectLotsSubcontractorsRetrieveApiResponse,
       ProjectLotsSubcontractorsRetrieveApiArg
     >({
-      query: queryArg => ({ url: `/project-lots/subcontractors/${queryArg.projectLotSubcontractorId}/` })
+      query: (queryArg) => ({
+        url: `/project-lots/subcontractors/${queryArg.projectLotSubcontractorId}/`,
+      }),
     }),
     projectLotsSubcontractorsRemoveDestroy: build.mutation<
       ProjectLotsSubcontractorsRemoveDestroyApiResponse,
       ProjectLotsSubcontractorsRemoveDestroyApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/subcontractors/${queryArg.projectLotSubcontractorId}/remove/`,
-        method: 'DELETE'
-      })
+        method: "DELETE",
+      }),
     }),
     updateProjectLotSubcontractorStatus: build.mutation<
       UpdateProjectLotSubcontractorStatusApiResponse,
       UpdateProjectLotSubcontractorStatusApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/subcontractors/${queryArg.projectLotSubcontractorId}/update-status/`,
-        method: 'PUT',
-        body: queryArg.projectLotSubcontractorUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.projectLotSubcontractorUpdateRequest,
+      }),
     }),
     projectLotsSubcontractorsDocumentsDeleteDevisDestroy: build.mutation<
       ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiResponse,
       ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/subcontractors/documents/${queryArg.documentId}/delete-devis/`,
-        method: 'DELETE'
-      })
+        method: "DELETE",
+      }),
     }),
     projectLotsSubcontractorsDocumentsUploadDevisCreate: build.mutation<
       ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiResponse,
       ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/project-lots/subcontractors/documents/${queryArg.projectLotSubcontractorId}/upload-devis/`,
-        method: 'POST',
-        body: queryArg.documentUploadRequest
-      })
+        method: "POST",
+        body: queryArg.documentUploadRequest,
+      }),
     }),
-    projectsRetrieve: build.query<ProjectsRetrieveApiResponse, ProjectsRetrieveApiArg>({
-      query: queryArg => ({
+    projectsRetrieve: build.query<
+      ProjectsRetrieveApiResponse,
+      ProjectsRetrieveApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/`,
         params: {
           client_ids: queryArg.clientIds,
@@ -494,41 +700,56 @@ const injectedRtkApi = api.injectEndpoints({
           percentage_complete_max: queryArg.percentageCompleteMax,
           percentage_complete_min: queryArg.percentageCompleteMin,
           search: queryArg.search,
-          status: queryArg.status
-        }
-      })
+          status: queryArg.status,
+        },
+      }),
     }),
-    projectsRetrieve2: build.query<ProjectsRetrieve2ApiResponse, ProjectsRetrieve2ApiArg>({
-      query: queryArg => ({ url: `/projects/${queryArg.projectId}/` })
+    projectsRetrieve2: build.query<
+      ProjectsRetrieve2ApiResponse,
+      ProjectsRetrieve2ApiArg
+    >({
+      query: (queryArg) => ({ url: `/projects/${queryArg.projectId}/` }),
     }),
-    assignProjectStaff: build.mutation<AssignProjectStaffApiResponse, AssignProjectStaffApiArg>({
-      query: queryArg => ({
+    assignProjectStaff: build.mutation<
+      AssignProjectStaffApiResponse,
+      AssignProjectStaffApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/${queryArg.projectId}/assign-staff/`,
-        method: 'POST',
-        body: queryArg.projectStaffAssignRequest
-      })
+        method: "POST",
+        body: queryArg.projectStaffAssignRequest,
+      }),
     }),
-    projectIntervenantList: build.query<ProjectIntervenantListApiResponse, ProjectIntervenantListApiArg>({
-      query: queryArg => ({
+    projectIntervenantList: build.query<
+      ProjectIntervenantListApiResponse,
+      ProjectIntervenantListApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/${queryArg.projectId}/intervenants/`,
         params: {
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
           role: queryArg.role,
-          search: queryArg.search
-        }
-      })
+          search: queryArg.search,
+        },
+      }),
     }),
-    projectIntervenantCreate: build.mutation<ProjectIntervenantCreateApiResponse, ProjectIntervenantCreateApiArg>({
-      query: queryArg => ({
+    projectIntervenantCreate: build.mutation<
+      ProjectIntervenantCreateApiResponse,
+      ProjectIntervenantCreateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/${queryArg.projectId}/intervenants/add/`,
-        method: 'POST',
-        body: queryArg.intervenantCreateRequest
-      })
+        method: "POST",
+        body: queryArg.intervenantCreateRequest,
+      }),
     }),
-    projectsLotsRetrieve: build.query<ProjectsLotsRetrieveApiResponse, ProjectsLotsRetrieveApiArg>({
-      query: queryArg => ({
+    projectsLotsRetrieve: build.query<
+      ProjectsLotsRetrieveApiResponse,
+      ProjectsLotsRetrieveApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/${queryArg.projectId}/lots/`,
         params: {
           created_by: queryArg.createdBy,
@@ -537,103 +758,179 @@ const injectedRtkApi = api.injectEndpoints({
           page: queryArg.page,
           page_size: queryArg.pageSize,
           search: queryArg.search,
-          status: queryArg.status
-        }
-      })
+          status: queryArg.status,
+        },
+      }),
     }),
-    listProjectStaff: build.query<ListProjectStaffApiResponse, ListProjectStaffApiArg>({
-      query: queryArg => ({
+    listProjectStaff: build.query<
+      ListProjectStaffApiResponse,
+      ListProjectStaffApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/${queryArg.projectId}/staff/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize }
-      })
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
     }),
-    projectsStaffReorderUpdate: build.mutation<ProjectsStaffReorderUpdateApiResponse, ProjectsStaffReorderUpdateApiArg>(
-      {
-        query: queryArg => ({
-          url: `/projects/${queryArg.projectId}/staff/reorder/`,
-          method: 'PUT',
-          body: queryArg.body
-        })
-      }
-    ),
-    getProjectStaffTree: build.query<GetProjectStaffTreeApiResponse, GetProjectStaffTreeApiArg>({
-      query: queryArg => ({ url: `/projects/${queryArg.projectId}/staff/tree/` })
+    projectsStaffReorderUpdate: build.mutation<
+      ProjectsStaffReorderUpdateApiResponse,
+      ProjectsStaffReorderUpdateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/${queryArg.projectId}/staff/reorder/`,
+        method: "PUT",
+        body: queryArg.body,
+      }),
     }),
-    listSuiviAdministrative: build.query<ListSuiviAdministrativeApiResponse, ListSuiviAdministrativeApiArg>({
-      query: queryArg => ({
+    getProjectStaffTree: build.query<
+      GetProjectStaffTreeApiResponse,
+      GetProjectStaffTreeApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/${queryArg.projectId}/staff/tree/`,
+      }),
+    }),
+    listSuiviAdministrative: build.query<
+      ListSuiviAdministrativeApiResponse,
+      ListSuiviAdministrativeApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/${queryArg.projectId}/suivi-administrative/`,
         params: {
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
           search: queryArg.search,
-          status: queryArg.status
-        }
-      })
+          status: queryArg.status,
+        },
+      }),
     }),
-    projectsTemplatesList: build.query<ProjectsTemplatesListApiResponse, ProjectsTemplatesListApiArg>({
-      query: queryArg => ({ url: `/projects/${queryArg.projectId}/templates/` })
+    projectsTemplatesList: build.query<
+      ProjectsTemplatesListApiResponse,
+      ProjectsTemplatesListApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/${queryArg.projectId}/templates/`,
+      }),
     }),
-    projectsCreateCreate: build.mutation<ProjectsCreateCreateApiResponse, ProjectsCreateCreateApiArg>({
-      query: queryArg => ({ url: `/projects/create/`, method: 'POST', body: queryArg.projectCreateRequest })
+    projectsCreateCreate: build.mutation<
+      ProjectsCreateCreateApiResponse,
+      ProjectsCreateCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/create/`,
+        method: "POST",
+        body: queryArg.projectCreateRequest,
+      }),
     }),
-    projectsDeleteDestroy: build.mutation<ProjectsDeleteDestroyApiResponse, ProjectsDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/projects/delete/${queryArg.projectId}/`, method: 'DELETE' })
+    projectsDeleteDestroy: build.mutation<
+      ProjectsDeleteDestroyApiResponse,
+      ProjectsDeleteDestroyApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/delete/${queryArg.projectId}/`,
+        method: "DELETE",
+      }),
     }),
-    projectIntervenantDetail: build.query<ProjectIntervenantDetailApiResponse, ProjectIntervenantDetailApiArg>({
-      query: queryArg => ({ url: `/projects/intervenants/${queryArg.projectIntervenantId}/` })
+    projectIntervenantDetail: build.query<
+      ProjectIntervenantDetailApiResponse,
+      ProjectIntervenantDetailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/intervenants/${queryArg.projectIntervenantId}/`,
+      }),
     }),
-    projectIntervenantDelete: build.mutation<ProjectIntervenantDeleteApiResponse, ProjectIntervenantDeleteApiArg>({
-      query: queryArg => ({ url: `/projects/intervenants/${queryArg.projectIntervenantId}/delete/`, method: 'DELETE' })
+    projectIntervenantDelete: build.mutation<
+      ProjectIntervenantDeleteApiResponse,
+      ProjectIntervenantDeleteApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/intervenants/${queryArg.projectIntervenantId}/delete/`,
+        method: "DELETE",
+      }),
     }),
-    projectIntervenantUpdate: build.mutation<ProjectIntervenantUpdateApiResponse, ProjectIntervenantUpdateApiArg>({
-      query: queryArg => ({
+    projectIntervenantUpdate: build.mutation<
+      ProjectIntervenantUpdateApiResponse,
+      ProjectIntervenantUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/intervenants/${queryArg.projectIntervenantId}/update/`,
-        method: 'PUT',
-        body: queryArg.intervenantUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.intervenantUpdateRequest,
+      }),
     }),
-    getProjectStaffById: build.query<GetProjectStaffByIdApiResponse, GetProjectStaffByIdApiArg>({
-      query: queryArg => ({ url: `/projects/staff/${queryArg.projectStaffId}/` })
+    getProjectStaffById: build.query<
+      GetProjectStaffByIdApiResponse,
+      GetProjectStaffByIdApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/staff/${queryArg.projectStaffId}/`,
+      }),
     }),
-    removeProjectStaffById: build.mutation<RemoveProjectStaffByIdApiResponse, RemoveProjectStaffByIdApiArg>({
-      query: queryArg => ({ url: `/projects/staff/${queryArg.projectStaffId}/remove/`, method: 'DELETE' })
+    removeProjectStaffById: build.mutation<
+      RemoveProjectStaffByIdApiResponse,
+      RemoveProjectStaffByIdApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/staff/${queryArg.projectStaffId}/remove/`,
+        method: "DELETE",
+      }),
     }),
-    updateProjectStaffById: build.mutation<UpdateProjectStaffByIdApiResponse, UpdateProjectStaffByIdApiArg>({
-      query: queryArg => ({
+    updateProjectStaffById: build.mutation<
+      UpdateProjectStaffByIdApiResponse,
+      UpdateProjectStaffByIdApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/staff/${queryArg.projectStaffId}/update/`,
-        method: 'PUT',
-        body: queryArg.projectStaffUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.projectStaffUpdateRequest,
+      }),
     }),
-    projectsTemplatesRetrieve: build.query<ProjectsTemplatesRetrieveApiResponse, ProjectsTemplatesRetrieveApiArg>({
-      query: queryArg => ({ url: `/projects/templates/${queryArg.templateId}/` })
+    projectsTemplatesRetrieve: build.query<
+      ProjectsTemplatesRetrieveApiResponse,
+      ProjectsTemplatesRetrieveApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/templates/${queryArg.templateId}/`,
+      }),
     }),
     projectsTemplatesResetCreate: build.mutation<
       ProjectsTemplatesResetCreateApiResponse,
       ProjectsTemplatesResetCreateApiArg
     >({
-      query: queryArg => ({ url: `/projects/templates/${queryArg.templateId}/reset/`, method: 'POST' })
+      query: (queryArg) => ({
+        url: `/projects/templates/${queryArg.templateId}/reset/`,
+        method: "POST",
+      }),
     }),
     projectsTemplatesUpdateUpdate: build.mutation<
       ProjectsTemplatesUpdateUpdateApiResponse,
       ProjectsTemplatesUpdateUpdateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/projects/templates/${queryArg.templateId}/update/`,
-        method: 'PUT',
-        body: queryArg.projectEmailTemplateUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.projectEmailTemplateUpdateRequest,
+      }),
     }),
-    projectsUpdateUpdate: build.mutation<ProjectsUpdateUpdateApiResponse, ProjectsUpdateUpdateApiArg>({
-      query: queryArg => ({
+    projectsUpdateUpdate: build.mutation<
+      ProjectsUpdateUpdateApiResponse,
+      ProjectsUpdateUpdateApiArg
+    >({
+      query: (queryArg) => ({
         url: `/projects/update/${queryArg.projectId}/`,
-        method: 'PUT',
-        body: queryArg.projectUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.projectUpdateRequest,
+      }),
     }),
-    setPasswordCreate: build.mutation<SetPasswordCreateApiResponse, SetPasswordCreateApiArg>({
-      query: queryArg => ({ url: `/set-password/`, method: 'POST', body: queryArg.setasswordRequest })
+    setPasswordCreate: build.mutation<
+      SetPasswordCreateApiResponse,
+      SetPasswordCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/set-password/`,
+        method: "POST",
+        body: queryArg.setasswordRequest,
+      }),
     }),
     listProjectSubcontractor: build.query<ListProjectSubcontractorApiResponse, ListProjectSubcontractorApiArg>({
       query: queryArg => ({
@@ -670,84 +967,100 @@ const injectedRtkApi = api.injectEndpoints({
           page: queryArg.page,
           page_size: queryArg.pageSize,
           phone_number: queryArg.phoneNumber,
-          siren_number: queryArg.sirenNumber
-        }
-      })
+          siren_number: queryArg.sirenNumber,
+        },
+      }),
     }),
-    subcontractorsRetrieve2: build.query<SubcontractorsRetrieve2ApiResponse, SubcontractorsRetrieve2ApiArg>({
-      query: queryArg => ({ url: `/subcontractors/${queryArg.subcontractorId}/` })
+    subcontractorsRetrieve2: build.query<
+      SubcontractorsRetrieve2ApiResponse,
+      SubcontractorsRetrieve2ApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/subcontractors/${queryArg.subcontractorId}/`,
+      }),
     }),
-    subcontractorsOwnerRetrieve: build.query<SubcontractorsOwnerRetrieveApiResponse, SubcontractorsOwnerRetrieveApiArg>(
-      {
-        query: queryArg => ({ url: `/subcontractors/${queryArg.subcontractorId}/owner/` })
-      }
-    ),
+    subcontractorsOwnerRetrieve: build.query<
+      SubcontractorsOwnerRetrieveApiResponse,
+      SubcontractorsOwnerRetrieveApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/subcontractors/${queryArg.subcontractorId}/owner/`,
+      }),
+    }),
     subcontractorsOwnerAssignUpdate: build.mutation<
       SubcontractorsOwnerAssignUpdateApiResponse,
       SubcontractorsOwnerAssignUpdateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/subcontractors/${queryArg.subcontractorId}/owner/assign/`,
-        method: 'PUT',
-        body: queryArg.subcontractorOwnerCreateRequest
-      })
+        method: "PUT",
+        body: queryArg.subcontractorOwnerCreateRequest,
+      }),
     }),
     subcontractorsOwnerUpdateUpdate: build.mutation<
       SubcontractorsOwnerUpdateUpdateApiResponse,
       SubcontractorsOwnerUpdateUpdateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/subcontractors/${queryArg.subcontractorId}/owner/update/`,
-        method: 'PUT',
-        body: queryArg.subcontractorOwnerUpdateRequest
-      })
+        method: "PUT",
+        body: queryArg.subcontractorOwnerUpdateRequest,
+      }),
     }),
     subcontractorsStaffRetrieve2: build.query<
       SubcontractorsStaffRetrieve2ApiResponse,
       SubcontractorsStaffRetrieve2ApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/subcontractors/${queryArg.subcontractorId}/staff/`,
         params: {
           created_by: queryArg.createdBy,
           email: queryArg.email,
           first_name: queryArg.firstName,
           is_active: queryArg.isActive,
+          is_active: queryArg.isActive,
           last_name: queryArg.lastName,
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
-          search: queryArg.search
-        }
-      })
+          search: queryArg.search,
+        },
+      }),
     }),
     subcontractorsStaffCreateCreate: build.mutation<
       SubcontractorsStaffCreateCreateApiResponse,
       SubcontractorsStaffCreateCreateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/subcontractors/${queryArg.subcontractorId}/staff/create/`,
-        method: 'POST',
-        body: queryArg.subcontractorStaffCreateRequest
-      })
+        method: "POST",
+        body: queryArg.subcontractorStaffCreateRequest,
+      }),
     }),
-    subcontractorsCreateCreate: build.mutation<SubcontractorsCreateCreateApiResponse, SubcontractorsCreateCreateApiArg>(
-      {
-        query: queryArg => ({
-          url: `/subcontractors/create/`,
-          method: 'POST',
-          body: queryArg.subcontractorCreateRequest
-        })
-      }
-    ),
+    subcontractorsCreateCreate: build.mutation<
+      SubcontractorsCreateCreateApiResponse,
+      SubcontractorsCreateCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/subcontractors/create/`,
+        method: "POST",
+        body: queryArg.subcontractorCreateRequest,
+      }),
+    }),
     subcontractorsDeleteDestroy: build.mutation<
       SubcontractorsDeleteDestroyApiResponse,
       SubcontractorsDeleteDestroyApiArg
     >({
-      query: queryArg => ({ url: `/subcontractors/delete/${queryArg.subcontractorId}/`, method: 'DELETE' })
+      query: (queryArg) => ({
+        url: `/subcontractors/delete/${queryArg.subcontractorId}/`,
+        method: "DELETE",
+      }),
     }),
-    getSubcontractorStaffList: build.query<GetSubcontractorStaffListApiResponse, GetSubcontractorStaffListApiArg>({
-      query: queryArg => ({
+    getSubcontractorStaffList: build.query<
+      GetSubcontractorStaffListApiResponse,
+      GetSubcontractorStaffListApiArg
+    >({
+      query: (queryArg) => ({
         url: `/subcontractors/staff/`,
         params: {
           created_by: queryArg.createdBy,
@@ -757,50 +1070,57 @@ const injectedRtkApi = api.injectEndpoints({
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
-          search: queryArg.search
-        }
-      })
+          search: queryArg.search,
+        },
+      }),
     }),
-    subcontractorsStaffRetrieve: build.query<SubcontractorsStaffRetrieveApiResponse, SubcontractorsStaffRetrieveApiArg>(
-      {
-        query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/` })
-      }
-    ),
+    subcontractorsStaffRetrieve: build.query<
+      SubcontractorsStaffRetrieveApiResponse,
+      SubcontractorsStaffRetrieveApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/`,
+      }),
+    }),
     subcontractorsStaffDeleteDestroy: build.mutation<
       SubcontractorsStaffDeleteDestroyApiResponse,
       SubcontractorsStaffDeleteDestroyApiArg
     >({
-      query: queryArg => ({ url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/delete/`, method: 'DELETE' })
+      query: (queryArg) => ({
+        url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/delete/`,
+        method: "DELETE",
+      }),
     }),
     subcontractorsStaffUpdatePartialUpdate: build.mutation<
       SubcontractorsStaffUpdatePartialUpdateApiResponse,
       SubcontractorsStaffUpdatePartialUpdateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/subcontractors/staff/${queryArg.subcontractorStaffId}/update/`,
-        method: 'PATCH',
-        body: queryArg.patchedSubcontractorStaffUpdateRequest
-      })
+        method: "PATCH",
+        body: queryArg.patchedSubcontractorStaffUpdateRequest,
+      }),
     }),
     createSubcontractorBySubcontractorUser: build.mutation<
       CreateSubcontractorBySubcontractorUserApiResponse,
       CreateSubcontractorBySubcontractorUserApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/subcontractors/staff/create/`,
-        method: 'POST',
-        body: queryArg.subcontractorStaffCreateRequest
-      })
+        method: "POST",
+        body: queryArg.subcontractorStaffCreateRequest,
+      }),
     }),
-    subcontractorsUpdateUpdate: build.mutation<SubcontractorsUpdateUpdateApiResponse, SubcontractorsUpdateUpdateApiArg>(
-      {
-        query: queryArg => ({
-          url: `/subcontractors/update/${queryArg.subcontractorId}/`,
-          method: 'PUT',
-          body: queryArg.subcontractorUpdateRequest
-        })
-      }
-    ),
+    subcontractorsUpdateUpdate: build.mutation<
+      SubcontractorsUpdateUpdateApiResponse,
+      SubcontractorsUpdateUpdateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/subcontractors/update/${queryArg.subcontractorId}/`,
+        method: "PUT",
+        body: queryArg.subcontractorUpdateRequest,
+      }),
+    }),
     retrieveSuiviAdministrativeDetail: build.query<
       RetrieveSuiviAdministrativeDetailApiResponse,
       RetrieveSuiviAdministrativeDetailApiArg
@@ -820,11 +1140,11 @@ const injectedRtkApi = api.injectEndpoints({
       UpdateSuiviAdministrativeStepApiResponse,
       UpdateSuiviAdministrativeStepApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/suivi-administrative/steps/${queryArg.stepId}/update/`,
-        method: 'PATCH',
-        body: queryArg.patchedSuiviAdministrativeStepUpdateRequest
-      })
+        method: "PATCH",
+        body: queryArg.patchedSuiviAdministrativeStepUpdateRequest,
+      }),
     }),
     addSuiviAdministrativeStepComment: build.mutation<
       AddSuiviAdministrativeStepCommentApiResponse,
@@ -839,107 +1159,135 @@ const injectedRtkApi = api.injectEndpoints({
     tokenRefreshCreate: build.mutation<TokenRefreshCreateApiResponse, TokenRefreshCreateApiArg>({
       query: queryArg => ({ url: `/token_refresh/`, method: 'POST', body: queryArg.tokenRefreshRequest })
     }),
-    userChangePasswordCreate: build.mutation<UserChangePasswordCreateApiResponse, UserChangePasswordCreateApiArg>({
-      query: queryArg => ({ url: `/user/change-password/`, method: 'POST', body: queryArg.userChangePasswordRequest })
+    userChangePasswordCreate: build.mutation<
+      UserChangePasswordCreateApiResponse,
+      UserChangePasswordCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/user/change-password/`,
+        method: "POST",
+        body: queryArg.userChangePasswordRequest,
+      }),
     }),
     userConfirmEmailChangeCreate: build.mutation<
       UserConfirmEmailChangeCreateApiResponse,
       UserConfirmEmailChangeCreateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/user/confirm-email-change/`,
-        method: 'POST',
-        body: queryArg.userEmailChangeConfirmRequest
-      })
+        method: "POST",
+        body: queryArg.userEmailChangeConfirmRequest,
+      }),
     }),
-    userProfileRetrieve: build.query<UserProfileRetrieveApiResponse, UserProfileRetrieveApiArg>({
-      query: () => ({ url: `/user/profile/` })
+    userProfileRetrieve: build.query<
+      UserProfileRetrieveApiResponse,
+      UserProfileRetrieveApiArg
+    >({
+      query: () => ({ url: `/user/profile/` }),
     }),
     userRequestChangeEmailCreate: build.mutation<
       UserRequestChangeEmailCreateApiResponse,
       UserRequestChangeEmailCreateApiArg
     >({
-      query: queryArg => ({
+      query: (queryArg) => ({
         url: `/user/request-change-email/`,
-        method: 'POST',
-        body: queryArg.userEmailChangeRequestRequest
-      })
+        method: "POST",
+        body: queryArg.userEmailChangeRequestRequest,
+      }),
     }),
-    userUpdatePartialUpdate: build.mutation<UserUpdatePartialUpdateApiResponse, UserUpdatePartialUpdateApiArg>({
-      query: queryArg => ({ url: `/user/update/`, method: 'PATCH', body: queryArg.patchedUserProfileUpdateRequest })
+    userUpdatePartialUpdate: build.mutation<
+      UserUpdatePartialUpdateApiResponse,
+      UserUpdatePartialUpdateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/user/update/`,
+        method: "PATCH",
+        body: queryArg.patchedUserProfileUpdateRequest,
+      }),
     }),
-    userUpdateAvatarCreate: build.mutation<UserUpdateAvatarCreateApiResponse, UserUpdateAvatarCreateApiArg>({
-      query: queryArg => ({ url: `/user/update-avatar/`, method: 'POST', body: queryArg.avatarUpdateRequest })
-    })
+    userUpdateAvatarCreate: build.mutation<
+      UserUpdateAvatarCreateApiResponse,
+      UserUpdateAvatarCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/user/update-avatar/`,
+        method: "POST",
+        body: queryArg.avatarUpdateRequest,
+      }),
+    }),
   }),
-  overrideExisting: false
-})
+  overrideExisting: false,
+});
 
-export { injectedRtkApi as pIsyBuildApi }
-export type SubcontractorsOwnerDeleteDestroyApiResponse = /** status 204  */ any
+export { injectedRtkApi as pIsyBuildApi };
+export type SubcontractorsOwnerDeleteDestroyApiResponse =
+  /** status 204  */ any;
 export type SubcontractorsOwnerDeleteDestroyApiArg = {
-  subcontractorId: number
-}
-export type AdminStaffRetrieveApiResponse = /** status 200  */ PaginatedAdminStaffRead
+  subcontractorId: number;
+};
+export type AdminStaffRetrieveApiResponse =
+  /** status 200  */ PaginatedAdminStaffRead;
 export type AdminStaffRetrieveApiArg = {
 
   /** Filter by created by email (contains match) */
-  createdByEmail?: string
+  createdByEmail?: string;
 
   /** Filter by active status (True or False) */
-  isActive?: boolean
+  isActive?: boolean;
 
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-user__date_joined'
-    | '-user__email'
-    | '-user__first_name'
-    | '-user__is_active'
-    | '-user__last_name'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'user__date_joined'
-    | 'user__email'
-    | 'user__first_name'
-    | 'user__is_active'
-    | 'user__last_name'
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-user__date_joined"
+    | "-user__email"
+    | "-user__first_name"
+    | "-user__is_active"
+    | "-user__last_name"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "user__date_joined"
+    | "user__email"
+    | "user__first_name"
+    | "user__is_active"
+    | "user__last_name";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
+  pageSize?: number;
 
   /** Search by first name, last name, or email */
-  search?: string
+  search?: string;
 
   /** Filter by email (contains match) */
-  userEmail?: string
+  userEmail?: string;
 
   /** Filter by first name (contains match) */
-  userFirstName?: string
+  userFirstName?: string;
 
   /** Filter by last name (contains match) */
-  userLastName?: string
-}
-export type AdminStaffRetrieve2ApiResponse = /** status 200  */ AdminStaffRead
+  userLastName?: string;
+};
+export type AdminStaffRetrieve2ApiResponse = /** status 200  */ AdminStaffRead;
 export type AdminStaffRetrieve2ApiArg = {
-  adminUserId: number
-}
-export type AdminStaffCreateCreateApiResponse = /** status 201  */ AdminStaffRead
+  adminUserId: number;
+};
+export type AdminStaffCreateCreateApiResponse =
+  /** status 201  */ AdminStaffRead;
 export type AdminStaffCreateCreateApiArg = {
-  adminStaffCreateRequest: AdminStaffCreateRequestWrite
-}
-export type AdminStaffUpdatePartialUpdateApiResponse = /** status 200  */ AdminStaffRead
+  adminStaffCreateRequest: AdminStaffCreateRequestWrite;
+};
+export type AdminStaffUpdatePartialUpdateApiResponse =
+  /** status 200  */ AdminStaffRead;
 export type AdminStaffUpdatePartialUpdateApiArg = {
-  adminUserId: number
-  patchedAdminStaffUpdateRequest: PatchedAdminStaffUpdateRequest
-}
-export type AdminUsersDeleteDestroyApiResponse = /** status 204  */ any
+  adminUserId: number;
+  patchedAdminStaffUpdateRequest: PatchedAdminStaffUpdateRequest;
+};
+export type AdminUsersDeleteDestroyApiResponse = /** status 204  */ any;
 export type AdminUsersDeleteDestroyApiArg = {
   adminUserId: number
 }
@@ -963,7 +1311,7 @@ export type CategoriesListApiArg = {
     | 'name'
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
   pageSize?: number
@@ -992,241 +1340,250 @@ export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedClientRead
 export type ClientsRetrieveApiArg = {
 
   /** Filter by contact email (contains match) */
-  contactEmail?: string
+  contactEmail?: string;
 
   /** Filter by the email of the creator */
-  createdByEmail?: string
+  createdByEmail?: string;
 
   /** Filter by active status (True or False) */
-  isActive?: boolean
+  isActive?: boolean;
 
   /** Filter by client name (contains match) */
-  name?: string
+  name?: string;
 
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
-    | '-contact_email'
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-is_active'
-    | '-name'
-    | '-owner__email'
-    | '-phone_number'
-    | '-siren_number'
-    | 'contact_email'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'is_active'
-    | 'name'
-    | 'owner__email'
-    | 'phone_number'
-    | 'siren_number'
+    | "-contact_email"
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-is_active"
+    | "-name"
+    | "-owner__email"
+    | "-phone_number"
+    | "-siren_number"
+    | "contact_email"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "is_active"
+    | "name"
+    | "owner__email"
+    | "phone_number"
+    | "siren_number";
 
   /** Filter by the owner's email */
-  ownerEmail?: string
+  ownerEmail?: string;
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
+  pageSize?: number;
 
   /** Filter by phone number (contains match) */
-  phoneNumber?: string
+  phoneNumber?: string;
 
   /** Search by client name, email, or phone number */
-  search?: string
+  search?: string;
 
   /** Filter by SIREN number (contains match) */
-  sirenNumber?: string
-}
-export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead
+  sirenNumber?: string;
+};
+export type ClientsRetrieve2ApiResponse = /** status 200  */ ClientRead;
 export type ClientsRetrieve2ApiArg = {
-  clientId: number
-}
-export type ClientsOwnerRetrieveApiResponse = /** status 200  */ UserRead
+  clientId: number;
+};
+export type ClientsOwnerRetrieveApiResponse = /** status 200  */ UserRead;
 export type ClientsOwnerRetrieveApiArg = {
-  clientId: number
-}
-export type ClientsOwnerAssignUpdateApiResponse = /** status 200  */ ClientRead
+  clientId: number;
+};
+export type ClientsOwnerAssignUpdateApiResponse = /** status 200  */ ClientRead;
 export type ClientsOwnerAssignUpdateApiArg = {
-  clientId: number
-  clientOwnerCreateRequest: ClientOwnerCreateRequestWrite
-}
-export type ClientsOwnerDeleteDestroyApiResponse = /** status 204  */ any
+  clientId: number;
+  clientOwnerCreateRequest: ClientOwnerCreateRequestWrite;
+};
+export type ClientsOwnerDeleteDestroyApiResponse = /** status 204  */ any;
 export type ClientsOwnerDeleteDestroyApiArg = {
-  clientId: number
-}
-export type ClientsOwnerUpdateUpdateApiResponse = /** status 200  */ ClientRead
+  clientId: number;
+};
+export type ClientsOwnerUpdateUpdateApiResponse = /** status 200  */ ClientRead;
 export type ClientsOwnerUpdateUpdateApiArg = {
-  clientId: number
-  clientOwnerUpdateRequest: ClientOwnerUpdateRequest
-}
-export type ClientsStaffRetrieve3ApiResponse = /** status 200  */ PaginatedClientStaffRead
+  clientId: number;
+  clientOwnerUpdateRequest: ClientOwnerUpdateRequest;
+};
+export type ClientsStaffRetrieve3ApiResponse =
+  /** status 200  */ PaginatedClientStaffRead;
 export type ClientsStaffRetrieve3ApiArg = {
-  clientId: number
+  clientId: number;
 
   /** Filter by created by email (contains match) */
-  createdBy?: string
+  createdBy?: string;
 
   /** Filter by email (contains match) */
-  email?: string
+  email?: string;
 
   /** Filter by first name (contains match) */
-  firstName?: string
+  firstName?: string;
 
   /** Filter by last name (contains match) */
-  lastName?: string
+  lastName?: string;
 
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-user__date_joined'
-    | '-user__email'
-    | '-user__first_name'
-    | '-user__is_active'
-    | '-user__last_name'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'user__date_joined'
-    | 'user__email'
-    | 'user__first_name'
-    | 'user__is_active'
-    | 'user__last_name'
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-user__date_joined"
+    | "-user__email"
+    | "-user__first_name"
+    | "-user__is_active"
+    | "-user__last_name"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "user__date_joined"
+    | "user__email"
+    | "user__first_name"
+    | "user__is_active"
+    | "user__last_name";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
+  pageSize?: number;
 
   /** Search by first name, last name, or email */
-  search?: string
-}
-export type ClientsStaffCreateCreate2ApiResponse = /** status 201  */ ClientStaffRead
+  search?: string;
+};
+export type ClientsStaffCreateCreate2ApiResponse =
+  /** status 201  */ ClientStaffRead;
 export type ClientsStaffCreateCreate2ApiArg = {
-  clientId: number
-  clientStaffCreateRequest: ClientStaffCreateRequestWrite
-}
-export type ClientsCreateCreateApiResponse = /** status 201  */ ClientRead
+  clientId: number;
+  clientStaffCreateRequest: ClientStaffCreateRequestWrite;
+};
+export type ClientsCreateCreateApiResponse = /** status 201  */ ClientRead;
 export type ClientsCreateCreateApiArg = {
-  clientCreateUpdateRequest: ClientCreateUpdateRequest
-}
-export type ClientsDeleteDestroyApiResponse = /** status 204  */ any
+  clientCreateUpdateRequest: ClientCreateUpdateRequest;
+};
+export type ClientsDeleteDestroyApiResponse = /** status 204  */ any;
 export type ClientsDeleteDestroyApiArg = {
-  clientId: number
-}
-export type ClientsStaffRetrieveApiResponse = /** status 200  */ PaginatedClientStaffRead
+  clientId: number;
+};
+export type ClientsStaffRetrieveApiResponse =
+  /** status 200  */ PaginatedClientStaffRead;
 export type ClientsStaffRetrieveApiArg = {
 
   /** Filter by created by email (contains match) */
-  createdBy?: string
+  createdBy?: string;
 
   /** Filter by email (contains match) */
-  email?: string
+  email?: string;
 
   /** Filter by first name (contains match) */
-  firstName?: string
+  firstName?: string;
 
   /** Filter by last name (contains match) */
-  lastName?: string
+  lastName?: string;
 
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-user__date_joined'
-    | '-user__email'
-    | '-user__first_name'
-    | '-user__is_active'
-    | '-user__last_name'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'user__date_joined'
-    | 'user__email'
-    | 'user__first_name'
-    | 'user__is_active'
-    | 'user__last_name'
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-user__date_joined"
+    | "-user__email"
+    | "-user__first_name"
+    | "-user__is_active"
+    | "-user__last_name"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "user__date_joined"
+    | "user__email"
+    | "user__first_name"
+    | "user__is_active"
+    | "user__last_name";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
+  pageSize?: number;
 
   /** Search by first name, last name, or email */
-  search?: string
-}
-export type ClientsStaffRetrieve2ApiResponse = /** status 200  */ ClientStaffRead
+  search?: string;
+};
+export type ClientsStaffRetrieve2ApiResponse =
+  /** status 200  */ ClientStaffRead;
 export type ClientsStaffRetrieve2ApiArg = {
-  clientStaffId: number
-}
-export type ClientsStaffDeleteDestroyApiResponse = /** status 204  */ any
+  clientStaffId: number;
+};
+export type ClientsStaffDeleteDestroyApiResponse = /** status 204  */ any;
 export type ClientsStaffDeleteDestroyApiArg = {
-  clientStaffId: number
-}
-export type ClientsStaffUpdateUpdateApiResponse = /** status 200  */ ClientStaffRead
+  clientStaffId: number;
+};
+export type ClientsStaffUpdateUpdateApiResponse =
+  /** status 200  */ ClientStaffRead;
 export type ClientsStaffUpdateUpdateApiArg = {
-  clientStaffId: number
-  clientStaffUpdateRequest: ClientStaffUpdateRequest
-}
-export type ClientsStaffCreateCreateApiResponse = /** status 201  */ ClientStaffRead
+  clientStaffId: number;
+  clientStaffUpdateRequest: ClientStaffUpdateRequest;
+};
+export type ClientsStaffCreateCreateApiResponse =
+  /** status 201  */ ClientStaffRead;
 export type ClientsStaffCreateCreateApiArg = {
-  clientStaffCreateRequest: ClientStaffCreateRequestWrite
-}
-export type ClientsUpdateUpdateApiResponse = /** status 200  */ ClientRead
+  clientStaffCreateRequest: ClientStaffCreateRequestWrite;
+};
+export type ClientsUpdateUpdateApiResponse = /** status 200  */ ClientRead;
 export type ClientsUpdateUpdateApiArg = {
-  clientId: number
-  clientCreateUpdateRequest: ClientCreateUpdateRequest
-}
-export type ContactUsSendEmailCreateApiResponse = unknown
+  clientId: number;
+  clientCreateUpdateRequest: ClientCreateUpdateRequest;
+};
+export type ContactUsSendEmailCreateApiResponse = unknown;
 export type ContactUsSendEmailCreateApiArg = {
-  contactUsEmailRequest: ContactUsEmailRequest
-}
-export type ContactsRetrieveApiResponse = /** status 200  */ ContactRead
+  contactUsEmailRequest: ContactUsEmailRequest;
+};
+export type ContactsRetrieveApiResponse = /** status 200  */ ContactRead;
 export type ContactsRetrieveApiArg = {
-  contactId: number
-}
-export type ContactsDeleteDestroyApiResponse = /** status 204  */ any
+  contactId: number;
+};
+export type ContactsDeleteDestroyApiResponse = /** status 204  */ any;
 export type ContactsDeleteDestroyApiArg = {
-  contactId: number
-}
-export type ContactsPhoneNumbersRetrieveApiResponse = /** status 200  */ PaginatedPhoneNumberRead
+  contactId: number;
+};
+export type ContactsPhoneNumbersRetrieveApiResponse =
+  /** status 200  */ PaginatedPhoneNumberRead;
 export type ContactsPhoneNumbersRetrieveApiArg = {
-  contactId: number
+  contactId: number;
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
-}
-export type ContactsPhoneNumbersCreateCreateApiResponse = /** status 201  */ PhoneNumberRead
+  pageSize?: number;
+};
+export type ContactsPhoneNumbersCreateCreateApiResponse =
+  /** status 201  */ PhoneNumberRead;
 export type ContactsPhoneNumbersCreateCreateApiArg = {
-  contactId: number
-  phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
-}
-export type ContactsUpdateUpdateApiResponse = /** status 200  */ ContactRead
+  contactId: number;
+  phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest;
+};
+export type ContactsUpdateUpdateApiResponse = /** status 200  */ ContactRead;
 export type ContactsUpdateUpdateApiArg = {
-  contactId: number
-  contactCreateUpdateRequest: ContactCreateUpdateRequest
-}
-export type GetDocumentDetailApiResponse = /** status 200  */ DocumentRead
+  contactId: number;
+  contactCreateUpdateRequest: ContactCreateUpdateRequest;
+};
+export type GetDocumentDetailApiResponse = /** status 200  */ DocumentRead;
 export type GetDocumentDetailApiArg = {
-  documentId: number
-}
-export type GetDocumentHistoryApiResponse = /** status 200  */ DocumentVersionRead[]
+  documentId: number;
+};
+export type GetDocumentHistoryApiResponse =
+  /** status 200  */ DocumentVersionRead[];
 export type GetDocumentHistoryApiArg = {
-  documentId: number
-}
-export type GetFolderDetailApiResponse = /** status 200  */ FolderRead
+  documentId: number;
+};
+export type GetFolderDetailApiResponse = /** status 200  */ FolderRead;
 export type GetFolderDetailApiArg = {
   folderId: number
 }
@@ -1273,103 +1630,106 @@ export type LocalisationCreateApiArg = {
   localisationRequest: LocalisationRequest
 }
 export type LoginCreateApiResponse = /** status 200  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type LoginCreateApiArg = {
-  tokenObtainPairRequest: TokenObtainPairRequestWrite
-}
-export type LogoutCreateApiResponse = /** status 205 No response body */ void
+  tokenObtainPairRequest: TokenObtainPairRequestWrite;
+};
+export type LogoutCreateApiResponse = /** status 205 No response body */ void;
 export type LogoutCreateApiArg = {
-  tokenRefreshRequest: TokenRefreshRequest
-}
-export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead
+  tokenRefreshRequest: TokenRefreshRequest;
+};
+export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead;
 export type LotsRetrieveApiArg = {
 
   /** Filter by Client IDs (comma-separated) */
-  clientIds?: string
+  clientIds?: string;
 
   /** Filter by creator's email (contains match) */
-  createdBy?: string
+  createdBy?: string;
 
   /** Filter by lot description (contains match) */
-  description?: string
+  description?: string;
 
   /** Filter by lot name (contains match) */
-  name?: string
+  name?: string;
 
   /** Order results by fields (e.g., 'name', '-created_at') */
   ordering?:
-    | '-client__name'
-    | '-created_at'
-    | '-created_by__email'
-    | '-description'
-    | '-id'
-    | '-name'
-    | 'client__name'
-    | 'created_at'
-    | 'created_by__email'
-    | 'description'
-    | 'id'
-    | 'name'
+    | "-client__name"
+    | "-created_at"
+    | "-created_by__email"
+    | "-description"
+    | "-id"
+    | "-name"
+    | "client__name"
+    | "created_at"
+    | "created_by__email"
+    | "description"
+    | "id"
+    | "name";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
-}
-export type LotsRetrieve2ApiResponse = /** status 200  */ LotRead
+  pageSize?: number;
+};
+export type LotsRetrieve2ApiResponse = /** status 200  */ LotRead;
 export type LotsRetrieve2ApiArg = {
-  lotId: number
-}
-export type LotsCreateCreateApiResponse = /** status 201  */ LotRead
+  lotId: number;
+};
+export type LotsCreateCreateApiResponse = /** status 201  */ LotRead;
 export type LotsCreateCreateApiArg = {
-  lotCreateUpdateRequest: LotCreateUpdateRequest
-}
-export type LotsDeleteDestroyApiResponse = /** status 204  */ any
+  lotCreateUpdateRequest: LotCreateUpdateRequest;
+};
+export type LotsDeleteDestroyApiResponse = /** status 204  */ any;
 export type LotsDeleteDestroyApiArg = {
-  lotId: number
-}
-export type LotsUpdateUpdateApiResponse = /** status 200  */ LotRead
+  lotId: number;
+};
+export type LotsUpdateUpdateApiResponse = /** status 200  */ LotRead;
 export type LotsUpdateUpdateApiArg = {
-  lotId: number
-  lotCreateUpdateRequest: LotCreateUpdateRequest
-}
-export type GetInAppNotificationsListApiResponse = /** status 200  */ PaginatedInAppNotificationRead
+  lotId: number;
+  lotCreateUpdateRequest: LotCreateUpdateRequest;
+};
+export type GetInAppNotificationsListApiResponse =
+  /** status 200  */ PaginatedInAppNotificationRead;
 export type GetInAppNotificationsListApiArg = {
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
-}
+  pageSize?: number;
+};
 export type GetInAppNotificationDetailApiResponse =
-  /** status 200 Success: Notification retrieved */ InAppNotificationRead
+  /** status 200 Success: Notification retrieved */ InAppNotificationRead;
 export type GetInAppNotificationDetailApiArg = {
-  notificationId: number
-}
-export type MarkNotificationAsReadApiResponse = unknown
+  notificationId: number;
+};
+export type MarkNotificationAsReadApiResponse = unknown;
 export type MarkNotificationAsReadApiArg = {
-  notificationId: number
-}
-export type PasswordConfirmCreateApiResponse = /** status 200  */ any
+  notificationId: number;
+};
+export type PasswordConfirmCreateApiResponse = /** status 200  */ any;
 export type PasswordConfirmCreateApiArg = {
-  setNewPasswordRequest: SetNewPasswordRequestWrite
-}
-export type PasswordResetCreateApiResponse = /** status 200  */ any
+  setNewPasswordRequest: SetNewPasswordRequestWrite;
+};
+export type PasswordResetCreateApiResponse = /** status 200  */ any;
 export type PasswordResetCreateApiArg = {
-  passwordResetRequestRequest: PasswordResetRequestRequest
-}
-export type PhoneNumbersRetrieveApiResponse = /** status 200  */ PhoneNumberRead
+  passwordResetRequestRequest: PasswordResetRequestRequest;
+};
+export type PhoneNumbersRetrieveApiResponse =
+  /** status 200  */ PhoneNumberRead;
 export type PhoneNumbersRetrieveApiArg = {
-  phoneNumberId: number
-}
-export type PhoneNumbersDeleteDestroyApiResponse = /** status 204  */ any
+  phoneNumberId: number;
+};
+export type PhoneNumbersDeleteDestroyApiResponse = /** status 204  */ any;
 export type PhoneNumbersDeleteDestroyApiArg = {
-  phoneNumberId: number
-}
-export type PhoneNumbersUpdateUpdateApiResponse = /** status 200  */ PhoneNumberRead
+  phoneNumberId: number;
+};
+export type PhoneNumbersUpdateUpdateApiResponse =
+  /** status 200  */ PhoneNumberRead;
 export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
@@ -1399,7 +1759,7 @@ export type ProductListApiArg = {
     | 'name'
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
   pageSize?: number
@@ -1438,368 +1798,409 @@ export type ProductMediaCreateApiArg = {
 }
 export type ProjectLotsRetrieveApiResponse = /** status 200  */ ProjectLotRead
 export type ProjectLotsRetrieveApiArg = {
-  projectLotId: number
-}
+  projectLotId: number;
+};
 export type ProjectLotsDeleteDestroyApiResponse = /** status 204  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type ProjectLotsDeleteDestroyApiArg = {
-  projectLotId: number
-}
-export type ProjectLotsSubcontractorsRetrieve2ApiResponse = /** status 200  */ PaginatedProjectLotSubcontractorRead
+  projectLotId: number;
+};
+export type ProjectLotsSubcontractorsRetrieve2ApiResponse =
+  /** status 200  */ PaginatedProjectLotSubcontractorRead;
 export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
 
   /** Filter by creator's email (contains match) */
-  createdBy?: string
+  createdBy?: string;
 
   /** Order results by fields (e.g., 'subcontractor__name', '-created_at') */
   ordering?:
-    | '-created_at'
-    | '-id'
-    | '-status'
-    | '-subcontractor__name'
-    | '-subcontractor_staff__user__first_name'
-    | 'created_at'
-    | 'id'
-    | 'status'
-    | 'subcontractor__name'
-    | 'subcontractor_staff__user__first_name'
+    | "-created_at"
+    | "-id"
+    | "-status"
+    | "-subcontractor__name"
+    | "-subcontractor_staff__user__first_name"
+    | "created_at"
+    | "id"
+    | "status"
+    | "subcontractor__name"
+    | "subcontractor_staff__user__first_name";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
-  projectLotId: number
+  pageSize?: number;
+  projectLotId: number;
 
   /** Search by subcontractor name, status, or subcontractor staff email/first name */
-  search?: string
+  search?: string;
 
   /** Filter by subcontractor status */
-  status?: 'canceled' | 'completed' | 'in_progress' | 'not_responding' | 'pending'
+  status?:
+    | "canceled"
+    | "completed"
+    | "in_progress"
+    | "not_responding"
+    | "pending";
 
   /** Filter by subcontractor name (contains match) */
-  subcontractorName?: string
+  subcontractorName?: string;
 
   /** Filter by subcontractor staff email (contains match) */
-  subcontractorStaffEmail?: string
+  subcontractorStaffEmail?: string;
 
   /** Filter by subcontractor staff first name (contains match) */
-  subcontractorStaffFirstName?: string
-}
-export type ProjectLotsSubcontractorsAssignCreateApiResponse = /** status 201  */ ProjectLotSubcontractorRead
+  subcontractorStaffFirstName?: string;
+};
+export type ProjectLotsSubcontractorsAssignCreateApiResponse =
+  /** status 201  */ ProjectLotSubcontractorRead;
 export type ProjectLotsSubcontractorsAssignCreateApiArg = {
-  projectLotId: number
-  projectLotSubcontractorCreateRequest: ProjectLotSubcontractorCreateRequest
-}
-export type ProjectLotsUpdateStatusUpdateApiResponse = /** status 200  */ ProjectLotRead
+  projectLotId: number;
+  projectLotSubcontractorCreateRequest: ProjectLotSubcontractorCreateRequest;
+};
+export type ProjectLotsUpdateStatusUpdateApiResponse =
+  /** status 200  */ ProjectLotRead;
 export type ProjectLotsUpdateStatusUpdateApiArg = {
-  projectLotId: number
-  projectLotUpdateRequest: ProjectLotUpdateRequest
-}
+  projectLotId: number;
+  projectLotUpdateRequest: ProjectLotUpdateRequest;
+};
 export type ProjectLotsUploadDocumentCreateApiResponse = /** status 201  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type ProjectLotsUploadDocumentCreateApiArg = {
-  projectLotId: number
-  documentUploadRequest: DocumentUploadRequest
-}
-export type ProjectLotsCreateCreateApiResponse = /** status 201  */ ProjectLotRead
+  projectLotId: number;
+  documentUploadRequest: DocumentUploadRequest;
+};
+export type ProjectLotsCreateCreateApiResponse =
+  /** status 201  */ ProjectLotRead;
 export type ProjectLotsCreateCreateApiArg = {
-  projectLotCreateRequest: ProjectLotCreateRequest
-}
+  projectLotCreateRequest: ProjectLotCreateRequest;
+};
 export type ProjectLotsDocumentsDeleteDestroyApiResponse = /** status 204  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type ProjectLotsDocumentsDeleteDestroyApiArg = {
-  documentId: number
-}
+  documentId: number;
+};
 export type ProjectLotsDocumentsUpdateCreateApiResponse = /** status 200  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type ProjectLotsDocumentsUpdateCreateApiArg = {
-  documentId: number
-  documentUploadRequest: DocumentUploadRequest
-}
-export type ProjectLotsSubcontractorsRetrieveApiResponse = /** status 200  */ ProjectLotSubcontractorRead
+  documentId: number;
+  documentUploadRequest: DocumentUploadRequest;
+};
+export type ProjectLotsSubcontractorsRetrieveApiResponse =
+  /** status 200  */ ProjectLotSubcontractorRead;
 export type ProjectLotsSubcontractorsRetrieveApiArg = {
-  projectLotSubcontractorId: number
-}
-export type ProjectLotsSubcontractorsRemoveDestroyApiResponse = /** status 204  */ {
-  [key: string]: any
-}
+  projectLotSubcontractorId: number;
+};
+export type ProjectLotsSubcontractorsRemoveDestroyApiResponse =
+  /** status 204  */ {
+    [key: string]: any;
+  };
 export type ProjectLotsSubcontractorsRemoveDestroyApiArg = {
-  projectLotSubcontractorId: number
-}
-export type UpdateProjectLotSubcontractorStatusApiResponse = /** status 200  */ ProjectLotSubcontractorRead
+  projectLotSubcontractorId: number;
+};
+export type UpdateProjectLotSubcontractorStatusApiResponse =
+  /** status 200  */ ProjectLotSubcontractorRead;
 export type UpdateProjectLotSubcontractorStatusApiArg = {
-  projectLotSubcontractorId: number
-  projectLotSubcontractorUpdateRequest: ProjectLotSubcontractorUpdateRequest
-}
-export type ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiResponse = /** status 204  */ {
-  [key: string]: any
-}
+  projectLotSubcontractorId: number;
+  projectLotSubcontractorUpdateRequest: ProjectLotSubcontractorUpdateRequest;
+};
+export type ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiResponse =
+  /** status 204  */ {
+    [key: string]: any;
+  };
 export type ProjectLotsSubcontractorsDocumentsDeleteDevisDestroyApiArg = {
-  documentId: number
-}
-export type ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiResponse = /** status 200  */ {
-  [key: string]: any
-}
+  documentId: number;
+};
+export type ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiResponse =
+  /** status 200  */ {
+    [key: string]: any;
+  };
 export type ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiArg = {
-  projectLotSubcontractorId: number
-  documentUploadRequest: DocumentUploadRequest
-}
-export type ProjectsRetrieveApiResponse = /** status 200  */ PaginatedProjectRead
+  projectLotSubcontractorId: number;
+  documentUploadRequest: DocumentUploadRequest;
+};
+export type ProjectsRetrieveApiResponse =
+  /** status 200  */ PaginatedProjectRead;
 export type ProjectsRetrieveApiArg = {
 
   /** Filter by Client IDs (comma-separated) */
-  clientIds?: string
+  clientIds?: string;
 
   /** Filter by project code (contains match) */
-  code?: string
+  code?: string;
 
   /** Filter by creator's email (contains match) */
-  createdBy?: string
+  createdBy?: string;
 
   /** Filter by project description (contains match) */
-  description?: string
+  description?: string;
 
   /** Filter by project name (contains match) */
-  name?: string
+  name?: string;
 
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
-    | '-client__name'
-    | '-code'
-    | '-created_at'
-    | '-created_by__email'
-    | '-description'
-    | '-id'
-    | '-manager__user__email'
-    | '-name'
-    | '-percentage_complete'
-    | '-start_date'
-    | '-status'
-    | 'client__name'
-    | 'code'
-    | 'created_at'
-    | 'created_by__email'
-    | 'description'
-    | 'id'
-    | 'manager__user__email'
-    | 'name'
-    | 'percentage_complete'
-    | 'start_date'
-    | 'status'
+    | "-client__name"
+    | "-code"
+    | "-created_at"
+    | "-created_by__email"
+    | "-description"
+    | "-id"
+    | "-manager__user__email"
+    | "-name"
+    | "-percentage_complete"
+    | "-start_date"
+    | "-status"
+    | "client__name"
+    | "code"
+    | "created_at"
+    | "created_by__email"
+    | "description"
+    | "id"
+    | "manager__user__email"
+    | "name"
+    | "percentage_complete"
+    | "start_date"
+    | "status";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
+  pageSize?: number;
 
   /** Maximum completion percentage */
-  percentageCompleteMax?: number
+  percentageCompleteMax?: number;
 
   /** Minimum completion percentage */
-  percentageCompleteMin?: number
+  percentageCompleteMin?: number;
 
   /** Search by code, name,description ,client name */
-  search?: string
+  search?: string;
 
   /** Filter by project status */
-  status?: 'canceled' | 'completed' | 'draft' | 'in_progress' | 'on_hold' | 'pending'
-}
-export type ProjectsRetrieve2ApiResponse = /** status 200  */ ProjectRead
+  status?:
+    | "canceled"
+    | "completed"
+    | "draft"
+    | "in_progress"
+    | "on_hold"
+    | "pending";
+};
+export type ProjectsRetrieve2ApiResponse = /** status 200  */ ProjectRead;
 export type ProjectsRetrieve2ApiArg = {
-  projectId: number
-}
-export type AssignProjectStaffApiResponse = /** status 201  */ ProjectStaffRead
+  projectId: number;
+};
+export type AssignProjectStaffApiResponse = /** status 201  */ ProjectStaffRead;
 export type AssignProjectStaffApiArg = {
-  projectId: number
-  projectStaffAssignRequest: ProjectStaffAssignRequest
-}
-export type ProjectIntervenantListApiResponse = /** status 200  */ PaginatedProjectIntervenantRead
+  projectId: number;
+  projectStaffAssignRequest: ProjectStaffAssignRequest;
+};
+export type ProjectIntervenantListApiResponse =
+  /** status 200  */ PaginatedProjectIntervenantRead;
 export type ProjectIntervenantListApiArg = {
 
   /** Order results by fields (e.g., 'name', '-created_at') */
   ordering?:
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-intervenant__role'
-    | '-intervenant__user__date_joined'
-    | '-intervenant__user__email'
-    | '-intervenant__user__first_name'
-    | '-intervenant__user__last_name'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'intervenant__role'
-    | 'intervenant__user__date_joined'
-    | 'intervenant__user__email'
-    | 'intervenant__user__first_name'
-    | 'intervenant__user__last_name'
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-intervenant__role"
+    | "-intervenant__user__date_joined"
+    | "-intervenant__user__email"
+    | "-intervenant__user__first_name"
+    | "-intervenant__user__last_name"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "intervenant__role"
+    | "intervenant__user__date_joined"
+    | "intervenant__user__email"
+    | "intervenant__user__first_name"
+    | "intervenant__user__last_name";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
-  projectId: number
+  pageSize?: number;
+  projectId: number;
 
   /** Filter by  role */
   role?:
-    | 'Architecte'
-    | 'Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement'
+    | "Architecte"
+    | "Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement"
     | "Bureau d'\u00E9tude technique"
-    | 'Bureau de contr\u00F4le'
-    | 'Client'
-    | 'Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9'
+    | "Bureau de contr\u00F4le"
+    | "Client"
+    | "Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9";
 
   /** Search by first name, last name, or email */
-  search?: string
-}
-export type ProjectIntervenantCreateApiResponse = /** status 201  */ ProjectIntervenantRead
+  search?: string;
+};
+export type ProjectIntervenantCreateApiResponse =
+  /** status 201  */ ProjectIntervenantRead;
 export type ProjectIntervenantCreateApiArg = {
-  projectId: number
-  intervenantCreateRequest: IntervenantCreateRequestWrite
-}
-export type ProjectsLotsRetrieveApiResponse = /** status 200  */ PaginatedProjectLotRead
+  projectId: number;
+  intervenantCreateRequest: IntervenantCreateRequestWrite;
+};
+export type ProjectsLotsRetrieveApiResponse =
+  /** status 200  */ PaginatedProjectLotRead;
 export type ProjectsLotsRetrieveApiArg = {
 
   /** Filter by creator's email (contains match) */
-  createdBy?: string
+  createdBy?: string;
 
   /** Filter by lot name (contains match) */
-  lotName?: string
+  lotName?: string;
 
   /** Order results by fields (e.g., 'lot__name', '-created_at') */
-  ordering?: '-created_at' | '-id' | '-lot__name' | '-status' | 'created_at' | 'id' | 'lot__name' | 'status'
+  ordering?:
+    | "-created_at"
+    | "-id"
+    | "-lot__name"
+    | "-status"
+    | "created_at"
+    | "id"
+    | "lot__name"
+    | "status";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
-  projectId: number
+  pageSize?: number;
+  projectId: number;
 
   /** Search by lot name or status */
-  search?: string
+  search?: string;
 
   /** Filter by project lot status */
-  status?: 'canceled' | 'completed' | 'in_progress' | 'pending' | 'review'
-}
-export type ListProjectStaffApiResponse = /** status 200  */ PaginatedProjectStaffRead
+  status?: "canceled" | "completed" | "in_progress" | "pending" | "review";
+};
+export type ListProjectStaffApiResponse =
+  /** status 200  */ PaginatedProjectStaffRead;
 export type ListProjectStaffApiArg = {
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
-  projectId: number
-}
+  pageSize?: number;
+  projectId: number;
+};
 export type ProjectsStaffReorderUpdateApiResponse = /** status 200  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type ProjectsStaffReorderUpdateApiArg = {
-  projectId: number
-  body: ProjectStaffReorderRequest[]
-}
-export type GetProjectStaffTreeApiResponse = /** status 200  */ ProjectStaffTreeRead[]
+  projectId: number;
+  body: ProjectStaffReorderRequest[];
+};
+export type GetProjectStaffTreeApiResponse =
+  /** status 200  */ ProjectStaffTreeRead[];
 export type GetProjectStaffTreeApiArg = {
-  projectId: number
-}
-export type ListSuiviAdministrativeApiResponse = /** status 200  */ PaginatedSuiviAdministrativeRead
+  projectId: number;
+};
+export type ListSuiviAdministrativeApiResponse =
+  /** status 200  */ PaginatedSuiviAdministrativeRead;
 export type ListSuiviAdministrativeApiArg = {
 
   /** Order results by fields (e.g., 'lot__name', '-created_at') */
   ordering?:
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-project_lot__lot__name'
-    | '-status'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'project_lot__lot__name'
-    | 'status'
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-project_lot__lot__name"
+    | "-status"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "project_lot__lot__name"
+    | "status";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
-  projectId: number
+  pageSize?: number;
+  projectId: number;
 
   /** Search by administrative status or related intervenant */
-  search?: string
+  search?: string;
 
   /** Filter by status */
-  status?: 'completed' | 'in_progress' | 'not_started'
-}
-export type ProjectsTemplatesListApiResponse = /** status 200  */ ProjectEmailTemplateRead[]
+  status?: "completed" | "in_progress" | "not_started";
+};
+export type ProjectsTemplatesListApiResponse =
+  /** status 200  */ ProjectEmailTemplateRead[];
 export type ProjectsTemplatesListApiArg = {
-  projectId: number
-}
-export type ProjectsCreateCreateApiResponse = /** status 201  */ ProjectRead
+  projectId: number;
+};
+export type ProjectsCreateCreateApiResponse = /** status 201  */ ProjectRead;
 export type ProjectsCreateCreateApiArg = {
-  projectCreateRequest: ProjectCreateRequest
-}
-export type ProjectsDeleteDestroyApiResponse = /** status 204  */ any
+  projectCreateRequest: ProjectCreateRequest;
+};
+export type ProjectsDeleteDestroyApiResponse = /** status 204  */ any;
 export type ProjectsDeleteDestroyApiArg = {
-  projectId: number
-}
+  projectId: number;
+};
 export type ProjectIntervenantDetailApiResponse =
-  /** status 200 Project Intervenant details retrieved successfully. */ ProjectIntervenantRead
+  /** status 200 Project Intervenant details retrieved successfully. */ ProjectIntervenantRead;
 export type ProjectIntervenantDetailApiArg = {
-  projectIntervenantId: number
-}
-export type ProjectIntervenantDeleteApiResponse = unknown
+  projectIntervenantId: number;
+};
+export type ProjectIntervenantDeleteApiResponse = unknown;
 export type ProjectIntervenantDeleteApiArg = {
-  projectIntervenantId: number
-}
-export type ProjectIntervenantUpdateApiResponse = unknown
+  projectIntervenantId: number;
+};
+export type ProjectIntervenantUpdateApiResponse = unknown;
 export type ProjectIntervenantUpdateApiArg = {
-  projectIntervenantId: number
-  intervenantUpdateRequest: IntervenantUpdateRequest
-}
-export type GetProjectStaffByIdApiResponse = /** status 200  */ ProjectStaffRead
+  projectIntervenantId: number;
+  intervenantUpdateRequest: IntervenantUpdateRequest;
+};
+export type GetProjectStaffByIdApiResponse =
+  /** status 200  */ ProjectStaffRead;
 export type GetProjectStaffByIdApiArg = {
-  projectStaffId: number
-}
+  projectStaffId: number;
+};
 export type RemoveProjectStaffByIdApiResponse = /** status 204  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type RemoveProjectStaffByIdApiArg = {
-  projectStaffId: number
-}
-export type UpdateProjectStaffByIdApiResponse = /** status 200  */ ProjectStaffRead
+  projectStaffId: number;
+};
+export type UpdateProjectStaffByIdApiResponse =
+  /** status 200  */ ProjectStaffRead;
 export type UpdateProjectStaffByIdApiArg = {
-  projectStaffId: number
-  projectStaffUpdateRequest: ProjectStaffUpdateRequest
-}
-export type ProjectsTemplatesRetrieveApiResponse = /** status 200  */ ProjectEmailTemplateRead
+  projectStaffId: number;
+  projectStaffUpdateRequest: ProjectStaffUpdateRequest;
+};
+export type ProjectsTemplatesRetrieveApiResponse =
+  /** status 200  */ ProjectEmailTemplateRead;
 export type ProjectsTemplatesRetrieveApiArg = {
-  templateId: number
-}
-export type ProjectsTemplatesResetCreateApiResponse = /** status 200  */ ProjectEmailTemplateRead
+  templateId: number;
+};
+export type ProjectsTemplatesResetCreateApiResponse =
+  /** status 200  */ ProjectEmailTemplateRead;
 export type ProjectsTemplatesResetCreateApiArg = {
-  templateId: number
-}
-export type ProjectsTemplatesUpdateUpdateApiResponse = /** status 200  */ ProjectEmailTemplateRead
+  templateId: number;
+};
+export type ProjectsTemplatesUpdateUpdateApiResponse =
+  /** status 200  */ ProjectEmailTemplateRead;
 export type ProjectsTemplatesUpdateUpdateApiArg = {
-  templateId: number
-  projectEmailTemplateUpdateRequest: ProjectEmailTemplateUpdateRequest
-}
-export type ProjectsUpdateUpdateApiResponse = /** status 200  */ ProjectRead
+  templateId: number;
+  projectEmailTemplateUpdateRequest: ProjectEmailTemplateUpdateRequest;
+};
+export type ProjectsUpdateUpdateApiResponse = /** status 200  */ ProjectRead;
 export type ProjectsUpdateUpdateApiArg = {
-  projectId: number
-  projectUpdateRequest: ProjectUpdateRequest
-}
-export type SetPasswordCreateApiResponse = /** status 200  */ any
+  projectId: number;
+  projectUpdateRequest: ProjectUpdateRequest;
+};
+export type SetPasswordCreateApiResponse = /** status 200  */ any;
 export type SetPasswordCreateApiArg = {
   setasswordRequest: SetasswordRequestWrite
 }
@@ -1835,85 +2236,90 @@ export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubc
 export type SubcontractorsRetrieveApiArg = {
 
   /** Filter by Client IDs (comma-separated) */
-  clientIds?: string
+  clientIds?: string;
 
   /** Filter by contact email (contains match) */
-  contactEmail?: string
+  contactEmail?: string;
 
   /** Filter by the creator's email */
-  createdBy?: string
+  createdBy?: string;
 
   /** Filter by active status (True or False) */
-  isActive?: boolean
+  isActive?: boolean;
 
   /** Filter by Lot IDs (comma-separated) */
-  lotIds?: string
+  lotIds?: string;
 
   /** Filter by subcontractor name (contains match) */
-  name?: string
+  name?: string;
 
   /** Comma-separated fields to order by (e.g., 'name', '-created_at') */
   ordering?:
-    | '-contact_email'
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-is_active'
-    | '-name'
-    | '-owner__email'
-    | '-phone_number'
-    | '-siren_number'
-    | 'contact_email'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'is_active'
-    | 'name'
-    | 'owner__email'
-    | 'phone_number'
-    | 'siren_number'
+    | "-contact_email"
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-is_active"
+    | "-name"
+    | "-owner__email"
+    | "-phone_number"
+    | "-siren_number"
+    | "contact_email"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "is_active"
+    | "name"
+    | "owner__email"
+    | "phone_number"
+    | "siren_number";
 
   /** Filter by the owner's email */
-  ownerEmail?: string
+  ownerEmail?: string;
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
+  pageSize?: number;
 
   /** Filter by phone number (contains match) */
-  phoneNumber?: string
+  phoneNumber?: string;
 
   /** Filter by SIREN number (contains match) */
-  sirenNumber?: string
-}
-export type SubcontractorsRetrieve2ApiResponse = /** status 200  */ SubcontractorRead
+  sirenNumber?: string;
+};
+export type SubcontractorsRetrieve2ApiResponse =
+  /** status 200  */ SubcontractorRead;
 export type SubcontractorsRetrieve2ApiArg = {
-  subcontractorId: number
-}
-export type SubcontractorsOwnerRetrieveApiResponse = /** status 200  */ UserRead
+  subcontractorId: number;
+};
+export type SubcontractorsOwnerRetrieveApiResponse =
+  /** status 200  */ UserRead;
 export type SubcontractorsOwnerRetrieveApiArg = {
-  subcontractorId: number
-}
-export type SubcontractorsOwnerAssignUpdateApiResponse = /** status 200  */ SubcontractorRead
+  subcontractorId: number;
+};
+export type SubcontractorsOwnerAssignUpdateApiResponse =
+  /** status 200  */ SubcontractorRead;
 export type SubcontractorsOwnerAssignUpdateApiArg = {
-  subcontractorId: number
-  subcontractorOwnerCreateRequest: SubcontractorOwnerCreateRequestWrite
-}
-export type SubcontractorsOwnerUpdateUpdateApiResponse = /** status 200  */ SubcontractorRead
+  subcontractorId: number;
+  subcontractorOwnerCreateRequest: SubcontractorOwnerCreateRequestWrite;
+};
+export type SubcontractorsOwnerUpdateUpdateApiResponse =
+  /** status 200  */ SubcontractorRead;
 export type SubcontractorsOwnerUpdateUpdateApiArg = {
-  subcontractorId: number
-  subcontractorOwnerUpdateRequest: SubcontractorOwnerUpdateRequest
-}
-export type SubcontractorsStaffRetrieve2ApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+  subcontractorId: number;
+  subcontractorOwnerUpdateRequest: SubcontractorOwnerUpdateRequest;
+};
+export type SubcontractorsStaffRetrieve2ApiResponse =
+  /** status 200  */ PaginatedSubcontractorStaffRead;
 export type SubcontractorsStaffRetrieve2ApiArg = {
 
   /** Filter by created by email (contains match) */
-  createdBy?: string
+  createdBy?: string;
 
   /** Filter by email (contains match) */
-  email?: string
+  email?: string;
 
   /** Filter by first name (contains match) */
   firstName?: string
@@ -1922,116 +2328,125 @@ export type SubcontractorsStaffRetrieve2ApiArg = {
   isActive?: boolean
 
   /** Filter by last name (contains match) */
-  lastName?: string
+  lastName?: string;
 
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-user__date_joined'
-    | '-user__email'
-    | '-user__first_name'
-    | '-user__is_active'
-    | '-user__last_name'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'user__date_joined'
-    | 'user__email'
-    | 'user__first_name'
-    | 'user__is_active'
-    | 'user__last_name'
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-user__date_joined"
+    | "-user__email"
+    | "-user__first_name"
+    | "-user__is_active"
+    | "-user__last_name"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "user__date_joined"
+    | "user__email"
+    | "user__first_name"
+    | "user__is_active"
+    | "user__last_name";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
+  pageSize?: number;
 
   /** Search by first name, last name, or email */
-  search?: string
-  subcontractorId: number
-}
-export type SubcontractorsStaffCreateCreateApiResponse = /** status 201  */ SubcontractorStaffRead
+  search?: string;
+  subcontractorId: number;
+};
+export type SubcontractorsStaffCreateCreateApiResponse =
+  /** status 201  */ SubcontractorStaffRead;
 export type SubcontractorsStaffCreateCreateApiArg = {
-  subcontractorId: number
-  subcontractorStaffCreateRequest: SubcontractorStaffCreateRequestWrite
-}
-export type SubcontractorsCreateCreateApiResponse = /** status 201  */ SubcontractorRead
+  subcontractorId: number;
+  subcontractorStaffCreateRequest: SubcontractorStaffCreateRequestWrite;
+};
+export type SubcontractorsCreateCreateApiResponse =
+  /** status 201  */ SubcontractorRead;
 export type SubcontractorsCreateCreateApiArg = {
-  subcontractorCreateRequest: SubcontractorCreateRequest
-}
-export type SubcontractorsDeleteDestroyApiResponse = /** status 204  */ any
+  subcontractorCreateRequest: SubcontractorCreateRequest;
+};
+export type SubcontractorsDeleteDestroyApiResponse = /** status 204  */ any;
 export type SubcontractorsDeleteDestroyApiArg = {
-  subcontractorId: number
-}
-export type GetSubcontractorStaffListApiResponse = /** status 200  */ PaginatedSubcontractorStaffRead
+  subcontractorId: number;
+};
+export type GetSubcontractorStaffListApiResponse =
+  /** status 200  */ PaginatedSubcontractorStaffRead;
 export type GetSubcontractorStaffListApiArg = {
 
   /** Filter by created by email (contains match) */
-  createdBy?: string
+  createdBy?: string;
 
   /** Filter by email (contains match) */
-  email?: string
+  email?: string;
 
   /** Filter by first name (contains match) */
-  firstName?: string
+  firstName?: string;
 
   /** Filter by last name (contains match) */
-  lastName?: string
+  lastName?: string;
 
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
-    | '-created_at'
-    | '-created_by__email'
-    | '-id'
-    | '-user__date_joined'
-    | '-user__email'
-    | '-user__first_name'
-    | '-user__is_active'
-    | '-user__last_name'
-    | 'created_at'
-    | 'created_by__email'
-    | 'id'
-    | 'user__date_joined'
-    | 'user__email'
-    | 'user__first_name'
-    | 'user__is_active'
-    | 'user__last_name'
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-user__date_joined"
+    | "-user__email"
+    | "-user__first_name"
+    | "-user__is_active"
+    | "-user__last_name"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "user__date_joined"
+    | "user__email"
+    | "user__first_name"
+    | "user__is_active"
+    | "user__last_name";
 
   /** Page number of the results to fetch */
-  page?: number
+  page?: number;
 
   /** Number of results per page */
-  pageSize?: number
+  pageSize?: number;
 
   /** Search by first name, last name, or email */
-  search?: string
-}
-export type SubcontractorsStaffRetrieveApiResponse = /** status 200  */ SubcontractorStaffRead
+  search?: string;
+};
+export type SubcontractorsStaffRetrieveApiResponse =
+  /** status 200  */ SubcontractorStaffRead;
 export type SubcontractorsStaffRetrieveApiArg = {
-  subcontractorStaffId: number
-}
-export type SubcontractorsStaffDeleteDestroyApiResponse = /** status 204  */ any
+  subcontractorStaffId: number;
+};
+export type SubcontractorsStaffDeleteDestroyApiResponse =
+  /** status 204  */ any;
 export type SubcontractorsStaffDeleteDestroyApiArg = {
-  subcontractorStaffId: number
-}
-export type SubcontractorsStaffUpdatePartialUpdateApiResponse = /** status 200  */ SubcontractorStaffRead
+  subcontractorStaffId: number;
+};
+export type SubcontractorsStaffUpdatePartialUpdateApiResponse =
+  /** status 200  */ SubcontractorStaffRead;
 export type SubcontractorsStaffUpdatePartialUpdateApiArg = {
-  subcontractorStaffId: number
-  patchedSubcontractorStaffUpdateRequest: PatchedSubcontractorStaffUpdateRequest
-}
-export type CreateSubcontractorBySubcontractorUserApiResponse = /** status 201  */ SubcontractorStaffRead
+  subcontractorStaffId: number;
+  patchedSubcontractorStaffUpdateRequest: PatchedSubcontractorStaffUpdateRequest;
+};
+export type CreateSubcontractorBySubcontractorUserApiResponse =
+  /** status 201  */ SubcontractorStaffRead;
 export type CreateSubcontractorBySubcontractorUserApiArg = {
-  subcontractorStaffCreateRequest: SubcontractorStaffCreateRequestWrite
-}
-export type SubcontractorsUpdateUpdateApiResponse = /** status 200  */ SubcontractorRead
+  subcontractorStaffCreateRequest: SubcontractorStaffCreateRequestWrite;
+};
+export type SubcontractorsUpdateUpdateApiResponse =
+  /** status 200  */ SubcontractorRead;
 export type SubcontractorsUpdateUpdateApiArg = {
-  subcontractorId: number
-  subcontractorUpdateRequest: SubcontractorUpdateRequest
-}
-export type RetrieveSuiviAdministrativeDetailApiResponse = /** status 200  */ SuiviAdministrativeRead
+  subcontractorId: number;
+  subcontractorUpdateRequest: SubcontractorUpdateRequest;
+};
+export type RetrieveSuiviAdministrativeDetailApiResponse =
+  /** status 200  */ SuiviAdministrativeRead;
 export type RetrieveSuiviAdministrativeDetailApiArg = {
   suiviAdministrativeId: number
 }
@@ -2057,106 +2472,106 @@ export type AddSuiviAdministrativeStepCommentApiArg = {
   suiviAdministrativeStepCommentCreateRequest: SuiviAdministrativeStepCommentCreateRequest
 }
 export type TokenRefreshCreateApiResponse = /** status 200  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type TokenRefreshCreateApiArg = {
-  tokenRefreshRequest: TokenRefreshRequest
-}
+  tokenRefreshRequest: TokenRefreshRequest;
+};
 export type UserChangePasswordCreateApiResponse = /** status 200  */ {
-  [key: string]: any
-}
+  [key: string]: any;
+};
 export type UserChangePasswordCreateApiArg = {
-  userChangePasswordRequest: UserChangePasswordRequest
-}
+  userChangePasswordRequest: UserChangePasswordRequest;
+};
 export type UserConfirmEmailChangeCreateApiResponse = /** status 200  */ {
-  message?: string
-  new_email?: string
-}
+  message?: string;
+  new_email?: string;
+};
 export type UserConfirmEmailChangeCreateApiArg = {
-  userEmailChangeConfirmRequest: UserEmailChangeConfirmRequest
-}
-export type UserProfileRetrieveApiResponse = /** status 200  */ UserRead
-export type UserProfileRetrieveApiArg = void
-export type UserRequestChangeEmailCreateApiResponse = /** status 200  */ any
+  userEmailChangeConfirmRequest: UserEmailChangeConfirmRequest;
+};
+export type UserProfileRetrieveApiResponse = /** status 200  */ UserRead;
+export type UserProfileRetrieveApiArg = void;
+export type UserRequestChangeEmailCreateApiResponse = /** status 200  */ any;
 export type UserRequestChangeEmailCreateApiArg = {
-  userEmailChangeRequestRequest: UserEmailChangeRequestRequestWrite
-}
-export type UserUpdatePartialUpdateApiResponse = /** status 200  */ UserRead
+  userEmailChangeRequestRequest: UserEmailChangeRequestRequestWrite;
+};
+export type UserUpdatePartialUpdateApiResponse = /** status 200  */ UserRead;
 export type UserUpdatePartialUpdateApiArg = {
-  patchedUserProfileUpdateRequest: PatchedUserProfileUpdateRequest
-}
-export type UserUpdateAvatarCreateApiResponse = /** status 200  */ UserRead
+  patchedUserProfileUpdateRequest: PatchedUserProfileUpdateRequest;
+};
+export type UserUpdateAvatarCreateApiResponse = /** status 200  */ UserRead;
 export type UserUpdateAvatarCreateApiArg = {
-  avatarUpdateRequest: AvatarUpdateRequest
-}
-export type AdminStaff = {}
+  avatarUpdateRequest: AvatarUpdateRequest;
+};
+export type AdminStaff = {};
 export type User = {
-  email: string
-  first_name?: string
-  last_name?: string
-  date_joined?: string
-  is_active?: boolean
-}
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  date_joined?: string;
+  is_active?: boolean;
+};
 export type UserRead = {
-  id: number
-  avatar: string
-  email: string
-  first_name?: string
-  last_name?: string
-  date_joined?: string
-  is_active?: boolean
-  role: string
-}
+  id: number;
+  avatar: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  date_joined?: string;
+  is_active?: boolean;
+  role: string;
+};
 export type CreatedBy = {
-  email: string
-  first_name?: string
-  last_name?: string
-}
+  email: string;
+  first_name?: string;
+  last_name?: string;
+};
 export type CreatedByRead = {
-  id: number
-  avatar: string
-  email: string
-  first_name?: string
-  last_name?: string
-}
+  id: number;
+  avatar: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+};
 export type AdminStaffRead = {
-  id: number
-  user: UserRead
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  user: UserRead;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedAdminStaff = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: AdminStaff[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: AdminStaff[];
+};
 export type PaginatedAdminStaffRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: AdminStaffRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: AdminStaffRead[];
+};
 export type UserCreateRequest = {
-  email: string
-  first_name: string
-  last_name: string
-  is_active?: boolean
-}
+  email: string;
+  first_name: string;
+  last_name: string;
+  is_active?: boolean;
+};
 export type UserCreateRequestWrite = {
-  email: string
-  first_name: string
-  last_name: string
-  is_active?: boolean
-  redirect_uri: string
-}
+  email: string;
+  first_name: string;
+  last_name: string;
+  is_active?: boolean;
+  redirect_uri: string;
+};
 export type AdminStaffCreateRequest = {
-  user: UserCreateRequest
-}
+  user: UserCreateRequest;
+};
 export type AdminStaffCreateRequestWrite = {
-  user: UserCreateRequestWrite
-}
+  user: UserCreateRequestWrite;
+};
 export type PatchedAdminStaffUpdateRequest = {
   first_name?: string
   last_name?: string
@@ -2167,11 +2582,11 @@ export type Category = {
   description?: string | null
 }
 export type Product = {
-  name: string
-  description?: string | null
-  category: number
-  technical_sheet?: string | null
-}
+  name: string;
+  description?: string | null;
+  category: number;
+  technical_sheet?: string | null;
+};
 export type ProductMedia = {
   image: string
   product: number
@@ -2217,207 +2632,207 @@ export type PaginatedCategoryRead = {
   results: CategoryRead[]
 }
 export type CategoryRequest = {
-  name: string
-  description?: string | null
-}
+  name: string;
+  description?: string | null;
+};
 export type Address = {
-  street_number: string
-  street_name: string
-  postal_code: string
-  city: string
-  department?: string | null
-  region?: string | null
-  country?: string
-}
+  street_number: string;
+  street_name: string;
+  postal_code: string;
+  city: string;
+  department?: string | null;
+  region?: string | null;
+  country?: string;
+};
 export type AddressRead = {
-  id: number
-  street_number: string
-  street_name: string
-  postal_code: string
-  city: string
-  department?: string | null
-  region?: string | null
-  country?: string
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  street_number: string;
+  street_name: string;
+  postal_code: string;
+  city: string;
+  department?: string | null;
+  region?: string | null;
+  country?: string;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type Client = {
-  name: string
-  siren_number: string
-  address: Address
-  contact_email: string
-  phone_number: string
-  is_active?: boolean
-}
+  name: string;
+  siren_number: string;
+  address: Address;
+  contact_email: string;
+  phone_number: string;
+  is_active?: boolean;
+};
 export type ClientRead = {
-  id: number
-  name: string
-  siren_number: string
-  address: AddressRead
-  owner: CreatedByRead
-  contact_email: string
-  phone_number: string
-  is_active?: boolean
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  name: string;
+  siren_number: string;
+  address: AddressRead;
+  owner: CreatedByRead;
+  contact_email: string;
+  phone_number: string;
+  is_active?: boolean;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedClient = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: Client[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Client[];
+};
 export type PaginatedClientRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ClientRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ClientRead[];
+};
 export type ClientOwnerCreateRequest = {
-  user: UserCreateRequest
-}
+  user: UserCreateRequest;
+};
 export type ClientOwnerCreateRequestWrite = {
-  user: UserCreateRequestWrite
-}
+  user: UserCreateRequestWrite;
+};
 export type UserUpdateRequest = {
-  first_name: string
-  last_name: string
-  is_active?: boolean
-}
+  first_name: string;
+  last_name: string;
+  is_active?: boolean;
+};
 export type ClientOwnerUpdateRequest = {
-  user: UserUpdateRequest
-}
-export type ClientStaff = {}
+  user: UserUpdateRequest;
+};
+export type ClientStaff = {};
 export type ClientStaffRead = {
-  id: number
-  user: UserRead
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  user: UserRead;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedClientStaff = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ClientStaff[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ClientStaff[];
+};
 export type PaginatedClientStaffRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ClientStaffRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ClientStaffRead[];
+};
 export type ClientStaffCreateRequest = {
-  user: UserCreateRequest
-  client_id?: number | null
-}
+  user: UserCreateRequest;
+  client_id?: number | null;
+};
 export type ClientStaffCreateRequestWrite = {
-  user: UserCreateRequestWrite
-  client_id?: number | null
-}
+  user: UserCreateRequestWrite;
+  client_id?: number | null;
+};
 export type AddressCreateRequest = {
-  street_number: string
-  street_name: string
-  postal_code: string
-  city: string
-  department?: string | null
-  region?: string | null
-  country?: string
-}
+  street_number: string;
+  street_name: string;
+  postal_code: string;
+  city: string;
+  department?: string | null;
+  region?: string | null;
+  country?: string;
+};
 export type ClientCreateUpdateRequest = {
-  name: string
-  siren_number: string
-  address: AddressCreateRequest
-  contact_email: string
-  phone_number: string
-  is_active?: boolean
-}
+  name: string;
+  siren_number: string;
+  address: AddressCreateRequest;
+  contact_email: string;
+  phone_number: string;
+  is_active?: boolean;
+};
 export type ClientStaffUpdateRequest = {
-  user: UserUpdateRequest
-}
+  user: UserUpdateRequest;
+};
 export type ContactUsEmailRequest = {
-  nom: string
-  prenom: string
-  telephone: string
-  email: string
-  fonction: string
-  entreprise: string
-  message?: string
-}
+  nom: string;
+  prenom: string;
+  telephone: string;
+  email: string;
+  fonction: string;
+  entreprise: string;
+  message?: string;
+};
 export type Contact = {
-  first_name: string
-  last_name: string
-  email: string
-}
-export type TypeEnum = 'work' | 'personal' | 'fax'
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+export type TypeEnum = "work" | "personal" | "fax";
 export type PhoneNumber = {
-  number: string
-  type?: TypeEnum
-}
+  number: string;
+  type?: TypeEnum;
+};
 export type PhoneNumberRead = {
-  id: number
-  number: string
-  type?: TypeEnum
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  number: string;
+  type?: TypeEnum;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type ContactRead = {
-  id: number
-  first_name: string
-  last_name: string
-  email: string
-  phone_numbers: PhoneNumberRead[]
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone_numbers: PhoneNumberRead[];
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedPhoneNumber = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: PhoneNumber[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: PhoneNumber[];
+};
 export type PaginatedPhoneNumberRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: PhoneNumberRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: PhoneNumberRead[];
+};
 export type PhoneNumberCreateUpdateRequest = {
-  number: string
-  type: TypeEnum
-}
+  number: string;
+  type: TypeEnum;
+};
 export type ContactCreateUpdateRequest = {
-  first_name: string
-  last_name: string
-  email: string
-}
+  first_name: string;
+  last_name: string;
+  email: string;
+};
 export type Document = {
-  name: string
-  tags?: string | null
-}
+  name: string;
+  tags?: string | null;
+};
 export type DocumentVersion = {
-  version_number: number
-  notes?: string | null
-}
+  version_number: number;
+  notes?: string | null;
+};
 export type DocumentVersionRead = {
-  version_number: number
-  file_url: string
-  notes?: string | null
-  created_at: string
-}
+  version_number: number;
+  file_url: string;
+  notes?: string | null;
+  created_at: string;
+};
 export type DocumentRead = {
-  id: number
-  name: string
-  tags?: string | null
-  latest_version: DocumentVersionRead
-}
+  id: number;
+  name: string;
+  tags?: string | null;
+  latest_version: DocumentVersionRead;
+};
 export type Folder = {
-  name: string
-}
+  name: string;
+};
 export type FolderRead = {
   id: number
   name: string
@@ -2450,82 +2865,87 @@ export type LocalisationRequest = {
 }
 export type TokenObtainPairRequest = {}
 export type TokenObtainPairRequestWrite = {
-  email: string
-  password: string
-}
+  email: string;
+  password: string;
+};
 export type TokenRefreshRequest = {
-  refresh: string
-}
+  refresh: string;
+};
 export type Lot = {
-  name: string
-  description?: string | null
-}
+  name: string;
+  description?: string | null;
+};
 export type LotRead = {
-  id: number
-  name: string
-  description?: string | null
-  client: ClientRead
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  name: string;
+  description?: string | null;
+  client: ClientRead;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedLot = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: Lot[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Lot[];
+};
 export type PaginatedLotRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: LotRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: LotRead[];
+};
 export type LotCreateUpdateRequest = {
-  name: string
-  description?: string | null
-}
-export type InAppNotificationStatusEnum = 'pending' | 'Sent' | 'Failed' | 'read' | 'unread'
-export type ChannelEnum = 'Email' | 'sms' | 'whatsApp' | 'push' | 'in_app'
+  name: string;
+  description?: string | null;
+};
+export type InAppNotificationStatusEnum =
+  | "pending"
+  | "Sent"
+  | "Failed"
+  | "read"
+  | "unread";
+export type ChannelEnum = "Email" | "sms" | "whatsApp" | "push" | "in_app";
 export type InAppNotification = {
-  subject?: string | null
-  message: string
-  status?: InAppNotificationStatusEnum
-  channel: ChannelEnum
-  sent_at?: string | null
-  read_at?: string | null
-  redirect_url?: string | null
-  context_data?: any | null
-}
+  subject?: string | null;
+  message: string;
+  status?: InAppNotificationStatusEnum;
+  channel: ChannelEnum;
+  sent_at?: string | null;
+  read_at?: string | null;
+  redirect_url?: string | null;
+  context_data?: any | null;
+};
 export type InAppNotificationRead = {
-  id: number
-  subject?: string | null
-  message: string
-  status?: InAppNotificationStatusEnum
-  channel: ChannelEnum
-  sent_at?: string | null
-  read_at?: string | null
-  redirect_url?: string | null
-  context_data?: any | null
-}
+  id: number;
+  subject?: string | null;
+  message: string;
+  status?: InAppNotificationStatusEnum;
+  channel: ChannelEnum;
+  sent_at?: string | null;
+  read_at?: string | null;
+  redirect_url?: string | null;
+  context_data?: any | null;
+};
 export type PaginatedInAppNotification = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: InAppNotification[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: InAppNotification[];
+};
 export type PaginatedInAppNotificationRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: InAppNotificationRead[]
-}
-export type SetNewPasswordRequest = {}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: InAppNotificationRead[];
+};
+export type SetNewPasswordRequest = {};
 export type SetNewPasswordRequestWrite = {
-  new_password: string
-  uid: string
-  token: string
-}
+  new_password: string;
+  uid: string;
+  token: string;
+};
 export type PasswordResetRequestRequest = {
   email: string
   redirect_uri: string
@@ -2543,317 +2963,331 @@ export type PaginatedProductRead = {
   results: ProductRead[]
 }
 export type ProductRequest = {
-  name: string
-  description?: string | null
-  category: number
-  technical_sheet?: string | null
-}
+  name: string;
+  description?: string | null;
+  category: number;
+  technical_sheet?: string | null;
+};
 export type ProductMediaRequest = {
   image: Blob
   product: number
 }
 export type Status109Enum = 'pending' | 'in_progress' | 'review' | 'completed' | 'canceled'
 export type ProjectLot = {
-  status?: Status109Enum
-  notes?: string
-}
+  status?: Status109Enum;
+  notes?: string;
+};
 export type ProjectSimple = {
-  name: string
-}
+  name: string;
+};
 export type ClientSimple = {
-  name: string
-  siren_number: string
-  contact_email: string
-  phone_number: string
-}
+  name: string;
+  siren_number: string;
+  contact_email: string;
+  phone_number: string;
+};
 export type ClientSimpleRead = {
-  id: number
-  name: string
-  siren_number: string
-  contact_email: string
-  phone_number: string
-}
+  id: number;
+  name: string;
+  siren_number: string;
+  contact_email: string;
+  phone_number: string;
+};
 export type ProjectSimpleRead = {
-  id: number
-  name: string
-  client: ClientSimpleRead
-}
+  id: number;
+  name: string;
+  client: ClientSimpleRead;
+};
 export type LotSimple = {
-  name: string
-}
+  name: string;
+};
 export type LotSimpleRead = {
-  id: number
-  name: string
-}
+  id: number;
+  name: string;
+};
 export type ProjectLotRead = {
-  id: number
-  project: ProjectSimpleRead
-  lot: LotSimpleRead
-  status?: Status109Enum
-  folder: FolderRead
-  notes?: string
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
-export type Status841Enum = 'pending' | 'in_progress' | 'completed' | 'not_responding' | 'canceled'
+  id: number;
+  project: ProjectSimpleRead;
+  lot: LotSimpleRead;
+  status?: Status109Enum;
+  folder: FolderRead;
+  notes?: string;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
+export type Status841Enum =
+  | "pending"
+  | "in_progress"
+  | "completed"
+  | "not_responding"
+  | "canceled";
 export type ProjectLotSubcontractor = {
-  status?: Status841Enum
-  notes?: string | null
-  notifications_sent?: number
-  last_notification_date?: string | null
-}
+  status?: Status841Enum;
+  notes?: string | null;
+  notifications_sent?: number;
+  last_notification_date?: string | null;
+};
 export type ProjectLotSimple = {
-  status?: Status109Enum
-  notes?: string
-}
+  status?: Status109Enum;
+  notes?: string;
+};
 export type ProjectLotSimpleRead = {
-  id: number
-  project: ProjectSimpleRead
-  lot: LotSimpleRead
-  status?: Status109Enum
-  notes?: string
-}
+  id: number;
+  project: ProjectSimpleRead;
+  lot: LotSimpleRead;
+  status?: Status109Enum;
+  notes?: string;
+};
 export type SubcontractorSimple = {
-  name: string
-  siren_number: string
-}
+  name: string;
+  siren_number: string;
+};
 export type SubcontractorSimpleRead = {
-  id: number
-  name: string
-  siren_number: string
-}
-export type SubcontractorStaffSimple = {}
+  id: number;
+  name: string;
+  siren_number: string;
+};
+export type SubcontractorStaffSimple = {};
 export type SubcontractorStaffSimpleRead = {
-  id: number
-  user: CreatedByRead
-  subcontractor: SubcontractorSimpleRead
-}
+  id: number;
+  user: CreatedByRead;
+  subcontractor: SubcontractorSimpleRead;
+};
 export type ProjectLotSubcontractorRead = {
-  id: number
-  project_lot: ProjectLotSimpleRead
-  subcontractor: SubcontractorSimpleRead
-  subcontractor_staff: SubcontractorStaffSimpleRead
-  devis_document: DocumentRead
-  status?: Status841Enum
-  notes?: string | null
-  notifications_sent?: number
-  last_notification_date?: string | null
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  project_lot: ProjectLotSimpleRead;
+  subcontractor: SubcontractorSimpleRead;
+  subcontractor_staff: SubcontractorStaffSimpleRead;
+  devis_document: DocumentRead;
+  status?: Status841Enum;
+  notes?: string | null;
+  notifications_sent?: number;
+  last_notification_date?: string | null;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedProjectLotSubcontractor = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectLotSubcontractor[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectLotSubcontractor[];
+};
 export type PaginatedProjectLotSubcontractorRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectLotSubcontractorRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectLotSubcontractorRead[];
+};
 export type ProjectLotSubcontractorCreateRequest = {
-  subcontractor_id: number
-  subcontractor_staff_id: number
-  status?: Status841Enum
-  notes?: string | null
-}
+  subcontractor_id: number;
+  subcontractor_staff_id: number;
+  status?: Status841Enum;
+  notes?: string | null;
+};
 export type ProjectLotUpdateRequest = {
-  status?: Status109Enum
-}
+  status?: Status109Enum;
+};
 export type DocumentUploadRequest = {
-  name?: string
-  file: Blob
-  tags?: string
-  notes?: string
-}
+  name?: string;
+  file: Blob;
+  tags?: string;
+  notes?: string;
+};
 export type ProjectLotCreateRequest = {
-  lot_id: number
-  project_id: number
-}
+  lot_id: number;
+  project_id: number;
+};
 export type ProjectLotSubcontractorUpdateRequest = {
-  status?: Status841Enum
-}
-export type ProjectStatusEnum = 'draft' | 'pending' | 'in_progress' | 'completed' | 'on_hold' | 'canceled'
-export type RiskLevelEnum = 'low' | 'medium' | 'high' | 'critical'
+  status?: Status841Enum;
+};
+export type ProjectStatusEnum =
+  | "draft"
+  | "pending"
+  | "in_progress"
+  | "completed"
+  | "on_hold"
+  | "canceled";
+export type RiskLevelEnum = "low" | "medium" | "high" | "critical";
 export type Project = {
-  code: string
-  name: string
-  description?: string
-  status?: ProjectStatusEnum
-  start_date?: string | null
-  estimated_completion_date?: string | null
-  percentage_complete?: string
-  budget?: string
-  actual_cost?: string
-  cost_variance?: string
-  risk_level?: RiskLevelEnum
-  notification_frequency?: number
-  max_notifications?: number
-}
+  code: string;
+  name: string;
+  description?: string;
+  status?: ProjectStatusEnum;
+  start_date?: string | null;
+  estimated_completion_date?: string | null;
+  percentage_complete?: string;
+  budget?: string;
+  actual_cost?: string;
+  cost_variance?: string;
+  risk_level?: RiskLevelEnum;
+  notification_frequency?: number;
+  max_notifications?: number;
+};
 export type MapCoordinate = {
-  latitude: string
-  longitude: string
-}
+  latitude: string;
+  longitude: string;
+};
 export type ProjectRead = {
-  id: number
-  code: string
-  name: string
-  description?: string
-  client: ClientRead
-  status?: ProjectStatusEnum
-  start_date?: string | null
-  estimated_completion_date?: string | null
-  map_coordinate: MapCoordinate
-  percentage_complete?: string
-  budget?: string
-  actual_cost?: string
-  cost_variance?: string
-  risk_level?: RiskLevelEnum
-  address: AddressRead
-  manager: ClientStaffRead
-  notification_frequency?: number
-  max_notifications?: number
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  code: string;
+  name: string;
+  description?: string;
+  client: ClientRead;
+  status?: ProjectStatusEnum;
+  start_date?: string | null;
+  estimated_completion_date?: string | null;
+  map_coordinate: MapCoordinate;
+  percentage_complete?: string;
+  budget?: string;
+  actual_cost?: string;
+  cost_variance?: string;
+  risk_level?: RiskLevelEnum;
+  address: AddressRead;
+  manager: ClientStaffRead;
+  notification_frequency?: number;
+  max_notifications?: number;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedProject = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: Project[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Project[];
+};
 export type PaginatedProjectRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectRead[];
+};
 export type ProjectStaff = {
-  role: string
-}
-export type ClientStaffSimple = {}
+  role: string;
+};
+export type ClientStaffSimple = {};
 export type UserSimple = {
-  email: string
-  first_name?: string
-  last_name?: string
-}
+  email: string;
+  first_name?: string;
+  last_name?: string;
+};
 export type UserSimpleRead = {
-  id: number
-  avatar: string
-  email: string
-  first_name?: string
-  last_name?: string
-}
+  id: number;
+  avatar: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+};
 export type ClientStaffSimpleRead = {
-  id: number
-  user: UserSimpleRead
-}
+  id: number;
+  user: UserSimpleRead;
+};
 export type ProjectStaffRead = {
-  id: number
-  staff: ClientStaffSimpleRead
-  role: string
-  supervisor: ClientStaffSimpleRead | null
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  staff: ClientStaffSimpleRead;
+  role: string;
+  supervisor: ClientStaffSimpleRead | null;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type ProjectStaffAssignRequest = {
-  staff_id: number
-  role: string
-  supervisor_id?: number | null
-}
-export type ProjectIntervenant = {}
+  staff_id: number;
+  role: string;
+  supervisor_id?: number | null;
+};
+export type ProjectIntervenant = {};
 export type RoleEnum =
-  | 'Architecte'
-  | 'Bureau de contr\u00F4le'
+  | "Architecte"
+  | "Bureau de contr\u00F4le"
   | "Bureau d'\u00E9tude technique"
-  | 'Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9'
-  | 'Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement'
-  | 'Client'
+  | "Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9"
+  | "Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement"
+  | "Client";
 export type Intervenant = {
-  role: RoleEnum
-}
+  role: RoleEnum;
+};
 export type IntervenantRead = {
-  id: number
-  user: UserRead
-  role: RoleEnum
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  user: UserRead;
+  role: RoleEnum;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type ProjectIntervenantRead = {
-  id: number
-  intervenant: IntervenantRead
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  intervenant: IntervenantRead;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedProjectIntervenant = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectIntervenant[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectIntervenant[];
+};
 export type PaginatedProjectIntervenantRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectIntervenantRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectIntervenantRead[];
+};
 export type IntervenantCreateRequest = {
-  user: UserCreateRequest
-  role: RoleEnum
-}
+  user: UserCreateRequest;
+  role: RoleEnum;
+};
 export type IntervenantCreateRequestWrite = {
-  user: UserCreateRequestWrite
-  role: RoleEnum
-}
+  user: UserCreateRequestWrite;
+  role: RoleEnum;
+};
 export type PaginatedProjectLot = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectLot[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectLot[];
+};
 export type PaginatedProjectLotRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectLotRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectLotRead[];
+};
 export type PaginatedProjectStaff = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectStaff[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectStaff[];
+};
 export type PaginatedProjectStaffRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProjectStaffRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectStaffRead[];
+};
 export type ProjectStaffReorderRequest = {
-  id: number
-  supervisor_id?: number | null
+  id: number;
+  supervisor_id?: number | null;
   children?: {
-    [key: string]: any
-  }[]
-}
+    [key: string]: any;
+  }[];
+};
 export type ProjectStaffTree = {
-  role: string
-}
+  role: string;
+};
 export type ProjectStaffTreeRead = {
-  id: number
-  staff: ClientStaffSimpleRead
-  role: string
-  children: string
-}
-export type SuiviAdministrativeStatusEnum = 'not_started' | 'in_progress' | 'completed'
+  id: number;
+  staff: ClientStaffSimpleRead;
+  role: string;
+  children: string;
+};
+export type SuiviAdministrativeStatusEnum =
+  | "not_started"
+  | "in_progress"
+  | "completed";
 export type SuiviAdministrative = {
 
   /** Overall status of the administrative process.
@@ -2861,24 +3295,24 @@ export type SuiviAdministrative = {
     * `not_started` - Not Started
     * `in_progress` - In Progress
     * `completed` - Completed */
-  status?: SuiviAdministrativeStatusEnum
-}
+  status?: SuiviAdministrativeStatusEnum;
+};
 export type Status3BfEnum =
-  | 'not_started'
-  | 'in_progress'
-  | 'completed'
-  | 'on_hold'
-  | 'canceled'
-  | 'rejected'
-  | 'temporarily_done'
+  | "not_started"
+  | "in_progress"
+  | "completed"
+  | "on_hold"
+  | "canceled"
+  | "rejected"
+  | "temporarily_done";
 export type SuiviAdministrativeStep = {
-  step_name: string
-  order?: number
+  step_name: string;
+  order?: number;
 
   /** Number of days before or after the project start date. */
-  nbr_of_days: number
-  target_date?: string | null
-  actual_date?: string | null
+  nbr_of_days: number;
+  target_date?: string | null;
+  actual_date?: string | null;
 
   /** Status of the step in the suivi administrative process.
 
@@ -2889,17 +3323,17 @@ export type SuiviAdministrativeStep = {
     * `canceled` - Canceled
     * `rejected` - Rejected
     * `temporarily_done` - Temporarily Done */
-  status?: Status3BfEnum
-}
+  status?: Status3BfEnum;
+};
 export type SuiviAdministrativeStepRead = {
-  id: number
-  step_name: string
-  order?: number
+  id: number;
+  step_name: string;
+  order?: number;
 
   /** Number of days before or after the project start date. */
-  nbr_of_days: number
-  target_date?: string | null
-  actual_date?: string | null
+  nbr_of_days: number;
+  target_date?: string | null;
+  actual_date?: string | null;
 
   /** Status of the step in the suivi administrative process.
 
@@ -2910,146 +3344,146 @@ export type SuiviAdministrativeStepRead = {
     * `canceled` - Canceled
     * `rejected` - Rejected
     * `temporarily_done` - Temporarily Done */
-  status?: Status3BfEnum
-  assigned_to: ProjectIntervenantRead
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  status?: Status3BfEnum;
+  assigned_to: ProjectIntervenantRead;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type SuiviAdministrativeRead = {
-  id: number
-  project_lot: ProjectLotRead
+  id: number;
+  project_lot: ProjectLotRead;
 
   /** Overall status of the administrative process.
 
     * `not_started` - Not Started
     * `in_progress` - In Progress
     * `completed` - Completed */
-  status?: SuiviAdministrativeStatusEnum
-  steps: SuiviAdministrativeStepRead[]
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  status?: SuiviAdministrativeStatusEnum;
+  steps: SuiviAdministrativeStepRead[];
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedSuiviAdministrative = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: SuiviAdministrative[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: SuiviAdministrative[];
+};
 export type PaginatedSuiviAdministrativeRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: SuiviAdministrativeRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: SuiviAdministrativeRead[];
+};
 export type TemplateTypeEnum =
-  | 'upload_devis'
-  | 'assign_subcontractor'
-  | 'update_document'
-  | 'rappel_client'
-  | 'rappel_subcontractor'
+  | "upload_devis"
+  | "assign_subcontractor"
+  | "update_document"
+  | "rappel_client"
+  | "rappel_subcontractor";
 export type ProjectEmailTemplate = {
-  project: ProjectSimple
-  template_type: TemplateTypeEnum
-}
+  project: ProjectSimple;
+  template_type: TemplateTypeEnum;
+};
 export type EmailTemplate = {
 
   /** Template name for internal reference */
-  name: string
+  name: string;
 
   /** Subject template with placeholders */
-  subject_template: string
+  subject_template: string;
 
   /** Customizable header content with placeholders */
-  header_template?: string | null
+  header_template?: string | null;
 
   /** Customizable body content with placeholders */
-  body_template: string
+  body_template: string;
 
   /** Customizable footer content with placeholders */
-  footer_template?: string | null
-}
+  footer_template?: string | null;
+};
 export type EmailTemplateRead = {
-  id: number
+  id: number;
 
   /** Template name for internal reference */
-  name: string
+  name: string;
 
   /** Subject template with placeholders */
-  subject_template: string
+  subject_template: string;
 
   /** Customizable header content with placeholders */
-  header_template?: string | null
+  header_template?: string | null;
 
   /** Customizable body content with placeholders */
-  body_template: string
+  body_template: string;
 
   /** Customizable footer content with placeholders */
-  footer_template?: string | null
-}
+  footer_template?: string | null;
+};
 export type ProjectEmailTemplateRead = {
-  id: number
-  project: ProjectSimpleRead
-  email_template: EmailTemplateRead
-  template_type: TemplateTypeEnum
-}
+  id: number;
+  project: ProjectSimpleRead;
+  email_template: EmailTemplateRead;
+  template_type: TemplateTypeEnum;
+};
 export type MapCoordinateCreateOrUpdateRequest = {
-  latitude: string
-  longitude: string
-}
+  latitude: string;
+  longitude: string;
+};
 export type ProjectCreateRequest = {
-  code: string
-  name: string
-  description?: string
-  client_id?: number | null
-  start_date?: string | null
-  budget?: string
-  address?: AddressCreateRequest
-  map_coordinate?: MapCoordinateCreateOrUpdateRequest
-  notes?: string
-}
+  code: string;
+  name: string;
+  description?: string;
+  client_id?: number | null;
+  start_date?: string | null;
+  budget?: string;
+  address?: AddressCreateRequest;
+  map_coordinate?: MapCoordinateCreateOrUpdateRequest;
+  notes?: string;
+};
 export type IntervenantUpdateRequest = {
-  user: UserUpdateRequest
-  role: RoleEnum
-}
+  user: UserUpdateRequest;
+  role: RoleEnum;
+};
 export type ProjectStaffUpdateRequest = {
-  role?: string
-  supervisor_id?: number | null
-}
+  role?: string;
+  supervisor_id?: number | null;
+};
 export type EmailTemplateUpdateRequest = {
 
   /** Template name for internal reference */
-  name: string
+  name: string;
 
   /** Subject template with placeholders */
-  subject_template: string
+  subject_template: string;
 
   /** Customizable header content with placeholders */
-  header_template?: string | null
+  header_template?: string | null;
 
   /** Customizable body content with placeholders */
-  body_template: string
+  body_template: string;
 
   /** Customizable footer content with placeholders */
-  footer_template?: string | null
-}
+  footer_template?: string | null;
+};
 export type ProjectEmailTemplateUpdateRequest = {
-  email_template: EmailTemplateUpdateRequest
-}
+  email_template: EmailTemplateUpdateRequest;
+};
 export type ProjectUpdateRequest = {
-  code: string
-  name: string
-  description?: string
-  start_date?: string | null
-  budget?: string
-  address: AddressCreateRequest
-  map_coordinate: MapCoordinateCreateOrUpdateRequest
-  notes?: string
-  notification_frequency?: number | null
-  max_notifications?: number | null
-}
-export type SetasswordRequest = {}
+  code: string;
+  name: string;
+  description?: string;
+  start_date?: string | null;
+  budget?: string;
+  address: AddressCreateRequest;
+  map_coordinate: MapCoordinateCreateOrUpdateRequest;
+  notes?: string;
+  notification_frequency?: number | null;
+  max_notifications?: number | null;
+};
+export type SetasswordRequest = {};
 export type SetasswordRequestWrite = {
   new_password: string
   uid: string
@@ -3085,88 +3519,88 @@ export type PaginatedProjectSubcontractorRead = {
   results: ProjectSubcontractorRead[]
 }
 export type Subcontractor = {
-  name: string
-  siren_number: string
-  address: Address
-  contact_email: string
-  phone_number: string
-  is_active?: boolean
-}
+  name: string;
+  siren_number: string;
+  address: Address;
+  contact_email: string;
+  phone_number: string;
+  is_active?: boolean;
+};
 export type SubcontractorRead = {
-  id: number
-  name: string
-  siren_number: string
-  address: AddressRead
-  contact_email: string
-  clients: ClientRead[]
-  phone_number: string
-  owner: CreatedByRead
-  is_active?: boolean
-  lots: LotSimpleRead[]
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  name: string;
+  siren_number: string;
+  address: AddressRead;
+  contact_email: string;
+  clients: ClientRead[];
+  phone_number: string;
+  owner: CreatedByRead;
+  is_active?: boolean;
+  lots: LotSimpleRead[];
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedSubcontractort = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: Subcontractor[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Subcontractor[];
+};
 export type PaginatedSubcontractortRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: SubcontractorRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: SubcontractorRead[];
+};
 export type SubcontractorOwnerCreateRequest = {
-  user: UserCreateRequest
-}
+  user: UserCreateRequest;
+};
 export type SubcontractorOwnerCreateRequestWrite = {
-  user: UserCreateRequestWrite
-}
+  user: UserCreateRequestWrite;
+};
 export type SubcontractorOwnerUpdateRequest = {
-  user: UserUpdateRequest
-}
-export type SubcontractorStaff = {}
+  user: UserUpdateRequest;
+};
+export type SubcontractorStaff = {};
 export type SubcontractorStaffRead = {
-  id: number
-  user: UserRead
-  created_by: CreatedByRead
-  created_at: string
-  updated_at: string
-}
+  id: number;
+  user: UserRead;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type PaginatedSubcontractorStaff = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: SubcontractorStaff[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: SubcontractorStaff[];
+};
 export type PaginatedSubcontractorStaffRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: SubcontractorStaffRead[]
-}
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: SubcontractorStaffRead[];
+};
 export type SubcontractorStaffCreateRequest = {
-  user: UserCreateRequest
-}
+  user: UserCreateRequest;
+};
 export type SubcontractorStaffCreateRequestWrite = {
-  user: UserCreateRequestWrite
-}
+  user: UserCreateRequestWrite;
+};
 export type SubcontractorCreateRequest = {
-  name: string
-  siren_number: string
-  address: AddressCreateRequest
-  contact_email: string
-  phone_number: string
-  is_active?: boolean
-  lots_ids?: number[] | null
-  client_id?: number | null
-}
+  name: string;
+  siren_number: string;
+  address: AddressCreateRequest;
+  contact_email: string;
+  phone_number: string;
+  is_active?: boolean;
+  lots_ids?: number[] | null;
+  client_id?: number | null;
+};
 export type PatchedSubcontractorStaffUpdateRequest = {
-  user?: UserUpdateRequest
-}
+  user?: UserUpdateRequest;
+};
 export type SubcontractorUpdateRequest = {
   name: string
   siren_number: string
@@ -3238,7 +3672,7 @@ export type PatchedSuiviAdministrativeStepUpdateRequest = {
     * `canceled` - Canceled
     * `rejected` - Rejected
     * `temporarily_done` - Temporarily Done */
-  status?: Status3BfEnum
+  status?: Status3BfEnum;
 
   /** Number of days, must be a positive integer. */
   nbr_of_days?: number
@@ -3266,28 +3700,28 @@ export type SuiviAdministrativeStepCommentCreateRequest = {
   status?: Status3BfEnum
 }
 export type UserChangePasswordRequest = {
-  old_password: string
-  new_password: string
-}
+  old_password: string;
+  new_password: string;
+};
 export type UserEmailChangeConfirmRequest = {
-  token: string
-}
+  token: string;
+};
 export type UserEmailChangeRequestRequest = {
-  new_email: string
-  redirect_uri: string
-}
+  new_email: string;
+  redirect_uri: string;
+};
 export type UserEmailChangeRequestRequestWrite = {
-  new_email: string
-  password: string
-  redirect_uri: string
-}
+  new_email: string;
+  password: string;
+  redirect_uri: string;
+};
 export type PatchedUserProfileUpdateRequest = {
-  first_name?: string
-  last_name?: string
-}
+  first_name?: string;
+  last_name?: string;
+};
 export type AvatarUpdateRequest = {
-  avatar: Blob
-}
+  avatar: Blob;
+};
 export const {
   useSubcontractorsOwnerDeleteDestroyMutation,
   useAdminStaffRetrieveQuery,
@@ -3296,7 +3730,11 @@ export const {
   useAdminStaffUpdatePartialUpdateMutation,
   useAdminUsersDeleteDestroyMutation,
   useCategoriesListQuery,
+  useCategoriesListQuery,
   useCategoriesRetrieveQuery,
+  useCategoryDeleteMutation,
+  useCategoryUpdateMutation,
+  useCategoryCreateMutation,
   useCategoryDeleteMutation,
   useCategoryUpdateMutation,
   useCategoryCreateMutation,
@@ -3354,6 +3792,14 @@ export const {
   useProductMediaDetailQuery,
   useProductMediaDeleteMutation,
   useProductMediaCreateMutation,
+  useProductListQuery,
+  useProductDetailQuery,
+  useProductDeleteMutation,
+  useProductUpdateMutation,
+  useProductCreateMutation,
+  useProductMediaDetailQuery,
+  useProductMediaDeleteMutation,
+  useProductMediaCreateMutation,
   useProjectLotsRetrieveQuery,
   useProjectLotsDeleteDestroyMutation,
   useProjectLotsSubcontractorsRetrieve2Query,
@@ -3394,6 +3840,8 @@ export const {
   useSetPasswordCreateMutation,
   useListProjectSubcontractorQuery,
   useGetSubcontractorProjectDetailQuery,
+  useListProjectSubcontractorQuery,
+  useGetSubcontractorProjectDetailQuery,
   useSubcontractorsRetrieveQuery,
   useSubcontractorsRetrieve2Query,
   useSubcontractorsOwnerRetrieveQuery,
@@ -3419,5 +3867,5 @@ export const {
   useUserProfileRetrieveQuery,
   useUserRequestChangeEmailCreateMutation,
   useUserUpdatePartialUpdateMutation,
-  useUserUpdateAvatarCreateMutation
-} = injectedRtkApi
+  useUserUpdateAvatarCreateMutation,
+} = injectedRtkApi;
