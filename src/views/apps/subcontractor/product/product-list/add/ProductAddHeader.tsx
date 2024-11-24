@@ -20,7 +20,7 @@ const SubcontractorAddHeader: React.FC<SubcontractorAddHeaderProps> = ({ onSubmi
   const userRole = user?.role
 
   const handleDiscard = () => {
-    router.push(`/${userRole}/subcontractor/list`) // Replace '/lots' with the actual route of your lots list page
+    router.push(`/${userRole}/product/list`) // Replace '/lots' with the actual route of your lots list page
   }
 
   return (

@@ -106,7 +106,7 @@ const ProductUpdate = () => {
         <Grid item xs={12} md={4}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <ProductStatus register={register} />
+              <ProductStatus register={register} productData={productData}/>
             </Grid>
           </Grid>
           

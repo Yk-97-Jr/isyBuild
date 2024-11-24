@@ -134,7 +134,7 @@ return
     <Dropzone>
       <Card>
         <CardHeader
-          title="Product Image"
+          title="produit  Image"
           sx={{ '& .MuiCardHeader-action': { alignSelf: 'center' } }}
         />
         <CardContent>
@@ -144,10 +144,10 @@ return
               <CustomAvatar variant="rounded" skin="light" color="secondary">
                 <i className="tabler-upload" />
               </CustomAvatar>
-              <Typography variant="h4">Drag and Drop Your Image Here.</Typography>
-              <Typography color="text.disabled">or</Typography>
+              <Typography variant="h4">Faites glisser et déposez votre image ici</Typography>
+              <Typography color="text.disabled">ou</Typography>
               <Button variant="tonal" size="small">
-                Browse Image
+              Parcourir le image
               </Button>
             </div>
           </div>
@@ -173,7 +173,7 @@ return
               </ListItem>
             </List>
           ) : null}
-          <div className="buttons">
+          <div className="buttons mbe-3">
             {file && (
               <Button variant="contained" onClick={handleUpload} disabled={isLoading}>
                 {isLoading ? 'Uploading...' : 'Upload File'}

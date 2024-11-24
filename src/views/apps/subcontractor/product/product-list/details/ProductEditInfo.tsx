@@ -30,7 +30,7 @@ type ProductEditInfoProps = {
 const ProductEditInfo: React.FC<ProductEditInfoProps> = ({ register, errors }) => {
   return (
     <Card>
-      <CardHeader title="Modifier les informations du produit" />
+      <CardHeader  />
       <CardContent>
         <Grid container spacing={6} className="mbe-6">
           <Grid item xs={12}>

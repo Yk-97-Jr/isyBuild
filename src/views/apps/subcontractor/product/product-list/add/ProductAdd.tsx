@@ -61,7 +61,7 @@ const ProductAdd = () => {
 
       const clientId = response.id;
 
-      router.push(`/${userRole}/Product/${clientId}/details`);
+      router.push(`/${userRole}/product/${clientId}/details`);
 
     } catch (err: any) {
       console.error('Failed to add entreprise:', err)

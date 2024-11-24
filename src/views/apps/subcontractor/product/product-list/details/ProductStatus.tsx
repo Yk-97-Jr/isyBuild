@@ -19,13 +19,15 @@ import type {  UseFormRegister } from 'react-hook-form'
 import SelectMultiple from './SelectMultiple'
 
 import type { FormValidateProductEditType } from './schemaProductEdit'
+import type { ProductRead } from '@/services/IsyBuildApi'
 
 type ClientStatusProps = {
   register: UseFormRegister<FormValidateProductEditType> // Adjust the type as necessary
+  productData:ProductRead | undefined
  
 }
 
-const ProductStatus: React.FC<ClientStatusProps> = ({ register }) => {
+const ProductStatus: React.FC<ClientStatusProps> = ({ register, productData }) => {
   const [isSelectOpen, setIsSelectOpen] = useState(false)
 
   // Function to toggle the select menu state
@@ -43,7 +45,7 @@ const ProductStatus: React.FC<ClientStatusProps> = ({ register }) => {
         flexDirection: 'column' // Column layout to stack elements
       }}
     >
-      <CardHeader title='Détails' />
+      <CardHeader title='Ajouter Catégorie' />
       <CardContent
         sx={{
           flexGrow: 1, // Make CardContent grow to fill available space
@@ -52,7 +54,7 @@ const ProductStatus: React.FC<ClientStatusProps> = ({ register }) => {
         }}
       >
         <div className='flex flex-grow flex-col'>
-          <SelectMultiple onToggleMenu={handleSelectToggle} register={register} />
+          <SelectMultiple onToggleMenu={handleSelectToggle} register={register} productData={productData}/>
           <div style={{ flexGrow: 1 }}></div>
         </div>
       </CardContent>
