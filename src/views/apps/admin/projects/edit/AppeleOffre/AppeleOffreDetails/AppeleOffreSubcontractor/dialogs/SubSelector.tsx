@@ -32,7 +32,7 @@ export default function SubSelect({selectedSub, setSelectedSub, projectLotData}:
     {
       page,
       pageSize: 10,
-      clientIds: String(projectLotData?.project?.id ),
+      clientIds: String(projectLotData?.project?.client?.id ),
       lotIds: String(projectLotData?.lot?.id ),
 
     },
