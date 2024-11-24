@@ -1,4 +1,5 @@
 import { IsyBuildClient as api } from "../apiClients/IsyBuildClient";
+
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     subcontractorsOwnerDeleteDestroy: build.mutation<
@@ -1317,6 +1318,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
+
 export { injectedRtkApi as pIsyBuildApi };
 export type SubcontractorsOwnerDeleteDestroyApiResponse =
   /** status 204  */ any;
@@ -1326,10 +1328,13 @@ export type SubcontractorsOwnerDeleteDestroyApiArg = {
 export type AdminStaffRetrieveApiResponse =
   /** status 200  */ PaginatedAdminStaffRead;
 export type AdminStaffRetrieveApiArg = {
+
   /** Filter by created by email (contains match) */
   createdByEmail?: string;
+
   /** Filter by active status (True or False) */
   isActive?: boolean;
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | "-created_at"
@@ -1348,16 +1353,22 @@ export type AdminStaffRetrieveApiArg = {
     | "user__first_name"
     | "user__is_active"
     | "user__last_name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by first name, last name, or email */
   search?: string;
+
   /** Filter by email (contains match) */
   userEmail?: string;
+
   /** Filter by first name (contains match) */
   userFirstName?: string;
+
   /** Filter by last name (contains match) */
   userLastName?: string;
 };
@@ -1383,8 +1394,10 @@ export type AdminUsersDeleteDestroyApiArg = {
 export type CategoriesListApiResponse =
   /** status 200  */ PaginatedCategoryRead;
 export type CategoriesListApiArg = {
+
   /** Filter by category name (contains match) */
   name?: string;
+
   /** Order results by fields (e.g., 'name', '-created_at') */
   ordering?:
     | "-created_at"
@@ -1397,10 +1410,13 @@ export type CategoriesListApiArg = {
     | "description"
     | "id"
     | "name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by category name, or description */
   search?: string;
 };
@@ -1423,14 +1439,19 @@ export type CategoryCreateApiArg = {
 };
 export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedClientRead;
 export type ClientsRetrieveApiArg = {
+
   /** Filter by contact email (contains match) */
   contactEmail?: string;
+
   /** Filter by the email of the creator */
   createdByEmail?: string;
+
   /** Filter by active status (True or False) */
   isActive?: boolean;
+
   /** Filter by client name (contains match) */
   name?: string;
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | "-contact_email"
@@ -1451,16 +1472,22 @@ export type ClientsRetrieveApiArg = {
     | "owner__email"
     | "phone_number"
     | "siren_number";
+
   /** Filter by the owner's email */
   ownerEmail?: string;
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Filter by phone number (contains match) */
   phoneNumber?: string;
+
   /** Search by client name, email, or phone number */
   search?: string;
+
   /** Filter by SIREN number (contains match) */
   sirenNumber?: string;
 };
@@ -1490,14 +1517,19 @@ export type ClientsStaffRetrieve3ApiResponse =
   /** status 200  */ PaginatedClientStaffRead;
 export type ClientsStaffRetrieve3ApiArg = {
   clientId: number;
+
   /** Filter by created by email (contains match) */
   createdBy?: string;
+
   /** Filter by email (contains match) */
   email?: string;
+
   /** Filter by first name (contains match) */
   firstName?: string;
+
   /** Filter by last name (contains match) */
   lastName?: string;
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | "-created_at"
@@ -1516,10 +1548,13 @@ export type ClientsStaffRetrieve3ApiArg = {
     | "user__first_name"
     | "user__is_active"
     | "user__last_name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by first name, last name, or email */
   search?: string;
 };
@@ -1540,14 +1575,19 @@ export type ClientsDeleteDestroyApiArg = {
 export type ClientsStaffRetrieveApiResponse =
   /** status 200  */ PaginatedClientStaffRead;
 export type ClientsStaffRetrieveApiArg = {
+
   /** Filter by created by email (contains match) */
   createdBy?: string;
+
   /** Filter by email (contains match) */
   email?: string;
+
   /** Filter by first name (contains match) */
   firstName?: string;
+
   /** Filter by last name (contains match) */
   lastName?: string;
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | "-created_at"
@@ -1566,10 +1606,13 @@ export type ClientsStaffRetrieveApiArg = {
     | "user__first_name"
     | "user__is_active"
     | "user__last_name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by first name, last name, or email */
   search?: string;
 };
@@ -1614,8 +1657,10 @@ export type ContactsPhoneNumbersRetrieveApiResponse =
   /** status 200  */ PaginatedPhoneNumberRead;
 export type ContactsPhoneNumbersRetrieveApiArg = {
   contactId: number;
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
 };
@@ -1651,10 +1696,13 @@ export type IntervenantRolesRetrieveApiArg = void;
 export type LocalisationsListApiResponse =
   /** status 200  */ PaginatedLocalisationRead;
 export type LocalisationsListApiArg = {
+
   /** Filter by creator's email (contains match) */
   createdBy?: string;
+
   /** Filter by localisation name (contains match) */
   name?: string;
+
   /** Order results by fields (e.g., 'name', '-created_at') */
   ordering?:
     | "-created_at"
@@ -1665,10 +1713,13 @@ export type LocalisationsListApiArg = {
     | "created_by__email"
     | "id"
     | "name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by localisation name */
   search?: string;
 };
@@ -1701,14 +1752,19 @@ export type LogoutCreateApiArg = {
 };
 export type LotsRetrieveApiResponse = /** status 200  */ PaginatedLotRead;
 export type LotsRetrieveApiArg = {
+
   /** Filter by Client IDs (comma-separated) */
   clientIds?: string;
+
   /** Filter by creator's email (contains match) */
   createdBy?: string;
+
   /** Filter by lot description (contains match) */
   description?: string;
+
   /** Filter by lot name (contains match) */
   name?: string;
+
   /** Order results by fields (e.g., 'name', '-created_at') */
   ordering?:
     | "-client__name"
@@ -1723,8 +1779,10 @@ export type LotsRetrieveApiArg = {
     | "description"
     | "id"
     | "name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
 };
@@ -1748,8 +1806,10 @@ export type LotsUpdateUpdateApiArg = {
 export type GetInAppNotificationsListApiResponse =
   /** status 200  */ PaginatedInAppNotificationRead;
 export type GetInAppNotificationsListApiArg = {
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
 };
@@ -1787,10 +1847,13 @@ export type PhoneNumbersUpdateUpdateApiArg = {
 };
 export type ProductListApiResponse = /** status 200  */ PaginatedProductRead;
 export type ProductListApiArg = {
+
   /** Filter by Categories IDs (comma-separated) */
   category?: string;
+
   /** Filter by product name (contains match) */
   name?: string;
+
   /** Order results by fields (e.g., 'name', '-created_at') */
   ordering?:
     | "-category__name"
@@ -1805,10 +1868,13 @@ export type ProductListApiArg = {
     | "description"
     | "id"
     | "name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by product name, or description */
   search?: string;
 };
@@ -1854,8 +1920,10 @@ export type ProjectLotsDeleteDestroyApiArg = {
 export type ProjectLotsSubcontractorsRetrieve2ApiResponse =
   /** status 200  */ PaginatedProjectLotSubcontractorRead;
 export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
+
   /** Filter by creator's email (contains match) */
   createdBy?: string;
+
   /** Order results by fields (e.g., 'subcontractor__name', '-created_at') */
   ordering?:
     | "-created_at"
@@ -1868,13 +1936,17 @@ export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
     | "status"
     | "subcontractor__name"
     | "subcontractor_staff__user__first_name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
   projectLotId: number;
+
   /** Search by subcontractor name, status, or subcontractor staff email/first name */
   search?: string;
+
   /** Filter by subcontractor status */
   status?:
     | "canceled"
@@ -1882,10 +1954,13 @@ export type ProjectLotsSubcontractorsRetrieve2ApiArg = {
     | "in_progress"
     | "not_responding"
     | "pending";
+
   /** Filter by subcontractor name (contains match) */
   subcontractorName?: string;
+
   /** Filter by subcontractor staff email (contains match) */
   subcontractorStaffEmail?: string;
+
   /** Filter by subcontractor staff first name (contains match) */
   subcontractorStaffFirstName?: string;
 };
@@ -1962,16 +2037,22 @@ export type ProjectLotsSubcontractorsDocumentsUploadDevisCreateApiArg = {
 export type ProjectsRetrieveApiResponse =
   /** status 200  */ PaginatedProjectRead;
 export type ProjectsRetrieveApiArg = {
+
   /** Filter by Client IDs (comma-separated) */
   clientIds?: string;
+
   /** Filter by project code (contains match) */
   code?: string;
+
   /** Filter by creator's email (contains match) */
   createdBy?: string;
+
   /** Filter by project description (contains match) */
   description?: string;
+
   /** Filter by project name (contains match) */
   name?: string;
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | "-client__name"
@@ -1996,16 +2077,22 @@ export type ProjectsRetrieveApiArg = {
     | "percentage_complete"
     | "start_date"
     | "status";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Maximum completion percentage */
   percentageCompleteMax?: number;
+
   /** Minimum completion percentage */
   percentageCompleteMin?: number;
+
   /** Search by code, name,description ,client name */
   search?: string;
+
   /** Filter by project status */
   status?:
     | "canceled"
@@ -2027,6 +2114,7 @@ export type AssignProjectStaffApiArg = {
 export type ProjectIntervenantListApiResponse =
   /** status 200  */ PaginatedProjectIntervenantRead;
 export type ProjectIntervenantListApiArg = {
+
   /** Order results by fields (e.g., 'name', '-created_at') */
   ordering?:
     | "-created_at"
@@ -2045,11 +2133,14 @@ export type ProjectIntervenantListApiArg = {
     | "intervenant__user__email"
     | "intervenant__user__first_name"
     | "intervenant__user__last_name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
   projectId: number;
+
   /** Filter by  role */
   role?:
     | "Architecte"
@@ -2058,6 +2149,7 @@ export type ProjectIntervenantListApiArg = {
     | "Bureau de contr\u00F4le"
     | "Client"
     | "Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9";
+
   /** Search by first name, last name, or email */
   search?: string;
 };
@@ -2070,10 +2162,13 @@ export type ProjectIntervenantCreateApiArg = {
 export type ProjectsLotsRetrieveApiResponse =
   /** status 200  */ PaginatedProjectLotRead;
 export type ProjectsLotsRetrieveApiArg = {
+
   /** Filter by creator's email (contains match) */
   createdBy?: string;
+
   /** Filter by lot name (contains match) */
   lotName?: string;
+
   /** Order results by fields (e.g., 'lot__name', '-created_at') */
   ordering?:
     | "-created_at"
@@ -2084,21 +2179,27 @@ export type ProjectsLotsRetrieveApiArg = {
     | "id"
     | "lot__name"
     | "status";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
   projectId: number;
+
   /** Search by lot name or status */
   search?: string;
+
   /** Filter by project lot status */
   status?: "canceled" | "completed" | "in_progress" | "pending" | "review";
 };
 export type ListProjectStaffApiResponse =
   /** status 200  */ PaginatedProjectStaffRead;
 export type ListProjectStaffApiArg = {
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
   projectId: number;
@@ -2118,6 +2219,7 @@ export type GetProjectStaffTreeApiArg = {
 export type ListSuiviAdministrativeApiResponse =
   /** status 200  */ PaginatedSuiviAdministrativeRead;
 export type ListSuiviAdministrativeApiArg = {
+
   /** Order results by fields (e.g., 'lot__name', '-created_at') */
   ordering?:
     | "-created_at"
@@ -2130,13 +2232,17 @@ export type ListSuiviAdministrativeApiArg = {
     | "id"
     | "project_lot__lot__name"
     | "status";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
   projectId: number;
+
   /** Search by administrative status or related intervenant */
   search?: string;
+
   /** Filter by status */
   status?: "completed" | "in_progress" | "not_started";
 };
@@ -2212,12 +2318,16 @@ export type SetPasswordCreateApiArg = {
 export type ListProjectSubcontractorApiResponse =
   /** status 200  */ PaginatedProjectSubcontractorRead;
 export type ListProjectSubcontractorApiArg = {
+
   /** Filter by project code (contains match) */
   code?: string;
+
   /** Filter by project description (contains match) */
   description?: string;
+
   /** Filter by project name (contains match) */
   name?: string;
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | "-code"
@@ -2228,10 +2338,13 @@ export type ListProjectSubcontractorApiArg = {
     | "description"
     | "id"
     | "name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by code, name,description ,client name */
   search?: string;
 };
@@ -2243,18 +2356,25 @@ export type GetSubcontractorProjectDetailApiArg = {
 export type SubcontractorsRetrieveApiResponse =
   /** status 200  */ PaginatedSubcontractortRead;
 export type SubcontractorsRetrieveApiArg = {
+
   /** Filter by Client IDs (comma-separated) */
   clientIds?: string;
+
   /** Filter by contact email (contains match) */
   contactEmail?: string;
+
   /** Filter by the creator's email */
   createdBy?: string;
+
   /** Filter by active status (True or False) */
   isActive?: boolean;
+
   /** Filter by Lot IDs (comma-separated) */
   lotIds?: string;
+
   /** Filter by subcontractor name (contains match) */
   name?: string;
+
   /** Comma-separated fields to order by (e.g., 'name', '-created_at') */
   ordering?:
     | "-contact_email"
@@ -2275,14 +2395,19 @@ export type SubcontractorsRetrieveApiArg = {
     | "owner__email"
     | "phone_number"
     | "siren_number";
+
   /** Filter by the owner's email */
   ownerEmail?: string;
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Filter by phone number (contains match) */
   phoneNumber?: string;
+
   /** Filter by SIREN number (contains match) */
   sirenNumber?: string;
 };
@@ -2311,16 +2436,22 @@ export type SubcontractorsOwnerUpdateUpdateApiArg = {
 export type SubcontractorsStaffRetrieve2ApiResponse =
   /** status 200  */ PaginatedSubcontractorStaffRead;
 export type SubcontractorsStaffRetrieve2ApiArg = {
+
   /** Filter by created by email (contains match) */
   createdBy?: string;
+
   /** Filter by email (contains match) */
   email?: string;
+
   /** Filter by first name (contains match) */
   firstName?: string;
+
   /** Filter by active status (True or False) */
   isActive?: boolean;
+
   /** Filter by last name (contains match) */
   lastName?: string;
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | "-created_at"
@@ -2339,10 +2470,13 @@ export type SubcontractorsStaffRetrieve2ApiArg = {
     | "user__first_name"
     | "user__is_active"
     | "user__last_name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by first name, last name, or email */
   search?: string;
   subcontractorId: number;
@@ -2365,14 +2499,19 @@ export type SubcontractorsDeleteDestroyApiArg = {
 export type GetSubcontractorStaffListApiResponse =
   /** status 200  */ PaginatedSubcontractorStaffRead;
 export type GetSubcontractorStaffListApiArg = {
+
   /** Filter by created by email (contains match) */
   createdBy?: string;
+
   /** Filter by email (contains match) */
   email?: string;
+
   /** Filter by first name (contains match) */
   firstName?: string;
+
   /** Filter by last name (contains match) */
   lastName?: string;
+
   /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
   ordering?:
     | "-created_at"
@@ -2391,10 +2530,13 @@ export type GetSubcontractorStaffListApiArg = {
     | "user__first_name"
     | "user__is_active"
     | "user__last_name";
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
+
   /** Search by first name, last name, or email */
   search?: string;
 };
@@ -2433,8 +2575,10 @@ export type RetrieveSuiviAdministrativeDetailApiArg = {
 export type ListSuiviAdministrativeStepCommentsApiResponse =
   /** status 200  */ PaginatedSuiviAdministrativeStepCommentRead;
 export type ListSuiviAdministrativeStepCommentsApiArg = {
+
   /** Page number of the results to fetch */
   page?: number;
+
   /** Number of results per page */
   pageSize?: number;
   stepId: number;
@@ -3272,6 +3416,7 @@ export type SuiviAdministrativeStatusEnum =
   | "in_progress"
   | "completed";
 export type SuiviAdministrative = {
+
   /** Overall status of the administrative process.
     
     * `not_started` - Not Started
@@ -3290,10 +3435,12 @@ export type Status3BfEnum =
 export type SuiviAdministrativeStep = {
   step_name: string;
   order?: number;
+
   /** Number of days before or after the project start date. */
   nbr_of_days: number;
   target_date?: string | null;
   actual_date?: string | null;
+
   /** Status of the step in the suivi administrative process.
     
     * `not_started` - Not Started
@@ -3309,10 +3456,12 @@ export type SuiviAdministrativeStepRead = {
   id: number;
   step_name: string;
   order?: number;
+
   /** Number of days before or after the project start date. */
   nbr_of_days: number;
   target_date?: string | null;
   actual_date?: string | null;
+
   /** Status of the step in the suivi administrative process.
     
     * `not_started` - Not Started
@@ -3331,6 +3480,7 @@ export type SuiviAdministrativeStepRead = {
 export type SuiviAdministrativeRead = {
   id: number;
   project_lot: ProjectLotRead;
+
   /** Overall status of the administrative process.
     
     * `not_started` - Not Started
@@ -3365,27 +3515,37 @@ export type ProjectEmailTemplate = {
   template_type: TemplateTypeEnum;
 };
 export type EmailTemplate = {
+
   /** Template name for internal reference */
   name: string;
+
   /** Subject template with placeholders */
   subject_template: string;
+
   /** Customizable header content with placeholders */
   header_template?: string | null;
+
   /** Customizable body content with placeholders */
   body_template: string;
+
   /** Customizable footer content with placeholders */
   footer_template?: string | null;
 };
 export type EmailTemplateRead = {
   id: number;
+
   /** Template name for internal reference */
   name: string;
+
   /** Subject template with placeholders */
   subject_template: string;
+
   /** Customizable header content with placeholders */
   header_template?: string | null;
+
   /** Customizable body content with placeholders */
   body_template: string;
+
   /** Customizable footer content with placeholders */
   footer_template?: string | null;
 };
@@ -3419,14 +3579,19 @@ export type ProjectStaffUpdateRequest = {
   supervisor_id?: number | null;
 };
 export type EmailTemplateUpdateRequest = {
+
   /** Template name for internal reference */
   name: string;
+
   /** Subject template with placeholders */
   subject_template: string;
+
   /** Customizable header content with placeholders */
   header_template?: string | null;
+
   /** Customizable body content with placeholders */
   body_template: string;
+
   /** Customizable footer content with placeholders */
   footer_template?: string | null;
 };
@@ -3575,8 +3740,10 @@ export type SubcontractorUpdateRequest = {
 export type BlankEnum = "";
 export type NullEnum = null;
 export type SuiviAdministrativeStepComment = {
+
   /** The content of the comment. */
   comment: string;
+
   /** Optional status update for the step when this comment is created.
     
     * `not_started` - Not Started
@@ -3591,9 +3758,11 @@ export type SuiviAdministrativeStepComment = {
 };
 export type SuiviAdministrativeStepCommentRead = {
   id: number;
+
   /** The content of the comment. */
   comment: string;
   document: DocumentRead;
+
   /** Optional status update for the step when this comment is created.
     
     * `not_started` - Not Started
@@ -3620,6 +3789,7 @@ export type PaginatedSuiviAdministrativeStepCommentRead = {
   results: SuiviAdministrativeStepCommentRead[];
 };
 export type PatchedSuiviAdministrativeStepUpdateRequest = {
+
   /** Optional status to update for the step.
     
     * `not_started` - Not Started
@@ -3630,16 +3800,21 @@ export type PatchedSuiviAdministrativeStepUpdateRequest = {
     * `rejected` - Rejected
     * `temporarily_done` - Temporarily Done */
   status?: Status3BfEnum;
+
   /** Number of days, must be a positive integer. */
   nbr_of_days?: number;
 };
 export type SuiviAdministrativeStepCommentCreateRequest = {
+
   /** ID of the step to comment on. */
   step_id: number;
+
   /** Text content of the comment. */
   comment: string;
+
   /** The file to be uploaded. */
   document_file?: Blob;
+
   /** Optional status to update for the step.
     
     * `not_started` - Not Started
