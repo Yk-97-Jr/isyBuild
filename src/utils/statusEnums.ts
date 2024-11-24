@@ -1,6 +1,6 @@
 // statusEnums.ts
 
-import type {Status109Enum, Status841Enum, SuiviAdministrativeStatusEnum} from "@/services/IsyBuildApi";
+import type {Status109Enum, Status841Enum, SuiviAdministrativeStatusEnum, Status3BfEnum} from "@/services/IsyBuildApi";
 
 export const Status841Mapping: Record<Status841Enum, {
   label: string,
@@ -28,10 +28,52 @@ export const SuiviAdministrativeStatusMapping: Record<SuiviAdministrativeStatusE
   label: string,
   color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning'
 }> = {
-  not_started: { label: 'Non démarré', color: 'warning' },
-  in_progress: { label: 'En cours', color: 'primary' },
-  completed: { label: 'Terminé', color: 'success' },
+  not_started: {label: 'Non démarré', color: 'warning'},
+  in_progress: {label: 'En cours', color: 'primary'},
+  completed: {label: 'Terminé', color: 'success'},
 };
+
+export const Status3BfMapping: Record<Status3BfEnum, {
+  label: string,
+  color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning'
+}> = {
+  not_started: {label: 'Non commencé', color: 'default'},
+  in_progress: {label: 'En cours', color: 'primary'},
+  completed: {label: 'Terminé', color: 'success'},
+  on_hold: {label: 'En attente', color: 'warning'},
+  canceled: {label: 'Annulé', color: 'secondary'},
+  rejected: {label: 'Rejeté', color: 'error'},
+  temporarily_done: {label: 'Temporairement terminé', color: 'success'},
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -260,25 +260,31 @@ paths:
           description: ''
   /categories/:
     get:
-      operationId: categories_retrieve
+      operationId: categories_list
       description: Retrieve a list of all the categories with pagination.
       summary: List all the categories.
       parameters:
-      - in: query
-        name: created_by
-        schema:
-          type: string
-        description: Filter by creator's email (contains match)
-      - in: query
-        name: description
-        schema:
-          type: string
-        description: Filter by category description (contains match)
       - in: query
         name: name
         schema:
           type: string
         description: Filter by category name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -description
+          - -id
+          - -name
+          - created_at
+          - created_by__email
+          - description
+          - id
+          - name
+        description: Order results by fields (e.g., 'name', '-created_at')
       - in: query
         name: page
         schema:
@@ -289,6 +295,11 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by category name, or description
       tags:
       - Product Management
       security:
@@ -298,11 +309,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedProduct'
+                $ref: '#/components/schemas/PaginatedCategory'
           description: ''
   /categories/{category_id}/:
     get:
-      operationId: categories_retrieve_2
+      operationId: categories_retrieve
       description: Fetches detailed information about a category by their ID.
       summary: Retrieve category Details
       parameters:
@@ -322,44 +333,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Category'
           description: ''
-  /categories/create/:
-    post:
-      operationId: categories_create_create
-      description: Create a new category.
-      tags:
-      - Product Management
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CategoryRequest'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/CategoryRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/CategoryRequest'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Category'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
-  /categories/delete/{category_id}/:
+  /categories/{category_id}/delete/:
     delete:
-      operationId: categories_delete_destroy
+      operationId: category_delete
       description: Deletes a Category by ID. Requires administrative privileges.
       summary: Delete Category
       parameters:
@@ -391,9 +367,9 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
-  /categories/update/{category_id}/:
+  /categories/{category_id}/update/:
     put:
-      operationId: categories_update_update
+      operationId: category_update
       description: Updates informations for an existing category .
       summary: Update category
       parameters:
@@ -434,6 +410,41 @@ paths:
                 description: Unspecified response body
           description: ''
         '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /categories/create/:
+    post:
+      operationId: category_create
+      description: Create a new category.
+      tags:
+      - Product Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+        '400':
           content:
             application/json:
               schema:
@@ -1542,6 +1553,203 @@ paths:
                 type: object
                 additionalProperties: {}
           description: Available roles for Intervenants
+  /localisations/:
+    get:
+      operationId: localisations_list
+      description: Retrieve a list of all the localisations with pagination.
+      summary: List all the localisations.
+      parameters:
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by creator's email (contains match)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by localisation name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -name
+          - created_at
+          - created_by__email
+          - id
+          - name
+        description: Order results by fields (e.g., 'name', '-created_at')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by localisation name
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLocalisation'
+          description: ''
+  /localisations/{localisation_id}/:
+    get:
+      operationId: localisation_detail
+      description: Fetches detailed information about a localisation by their ID.
+      summary: Retrieve localisation Details
+      parameters:
+      - in: path
+        name: localisation_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Localisation'
+          description: ''
+  /localisations/{localisation_id}/delete/:
+    delete:
+      operationId: localisations_delete_destroy
+      description: Deletes a Localisation by ID. Requires administrative privileges.
+      summary: Delete Localisation
+      parameters:
+      - in: path
+        name: localisation_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: Localisation deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Localisation not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /localisations/{localisation_id}/update/:
+    put:
+      operationId: localisation_update
+      description: Updates informations for an existing localisation .
+      summary: Update localisation
+      parameters:
+      - in: path
+        name: localisation_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalisationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LocalisationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LocalisationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Localisation'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /localisations/create/:
+    post:
+      operationId: localisation_create
+      description: Create a new localisation.
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocalisationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LocalisationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LocalisationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Localisation'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /login/:
     post:
       operationId: login_create
@@ -2103,25 +2311,38 @@ paths:
           description: ''
   /products/:
     get:
-      operationId: products_retrieve
+      operationId: product_list
       description: Retrieve a list of all the products with pagination.
       summary: List all the products.
       parameters:
       - in: query
-        name: created_by
+        name: category
         schema:
           type: string
-        description: Filter by creator's email (contains match)
-      - in: query
-        name: description
-        schema:
-          type: string
-        description: Filter by product description (contains match)
+        description: Filter by Categories IDs (comma-separated)
       - in: query
         name: name
         schema:
           type: string
         description: Filter by product name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -category__name
+          - -created_at
+          - -created_by__email
+          - -description
+          - -id
+          - -name
+          - category__name
+          - created_at
+          - created_by__email
+          - description
+          - id
+          - name
+        description: Order results by fields (e.g., 'name', '-created_at')
       - in: query
         name: page
         schema:
@@ -2132,6 +2353,11 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by product name, or description
       tags:
       - Product Management
       security:
@@ -2145,7 +2371,7 @@ paths:
           description: ''
   /products/{product_id}/:
     get:
-      operationId: products_retrieve_2
+      operationId: product_detail
       description: Fetches detailed information about a product by their ID.
       summary: Retrieve product Details
       parameters:
@@ -2165,44 +2391,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Product'
           description: ''
-  /products/create/:
-    post:
-      operationId: products_create_create
-      description: Create a new product.
-      tags:
-      - Product Management
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductRequest'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/ProductRequest'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/ProductRequest'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
-  /products/delete/{product_id}/:
+  /products/{product_id}/delete/:
     delete:
-      operationId: products_delete_destroy
+      operationId: product_delete
       description: Deletes a Product by ID. Requires administrative privileges.
       summary: Delete Product
       parameters:
@@ -2234,91 +2425,9 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
-  /products/media/{product_media_id}/:
-    get:
-      operationId: products_media_retrieve
-      description: Fetches detailed information about a product media by their ID.
-      summary: Retrieve product media details
-      parameters:
-      - in: path
-        name: product_media_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Product Management
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductMedia'
-          description: ''
-  /products/media/create/:
-    post:
-      operationId: products_media_create_create
-      description: Upload a Product Media.
-      tags:
-      - Product Management
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/ProductMediaRequest'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-              examples:
-                Success:
-                  value:
-                    message: Product Media created successfully!
-                  description: Successfully created the product media
-          description: ''
-  /products/media/delete/{product_media_id}/:
-    delete:
-      operationId: products_media_delete_destroy
-      description: Deletes a Product Media by ID. Requires administrative privileges.
-      summary: Delete Product Media
-      parameters:
-      - in: path
-        name: product_media_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Product Management
-      security:
-      - jwtAuth: []
-      responses:
-        '204':
-          content:
-            application/json:
-              schema:
-                description: product media deleted successfully.
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                description: product media not found.
-          description: ''
-        '403':
-          content:
-            application/json:
-              schema:
-                description: Permission denied.
-          description: ''
-  /products/update/{product_id}/:
+  /products/{product_id}/update/:
     put:
-      operationId: products_update_update
+      operationId: product_update
       description: Updates information for an existing product .
       summary: Update product
       parameters:
@@ -2365,6 +2474,123 @@ paths:
                 type: object
                 additionalProperties: {}
                 description: Unspecified response body
+          description: ''
+  /products/create/:
+    post:
+      operationId: product_create
+      description: Create a new product.
+      tags:
+      - Product Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /products/media/{product_media_id}/:
+    get:
+      operationId: product_media_detail
+      description: Fetches detailed information about a product media by their ID.
+      summary: Retrieve product media details
+      parameters:
+      - in: path
+        name: product_media_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductMedia'
+          description: ''
+  /products/media/{product_media_id}/delete/:
+    delete:
+      operationId: product_media_delete
+      description: Deletes a Product Media by ID. Requires administrative privileges.
+      summary: Delete Product Media
+      parameters:
+      - in: path
+        name: product_media_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Product Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: product media deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: product media not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /products/media/create/:
+    post:
+      operationId: product_media_create
+      description: Upload a Product Media.
+      tags:
+      - Product Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductMediaRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+              examples:
+                Success:
+                  value:
+                    message: Product Media created successfully!
+                  description: Successfully created the product media
           description: ''
   /project-lots/{project_lot_id}/:
     get:
@@ -3220,13 +3446,7 @@ paths:
       - Project Intervenant Management
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IntervenantCreateRequest'
           application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/IntervenantCreateRequest'
-          multipart/form-data:
             schema:
               $ref: '#/components/schemas/IntervenantCreateRequest'
         required: true
@@ -3640,13 +3860,7 @@ paths:
       - Project Intervenant Management
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/IntervenantUpdateRequest'
           application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/IntervenantUpdateRequest'
-          multipart/form-data:
             schema:
               $ref: '#/components/schemas/IntervenantUpdateRequest'
         required: true
@@ -3902,6 +4116,90 @@ paths:
             application/json:
               schema:
                 description: Request contains invalid data or validation errors.
+          description: ''
+  /subcontractor/projects/:
+    get:
+      operationId: list_project_subcontractor
+      description: Retrieve a list of all Projects with pagination.
+      summary: List all Project
+      parameters:
+      - in: query
+        name: code
+        schema:
+          type: string
+        description: Filter by project code (contains match)
+      - in: query
+        name: description
+        schema:
+          type: string
+        description: Filter by project description (contains match)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Filter by project name (contains match)
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -code
+          - -description
+          - -id
+          - -name
+          - code
+          - description
+          - id
+          - name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by code, name,description ,client name
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectSubcontractor'
+          description: ''
+  /subcontractor/projects/{project_id}/:
+    get:
+      operationId: get_subcontractor_project_detail
+      description: Fetches detailed information about an project member by their unique
+        identifier.
+      summary: Retrieve project Details
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSubcontractor'
           description: ''
   /subcontractors/:
     get:
@@ -4629,6 +4927,39 @@ paths:
           description: ''
         '404':
           description: Suivi Administrative record not found.
+  /suivi-administrative/steps/{step_id}/comments/:
+    get:
+      operationId: list_suivi_administrative_step_comments
+      description: Retrieve a paginated list of comments for a specific administrative
+        step.
+      summary: List comments for a Suivi Administrative Step
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: step_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSuiviAdministrativeStepComment'
+          description: ''
   /suivi-administrative/steps/{step_id}/update/:
     patch:
       operationId: update_suivi_administrative_step
@@ -4645,13 +4976,7 @@ paths:
       - Suivi Administrative Management
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedSuiviAdministrativeStepUpdateRequest'
           application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedSuiviAdministrativeStepUpdateRequest'
-          multipart/form-data:
             schema:
               $ref: '#/components/schemas/PatchedSuiviAdministrativeStepUpdateRequest'
       security:
@@ -4661,6 +4986,34 @@ paths:
           description: Step updated successfully.
         '404':
           description: Step not found.
+  /suivi-administrative/steps/comments/:
+    post:
+      operationId: add_suivi_administrative_step_comment
+      description: Add a comment to a specific administrative step, with an optional
+        document upload.
+      summary: Add a comment to a Suivi Administrative Step
+      tags:
+      - Suivi Administrative Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SuiviAdministrativeStepCommentCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SuiviAdministrativeStepCommentCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuiviAdministrativeStepComment'
+          description: Comment created successfully.
+        '400':
+          description: Validation error.
   /token_refresh/:
     post:
       operationId: token_refresh_create
@@ -5047,6 +5400,9 @@ components:
           format: binary
       required:
       - avatar
+    BlankEnum:
+      enum:
+      - ''
     Category:
       type: object
       properties:
@@ -5681,6 +6037,42 @@ components:
       required:
       - role
       - user
+    Localisation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - name
+      - updated_at
+    LocalisationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+      required:
+      - name
     Lot:
       type: object
       properties:
@@ -5770,6 +6162,9 @@ components:
       required:
       - latitude
       - longitude
+    NullEnum:
+      enum:
+      - null
     PaginatedAdminStaff:
       type: object
       properties:
@@ -5787,6 +6182,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AdminStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedCategory:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
       required:
       - count
       - next
@@ -5853,6 +6270,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InAppNotification'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedLocalisation:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Localisation'
       required:
       - count
       - next
@@ -6034,6 +6473,28 @@ components:
       - next
       - previous
       - results
+    PaginatedProjectSubcontractor:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectSubcontractor'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PaginatedSubcontractorStaff:
       type: object
       properties:
@@ -6100,6 +6561,28 @@ components:
       - next
       - previous
       - results
+    PaginatedSuiviAdministrativeStepComment:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SuiviAdministrativeStepComment'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PasswordResetRequestRequest:
       type: object
       properties:
@@ -6137,7 +6620,7 @@ components:
           allOf:
           - $ref: '#/components/schemas/Status3bfEnum'
           description: |-
-            Status of the step in the suivi administrative process.
+            Optional status to update for the step.
 
             * `not_started` - Not Started
             * `in_progress` - In Progress
@@ -6148,9 +6631,8 @@ components:
             * `temporarily_done` - Temporarily Done
         nbr_of_days:
           type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-          description: Number of days before or after the project start date.
+          minimum: 1
+          description: Number of days, must be a positive integer.
     PatchedUserProfileUpdateRequest:
       type: object
       properties:
@@ -6260,8 +6742,9 @@ components:
         product:
           type: integer
         created_by:
-          type: integer
-          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
         created_at:
           type: string
           format: date-time
@@ -6272,6 +6755,7 @@ components:
           readOnly: true
       required:
       - created_at
+      - created_by
       - id
       - image
       - product
@@ -6284,9 +6768,6 @@ components:
           format: binary
         product:
           type: integer
-        created_by:
-          type: integer
-          nullable: true
       required:
       - image
       - product
@@ -6774,6 +7255,54 @@ components:
         * `completed` - Completed
         * `on_hold` - On Hold
         * `canceled` - Canceled
+    ProjectSubcontractor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          maxLength: 50
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        client:
+          allOf:
+          - $ref: '#/components/schemas/Client'
+          readOnly: true
+        map_coordinate:
+          allOf:
+          - $ref: '#/components/schemas/MapCoordinate'
+          readOnly: true
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          readOnly: true
+        manager:
+          allOf:
+          - $ref: '#/components/schemas/ClientStaff'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address
+      - client
+      - code
+      - created_at
+      - id
+      - manager
+      - map_coordinate
+      - name
+      - updated_at
     ProjectUpdateRequest:
       type: object
       properties:
@@ -7276,6 +7805,80 @@ components:
       - nbr_of_days
       - step_name
       - updated_at
+    SuiviAdministrativeStepComment:
+      type: object
+      description: Serializer for listing comments with details about the attached
+        document.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        comment:
+          type: string
+          description: The content of the comment.
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          readOnly: true
+        status:
+          nullable: true
+          description: |-
+            Optional status update for the step when this comment is created.
+
+            * `not_started` - Not Started
+            * `in_progress` - In Progress
+            * `completed` - Completed
+            * `on_hold` - On Hold
+            * `canceled` - Canceled
+            * `rejected` - Rejected
+            * `temporarily_done` - Temporarily Done
+          oneOf:
+          - $ref: '#/components/schemas/Status3bfEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        created_by:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - comment
+      - created_at
+      - document
+      - id
+    SuiviAdministrativeStepCommentCreateRequest:
+      type: object
+      description: Serializer for creating comments with optional document uploads.
+      properties:
+        step_id:
+          type: integer
+          description: ID of the step to comment on.
+        comment:
+          type: string
+          minLength: 1
+          description: Text content of the comment.
+        document_file:
+          type: string
+          format: binary
+          description: The file to be uploaded.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status3bfEnum'
+          description: |-
+            Optional status to update for the step.
+
+            * `not_started` - Not Started
+            * `in_progress` - In Progress
+            * `completed` - Completed
+            * `on_hold` - On Hold
+            * `canceled` - Canceled
+            * `rejected` - Rejected
+            * `temporarily_done` - Temporarily Done
+      required:
+      - comment
+      - step_id
     TemplateTypeEnum:
       enum:
       - upload_devis

@@ -43,33 +43,33 @@ const injectedRtkApi = api.injectEndpoints({
     adminUsersDeleteDestroy: build.mutation<AdminUsersDeleteDestroyApiResponse, AdminUsersDeleteDestroyApiArg>({
       query: queryArg => ({ url: `/admin-users/delete/${queryArg.adminUserId}/`, method: 'DELETE' })
     }),
-    categoriesRetrieve: build.query<CategoriesRetrieveApiResponse, CategoriesRetrieveApiArg>({
+    categoriesList: build.query<CategoriesListApiResponse, CategoriesListApiArg>({
       query: queryArg => ({
         url: `/categories/`,
         params: {
-          created_by: queryArg.createdBy,
-          description: queryArg.description,
           name: queryArg.name,
+          ordering: queryArg.ordering,
           page: queryArg.page,
-          page_size: queryArg.pageSize
+          page_size: queryArg.pageSize,
+          search: queryArg.search
         }
       })
     }),
-    categoriesRetrieve2: build.query<CategoriesRetrieve2ApiResponse, CategoriesRetrieve2ApiArg>({
+    categoriesRetrieve: build.query<CategoriesRetrieveApiResponse, CategoriesRetrieveApiArg>({
       query: queryArg => ({ url: `/categories/${queryArg.categoryId}/` })
     }),
-    categoriesCreateCreate: build.mutation<CategoriesCreateCreateApiResponse, CategoriesCreateCreateApiArg>({
-      query: queryArg => ({ url: `/categories/create/`, method: 'POST', body: queryArg.categoryRequest })
+    categoryDelete: build.mutation<CategoryDeleteApiResponse, CategoryDeleteApiArg>({
+      query: queryArg => ({ url: `/categories/${queryArg.categoryId}/delete/`, method: 'DELETE' })
     }),
-    categoriesDeleteDestroy: build.mutation<CategoriesDeleteDestroyApiResponse, CategoriesDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/categories/delete/${queryArg.categoryId}/`, method: 'DELETE' })
-    }),
-    categoriesUpdateUpdate: build.mutation<CategoriesUpdateUpdateApiResponse, CategoriesUpdateUpdateApiArg>({
+    categoryUpdate: build.mutation<CategoryUpdateApiResponse, CategoryUpdateApiArg>({
       query: queryArg => ({
-        url: `/categories/update/${queryArg.categoryId}/`,
+        url: `/categories/${queryArg.categoryId}/update/`,
         method: 'PUT',
         body: queryArg.categoryRequest
       })
+    }),
+    categoryCreate: build.mutation<CategoryCreateApiResponse, CategoryCreateApiArg>({
+      query: queryArg => ({ url: `/categories/create/`, method: 'POST', body: queryArg.categoryRequest })
     }),
     clientsRetrieve: build.query<ClientsRetrieveApiResponse, ClientsRetrieveApiArg>({
       query: queryArg => ({
@@ -225,6 +225,37 @@ const injectedRtkApi = api.injectEndpoints({
     intervenantRolesRetrieve: build.query<IntervenantRolesRetrieveApiResponse, IntervenantRolesRetrieveApiArg>({
       query: () => ({ url: `/intervenant/roles/` })
     }),
+    localisationsList: build.query<LocalisationsListApiResponse, LocalisationsListApiArg>({
+      query: queryArg => ({
+        url: `/localisations/`,
+        params: {
+          created_by: queryArg.createdBy,
+          name: queryArg.name,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search
+        }
+      })
+    }),
+    localisationDetail: build.query<LocalisationDetailApiResponse, LocalisationDetailApiArg>({
+      query: queryArg => ({ url: `/localisations/${queryArg.localisationId}/` })
+    }),
+    localisationsDeleteDestroy: build.mutation<LocalisationsDeleteDestroyApiResponse, LocalisationsDeleteDestroyApiArg>(
+      {
+        query: queryArg => ({ url: `/localisations/${queryArg.localisationId}/delete/`, method: 'DELETE' })
+      }
+    ),
+    localisationUpdate: build.mutation<LocalisationUpdateApiResponse, LocalisationUpdateApiArg>({
+      query: queryArg => ({
+        url: `/localisations/${queryArg.localisationId}/update/`,
+        method: 'PUT',
+        body: queryArg.localisationRequest
+      })
+    }),
+    localisationCreate: build.mutation<LocalisationCreateApiResponse, LocalisationCreateApiArg>({
+      query: queryArg => ({ url: `/localisations/create/`, method: 'POST', body: queryArg.localisationRequest })
+    }),
     loginCreate: build.mutation<LoginCreateApiResponse, LoginCreateApiArg>({
       query: queryArg => ({ url: `/login/`, method: 'POST', body: queryArg.tokenObtainPairRequest })
     }),
@@ -292,44 +323,43 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.phoneNumberCreateUpdateRequest
       })
     }),
-    productsRetrieve: build.query<ProductsRetrieveApiResponse, ProductsRetrieveApiArg>({
+    productList: build.query<ProductListApiResponse, ProductListApiArg>({
       query: queryArg => ({
         url: `/products/`,
         params: {
-          created_by: queryArg.createdBy,
-          description: queryArg.description,
+          category: queryArg.category,
           name: queryArg.name,
+          ordering: queryArg.ordering,
           page: queryArg.page,
-          page_size: queryArg.pageSize
+          page_size: queryArg.pageSize,
+          search: queryArg.search
         }
       })
     }),
-    productsRetrieve2: build.query<ProductsRetrieve2ApiResponse, ProductsRetrieve2ApiArg>({
+    productDetail: build.query<ProductDetailApiResponse, ProductDetailApiArg>({
       query: queryArg => ({ url: `/products/${queryArg.productId}/` })
     }),
-    productsCreateCreate: build.mutation<ProductsCreateCreateApiResponse, ProductsCreateCreateApiArg>({
-      query: queryArg => ({ url: `/products/create/`, method: 'POST', body: queryArg.productRequest })
+    productDelete: build.mutation<ProductDeleteApiResponse, ProductDeleteApiArg>({
+      query: queryArg => ({ url: `/products/${queryArg.productId}/delete/`, method: 'DELETE' })
     }),
-    productsDeleteDestroy: build.mutation<ProductsDeleteDestroyApiResponse, ProductsDeleteDestroyApiArg>({
-      query: queryArg => ({ url: `/products/delete/${queryArg.productId}/`, method: 'DELETE' })
-    }),
-    productsMediaRetrieve: build.query<ProductsMediaRetrieveApiResponse, ProductsMediaRetrieveApiArg>({
-      query: queryArg => ({ url: `/products/media/${queryArg.productMediaId}/` })
-    }),
-    productsMediaCreateCreate: build.mutation<ProductsMediaCreateCreateApiResponse, ProductsMediaCreateCreateApiArg>({
-      query: queryArg => ({ url: `/products/media/create/`, method: 'POST', body: queryArg.productMediaRequest })
-    }),
-    productsMediaDeleteDestroy: build.mutation<ProductsMediaDeleteDestroyApiResponse, ProductsMediaDeleteDestroyApiArg>(
-      {
-        query: queryArg => ({ url: `/products/media/delete/${queryArg.productMediaId}/`, method: 'DELETE' })
-      }
-    ),
-    productsUpdateUpdate: build.mutation<ProductsUpdateUpdateApiResponse, ProductsUpdateUpdateApiArg>({
+    productUpdate: build.mutation<ProductUpdateApiResponse, ProductUpdateApiArg>({
       query: queryArg => ({
-        url: `/products/update/${queryArg.productId}/`,
+        url: `/products/${queryArg.productId}/update/`,
         method: 'PUT',
         body: queryArg.productRequest
       })
+    }),
+    productCreate: build.mutation<ProductCreateApiResponse, ProductCreateApiArg>({
+      query: queryArg => ({ url: `/products/create/`, method: 'POST', body: queryArg.productRequest })
+    }),
+    productMediaDetail: build.query<ProductMediaDetailApiResponse, ProductMediaDetailApiArg>({
+      query: queryArg => ({ url: `/products/media/${queryArg.productMediaId}/` })
+    }),
+    productMediaDelete: build.mutation<ProductMediaDeleteApiResponse, ProductMediaDeleteApiArg>({
+      query: queryArg => ({ url: `/products/media/${queryArg.productMediaId}/delete/`, method: 'DELETE' })
+    }),
+    productMediaCreate: build.mutation<ProductMediaCreateApiResponse, ProductMediaCreateApiArg>({
+      query: queryArg => ({ url: `/products/media/create/`, method: 'POST', body: queryArg.productMediaRequest })
     }),
     projectLotsRetrieve: build.query<ProjectLotsRetrieveApiResponse, ProjectLotsRetrieveApiArg>({
       query: queryArg => ({ url: `/project-lots/${queryArg.projectLotId}/` })
@@ -605,6 +635,26 @@ const injectedRtkApi = api.injectEndpoints({
     setPasswordCreate: build.mutation<SetPasswordCreateApiResponse, SetPasswordCreateApiArg>({
       query: queryArg => ({ url: `/set-password/`, method: 'POST', body: queryArg.setasswordRequest })
     }),
+    listProjectSubcontractor: build.query<ListProjectSubcontractorApiResponse, ListProjectSubcontractorApiArg>({
+      query: queryArg => ({
+        url: `/subcontractor/projects/`,
+        params: {
+          code: queryArg.code,
+          description: queryArg.description,
+          name: queryArg.name,
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search
+        }
+      })
+    }),
+    getSubcontractorProjectDetail: build.query<
+      GetSubcontractorProjectDetailApiResponse,
+      GetSubcontractorProjectDetailApiArg
+    >({
+      query: queryArg => ({ url: `/subcontractor/projects/${queryArg.projectId}/` })
+    }),
     subcontractorsRetrieve: build.query<SubcontractorsRetrieveApiResponse, SubcontractorsRetrieveApiArg>({
       query: queryArg => ({
         url: `/subcontractors/`,
@@ -757,6 +807,15 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: queryArg => ({ url: `/suivi-administrative/${queryArg.suiviAdministrativeId}/` })
     }),
+    listSuiviAdministrativeStepComments: build.query<
+      ListSuiviAdministrativeStepCommentsApiResponse,
+      ListSuiviAdministrativeStepCommentsApiArg
+    >({
+      query: queryArg => ({
+        url: `/suivi-administrative/steps/${queryArg.stepId}/comments/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize }
+      })
+    }),
     updateSuiviAdministrativeStep: build.mutation<
       UpdateSuiviAdministrativeStepApiResponse,
       UpdateSuiviAdministrativeStepApiArg
@@ -765,6 +824,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/suivi-administrative/steps/${queryArg.stepId}/update/`,
         method: 'PATCH',
         body: queryArg.patchedSuiviAdministrativeStepUpdateRequest
+      })
+    }),
+    addSuiviAdministrativeStepComment: build.mutation<
+      AddSuiviAdministrativeStepCommentApiResponse,
+      AddSuiviAdministrativeStepCommentApiArg
+    >({
+      query: queryArg => ({
+        url: `/suivi-administrative/steps/comments/`,
+        method: 'POST',
+        body: queryArg.suiviAdministrativeStepCommentCreateRequest
       })
     }),
     tokenRefreshCreate: build.mutation<TokenRefreshCreateApiResponse, TokenRefreshCreateApiArg>({
@@ -874,39 +943,49 @@ export type AdminUsersDeleteDestroyApiResponse = /** status 204  */ any
 export type AdminUsersDeleteDestroyApiArg = {
   adminUserId: number
 }
-export type CategoriesRetrieveApiResponse = /** status 200  */ PaginatedProductRead
-export type CategoriesRetrieveApiArg = {
-
-  /** Filter by creator's email (contains match) */
-  createdBy?: string
-
-  /** Filter by category description (contains match) */
-  description?: string
+export type CategoriesListApiResponse = /** status 200  */ PaginatedCategoryRead
+export type CategoriesListApiArg = {
 
   /** Filter by category name (contains match) */
   name?: string
+
+  /** Order results by fields (e.g., 'name', '-created_at') */
+  ordering?:
+    | '-created_at'
+    | '-created_by__email'
+    | '-description'
+    | '-id'
+    | '-name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'description'
+    | 'id'
+    | 'name'
 
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Search by category name, or description */
+  search?: string
 }
-export type CategoriesRetrieve2ApiResponse = /** status 200  */ CategoryRead
-export type CategoriesRetrieve2ApiArg = {
+export type CategoriesRetrieveApiResponse = /** status 200  */ CategoryRead
+export type CategoriesRetrieveApiArg = {
   categoryId: number
 }
-export type CategoriesCreateCreateApiResponse = /** status 201  */ CategoryRead
-export type CategoriesCreateCreateApiArg = {
+export type CategoryDeleteApiResponse = /** status 204  */ any
+export type CategoryDeleteApiArg = {
+  categoryId: number
+}
+export type CategoryUpdateApiResponse = /** status 200  */ CategoryRead
+export type CategoryUpdateApiArg = {
+  categoryId: number
   categoryRequest: CategoryRequest
 }
-export type CategoriesDeleteDestroyApiResponse = /** status 204  */ any
-export type CategoriesDeleteDestroyApiArg = {
-  categoryId: number
-}
-export type CategoriesUpdateUpdateApiResponse = /** status 200  */ CategoryRead
-export type CategoriesUpdateUpdateApiArg = {
-  categoryId: number
+export type CategoryCreateApiResponse = /** status 201  */ CategoryRead
+export type CategoryCreateApiArg = {
   categoryRequest: CategoryRequest
 }
 export type ClientsRetrieveApiResponse = /** status 200  */ PaginatedClientRead
@@ -1155,6 +1234,44 @@ export type IntervenantRolesRetrieveApiResponse = /** status 200 Available roles
   [key: string]: any
 }
 export type IntervenantRolesRetrieveApiArg = void
+export type LocalisationsListApiResponse = /** status 200  */ PaginatedLocalisationRead
+export type LocalisationsListApiArg = {
+
+  /** Filter by creator's email (contains match) */
+  createdBy?: string
+
+  /** Filter by localisation name (contains match) */
+  name?: string
+
+  /** Order results by fields (e.g., 'name', '-created_at') */
+  ordering?: '-created_at' | '-created_by__email' | '-id' | '-name' | 'created_at' | 'created_by__email' | 'id' | 'name'
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+
+  /** Search by localisation name */
+  search?: string
+}
+export type LocalisationDetailApiResponse = /** status 200  */ LocalisationRead
+export type LocalisationDetailApiArg = {
+  localisationId: number
+}
+export type LocalisationsDeleteDestroyApiResponse = /** status 204  */ any
+export type LocalisationsDeleteDestroyApiArg = {
+  localisationId: number
+}
+export type LocalisationUpdateApiResponse = /** status 200  */ LocalisationRead
+export type LocalisationUpdateApiArg = {
+  localisationId: number
+  localisationRequest: LocalisationRequest
+}
+export type LocalisationCreateApiResponse = /** status 201  */ LocalisationRead
+export type LocalisationCreateApiArg = {
+  localisationRequest: LocalisationRequest
+}
 export type LoginCreateApiResponse = /** status 200  */ {
   [key: string]: any
 }
@@ -1257,52 +1374,67 @@ export type PhoneNumbersUpdateUpdateApiArg = {
   phoneNumberId: number
   phoneNumberCreateUpdateRequest: PhoneNumberCreateUpdateRequest
 }
-export type ProductsRetrieveApiResponse = /** status 200  */ PaginatedProductRead
-export type ProductsRetrieveApiArg = {
+export type ProductListApiResponse = /** status 200  */ PaginatedProductRead
+export type ProductListApiArg = {
 
-  /** Filter by creator's email (contains match) */
-  createdBy?: string
-
-  /** Filter by product description (contains match) */
-  description?: string
+  /** Filter by Categories IDs (comma-separated) */
+  category?: string
 
   /** Filter by product name (contains match) */
   name?: string
+
+  /** Order results by fields (e.g., 'name', '-created_at') */
+  ordering?:
+    | '-category__name'
+    | '-created_at'
+    | '-created_by__email'
+    | '-description'
+    | '-id'
+    | '-name'
+    | 'category__name'
+    | 'created_at'
+    | 'created_by__email'
+    | 'description'
+    | 'id'
+    | 'name'
 
   /** Page number of the results to fetch */
   page?: number
 
   /** Number of results per page */
   pageSize?: number
+
+  /** Search by product name, or description */
+  search?: string
 }
-export type ProductsRetrieve2ApiResponse = /** status 200  */ ProductRead
-export type ProductsRetrieve2ApiArg = {
+export type ProductDetailApiResponse = /** status 200  */ ProductRead
+export type ProductDetailApiArg = {
   productId: number
 }
-export type ProductsCreateCreateApiResponse = /** status 201  */ ProductRead
-export type ProductsCreateCreateApiArg = {
+export type ProductDeleteApiResponse = /** status 204  */ any
+export type ProductDeleteApiArg = {
+  productId: number
+}
+export type ProductUpdateApiResponse = /** status 200  */ ProductRead
+export type ProductUpdateApiArg = {
+  productId: number
   productRequest: ProductRequest
 }
-export type ProductsDeleteDestroyApiResponse = /** status 204  */ any
-export type ProductsDeleteDestroyApiArg = {
-  productId: number
+export type ProductCreateApiResponse = /** status 201  */ ProductRead
+export type ProductCreateApiArg = {
+  productRequest: ProductRequest
 }
-export type ProductsMediaRetrieveApiResponse = /** status 200  */ ProductMediaRead
-export type ProductsMediaRetrieveApiArg = {
+export type ProductMediaDetailApiResponse = /** status 200  */ ProductMediaRead
+export type ProductMediaDetailApiArg = {
   productMediaId: number
 }
-export type ProductsMediaCreateCreateApiResponse = /** status 200  */ ProductRead
-export type ProductsMediaCreateCreateApiArg = {
+export type ProductMediaDeleteApiResponse = /** status 204  */ any
+export type ProductMediaDeleteApiArg = {
+  productMediaId: number
+}
+export type ProductMediaCreateApiResponse = /** status 200  */ ProductRead
+export type ProductMediaCreateApiArg = {
   productMediaRequest: ProductMediaRequest
-}
-export type ProductsMediaDeleteDestroyApiResponse = /** status 204  */ any
-export type ProductsMediaDeleteDestroyApiArg = {
-  productMediaId: number
-}
-export type ProductsUpdateUpdateApiResponse = /** status 200  */ ProductRead
-export type ProductsUpdateUpdateApiArg = {
-  productId: number
-  productRequest: ProductRequest
 }
 export type ProjectLotsRetrieveApiResponse = /** status 200  */ ProjectLotRead
 export type ProjectLotsRetrieveApiArg = {
@@ -1671,6 +1803,34 @@ export type SetPasswordCreateApiResponse = /** status 200  */ any
 export type SetPasswordCreateApiArg = {
   setasswordRequest: SetasswordRequestWrite
 }
+export type ListProjectSubcontractorApiResponse = /** status 200  */ PaginatedProjectSubcontractorRead
+export type ListProjectSubcontractorApiArg = {
+
+  /** Filter by project code (contains match) */
+  code?: string
+
+  /** Filter by project description (contains match) */
+  description?: string
+
+  /** Filter by project name (contains match) */
+  name?: string
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?: '-code' | '-description' | '-id' | '-name' | 'code' | 'description' | 'id' | 'name'
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+
+  /** Search by code, name,description ,client name */
+  search?: string
+}
+export type GetSubcontractorProjectDetailApiResponse = /** status 200  */ ProjectSubcontractorRead
+export type GetSubcontractorProjectDetailApiArg = {
+  projectId: number
+}
 export type SubcontractorsRetrieveApiResponse = /** status 200  */ PaginatedSubcontractortRead
 export type SubcontractorsRetrieveApiArg = {
 
@@ -1875,10 +2035,26 @@ export type RetrieveSuiviAdministrativeDetailApiResponse = /** status 200  */ Su
 export type RetrieveSuiviAdministrativeDetailApiArg = {
   suiviAdministrativeId: number
 }
+export type ListSuiviAdministrativeStepCommentsApiResponse =
+  /** status 200  */ PaginatedSuiviAdministrativeStepCommentRead
+export type ListSuiviAdministrativeStepCommentsApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number
+
+  /** Number of results per page */
+  pageSize?: number
+  stepId: number
+}
 export type UpdateSuiviAdministrativeStepApiResponse = unknown
 export type UpdateSuiviAdministrativeStepApiArg = {
   stepId: number
   patchedSuiviAdministrativeStepUpdateRequest: PatchedSuiviAdministrativeStepUpdateRequest
+}
+export type AddSuiviAdministrativeStepCommentApiResponse =
+  /** status 201 Comment created successfully. */ SuiviAdministrativeStepCommentRead
+export type AddSuiviAdministrativeStepCommentApiArg = {
+  suiviAdministrativeStepCommentCreateRequest: SuiviAdministrativeStepCommentCreateRequest
 }
 export type TokenRefreshCreateApiResponse = /** status 200  */ {
   [key: string]: any
@@ -1986,6 +2162,10 @@ export type PatchedAdminStaffUpdateRequest = {
   last_name?: string
   is_active?: boolean
 }
+export type Category = {
+  name: string
+  description?: string | null
+}
 export type Product = {
   name: string
   description?: string | null
@@ -1995,13 +2175,12 @@ export type Product = {
 export type ProductMedia = {
   image: string
   product: number
-  created_by?: number | null
 }
 export type ProductMediaRead = {
   id: number
   image: string
   product: number
-  created_by?: number | null
+  created_by: CreatedByRead
   created_at: string
   updated_at: string
 }
@@ -2016,22 +2195,6 @@ export type ProductRead = {
   created_at: string
   updated_at: string
 }
-export type PaginatedProduct = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: Product[]
-}
-export type PaginatedProductRead = {
-  count: number
-  next: string | null
-  previous: string | null
-  results: ProductRead[]
-}
-export type Category = {
-  name: string
-  description?: string | null
-}
 export type CategoryRead = {
   id: number
   name: string
@@ -2040,6 +2203,18 @@ export type CategoryRead = {
   created_by: CreatedByRead
   created_at: string
   updated_at: string
+}
+export type PaginatedCategory = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Category[]
+}
+export type PaginatedCategoryRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: CategoryRead[]
 }
 export type CategoryRequest = {
   name: string
@@ -2248,6 +2423,31 @@ export type FolderRead = {
   name: string
   documents: DocumentRead[]
 }
+export type Localisation = {
+  name: string
+}
+export type LocalisationRead = {
+  id: number
+  name: string
+  created_by: CreatedByRead
+  created_at: string
+  updated_at: string
+}
+export type PaginatedLocalisation = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Localisation[]
+}
+export type PaginatedLocalisationRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: LocalisationRead[]
+}
+export type LocalisationRequest = {
+  name: string
+}
 export type TokenObtainPairRequest = {}
 export type TokenObtainPairRequestWrite = {
   email: string
@@ -2330,6 +2530,18 @@ export type PasswordResetRequestRequest = {
   email: string
   redirect_uri: string
 }
+export type PaginatedProduct = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: Product[]
+}
+export type PaginatedProductRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProductRead[]
+}
 export type ProductRequest = {
   name: string
   description?: string | null
@@ -2339,7 +2551,6 @@ export type ProductRequest = {
 export type ProductMediaRequest = {
   image: Blob
   product: number
-  created_by?: number | null
 }
 export type Status109Enum = 'pending' | 'in_progress' | 'review' | 'completed' | 'canceled'
 export type ProjectLot = {
@@ -2844,6 +3055,35 @@ export type SetasswordRequestWrite = {
   uid: string
   token: string
 }
+export type ProjectSubcontractor = {
+  code: string
+  name: string
+  description?: string
+}
+export type ProjectSubcontractorRead = {
+  id: number
+  code: string
+  name: string
+  description?: string
+  client: ClientRead
+  map_coordinate: MapCoordinate
+  address: AddressRead
+  manager: ClientStaffRead
+  created_at: string
+  updated_at: string
+}
+export type PaginatedProjectSubcontractor = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectSubcontractor[]
+}
+export type PaginatedProjectSubcontractorRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ProjectSubcontractorRead[]
+}
 export type Subcontractor = {
   name: string
   siren_number: string
@@ -2936,9 +3176,60 @@ export type SubcontractorUpdateRequest = {
   is_active?: boolean
   lots_ids?: number[] | null
 }
+export type BlankEnum = ''
+export type NullEnum = null
+export type SuiviAdministrativeStepComment = {
+
+  /** The content of the comment. */
+  comment: string
+
+  /** Optional status update for the step when this comment is created.
+
+    * `not_started` - Not Started
+    * `in_progress` - In Progress
+    * `completed` - Completed
+    * `on_hold` - On Hold
+    * `canceled` - Canceled
+    * `rejected` - Rejected
+    * `temporarily_done` - Temporarily Done */
+  status?: (Status3BfEnum | BlankEnum | NullEnum) | null
+  created_by?: number | null
+}
+export type SuiviAdministrativeStepCommentRead = {
+  id: number
+
+  /** The content of the comment. */
+  comment: string
+  document: DocumentRead
+
+  /** Optional status update for the step when this comment is created.
+
+    * `not_started` - Not Started
+    * `in_progress` - In Progress
+    * `completed` - Completed
+    * `on_hold` - On Hold
+    * `canceled` - Canceled
+    * `rejected` - Rejected
+    * `temporarily_done` - Temporarily Done */
+  status?: (Status3BfEnum | BlankEnum | NullEnum) | null
+  created_by?: number | null
+  created_at: string
+}
+export type PaginatedSuiviAdministrativeStepComment = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: SuiviAdministrativeStepComment[]
+}
+export type PaginatedSuiviAdministrativeStepCommentRead = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: SuiviAdministrativeStepCommentRead[]
+}
 export type PatchedSuiviAdministrativeStepUpdateRequest = {
 
-  /** Status of the step in the suivi administrative process.
+  /** Optional status to update for the step.
 
     * `not_started` - Not Started
     * `in_progress` - In Progress
@@ -2949,8 +3240,30 @@ export type PatchedSuiviAdministrativeStepUpdateRequest = {
     * `temporarily_done` - Temporarily Done */
   status?: Status3BfEnum
 
-  /** Number of days before or after the project start date. */
+  /** Number of days, must be a positive integer. */
   nbr_of_days?: number
+}
+export type SuiviAdministrativeStepCommentCreateRequest = {
+
+  /** ID of the step to comment on. */
+  step_id: number
+
+  /** Text content of the comment. */
+  comment: string
+
+  /** The file to be uploaded. */
+  document_file?: Blob
+
+  /** Optional status to update for the step.
+
+    * `not_started` - Not Started
+    * `in_progress` - In Progress
+    * `completed` - Completed
+    * `on_hold` - On Hold
+    * `canceled` - Canceled
+    * `rejected` - Rejected
+    * `temporarily_done` - Temporarily Done */
+  status?: Status3BfEnum
 }
 export type UserChangePasswordRequest = {
   old_password: string
@@ -2982,11 +3295,11 @@ export const {
   useAdminStaffCreateCreateMutation,
   useAdminStaffUpdatePartialUpdateMutation,
   useAdminUsersDeleteDestroyMutation,
+  useCategoriesListQuery,
   useCategoriesRetrieveQuery,
-  useCategoriesRetrieve2Query,
-  useCategoriesCreateCreateMutation,
-  useCategoriesDeleteDestroyMutation,
-  useCategoriesUpdateUpdateMutation,
+  useCategoryDeleteMutation,
+  useCategoryUpdateMutation,
+  useCategoryCreateMutation,
   useClientsRetrieveQuery,
   useClientsRetrieve2Query,
   useClientsOwnerRetrieveQuery,
@@ -3013,6 +3326,11 @@ export const {
   useGetDocumentHistoryQuery,
   useGetFolderDetailQuery,
   useIntervenantRolesRetrieveQuery,
+  useLocalisationsListQuery,
+  useLocalisationDetailQuery,
+  useLocalisationsDeleteDestroyMutation,
+  useLocalisationUpdateMutation,
+  useLocalisationCreateMutation,
   useLoginCreateMutation,
   useLogoutCreateMutation,
   useLotsRetrieveQuery,
@@ -3028,14 +3346,14 @@ export const {
   usePhoneNumbersRetrieveQuery,
   usePhoneNumbersDeleteDestroyMutation,
   usePhoneNumbersUpdateUpdateMutation,
-  useProductsRetrieveQuery,
-  useProductsRetrieve2Query,
-  useProductsCreateCreateMutation,
-  useProductsDeleteDestroyMutation,
-  useProductsMediaRetrieveQuery,
-  useProductsMediaCreateCreateMutation,
-  useProductsMediaDeleteDestroyMutation,
-  useProductsUpdateUpdateMutation,
+  useProductListQuery,
+  useProductDetailQuery,
+  useProductDeleteMutation,
+  useProductUpdateMutation,
+  useProductCreateMutation,
+  useProductMediaDetailQuery,
+  useProductMediaDeleteMutation,
+  useProductMediaCreateMutation,
   useProjectLotsRetrieveQuery,
   useProjectLotsDeleteDestroyMutation,
   useProjectLotsSubcontractorsRetrieve2Query,
@@ -3074,6 +3392,8 @@ export const {
   useProjectsTemplatesUpdateUpdateMutation,
   useProjectsUpdateUpdateMutation,
   useSetPasswordCreateMutation,
+  useListProjectSubcontractorQuery,
+  useGetSubcontractorProjectDetailQuery,
   useSubcontractorsRetrieveQuery,
   useSubcontractorsRetrieve2Query,
   useSubcontractorsOwnerRetrieveQuery,
@@ -3090,7 +3410,9 @@ export const {
   useCreateSubcontractorBySubcontractorUserMutation,
   useSubcontractorsUpdateUpdateMutation,
   useRetrieveSuiviAdministrativeDetailQuery,
+  useListSuiviAdministrativeStepCommentsQuery,
   useUpdateSuiviAdministrativeStepMutation,
+  useAddSuiviAdministrativeStepCommentMutation,
   useTokenRefreshCreateMutation,
   useUserChangePasswordCreateMutation,
   useUserConfirmEmailChangeCreateMutation,

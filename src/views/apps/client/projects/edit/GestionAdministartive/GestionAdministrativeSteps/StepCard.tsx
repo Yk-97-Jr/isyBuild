@@ -1,0 +1,100 @@
+import React, {useState} from 'react'
+
+import {
+  Card,
+  CardContent,
+  Typography,
+  Chip,
+  Stack,
+  CardHeader,
+  Box,
+  IconButton
+} from '@mui/material'
+
+
+import {Status3BfMapping} from "@/utils/statusEnums";
+import {getStatusProps} from "@/utils/statusHelper";
+import type {Status3BfEnum, SuiviAdministrativeStepRead} from "@/services/IsyBuildApi";
+import {formatDate} from "@/utils/formatDate";
+
+
+const StepCard: React.FC<{ step: SuiviAdministrativeStepRead }> = ({step}) => {
+
+  const [status] = useState<keyof typeof Status3BfMapping>(
+    step?.status || "not_started"
+  );
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  //
+  // const handleStatusChange = (event: SelectChangeEvent<keyof typeof Status3BfMapping>) => {
+  //   setStatus(event.target.value as keyof typeof Status3BfMapping);
+  //   setIsEditing(false); // Close dropdown after selection
+  // };
+
+  const {
+    label,
+    color
+  } = getStatusProps<Status3BfEnum>(status, Status3BfMapping);
+
+  return (
+    <Card
+      variant="outlined"
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        '&:hover': {
+          boxShadow: 3
+        }
+      }}
+    >
+      <CardHeader
+        sx={{
+          height: '100%',
+          display: 'flex',
+          alignItems: 'start',
+          justifyContent: 'space-between', // Space between title and actions
+        }}
+        action={
+          <Box display="flex" alignItems="center" gap={2}>
+            <Chip sx={{marginLeft: 1}} variant="tonal" label={label}
+                  color={color as any}/>
+            <IconButton onClick={() => setIsEditing(!isEditing)} size="small" sx={{mr: 1}}>
+              <i className='tabler-dots-vertical text-textSecondary'/>
+            </IconButton>
+
+          </Box>
+        }
+        title={step.step_name}
+      />
+      <CardContent sx={{flex: 1}}>
+        <Stack spacing={1}>
+          <Typography variant="body2" color="text.secondary">
+            Order: {step.order}
+          </Typography>
+          {step.target_date && (
+            <Typography variant="body2" color="text.secondary">
+              Target Date: {formatDate(step.target_date)}
+            </Typography>
+          )}
+          <Typography variant="body2" color="text.secondary">
+            Days Allocated: {step.nbr_of_days}
+          </Typography>
+          {step.actual_date && (
+            <Typography variant="body2" color="text.secondary">
+              Actual Date: {formatDate(step.actual_date)}
+            </Typography>
+          )}
+          {/*{step.assigned_to && (*/}
+          {/*  <Typography variant="body2" color="text.secondary">*/}
+          {/*    Assigned To: {step.assigned_to}*/}
+          {/*  </Typography>*/}
+          {/*)}*/}
+        </Stack>
+      </CardContent>
+    </Card>
+  )
+}
+
+export default StepCard

@@ -4,7 +4,7 @@
 import React, {useEffect, useState, useMemo} from 'react'
 
 // MUI Imports
-import {useRouter} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
@@ -114,7 +114,7 @@ const DebouncedInput = ({
 // Column Definitions
 const columnHelper = createColumnHelper<SuiviAdministrativeReadWithAction>()
 
-const GestionAdministrativeListListTable = ({
+const GestionAdministrativeListTable = ({
                                               data,
                                               page,
                                               setPage,
@@ -153,12 +153,12 @@ const GestionAdministrativeListListTable = ({
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
+  const {edit: projectId} = useParams();  // Renamed the route parameter variable
 
 
   const handleEdit = (id: number) => {
-    console.log(id)
-    console.log(`/${userRole}/users/${id}/details`)
-    router.push(`/${userRole}/users/${id}/details`);
+    console.log('helooooooooooooooo')
+    router.push(`/${userRole}/projects/${projectId}/details/gestionAdministrative/${id}`);
   }
 
 
@@ -391,4 +391,4 @@ const GestionAdministrativeListListTable = ({
   )
 }
 
-export default GestionAdministrativeListListTable
+export default GestionAdministrativeListTable
