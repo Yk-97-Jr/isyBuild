@@ -1,11 +1,13 @@
 // React Imports
 import React from 'react'
 
+import ProjectList from '@/views/apps/subcontractor/projects/list/ProjectList'
 
-const ProjectsListApp = () => {
+
+const ProjectListApp = () => {
 
 
-  return <div>this lis page for sub <h1>Project</h1></div>
+  return <ProjectList/>
 }
 
-export default ProjectsListApp
+export default ProjectListApp

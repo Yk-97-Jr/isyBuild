@@ -37,7 +37,7 @@ const CategoryList = () => {
         .map((s) => `${s.desc ? '-' : ''}${s.id}`)
         .join(',') as any, 
 
-     // search: debouncedSearch 
+      search: debouncedSearch 
     },
   );
 

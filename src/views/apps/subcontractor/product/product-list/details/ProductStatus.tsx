@@ -16,7 +16,7 @@ import type {  UseFormRegister } from 'react-hook-form'
 
 
 
-import SelectMultiple from './SelectMultiple'
+import CategoryDropdown from './CategoryDropdown' 
 
 import type { FormValidateProductEditType } from './schemaProductEdit'
 import type { ProductRead } from '@/services/IsyBuildApi'
@@ -43,7 +43,7 @@ const ProductStatus: React.FC<ClientStatusProps> = ({ register, productData }) =
        
       >
         <div className='flex flex-grow flex-col'>
-          <SelectMultiple  register={register} productData={productData}/>
+          <CategoryDropdown  register={register} productData={productData}/>
           <div style={{ flexGrow: 1 }}></div>
         </div>
       </CardContent>
