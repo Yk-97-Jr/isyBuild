@@ -51,6 +51,7 @@ const ProductAdd = () => {
           name: data.productName,
           description:data.description,
           category:data.category,
+          technical_sheet:data.technicalSheet
         }
           
           

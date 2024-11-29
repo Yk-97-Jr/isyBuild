@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useRef } from 'react'
 
 import { useParams, useRouter } from 'next/navigation'
 
@@ -15,6 +15,7 @@ import Box from '@mui/material/Box'
 import ProductEditHeader from './ProductEditHeader'
 import ProductEditInfo from './ProductEditInfo'
 import ProductStatus from './ProductStatus'
+import ProductMediaGrid from './media/ProductMediaGrid'
 
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
@@ -27,6 +28,7 @@ import ProductImage from './Productmage'
 import ProductCreatedBy from './ ProductCreatedBy'
 
 const ProductUpdate = () => {
+  const productMediaGridRef = useRef<any>();
   const { id } = useParams()
   const router = useRouter()
   const { user } = useAuth()
@@ -43,8 +45,21 @@ const ProductUpdate = () => {
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
-  const { data: productData, isLoading: isLoadingQuery } = useProductDetailQuery({ productId: +id })
+  const { data: productData, refetch: refetchProduct, isLoading: isLoadingQuery } = useProductDetailQuery({ productId: +id })
   const [updateProduct, { isLoading: isUpdating }] = useProductUpdateMutation()
+
+  const handleMediaUploadSuccess = (newMediaId: number) => {
+
+    console.log(`Media uploaded successfully with ID: ${newMediaId}`);
+    
+    // Trigger the media grid update
+    productMediaGridRef.current.handleMediaUpload(newMediaId);
+
+    refetchProduct();
+  };
+
+ 
+  
 
   useEffect(() => {
     if (productData) {
@@ -63,7 +78,7 @@ const ProductUpdate = () => {
           name: data.productName,
           description: data.description,
           category: data.category,
-          technical_sheet: data.technicalSheet
+          technical_sheet: data.technicalSheet || null,
         }
       }).unwrap()
 
@@ -79,6 +94,7 @@ const ProductUpdate = () => {
       })
     }
   }
+ 
 
   if (isLoadingQuery)
     return (
@@ -99,8 +115,17 @@ const ProductUpdate = () => {
               <ProductEditInfo register={register} errors={errors} />
             </Grid>
             <Grid item xs={12}>
-            <ProductImage />
+            <ProductImage refetchProduct={refetchProduct}/>
           </Grid>
+          <Grid item xs={12}>
+          {productData?.media && (
+                <ProductMediaGrid
+                  media={productData.media}
+                  refetchProduct={refetchProduct}
+                  onMediaUploadSuccess={handleMediaUploadSuccess}
+                />
+              )}{/* Add media grid */}
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12} md={4}>

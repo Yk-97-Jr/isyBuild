@@ -34,11 +34,11 @@ const MenuProps = {
 };
 
 const SelectMultiple = ({
-  onToggleMenu,
+ 
   register,
   productData,
 }: {
-  onToggleMenu: (open: boolean) => void;
+  
   register: UseFormRegister<FormValidateProductEditType>;
   productData: ProductRead | undefined; // Use ProductRead type
 }) => {
@@ -117,8 +117,7 @@ const SelectMultiple = ({
           multiple: false,
           MenuProps,
           onChange: handleChange,
-          onOpen: () => onToggleMenu(true),
-          onClose: () => onToggleMenu(false),
+         
           renderValue: (selected) => {
             if (!selected) return <Typography>Sélectionnez une catégorie</Typography>;
 

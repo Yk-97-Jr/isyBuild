@@ -7,7 +7,7 @@ export const schemaProductAdd = yup
     technicalSheet: yup
       .string()
       .url('Veuillez entrer une URL valide') // Ensures the input is a valid URL
-      .required('La fiche technique (URL) est requise'), // Makes it required
+      .notRequired(), // Makes it required
       category: yup
       .number()
       .typeError('La catégorie est requise') // Validates the category is a number

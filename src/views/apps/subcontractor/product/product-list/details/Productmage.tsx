@@ -50,19 +50,19 @@ const Dropzone = styled(AppReactDropzone)(({ theme }) => ({
   },
 }))
 
-const ProductImage = () => {
+const ProductImage = ({refetchProduct}:{refetchProduct: () => void;}) => {
   const params = useParams()
   const id = typeof params.id === 'string' ? params.id : '' // Ensure `id` is a string
 
   // States
   const [file, setFile] = useState<File | null>(null)
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [, setImageUrl] = useState<string | null>(null)
  
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
   // API Mutation
   const [productMediaCreate, { isLoading}] = useProductMediaCreateMutation()
-
+  
   // Hooks for Dropzone
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
@@ -113,6 +113,7 @@ return
         setImageUrl(URL.createObjectURL(file))
         setOpenSnackBar(true)
         setInfoAlert({ severity: 'success', message: 'uploading image successfully!' })
+        refetchProduct();
       }
       
     } catch ( error: any ) {
@@ -180,49 +181,7 @@ return
               </Button>
             )}
           </div>
-          {imageUrl  && (
-  <List>
-    <ListItem
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 1,
-        p: 2,
-        backgroundColor: 'background.paper',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        {/* Image Preview */}
-        <img
-          src={imageUrl}
-          alt="Uploaded preview"
-          style={{ width: '50px', height: '50px', borderRadius: '4px' }}
-        />
-
-        {/* File Name and Size */}
-        <div>
-          <Typography variant="body1" fontWeight="500">
-            {file?.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {((file?.size ?? 0) / 1024).toFixed(1)} kb
-          </Typography>
-        </div>
-      </div>
-
-      {/* Remove Button */}
-      <IconButton onClick={() => {
-        setFile(null);
-        setImageUrl(null);
-      }}>
-        <i className="tabler-x text-xl" />
-      </IconButton>
-    </ListItem>
-  </List>
-)}
+ 
 
 
         </CardContent>
