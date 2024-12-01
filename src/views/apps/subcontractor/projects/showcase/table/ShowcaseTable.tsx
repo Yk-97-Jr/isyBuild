@@ -41,7 +41,7 @@ import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type {ProjectSubcontractorRead} from '@/services/IsyBuildApi'
+import type {ProjectLotRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
 
 
@@ -55,7 +55,7 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ProjectWithAction = ProjectSubcontractorRead & {
+type ProjectWithAction = ProjectLotRead & {
   action?: string
 }
 
@@ -104,7 +104,7 @@ const DebouncedInput = ({
 // Column Definitions
 const columnHelper = createColumnHelper<ProjectWithAction>()
 
-const ProjectTable = ({
+const ShowcaseTable = ({
                          data,
                          page,
                          setPage,
@@ -119,7 +119,7 @@ const ProjectTable = ({
                          setSorting,
                          sorting
                        }: {
-  data?: ProjectSubcontractorRead[]
+  data?: ProjectLotRead[]
 
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -152,30 +152,29 @@ const ProjectTable = ({
 
   const columns = useMemo<ColumnDef<ProjectWithAction, any>[]>(
     () => [
-      columnHelper.accessor('id', {
-        header: 'Nom',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name} `}
-              </Typography>
-                <Typography color='text.secondery'>{`${row.original.code}`}</Typography>
-            </div>
-          </div>
-        )
-      }),
+        columnHelper.accessor('lot.name', {
+            header: `Lots`,
+            cell: ({row}) => (
+                <div className='flex items-center gap-1'>
+                <div className='flex flex-col'>
+                  <Typography color='text.primary' className='font-medium'>
+                    {`${row.original.lot.name} `}
+                  </Typography>
+                </div>
+              </div>
+            )
+          }),
 
-      columnHelper.accessor('client.name', {
-        header: `clients`,
+      columnHelper.accessor('project.client.id', {
+        header: `responsable`,
         cell: ({row}) => (
             <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.client.name} `}
+                {`${row.original.project.client.name} `}
               </Typography>
               <Typography color='text.secondery' >
-                {`${row.original.client.contact_email} `}
+                {`${row.original.project.client.contact_email} `}
               </Typography>
               
             </div>
@@ -209,7 +208,7 @@ const ProjectTable = ({
   )
 
   const table = useReactTable({
-    data: data as ProjectSubcontractorRead[],
+    data: data as ProjectLotRead[],
     columns,
     onSortingChange: setSorting,
     filterFns: {
@@ -344,4 +343,4 @@ const ProjectTable = ({
   )
 }
 
-export default ProjectTable
+export default ShowcaseTable

@@ -3,7 +3,7 @@ import type {ReactElement} from 'react'
 
 // Next Imports
 import dynamic from 'next/dynamic'
-
+ 
 // Component Imports 
 import ProductDetails from "@views/apps/subcontractor/product/ProductDetails";
 

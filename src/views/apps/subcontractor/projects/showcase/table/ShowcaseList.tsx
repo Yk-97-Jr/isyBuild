@@ -3,6 +3,8 @@
 // components/ProjectList.js
 import React, {useEffect, useState} from 'react'
 
+import { useParams } from 'next/navigation'
+
 import type {SortingState} from '@tanstack/react-table';
 import Grid from '@mui/material/Grid'
 
@@ -12,14 +14,16 @@ import Box from '@mui/material/Box'
 
 import {useDebounce} from "@uidotdev/usehooks";
 
-import ProjectTable from './ProjectTable'
-import {useListProjectSubcontractorQuery} from '@/services/IsyBuildApi'
+import ShowcaseTable from './ShowcaseTable'
+import {useProjectsLotsRetrieveQuery} from '@/services/IsyBuildApi'
 
-const ProjectList = () => {
+const ShowcaseList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
+
+  const { id } = useParams() // Extract id from dynamic route
 
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -27,7 +31,8 @@ const ProjectList = () => {
   const debouncedSearch = useDebounce(search, 500);
 
   // Pass parameters to the query hook
-  const {data, error, isLoading, isFetching, refetch} = useListProjectSubcontractorQuery({
+  const {data, error, isLoading, isFetching, refetch} = useProjectsLotsRetrieveQuery({
+    projectId:+id,
       page,
       pageSize,
 
@@ -71,9 +76,9 @@ const ProjectList = () => {
 
   return (
 
-    <Grid container spacing={3}>
+    <Grid container spacing={6}>
       <Grid item xs={12}>
-        <ProjectTable
+        <ShowcaseTable
           pageSize={pageSize}
           setPageSize={setPageSize}
           page={page}
@@ -91,4 +96,4 @@ const ProjectList = () => {
     </Grid>)
 }
 
-export default ProjectList
+export default ShowcaseList
