@@ -18,19 +18,28 @@ import type {Status3BfEnum, SuiviAdministrativeStepRead} from "@/services/IsyBui
 import {formatDate} from "@/utils/formatDate";
 
 
-const StepCard: React.FC<{ step: SuiviAdministrativeStepRead }> = ({step}) => {
+const StepCard: React.FC<{
+  step: SuiviAdministrativeStepRead,
+  setOpenAdd: (open: boolean) => void,
+  setStep: (step: SuiviAdministrativeStepRead) => void,
+  openAdd: boolean,
+}> = ({step, setStep, setOpenAdd, openAdd}) => {
 
   const [status] = useState<keyof typeof Status3BfMapping>(
     step?.status || "not_started"
   );
 
-  const [isEditing, setIsEditing] = useState(false);
 
   //
   // const handleStatusChange = (event: SelectChangeEvent<keyof typeof Status3BfMapping>) => {
   //   setStatus(event.target.value as keyof typeof Status3BfMapping);
   //   setIsEditing(false); // Close dropdown after selection
   // };
+
+  const handleToggle = () => {
+    setOpenAdd(!openAdd); // Toggle state
+    setStep(step)
+  };
 
   const {
     label,
@@ -60,7 +69,7 @@ const StepCard: React.FC<{ step: SuiviAdministrativeStepRead }> = ({step}) => {
           <Box display="flex" alignItems="center" gap={2}>
             <Chip sx={{marginLeft: 1}} variant="tonal" label={label}
                   color={color as any}/>
-            <IconButton onClick={() => setIsEditing(!isEditing)} size="small" sx={{mr: 1}}>
+            <IconButton onClick={handleToggle} size="small" sx={{mr: 1}}>
               <i className='tabler-dots-vertical text-textSecondary'/>
             </IconButton>
 

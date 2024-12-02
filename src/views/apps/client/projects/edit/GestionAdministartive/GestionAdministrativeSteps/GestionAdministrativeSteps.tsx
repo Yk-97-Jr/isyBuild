@@ -1,27 +1,32 @@
 'use client'
 
-import React from 'react'
+import React, {useState} from 'react'
 
-import { useParams } from "next/navigation"
+import {useParams} from "next/navigation"
 
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
-import { CircularProgress } from '@mui/material'
+import {CircularProgress} from '@mui/material'
 
-import { useRetrieveSuiviAdministrativeDetailQuery } from '@/services/IsyBuildApi'
+import type {SuiviAdministrativeStepRead} from '@/services/IsyBuildApi';
+import { useRetrieveSuiviAdministrativeDetailQuery} from '@/services/IsyBuildApi'
 import StepCard from './StepCard'
+import StepDetails
+  from "@views/apps/client/projects/edit/GestionAdministartive/GestionAdministrativeSteps/GestionAdministrativeStepsDetails/StepDetails";
 
 const GestionAdministrativeSteps = () => {
-  const { id } = useParams()
+  const {id} = useParams()
+  const [openAdd, setOpenAdd] = useState(false)
+  const [step, setStep] = useState<SuiviAdministrativeStepRead | undefined>();
 
-  const { data, error, isLoading } = useRetrieveSuiviAdministrativeDetailQuery({
+  const {data, error, isLoading} = useRetrieveSuiviAdministrativeDetailQuery({
     suiviAdministrativeId: +id,
   })
 
   if (isLoading)
     return (
       <Box display='flex' justifyContent='center' alignItems='flex-start' height='100vh'>
-        <CircularProgress />
+        <CircularProgress/>
       </Box>
     )
 
@@ -39,10 +44,15 @@ const GestionAdministrativeSteps = () => {
       <Grid container spacing={3}>
         {data?.steps?.map((step) => (
           <Grid item xs={12} sm={6} md={4} key={step.id}>
-            <StepCard step={step} />
+            <StepCard step={step} setStep={setStep} setOpenAdd={setOpenAdd} openAdd={openAdd}/>
           </Grid>
         ))}
       </Grid>
+      <StepDetails
+        open={openAdd}
+        setOpen={setOpenAdd}
+        step={step}
+      />
     </div>
   )
 }
