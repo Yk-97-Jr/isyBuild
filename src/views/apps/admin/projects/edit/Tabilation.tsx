@@ -1,8 +1,8 @@
 'use client'
 
 // React Imports
-import { useState } from 'react'
-import type { SyntheticEvent, ReactElement } from 'react'
+import {useState} from 'react'
+import type {SyntheticEvent, ReactElement} from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid'
@@ -13,7 +13,7 @@ import TabPanel from '@mui/lab/TabPanel'
 // Component Imports
 import CustomTabList from '@core/components/mui/TabList'
 
-const Tabilation = ({ tabContentList }: { tabContentList: { [key: string]: ReactElement } }) => {
+const Tabilation = ({tabContentList}: { tabContentList: { [key: string]: ReactElement } }) => {
   // States
   const [activeTab, setActiveTab] = useState('Informations Generales')
 
@@ -28,15 +28,21 @@ const Tabilation = ({ tabContentList }: { tabContentList: { [key: string]: React
           <CustomTabList onChange={handleChange} variant='scrollable' pill='true'>
             <Tab
               label='Informations Generales'
-              icon={<i className='tabler-info-square' />}
+              icon={<i className='tabler-info-square'/>}
               iconPosition='start'
               value='Informations Generales'
             />
             <Tab
               label='Appelle Offre'
-              icon={<i className='tabler-subtask' />}
+              icon={<i className='tabler-subtask'/>}
               iconPosition='start'
               value='Appelle Offre'
+            />
+            <Tab
+              label='Gestion Administartive'
+              icon={<i className='tabler-brand-google-analytics'/>}
+              iconPosition='start'
+              value='Gestion Administartive'
             />
           </CustomTabList>
         </Grid>

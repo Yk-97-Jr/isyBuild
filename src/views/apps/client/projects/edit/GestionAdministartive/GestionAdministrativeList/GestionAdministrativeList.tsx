@@ -20,7 +20,6 @@ import GestionAdministrativeListTable
 
 
 const GestionAdministrativeList = () => {
-  console.log("clieeeeeeeeeeeeeent")
 
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
