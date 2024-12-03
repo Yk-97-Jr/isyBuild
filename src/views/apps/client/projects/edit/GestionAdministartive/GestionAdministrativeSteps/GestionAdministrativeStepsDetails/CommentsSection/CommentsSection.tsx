@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import type {TimelineProps} from '@mui/lab/Timeline'
 import MuiTimeline from '@mui/lab/Timeline'
@@ -23,13 +23,15 @@ import {
   TimelineDot
 } from '@mui/lab';
 import Box from "@mui/material/Box";
+import {useDispatch} from 'react-redux';
 
+import {setStep} from '@/store/slices/stepSlice';
 
 import {
   useListSuiviAdministrativeStepCommentsQuery,
-  useAddSuiviAdministrativeStepCommentMutation,
+  useAddSuiviAdministrativeStepCommentMutation
 } from "@/services/IsyBuildApi";
-import type {SuiviAdministrativeStepRead} from "@/services/IsyBuildApi";
+import type {SuiviAdministrativeStepRead, Status3BfEnum} from "@/services/IsyBuildApi";
 import {formatDate} from "@/utils/formatDate";
 import {Status3BfMapping} from "@/utils/statusEnums";
 
@@ -58,9 +60,10 @@ function CommentsSection({step}: { step: SuiviAdministrativeStepRead | undefined
   const [files, setFiles] = useState<File[]>([]);
   const [newStatus, setNewStatus] = useState('');
   const [addComment, {isLoading: isAdding}] = useAddSuiviAdministrativeStepCommentMutation();
+  const dispatch = useDispatch(); // Redux dispatch function
 
   // Fetch comments with pagination
-  const {data, isLoading, isFetching, error} = useListSuiviAdministrativeStepCommentsQuery({
+  const {data, isLoading, refetch, isFetching, error} = useListSuiviAdministrativeStepCommentsQuery({
     stepId: step!.id,
     page,
   });
@@ -102,11 +105,23 @@ function CommentsSection({step}: { step: SuiviAdministrativeStepRead | undefined
     </Box>
   ));
 
+  useEffect(() => {
+    refetch()
+  }, []);
+
 
   // Append new results when `data` updates
-  React.useEffect(() => {
+  useEffect(() => {
+
     if (data?.results) {
-      setAllComments((prevComments) => [...prevComments, ...data.results]);
+      setAllComments((prevComments) => {
+        // Check if new comments already exist in the state to prevent duplicates
+        const newComments = data.results.filter(
+          (newComment) => !prevComments.some((comment) => comment.id === newComment.id)
+        );
+
+        return [...newComments, ...prevComments];
+      });
     }
   }, [data]);
 
@@ -168,6 +183,18 @@ function CommentsSection({step}: { step: SuiviAdministrativeStepRead | undefined
       // Add the new comment at the top of the list
       setAllComments((prevComments) => [response, ...prevComments]);
 
+      // Update the step in Redux
+      if (step?.id && response.status) {
+        const updatedStep = {
+          ...step,
+          status: response.status as Status3BfEnum | undefined,  // Force the type
+        };
+
+        dispatch(setStep(updatedStep)); // Dispatch the action to update Redux state
+      } else {
+        // Handle the case where step.id is not defined
+        console.error('Step id or status step is missing');
+      }
 
       // Reset form after successful submission
       setNewComment('');
@@ -261,7 +288,7 @@ function CommentsSection({step}: { step: SuiviAdministrativeStepRead | undefined
 
       {/* Comments List */}
       {
-        isLoading ? (
+        isLoading || isFetching ? (
           <Box
             sx={{
               minHeight: '200px',
