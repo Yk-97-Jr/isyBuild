@@ -15,9 +15,12 @@ import Box from '@mui/material/Box'
 import {useDebounce} from "@uidotdev/usehooks";
 
 import {useListSuiviAdministrativeQuery} from '@/services/IsyBuildApi'
-import GestionAdministrativeListListTable from "./GestionAdministrativeListTable";
+import GestionAdministrativeListTable
+  from "@views/apps/admin/projects/edit/GestionAdministartive/GestionAdministrativeList/GestionAdministrativeListTable";
+
 
 const GestionAdministrativeList = () => {
+
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -75,7 +78,7 @@ const GestionAdministrativeList = () => {
 
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <GestionAdministrativeListListTable
+        <GestionAdministrativeListTable
           pageSize={pageSize}
           setPageSize={setPageSize}
           page={page}
