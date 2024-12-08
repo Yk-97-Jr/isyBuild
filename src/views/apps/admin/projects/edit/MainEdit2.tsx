@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState, useEffect, useContext } from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 
-import { useParams } from 'next/navigation'
+import {useParams} from 'next/navigation'
 
-import { CircularProgress, Button } from '@mui/material'
+import {CircularProgress, Button} from '@mui/material'
+
 
 import Templates from './Templates'
 
@@ -16,9 +17,9 @@ import Details from './Details'
 
 import CreatedBy from './CreatedBy'
 
-import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
+import {SnackBarContext} from '@/contexts/SnackBarContextProvider'
 
-import type { SnackBarContextType } from '@/types/apps/snackbarType'
+import type {SnackBarContextType} from '@/types/apps/snackbarType'
 
 import {
   useProjectsRetrieve2Query,
@@ -28,6 +29,7 @@ import {
   useProjectsTemplatesListQuery,
   type ProjectEmailTemplateRead
 } from '@/services/IsyBuildApi'
+import HandleIntervenants from "@views/apps/admin/projects/edit/HandleIntervenants";
 
 function MainEdit2() {
   const params = useParams()
@@ -35,12 +37,12 @@ function MainEdit2() {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-  const { data: ProjectData, isLoading } = useProjectsRetrieve2Query({ projectId })
+  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
+  const {data: ProjectData, isLoading} = useProjectsRetrieve2Query({projectId})
   const [projectState, setProjectState] = useState<ProjectRead>()
 
   //state to store  Email Templates
-  const { data: templates_data, isLoading: templates_loading } = useProjectsTemplatesListQuery({ projectId })
+  const {data: templates_data, isLoading: templates_loading} = useProjectsTemplatesListQuery({projectId})
 
   const [templates, setTemplates] = useState<ProjectEmailTemplateRead[]>()
 
@@ -159,16 +161,16 @@ function MainEdit2() {
 
     try {
       const projectUpdateRequest = EditedProject
-      const response = await TriggerUpdate({ projectId: projectId, projectUpdateRequest })
+      const response = await TriggerUpdate({projectId: projectId, projectUpdateRequest})
 
       if (response) {
         setOpenSnackBar(true)
-        setInfoAlert({ message: 'The Project has been Edited !!', severity: 'success' })
+        setInfoAlert({message: 'The Project has been Edited !!', severity: 'success'})
         window.location.reload()
       }
     } catch (err) {
       setOpenSnackBar(true)
-      setInfoAlert({ message: `Error Adding the project: ${err}`, severity: 'error' })
+      setInfoAlert({message: `Error Adding the project: ${err}`, severity: 'error'})
       console.error('Error updating the data', err)
     }
   }
@@ -177,7 +179,7 @@ function MainEdit2() {
     <>
       {isLoading ? (
         <div className='flex justify-center items-center'>
-          <CircularProgress />
+          <CircularProgress/>
         </div>
       ) : (
         <div className='p'>
@@ -213,12 +215,13 @@ function MainEdit2() {
                 setProjectState={setProjectState}
                 isLoading={isLoading}
               />
+              <HandleIntervenants />
               <CreatedBy
                 projectState={projectState || ({} as ProjectRead)}
                 setProjectState={setProjectState}
                 isLoading={isLoading}
               />
-              <Templates templates={templates || []} templates_loading={templates_loading} />
+              <Templates templates={templates || []} templates_loading={templates_loading}/>
             </div>
           </div>
         </div>
