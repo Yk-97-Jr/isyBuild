@@ -357,6 +357,103 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/document/${queryArg.documentId}/history`,
       }),
     }),
+    documentDiffusionsList: build.query<
+      DocumentDiffusionsListApiResponse,
+      DocumentDiffusionsListApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/`,
+        params: {
+          created_by: queryArg.createdBy,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          title: queryArg.title,
+        },
+      }),
+    }),
+    documentDiffusionDetail: build.query<
+      DocumentDiffusionDetailApiResponse,
+      DocumentDiffusionDetailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/`,
+      }),
+    }),
+    documentDiffusionDelete: build.mutation<
+      DocumentDiffusionDeleteApiResponse,
+      DocumentDiffusionDeleteApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/delete/`,
+        method: "DELETE",
+      }),
+    }),
+    documentDiffusionUpdate: build.mutation<
+      DocumentDiffusionUpdateApiResponse,
+      DocumentDiffusionUpdateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/update/`,
+        method: "PUT",
+        body: queryArg.documentDiffusionRequest,
+      }),
+    }),
+    documentDiffusionUpload: build.mutation<
+      DocumentDiffusionUploadApiResponse,
+      DocumentDiffusionUploadApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/upload-document/`,
+        method: "POST",
+        body: queryArg.documentUploadRequest,
+      }),
+    }),
+    documentDiffusionConfigList: build.query<
+      DocumentDiffusionConfigListApiResponse,
+      DocumentDiffusionConfigListApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/configs/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
+    }),
+    documentDiffusionConfigDetail: build.query<
+      DocumentDiffusionConfigDetailApiResponse,
+      DocumentDiffusionConfigDetailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/configs/${queryArg.documentDiffusionConfigId}/`,
+      }),
+    }),
+    documentDiffusionConfigDelete: build.mutation<
+      DocumentDiffusionConfigDeleteApiResponse,
+      DocumentDiffusionConfigDeleteApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/configs/${queryArg.documentDiffusionConfigId}/delete/`,
+        method: "DELETE",
+      }),
+    }),
+    documentDiffusionConfigCreate: build.mutation<
+      DocumentDiffusionConfigCreateApiResponse,
+      DocumentDiffusionConfigCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/configs/create/`,
+        method: "POST",
+        body: queryArg.documentDiffusionConfigRequest,
+      }),
+    }),
+    documentDiffusionCreate: build.mutation<
+      DocumentDiffusionCreateApiResponse,
+      DocumentDiffusionCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/create/`,
+        method: "POST",
+        body: queryArg.documentDiffusionRequest,
+      }),
+    }),
     getFolderDetail: build.query<
       GetFolderDetailApiResponse,
       GetFolderDetailApiArg
@@ -1684,6 +1781,73 @@ export type GetDocumentHistoryApiResponse =
 export type GetDocumentHistoryApiArg = {
   documentId: number;
 };
+export type DocumentDiffusionsListApiResponse =
+  /** status 200  */ PaginatedDocumentDiffusionRead;
+export type DocumentDiffusionsListApiArg = {
+
+  /** Filter by creator's email (contains match) */
+  createdBy?: string;
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
+
+  /** Filter by document diffusion title (contains match) */
+  title?: string;
+};
+export type DocumentDiffusionDetailApiResponse =
+  /** status 200  */ DocumentDiffusionRead;
+export type DocumentDiffusionDetailApiArg = {
+  documentDiffusionId: number;
+};
+export type DocumentDiffusionDeleteApiResponse = /** status 204  */ any;
+export type DocumentDiffusionDeleteApiArg = {
+  documentDiffusionId: number;
+};
+export type DocumentDiffusionUpdateApiResponse =
+  /** status 200  */ DocumentDiffusionRead;
+export type DocumentDiffusionUpdateApiArg = {
+  documentDiffusionId: number;
+  documentDiffusionRequest: DocumentDiffusionRequest;
+};
+export type DocumentDiffusionUploadApiResponse = /** status 201  */ {
+  [key: string]: any;
+};
+export type DocumentDiffusionUploadApiArg = {
+  documentDiffusionId: number;
+  documentUploadRequest: DocumentUploadRequest;
+};
+export type DocumentDiffusionConfigListApiResponse =
+  /** status 200  */ PaginatedDocumentDiffusionConfigRead;
+export type DocumentDiffusionConfigListApiArg = {
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
+};
+export type DocumentDiffusionConfigDetailApiResponse =
+  /** status 200  */ DocumentDiffusionConfigRead;
+export type DocumentDiffusionConfigDetailApiArg = {
+  documentDiffusionConfigId: number;
+};
+export type DocumentDiffusionConfigDeleteApiResponse = /** status 204  */ any;
+export type DocumentDiffusionConfigDeleteApiArg = {
+  documentDiffusionConfigId: number;
+};
+export type DocumentDiffusionConfigCreateApiResponse =
+  /** status 201  */ DocumentDiffusionConfigRead;
+export type DocumentDiffusionConfigCreateApiArg = {
+  documentDiffusionConfigRequest: DocumentDiffusionConfigRequest;
+};
+export type DocumentDiffusionCreateApiResponse =
+  /** status 201  */ DocumentDiffusionRead;
+export type DocumentDiffusionCreateApiArg = {
+  documentDiffusionRequest: DocumentDiffusionRequest;
+};
 export type GetFolderDetailApiResponse = /** status 200  */ FolderRead;
 export type GetFolderDetailApiArg = {
   folderId: number;
@@ -2888,15 +3052,15 @@ export type Contact = {
   last_name: string;
   email: string;
 };
-export type TypeEnum = "work" | "personal" | "fax";
+export type TypeB5BEnum = "work" | "personal" | "fax";
 export type PhoneNumber = {
   number: string;
-  type?: TypeEnum;
+  type?: TypeB5BEnum;
 };
 export type PhoneNumberRead = {
   id: number;
   number: string;
-  type?: TypeEnum;
+  type?: TypeB5BEnum;
   created_by: CreatedByRead;
   created_at: string;
   updated_at: string;
@@ -2925,7 +3089,7 @@ export type PaginatedPhoneNumberRead = {
 };
 export type PhoneNumberCreateUpdateRequest = {
   number: string;
-  type: TypeEnum;
+  type: TypeB5BEnum;
 };
 export type ContactCreateUpdateRequest = {
   first_name: string;
@@ -2951,6 +3115,99 @@ export type DocumentRead = {
   name: string;
   tags?: string | null;
   latest_version: DocumentVersionRead;
+};
+export type PhaseEnum = "design" | "execution";
+export type Type474Enum =
+  | "plan_technique"
+  | "plan_de_coffrage"
+  | "fiche_technique"
+  | "avis_technique"
+  | "note_de_calcul"
+  | "fiche_question"
+  | "autre";
+export type DocumentDiffusion = {
+  title: string;
+  phase?: PhaseEnum;
+  diffusion_date?: string | null;
+  indice?: string | null;
+  type?: Type474Enum;
+  localisation: number;
+  project_lot: number;
+  document?: number | null;
+};
+export type DocumentDiffusionRead = {
+  id: number;
+  title: string;
+  phase?: PhaseEnum;
+  diffusion_date?: string | null;
+  indice?: string | null;
+  type?: Type474Enum;
+  localisation: number;
+  project_lot: number;
+  document?: number | null;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
+export type PaginatedDocumentDiffusion = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: DocumentDiffusion[];
+};
+export type PaginatedDocumentDiffusionRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: DocumentDiffusionRead[];
+};
+export type DocumentDiffusionRequest = {
+  title: string;
+  phase?: PhaseEnum;
+  diffusion_date?: string | null;
+  indice?: string | null;
+  type?: Type474Enum;
+  localisation: number;
+  project_lot: number;
+  document?: number | null;
+};
+export type DocumentUploadRequest = {
+  name?: string;
+  file: Blob;
+  tags?: string;
+  notes?: string;
+};
+export type RoleEnum =
+  | "Architecte"
+  | "Bureau de contr\u00F4le"
+  | "Bureau d'\u00E9tude technique"
+  | "Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9"
+  | "Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement"
+  | "Client";
+export type DocumentDiffusionConfig = {
+  type: Type474Enum;
+  role: RoleEnum;
+};
+export type DocumentDiffusionConfigRead = {
+  id: number;
+  type: Type474Enum;
+  role: RoleEnum;
+};
+export type PaginatedDocumentDiffusionConfig = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: DocumentDiffusionConfig[];
+};
+export type PaginatedDocumentDiffusionConfigRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: DocumentDiffusionConfigRead[];
+};
+export type DocumentDiffusionConfigRequest = {
+  type: Type474Enum;
+  role: RoleEnum;
 };
 export type Folder = {
   name: string;
@@ -3216,12 +3473,6 @@ export type ProjectLotSubcontractorCreateRequest = {
 export type ProjectLotUpdateRequest = {
   status?: Status109Enum;
 };
-export type DocumentUploadRequest = {
-  name?: string;
-  file: Blob;
-  tags?: string;
-  notes?: string;
-};
 export type ProjectLotCreateRequest = {
   lot_id: number;
   project_id: number;
@@ -3326,13 +3577,6 @@ export type ProjectStaffAssignRequest = {
   supervisor_id?: number | null;
 };
 export type ProjectIntervenant = {};
-export type RoleEnum =
-  | "Architecte"
-  | "Bureau de contr\u00F4le"
-  | "Bureau d'\u00E9tude technique"
-  | "Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9"
-  | "Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement"
-  | "Client";
 export type Intervenant = {
   role: RoleEnum;
 };
@@ -3885,6 +4129,16 @@ export const {
   useContactsUpdateUpdateMutation,
   useGetDocumentDetailQuery,
   useGetDocumentHistoryQuery,
+  useDocumentDiffusionsListQuery,
+  useDocumentDiffusionDetailQuery,
+  useDocumentDiffusionDeleteMutation,
+  useDocumentDiffusionUpdateMutation,
+  useDocumentDiffusionUploadMutation,
+  useDocumentDiffusionConfigListQuery,
+  useDocumentDiffusionConfigDetailQuery,
+  useDocumentDiffusionConfigDeleteMutation,
+  useDocumentDiffusionConfigCreateMutation,
+  useDocumentDiffusionCreateMutation,
   useGetFolderDetailQuery,
   useIntervenantRolesRetrieveQuery,
   useLocalisationsListQuery,

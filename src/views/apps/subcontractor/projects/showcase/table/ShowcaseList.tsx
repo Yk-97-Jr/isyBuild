@@ -1,7 +1,9 @@
 'use client'
 
-// components/ProductList.js
+// components/ProjectList.js
 import React, {useEffect, useState} from 'react'
+
+import { useParams } from 'next/navigation'
 
 import type {SortingState} from '@tanstack/react-table';
 import Grid from '@mui/material/Grid'
@@ -12,14 +14,16 @@ import Box from '@mui/material/Box'
 
 import {useDebounce} from "@uidotdev/usehooks";
 
-import ProductTable from './ProductTable'
-import {useProductListQuery} from '@/services/IsyBuildApi'
+import ShowcaseTable from './ShowcaseTable'
+import {useProjectsLotsRetrieveQuery} from '@/services/IsyBuildApi'
 
-const ProductList = () => {
+const ShowcaseList = () => {
   // States for pagination or other parameters
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
+
+  const { id } = useParams() // Extract id from dynamic route
 
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -27,13 +31,16 @@ const ProductList = () => {
   const debouncedSearch = useDebounce(search, 500);
 
   // Pass parameters to the query hook
-  const {data, error, isLoading, isFetching, refetch} = useProductListQuery({
+  const {data, error, isLoading, isFetching, refetch} = useProjectsLotsRetrieveQuery({
+    projectId:+id,
       page,
       pageSize,
 
       //isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
 
-      ordering: sorting.map(s => `${s.desc ? '-' : ''}${s.id}`).join(',') as any,
+       ordering: sorting
+        .map((s) => `${s.desc ? '-' : ''}${s.id}`)
+        .join(',') as any, 
 
       search: debouncedSearch 
     },
@@ -47,7 +54,7 @@ const ProductList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, refetch]);
+  }, [ refetch]);
 
 
   if (isLoading)
@@ -59,11 +66,11 @@ const ProductList = () => {
   if (error)
     return (
       <div>
-        Error fetching product data:{' '}
+        Error fetching Project data:{' '}
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const product = data?.results || []
+  const project = data?.results || []
   const countRecords = data?.count
 
 
@@ -71,17 +78,16 @@ const ProductList = () => {
 
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <ProductTable
+        <ShowcaseTable
           pageSize={pageSize}
           setPageSize={setPageSize}
           page={page}
           setPage={setPage}
-          data={product}
+          data={project}
           countRecords={countRecords}
           isFetching={isFetching}
-          refetch={refetch}
-          setSearch={setSearch}
           
+          setSearch={setSearch}
           setSorting={setSorting}
           sorting={sorting}
           search={search}
@@ -90,4 +96,4 @@ const ProductList = () => {
     </Grid>)
 }
 
-export default ProductList
+export default ShowcaseList

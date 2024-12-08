@@ -1,6 +1,6 @@
 'use client'
 
-// components/ProductList.js
+// components/ProjectList.js
 import React, {useEffect, useState} from 'react'
 
 import type {SortingState} from '@tanstack/react-table';
@@ -12,13 +12,13 @@ import Box from '@mui/material/Box'
 
 import {useDebounce} from "@uidotdev/usehooks";
 
-import ProductTable from './ProductTable'
-import {useProductListQuery} from '@/services/IsyBuildApi'
+import ProjectTable from './ProjectTable'
+import {useListProjectSubcontractorQuery} from '@/services/IsyBuildApi'
 
-const ProductList = () => {
+const ProjectList = () => {
   // States for pagination or other parameters
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
 
 
@@ -27,13 +27,15 @@ const ProductList = () => {
   const debouncedSearch = useDebounce(search, 500);
 
   // Pass parameters to the query hook
-  const {data, error, isLoading, isFetching, refetch} = useProductListQuery({
+  const {data, error, isLoading, isFetching, refetch} = useListProjectSubcontractorQuery({
       page,
       pageSize,
 
       //isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
 
-      ordering: sorting.map(s => `${s.desc ? '-' : ''}${s.id}`).join(',') as any,
+       ordering: sorting
+        .map((s) => `${s.desc ? '-' : ''}${s.id}`)
+        .join(',') as any, 
 
       search: debouncedSearch 
     },
@@ -47,7 +49,7 @@ const ProductList = () => {
 
   useEffect(() => {
     refetch();
-  }, [page, refetch]);
+  }, [ refetch]);
 
 
   if (isLoading)
@@ -59,29 +61,28 @@ const ProductList = () => {
   if (error)
     return (
       <div>
-        Error fetching product data:{' '}
+        Error fetching Project data:{' '}
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const product = data?.results || []
+  const project = data?.results || []
   const countRecords = data?.count
 
 
   return (
 
-    <Grid container spacing={6}>
+    <Grid container spacing={3}>
       <Grid item xs={12}>
-        <ProductTable
+        <ProjectTable
           pageSize={pageSize}
           setPageSize={setPageSize}
           page={page}
           setPage={setPage}
-          data={product}
+          data={project}
           countRecords={countRecords}
           isFetching={isFetching}
-          refetch={refetch}
-          setSearch={setSearch}
           
+          setSearch={setSearch}
           setSorting={setSorting}
           sorting={sorting}
           search={search}
@@ -90,4 +91,4 @@ const ProductList = () => {
     </Grid>)
 }
 
-export default ProductList
+export default ProjectList

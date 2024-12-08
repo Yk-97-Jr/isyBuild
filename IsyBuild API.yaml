@@ -1488,6 +1488,344 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /document_diffusions/:
+    get:
+      operationId: document_diffusions_list
+      description: Retrieve a list of all the document diffusions with pagination.
+      summary: List all the document diffusions.
+      parameters:
+      - in: query
+        name: created_by
+        schema:
+          type: string
+        description: Filter by creator's email (contains match)
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: query
+        name: title
+        schema:
+          type: string
+        description: Filter by document diffusion title (contains match)
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentDiffusion'
+          description: ''
+  /document_diffusions/{document_diffusion_id}/:
+    get:
+      operationId: document_diffusion_detail
+      description: Fetches detailed information about a document diffusion by their
+        ID.
+      summary: Retrieve document diffusion Details
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDiffusion'
+          description: ''
+  /document_diffusions/{document_diffusion_id}/delete/:
+    delete:
+      operationId: document_diffusion_delete
+      description: Deletes a Document Diffusion by ID. Requires administrative privileges.
+      summary: Delete Document Diffusion
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: Document Diffusion deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Document Diffusion not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /document_diffusions/{document_diffusion_id}/update/:
+    put:
+      operationId: document_diffusion_update
+      description: Updates informations for an existing document diffusion .
+      summary: Update document diffusion
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDiffusion'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /document_diffusions/{document_diffusion_id}/upload-document/:
+    post:
+      operationId: document_diffusion_upload
+      description: Upload a file to the folder associated with the given Document
+        Diffusion ID.
+      summary: Upload a document to a Document Diffusion's folder
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /document_diffusions/configs/:
+    get:
+      operationId: document_diffusion_config_list
+      description: Retrieve a list of all the document diffusion configs with pagination.
+      summary: List all the document diffusion configs.
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentDiffusionConfig'
+          description: ''
+  /document_diffusions/configs/{document_diffusion_config_id}/:
+    get:
+      operationId: document_diffusion_config_detail
+      description: Fetches detailed information about a document diffusion config
+        by their ID.
+      summary: Retrieve document diffusion config Details
+      parameters:
+      - in: path
+        name: document_diffusion_config_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDiffusionConfig'
+          description: ''
+  /document_diffusions/configs/{document_diffusion_config_id}/delete/:
+    delete:
+      operationId: document_diffusion_config_delete
+      description: Deletes a Document Diffusion Config by ID. Requires administrative
+        privileges.
+      summary: Delete Document Diffusion Config
+      parameters:
+      - in: path
+        name: document_diffusion_config_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                description: Document Diffusion Config deleted successfully.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Document Diffusion Config not found.
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                description: Permission denied.
+          description: ''
+  /document_diffusions/configs/create/:
+    post:
+      operationId: document_diffusion_config_create
+      description: Create a new document diffusion config.
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionConfigRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionConfigRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionConfigRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDiffusionConfig'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /document_diffusions/create/:
+    post:
+      operationId: document_diffusion_create
+      description: Create a new document diffusion.
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentDiffusionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDiffusion'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /folders/{folder_id}/:
     get:
       operationId: get_folder_detail
@@ -5822,6 +6160,108 @@ components:
       - id
       - latest_version
       - name
+    DocumentDiffusion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        phase:
+          $ref: '#/components/schemas/PhaseEnum'
+        diffusion_date:
+          type: string
+          format: date
+          nullable: true
+        indice:
+          type: string
+          nullable: true
+          maxLength: 100
+        type:
+          $ref: '#/components/schemas/Type474Enum'
+        localisation:
+          type: integer
+        project_lot:
+          type: integer
+        document:
+          type: integer
+          nullable: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - localisation
+      - project_lot
+      - title
+      - updated_at
+    DocumentDiffusionConfig:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/Type474Enum'
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+      required:
+      - id
+      - role
+      - type
+    DocumentDiffusionConfigRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/Type474Enum'
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+      required:
+      - role
+      - type
+    DocumentDiffusionRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        phase:
+          $ref: '#/components/schemas/PhaseEnum'
+        diffusion_date:
+          type: string
+          format: date
+          nullable: true
+        indice:
+          type: string
+          nullable: true
+          maxLength: 100
+        type:
+          $ref: '#/components/schemas/Type474Enum'
+        localisation:
+          type: integer
+        project_lot:
+          type: integer
+        document:
+          type: integer
+          nullable: true
+      required:
+      - localisation
+      - project_lot
+      - title
     DocumentUploadRequest:
       type: object
       properties:
@@ -6253,6 +6693,50 @@ components:
       - next
       - previous
       - results
+    PaginatedDocumentDiffusion:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDiffusion'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedDocumentDiffusionConfig:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentDiffusionConfig'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PaginatedInAppNotification:
       type: object
       properties:
@@ -6642,6 +7126,14 @@ components:
         last_name:
           type: string
           maxLength: 30
+    PhaseEnum:
+      enum:
+      - design
+      - execution
+      type: string
+      description: |-
+        * `design` - Design
+        * `execution` - Execution
     PhoneNumber:
       type: object
       properties:
@@ -6653,7 +7145,7 @@ components:
           title: Numéro de téléphone
           maxLength: 20
         type:
-          $ref: '#/components/schemas/TypeEnum'
+          $ref: '#/components/schemas/TypeB5bEnum'
         created_by:
           allOf:
           - $ref: '#/components/schemas/CreatedBy'
@@ -6681,7 +7173,7 @@ components:
           title: Numéro de téléphone
           maxLength: 20
         type:
-          $ref: '#/components/schemas/TypeEnum'
+          $ref: '#/components/schemas/TypeB5bEnum'
       required:
       - number
       - type
@@ -7915,7 +8407,25 @@ components:
           minLength: 1
       required:
       - refresh
-    TypeEnum:
+    Type474Enum:
+      enum:
+      - plan_technique
+      - plan_de_coffrage
+      - fiche_technique
+      - avis_technique
+      - note_de_calcul
+      - fiche_question
+      - autre
+      type: string
+      description: |-
+        * `plan_technique` - Plan Technique
+        * `plan_de_coffrage` - Plan de Coffrage
+        * `fiche_technique` - Fiche Technique
+        * `avis_technique` - Avis Technique
+        * `note_de_calcul` - Note de Calcul
+        * `fiche_question` - Fiche Question
+        * `autre` - Autre
+    TypeB5bEnum:
       enum:
       - work
       - personal

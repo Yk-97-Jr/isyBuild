@@ -12,9 +12,7 @@ export const schemaProductEdit =  yup
     .number()
     .typeError('La catégorie est requise') // Validates the category is a number
     .required('La catégorie est requise'), // Makes it required
-    image: yup
-    .mixed()
-    .notRequired(),
+   
     
 })
 .required();
