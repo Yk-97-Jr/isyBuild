@@ -29,13 +29,13 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
+import type { ColumnDef, FilterFn, SortingState } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import Box from '@mui/material/Box'
 
-import { Chip, CircularProgress } from '@mui/material'
+import { CardHeader, Chip, CircularProgress, Grid } from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -51,6 +51,9 @@ import type { PaginatedSubcontractortRead, SubcontractorRead } from '@/services/
 import CompanyDialog from '@/components/dialogs/company-dialog'
 
 import { useAuth } from '@/contexts/AuthContext'
+import TableFilters from '../TableFilters'
+import TableClientFilters from '../TableClientFilters'
+import TableLotsFilters from '../TableLotsFilters'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -119,7 +122,19 @@ const SubcontractorTable = ({
   pageSize,
   countRecords,
   isFetching,
-  refetch
+  refetch,
+  setSorting,
+  sorting,
+  setIsActive,
+  isActive,
+  setSearch,
+  search,
+  setClientId,
+  clientId,
+  setLotsId,
+  lotsId,
+                         
+
 }: {
   data?: SubcontractorRead[]
   page: number
@@ -129,14 +144,25 @@ const SubcontractorTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
+  sorting: SortingState
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+  setIsActive: React.Dispatch<React.SetStateAction<string | null>>
+  isActive: string | null
+  setSearch: React.Dispatch<React.SetStateAction<string>>
+  search: string
+  setClientId: React.Dispatch<React.SetStateAction<string | ''>>;
+  clientId: string | ''
+  setLotsId: React.Dispatch<React.SetStateAction<string | ''>>;
+  lotsId: string | ''
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
+  
 
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [, setGlobalFilter] = useState('')
   const router = useRouter()
 
   const { user } = useAuth()
@@ -156,6 +182,7 @@ const SubcontractorTable = ({
     router.push(`/${userRole}/subcontractor/add`)
   }
 
+
   const columns = useMemo<ColumnDef<CompanyTypeWithAction, any>[]>(
     () => [
       columnHelper.accessor('name', {
@@ -174,18 +201,23 @@ const SubcontractorTable = ({
         )
       }),
       
-      columnHelper.accessor('siren_number', {
-        header: 'numéro de sirène',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-0'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.siren_number}`}
-              </Typography>
+      columnHelper.accessor('clients.name', {
+        header: 'client',
+        cell: ({ row }) => {
+          const clientName = row.original.clients?.at(-1)?.name || 'Pas de client disponible';
+
+          return (
+            <div className="flex items-center gap-0">
+              <div className="flex flex-col">
+                <Typography color="text.primary" className="font-medium">
+                  {clientName}
+                </Typography>
+              </div>
             </div>
-          </div>
-        )
+          );
+        },
       }),
+
       columnHelper.accessor('created_by.id', {
         header: 'Créé Par',
         cell: ({ row }) => (
@@ -244,7 +276,7 @@ const SubcontractorTable = ({
               ]}
             />
           </div>
-        ),
+        ), 
         enableSorting: false
       })
     ],
@@ -255,18 +287,20 @@ const SubcontractorTable = ({
   const table = useReactTable({
     data: filteredData as SubcontractorRead[],
     columns,
+    onSortingChange: setSorting,
     filterFns: {
       fuzzy: fuzzyFilter
     },
     state: {
       rowSelection,
-      globalFilter
+      sorting
     },
     initialState: {
       pagination: {
         pageSize: pageSize
       }
     },
+    manualSorting: true,
     enableRowSelection: true, //enable row selection for all rows
     // enableRowSelection: row => row.original.age > 18, // or enable row selection conditionally per row
     globalFilterFn: fuzzyFilter,
@@ -284,8 +318,19 @@ const SubcontractorTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
+        <CardHeader title='Filters' className='pbe-4'/>
+        <Grid container spacing={6}>
+        <Grid item xs={12} sm={4}>
+        <TableFilters setIsActive={setIsActive} isActive={isActive}/>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+        <TableClientFilters setClientId={setClientId} clientId={clientId}/> 
+        </Grid>
+        <Grid item xs={12} sm={4}>
+        <TableLotsFilters setLotsId={setLotsId} lotsId={lotsId}/> 
+        </Grid>
+        
+        </Grid>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -299,8 +344,8 @@ const SubcontractorTable = ({
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
+              value={search}
+              onChange={value => setSearch(String(value))}
               placeholder='Rechercher un company'
               className='max-sm:is-full'
             />

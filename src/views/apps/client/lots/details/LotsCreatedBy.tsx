@@ -1,71 +1,82 @@
-import React from 'react'
+import React from 'react';
 
-import { Card, CardHeader, CardContent, Divider, Typography } from '@mui/material'
+import { Card,  CardContent, Typography, Avatar } from '@mui/material';
 
-import type { LotRead } from '@/services/IsyBuildApi'
+import type { LotRead } from '@/services/IsyBuildApi';
+import { getInitials } from '@/utils/getInitials';
 
-type LotsEditProps = {
-  lotData: LotRead | undefined // Adjust the type as necessary
-}
-
-// Function to format the date
+// Helper function to format the date
 const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
+  const date = new Date(dateString);
 
-  return date.toLocaleString('fr-FR', {
+  
+return date.toLocaleString('fr-FR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
-  })
-}
+    minute: '2-digit',
+  });
+};
 
-const LotsCreatedBy: React.FC<LotsEditProps> = ({ lotData }) => {
-  return (
-    <Card>
-      <CardHeader title='Détails De Création' />
-      <CardContent>
-        <Typography variant='subtitle2' className='mt-4' fontWeight='normal'>
-          Créé par
-        </Typography>
-        <Divider className='mlb-2' sx={{ height: '1px', width: '50%', marginLeft: '0' }} />
+// Helper function to render an Avatar
+const getAvatar = (params: { avatar: string; email: string }) => {
+  const { avatar, email } = params;
 
-        {lotData ? (
-          <>
-            <Typography variant='h6' fontWeight='bold'>
-              {lotData.created_by?.first_name} {lotData.created_by?.last_name}
-            </Typography>
-            <Typography variant='body1'>{lotData.created_by?.email}</Typography>
+  
+return avatar ? <Avatar src={avatar} /> : <Avatar>{getInitials(email)}</Avatar>;
+};
 
-            <Typography variant='subtitle2' className='mt-4' fontWeight='normal'>
-              Plus De Détails
-            </Typography>
-            <Divider className='mlb-2' sx={{ height: '1px', width: '50%', marginLeft: '0' }} />
-
-            <div className='flex flex-col gap-2'>
-              <div className='flex items-center flex-wrap gap-x-1.5'>
-                <Typography className='font-medium' color='text.primary'>
-                  Créé à:
-                </Typography>
-                <Typography>{formatDate(lotData.created_at)}</Typography>
-              </div>
-              <div className='flex items-center flex-wrap gap-x-1.5'>
-                <Typography className='font-medium' color='text.primary'>
-                  Mise à jour à:
-                </Typography>
-                <Typography>{formatDate(lotData.updated_at)}</Typography>
-              </div>
-            </div>
-          </>
-        ) : (
-          <Typography variant='body1' color='text.secondary'>
+// SubcontractorCreatedBy Component
+const LotsCreatedBy: React.FC<{ lotData: LotRead | undefined }> = ({ lotData }) => {
+  if (!lotData) {
+    return (
+      <Card>
+        <CardContent>
+          <Typography variant="body1" color="text.secondary">
             Aucune information disponible
           </Typography>
-        )}
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardContent className="flex flex-col gap-6">
+        <Typography variant="subtitle2" fontWeight="normal">
+          Créé Par
+        </Typography>
+        <div className="flex items-center gap-3">
+          {getAvatar({
+            avatar: lotData.created_by?.avatar ?? '/images/avatars/1.png',
+            email: lotData.created_by?.email ?? ''
+          })}
+          <div className="flex flex-col">
+            <Typography color="text.primary" className="font-medium">
+              {lotData.created_by?.first_name} {lotData.created_by?.last_name}
+            </Typography>
+            <Typography>{lotData.created_by?.email}</Typography>
+          </div>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Typography variant="subtitle2" className="font-medium mlb-2">
+            Plus de détails
+          </Typography>
+          <div className="flex items-center gap-2 mlb-2">
+            <i className="tabler-clock-hour-4" />
+            <Typography>Créé à:</Typography>
+            <Typography>{formatDate(lotData.created_at)}</Typography>
+          </div>
+          <div className="flex items-center gap-2 mlb-2">
+            <i className="tabler-clock-hour-4" />
+            <Typography>Mis à jour à:</Typography>
+            <Typography>{formatDate(lotData.updated_at)}</Typography>
+          </div>
+        </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 export default LotsCreatedBy

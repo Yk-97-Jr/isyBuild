@@ -99,7 +99,7 @@ const CategoryDropdown = ({
       >
         {categories.map((cat, index) => (
           <MenuItem
-            key={cat.id}
+            key={`${cat.id}-${Math.random().toString(36).substring(2, 9)}`}
             value={cat.id}
             ref={index === categories.length - 1 ? lastCategoryRef : null} // Attach infinite scroll ref to last item
           >

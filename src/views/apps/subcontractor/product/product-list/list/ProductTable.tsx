@@ -33,7 +33,7 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
 
-import {CircularProgress} from '@mui/material'
+import {CardHeader, CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -45,6 +45,7 @@ import CustomTextField from '@core/components/mui/TextField'
 import tableStyles from '@core/styles/table.module.css'
 import type {ProductMediaRead, ProductRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
+import TableCategoryFilters from './TableCategoryFilters';
 
 
 declare module '@tanstack/table-core' {
@@ -118,7 +119,8 @@ const ProductTable = ({
                          refetch,
                          setSearch,
                          search,
-                         
+                         categoryId,
+                         setCategoryId,
                          setSorting,
                          sorting
                        }: {
@@ -136,6 +138,8 @@ const ProductTable = ({
 
   sorting: SortingState
   setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+  setCategoryId: React.Dispatch<React.SetStateAction<string | ''>>;
+  categoryId: string | ''
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -221,7 +225,7 @@ const ProductTable = ({
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, data]
+    [data]
   )
 
   const table = useReactTable({
@@ -257,7 +261,8 @@ const ProductTable = ({
   return (
     <>
       <Card>
-        
+      <CardHeader title='Filters' className='pbe-4'/>
+        <TableCategoryFilters categoryId={categoryId} setCategoryId={setCategoryId}/>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select

@@ -44,7 +44,7 @@ const StaffCLientDetails = () => {
 
 
 
-  const { data: subcontractorStaffData, isLoading: isLoadingQuery } = useSubcontractorsStaffRetrieveQuery({
+  const { data: subcontractorStaffData, isLoading: isLoadingQuery, refetch } = useSubcontractorsStaffRetrieveQuery({
     subcontractorStaffId: +staffId
   })
 
@@ -79,6 +79,7 @@ const StaffCLientDetails = () => {
       console.log('staff modifyed successfully!', response)
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'staff Modifié avec succès' })
+      refetch()
      
     } catch (err: any) {
       console.error('Failed to modify staff:', err)
@@ -113,7 +114,7 @@ const StaffCLientDetails = () => {
         <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <StaffInformation register={register} errors={errors} />
+              <StaffInformation register={register} errors={errors} user={subcontractorStaffData} />
             </Grid>
           </Grid>
         </Grid>

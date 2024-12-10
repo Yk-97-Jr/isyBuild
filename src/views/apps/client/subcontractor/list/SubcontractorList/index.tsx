@@ -7,16 +7,32 @@ import { useRouter } from 'next/navigation';
 import Grid from '@mui/material/Grid';
 import { CircularProgress, Box} from '@mui/material';
 
+//import { useDebounce } from '@uidotdev/usehooks';
+
+import type { SortingState } from '@tanstack/react-table';
+
+
+
 import SubcontractorTable from '@/views/apps/client/subcontractor/list/SubcontractorTable';
 import { useSubcontractorsRetrieveQuery } from '@/services/IsyBuildApi';
 
 const SubcontractorList = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [isActive, setIsActive] = useState<string | null>(null);
+
+  //const [search, setSearch] = useState<string>("");
+
   const router = useRouter();
 
+  //const debouncedSearch = useDebounce(search, 500);
+  
   // Pass parameters to the query hook
-  const { data, error, isLoading, isFetching, refetch } = useSubcontractorsRetrieveQuery({ page, pageSize });
+  const { data, error, isLoading, isFetching, refetch } = useSubcontractorsRetrieveQuery({ page, pageSize,isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
+    ordering: sorting.map((s) => `${s.desc ? '-' : ''}${s.id}`)
+    .join(',') as any,
+  });
 
   // Effect to refetch data based on pagination changes
   useEffect(() => {
@@ -55,6 +71,11 @@ const SubcontractorList = () => {
       countRecords={countRecords}
       isFetching={isFetching}
       refetch={refetch}
+      setSorting={setSorting}
+      sorting={sorting}
+      setIsActive={setIsActive}
+          isActive={isActive}
+      
     />
   ) : (
     <Grid container spacing={6}>
@@ -68,6 +89,11 @@ const SubcontractorList = () => {
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
+          setSorting={setSorting}
+          sorting={sorting}
+          setIsActive={setIsActive}
+          isActive={isActive}
+          
         />
       </Grid>
     </Grid>

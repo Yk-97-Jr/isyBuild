@@ -31,18 +31,6 @@ const Showcase = () => {
     projectId: +id
   })
 
- 
-
-
-
-
-      
-
-      
-
-      
-    
-
   if (isLoadingQuery)
     return (
       <Box display='flex' justifyContent='center' alignItems='flex-start' height='100vh'>

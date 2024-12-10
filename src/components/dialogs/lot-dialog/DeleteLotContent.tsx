@@ -13,7 +13,7 @@ interface DeleteProps {
 }
 
 const DeleteLotContent = ({ handleClose, handleCloseWithoutRefresh, id }: DeleteProps) => {
-  const [deleteLot, { isLoading, isSuccess }] = useLotsDeleteDestroyMutation()
+  const [deleteLot, { isLoading,  }] = useLotsDeleteDestroyMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
   const handleDelete = async () => {
@@ -21,11 +21,11 @@ const DeleteLotContent = ({ handleClose, handleCloseWithoutRefresh, id }: Delete
       await deleteLot({ lotId: id }).unwrap() // Passez l'identifiant de l'utilisateur à la mutation
       handleClose()
 
-      if (isSuccess) {
+      
         console.log('lots supprimé avec succès')
         setOpenSnackBar(true)
         setInfoAlert({ severity: 'success', message: 'lot supprimé avec succès' })
-      }
+     
     } catch (error) {
       console.error('Échec de la suppression de lot :', error)
       setOpenSnackBar(true)

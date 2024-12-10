@@ -58,6 +58,7 @@ const UserInformation: React.FC<UserInformationProps> = ({register, errors}) => 
             <CustomTextField
               fullWidth
               label='E-mail'
+              disabled
               placeholder='email@example.com'
               {...register('email')} // Registering the email field from props
               error={!!errors.email} // Error handling

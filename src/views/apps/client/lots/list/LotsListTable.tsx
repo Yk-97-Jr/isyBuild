@@ -28,13 +28,13 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
+import type { ColumnDef, FilterFn, SortingState } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import Box from '@mui/material/Box'
 
-import { CircularProgress } from '@mui/material'
+import { CardHeader, CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -51,6 +51,7 @@ import type { LotRead } from '@/services/IsyBuildApi'
 import Chip from '@/@core/components/mui/Chip'
 
 import { useAuth } from '@/contexts/AuthContext'
+import TableClientFilters from "./TableClientFilters"
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -120,8 +121,14 @@ const LotsListTable = ({
   setPageSize,
   pageSize,
   countRecords,
+  setClientId,
+  clientId,
   isFetching,
-  refetch
+  refetch,
+  setSearch,
+                         search,
+                         setSorting,
+                         sorting
 }: {
   data?: LotRead[]
   page: number
@@ -131,6 +138,13 @@ const LotsListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
+  setClientId: React.Dispatch<React.SetStateAction<string | ''>>;
+  clientId: string | ''
+  setSearch: React.Dispatch<React.SetStateAction<string>>
+  search: string
+  sorting: SortingState
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -138,22 +152,16 @@ const LotsListTable = ({
   const [editValue, setEditValue] = useState<LotsType>()
   const [, setAddValue] = useState(false)
   const [open, setOpen] = useState(false)
-  const [filteredData] = useState(data)
-  const [globalFilter, setGlobalFilter] = useState('')
+
+  const [, setGlobalFilter] = useState('')
   const router = useRouter()
 
   const { user } = useAuth()
   const userRole = user?.role
 
-
-
-
   const handleEditLot = (id: number) => {
-    const targetPath = `/${userRole}/lots/${id}/details`;
-    
-    console.log("Navigating to:", targetPath);
-    router.push(targetPath);
-  };
+    router.push(`/${userRole}/lots/${id}/details`)
+  }
 
   const handleDeleteLot = (id: number) => {
     setOpen(true)
@@ -161,9 +169,6 @@ const LotsListTable = ({
   }
 
   const handleAddLots = () => {
-
-    console.log(`/${userRole}/lots/add`)
-
     router.push(`/${userRole}/lots/add`)
   }
 
@@ -189,7 +194,7 @@ const LotsListTable = ({
         }
       }),
 
-      columnHelper.accessor('name', {
+      columnHelper.accessor('client', {
         header: 'client',
         cell: ({ row }) => (
           <>
@@ -266,24 +271,26 @@ const LotsListTable = ({
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, filteredData]
+    [data, data]
   )
 
   const table = useReactTable({
-    data: filteredData as LotRead[],
+    data: data as LotRead[],
     columns,
+    onSortingChange: setSorting,
     filterFns: {
       fuzzy: fuzzyFilter
     },
     state: {
       rowSelection,
-      globalFilter
+      sorting
     },
     initialState: {
       pagination: {
         pageSize: pageSize
       }
     },
+    manualSorting: true,
     enableRowSelection: true, //enable row selection for all rows
     // enableRowSelection: row => row.original.age > 18, // or enable row selection conditionally per row
     globalFilterFn: fuzzyFilter,
@@ -301,6 +308,13 @@ const LotsListTable = ({
   return (
     <>
       <Card>
+      <CardHeader title='Filters' className='pbe-4'/>
+      
+      
+      <TableClientFilters setClientId={setClientId} clientId={clientId}/> 
+
+      
+      
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -308,14 +322,14 @@ const LotsListTable = ({
             onChange={e => setPageSize(Number(e.target.value))}
             className='max-sm:is-full sm:is-[70px]'
           >
-            <MenuItem value='10'>10</MenuItem>
+            <MenuItem  value='10'>10</MenuItem>
             <MenuItem value='25'>25</MenuItem>
             <MenuItem value='50'>50</MenuItem>
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
+              value={search ?? ''}
+              onChange={value => setSearch(String(value))}
               placeholder='Rechercher un lots'
               className='max-sm:is-full'
             />

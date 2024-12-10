@@ -41,7 +41,7 @@ const UserOwnerDetails = () => {
 
   const {id} = useParams(); // Get clientId from route parameters
 
-  const {data: userData, isLoading: isLoadingQuery} = useSubcontractorsOwnerRetrieveQuery({
+  const {data: userData, isLoading: isLoadingQuery, refetch} = useSubcontractorsOwnerRetrieveQuery({
     subcontractorId: +id,
   });
 
@@ -85,6 +85,7 @@ const UserOwnerDetails = () => {
         console.log('User affected successfully!', response);
         setOpenSnackBar(true);
         setInfoAlert({severity: "success", message: "User Affecté avec succès"});
+        refetch()
       } else {
         const response = await modifyassignedUser({
           subcontractorId: +id,
@@ -99,6 +100,7 @@ const UserOwnerDetails = () => {
         console.log('User affected successfully!', response);
         setOpenSnackBar(true);
         setInfoAlert({severity: "success", message: "User Affecté avec succès"});
+        refetch()
 
       }
 
@@ -131,7 +133,7 @@ const UserOwnerDetails = () => {
         <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <UserInformation register={register} errors={errors}/>
+              <UserInformation register={register} errors={errors} />
             </Grid>
             {/*<Grid item xs={12}>*/}
             {/*  <ClientAdresse register={register} errors={errors}/>*/}
@@ -141,7 +143,7 @@ const UserOwnerDetails = () => {
         <Grid item xs={12} md={4}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <UserStatus register={register} errors={errors}/>
+              <UserStatus register={register} errors={errors} user={userData}/>
             </Grid>
             <Grid item xs={12}>
               <UserCreatedBy userData={userData}/>

@@ -1826,6 +1826,45 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /document_diffusions/documents/{document_diffusion_id}/update-document/:
+    post:
+      operationId: document_diffusion_document_update
+      description: Upload a new version for an existing document and make it the latest
+        version.
+      summary: Update a document by adding a new version
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /folders/{folder_id}/:
     get:
       operationId: get_folder_detail
@@ -2222,6 +2261,11 @@ paths:
         schema:
           type: integer
         description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: 'Search by code, name,description '
       tags:
       - Lot Management
       security:
@@ -3184,6 +3228,45 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /project-lots/{project_lot_id}/upload-devis/:
+    post:
+      operationId: upload_devis_by_subconstactor
+      description: Allows subcontractors to upload or update their Devis (pricing
+        proposal) document.
+      summary: Upload or update Devis document for ProjectLotSubcontractor
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Documents Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /project-lots/{project_lot_id}/upload-document/:
     post:
       operationId: project_lots_upload_document_create
@@ -3784,7 +3867,13 @@ paths:
       - Project Intervenant Management
       requestBody:
         content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntervenantCreateRequest'
           application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IntervenantCreateRequest'
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/IntervenantCreateRequest'
         required: true
@@ -4198,7 +4287,13 @@ paths:
       - Project Intervenant Management
       requestBody:
         content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntervenantUpdateRequest'
           application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IntervenantUpdateRequest'
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/IntervenantUpdateRequest'
         required: true
@@ -4620,6 +4715,11 @@ paths:
           type: string
         description: Filter by phone number (contains match)
       - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by first name, last name, or email
+      - in: query
         name: siren_number
         schema:
           type: string
@@ -4996,6 +5096,11 @@ paths:
         schema:
           type: string
         description: Filter by first name (contains match)
+      - in: query
+        name: is_active
+        schema:
+          type: boolean
+        description: Filter by active status (True or False)
       - in: query
         name: last_name
         schema:
@@ -6218,8 +6323,12 @@ components:
           $ref: '#/components/schemas/Type474Enum'
         role:
           $ref: '#/components/schemas/RoleEnum'
+        project:
+          type: integer
+          nullable: true
       required:
       - id
+      - project
       - role
       - type
     DocumentDiffusionConfigRequest:
@@ -6229,7 +6338,11 @@ components:
           $ref: '#/components/schemas/Type474Enum'
         role:
           $ref: '#/components/schemas/RoleEnum'
+        project:
+          type: integer
+          nullable: true
       required:
+      - project
       - role
       - type
     DocumentDiffusionRequest:
