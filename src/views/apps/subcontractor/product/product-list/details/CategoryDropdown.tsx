@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 
 // MUI Imports
+import { useParams, useRouter } from 'next/navigation';
+
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
@@ -11,6 +13,8 @@ import CustomTextField from '@core/components/mui/TextField';
 import type { CategoryRead, ProductRead } from '@/services/IsyBuildApi';
 import { useCategoriesListQuery } from '@/services/IsyBuildApi';
 import type { FormValidateProductEditType } from './schemaProductEdit';
+import CustomIconButton from '@/@core/components/mui/IconButton';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -42,6 +46,11 @@ const CategoryDropdown = ({
   const { data, refetch } = useCategoriesListQuery({ page:1, pageSize:100 });
 
   const observer = useRef<IntersectionObserver | null>(null);
+
+  const router = useRouter();
+  const { id } = useParams()
+  const { user } = useAuth()
+  const userRole = user?.role
 
   const lastCategoryRef = useCallback(
     (node: HTMLLIElement | null) => {
@@ -85,12 +94,23 @@ const CategoryDropdown = ({
     refetch();
   }, [page, refetch]);
 
+  const handleRedirect = () => {
+    // Get the current URL
+    
+
+    // Construct the new URL with the query parameter
+    const newUrl = `/${userRole}/product/category/add?return_to=${userRole}/product/${id}/details`;
+
+    // Redirect to the new URL
+    router.push(newUrl);
+  };
+
   return (
     <div className="flex items-end gap-4">
       <CustomTextField
         select
         fullWidth
-        label="Category"
+        label="Catégorie"
         defaultValue={productData?.category || ''} // Default value directly from productData
         {...register('category')} // Let react-hook-form handle the onChange
         SelectProps={{
@@ -99,7 +119,7 @@ const CategoryDropdown = ({
       >
         {categories.map((cat, index) => (
           <MenuItem
-            key={cat.id}
+            key={`${cat.id}-${Math.random().toString(36).substring(2, 9)}`}
             value={cat.id}
             ref={index === categories.length - 1 ? lastCategoryRef : null} // Attach infinite scroll ref to last item
           >
@@ -108,6 +128,9 @@ const CategoryDropdown = ({
         ))}
         {!data?.results?.length && <MenuItem disabled>Loading categories...</MenuItem>}
       </CustomTextField>
+      <CustomIconButton variant="tonal" color="primary" className="min-is-fit" onClick={handleRedirect}>
+        <i className="tabler-plus" />
+      </CustomIconButton>
     </div>
   );
 };

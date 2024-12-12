@@ -41,7 +41,7 @@ const UserOwnerDetails = () => {
 
   const {id} = useParams(); // Get clientId from route parameters
 
-  const {data: userData, isLoading: isLoadingQuery} = useSubcontractorsOwnerRetrieveQuery({
+  const {data: userData, isLoading: isLoadingQuery, refetch} = useSubcontractorsOwnerRetrieveQuery({
     subcontractorId: +id,
   });
 
@@ -85,6 +85,7 @@ const UserOwnerDetails = () => {
         console.log('User affected successfully!', response);
         setOpenSnackBar(true);
         setInfoAlert({severity: "success", message: "User Affecté avec succès"});
+        refetch()
       } else {
         const response = await modifyassignedUser({
           subcontractorId: +id,
@@ -141,7 +142,7 @@ const UserOwnerDetails = () => {
         <Grid item xs={12} md={4}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <UserStatus register={register} errors={errors}/>
+              <UserStatus register={register} user={userData} errors={errors}/>
             </Grid>
             <Grid item xs={12}>
               <UserCreatedBy userData={userData}/>

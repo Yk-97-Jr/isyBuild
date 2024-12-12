@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useContext, useRef } from 'react'
+import React, { useEffect, useContext, useRef, useState } from 'react'
 
 import { useParams, useRouter } from 'next/navigation'
 
@@ -44,7 +44,7 @@ const ProductUpdate = () => {
   })
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-
+  const [openAdd, setOpenAdd] = useState(false)
   const { data: productData, refetch: refetchProduct, isLoading: isLoadingQuery } = useProductDetailQuery({ productId: +id })
   const [updateProduct, { isLoading: isUpdating }] = useProductUpdateMutation()
 
@@ -84,6 +84,7 @@ const ProductUpdate = () => {
 
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'Product updated successfully!' })
+      refetchProduct()
       router.push(`/${userRole}/product/${id}/details`)
     } catch (err: any) {
       console.error('Failed to update product:', err)
@@ -115,7 +116,8 @@ const ProductUpdate = () => {
               <ProductEditInfo register={register} errors={errors} />
             </Grid>
             <Grid item xs={12}>
-            <ProductImage refetchProduct={refetchProduct}/>
+            <ProductImage open={openAdd}
+        setOpen={setOpenAdd}/>
           </Grid>
           <Grid item xs={12}>
           {productData?.media && (
@@ -123,6 +125,7 @@ const ProductUpdate = () => {
                   media={productData.media}
                   refetchProduct={refetchProduct}
                   onMediaUploadSuccess={handleMediaUploadSuccess}
+                  setOpenAdd={setOpenAdd}
                 />
               )}{/* Add media grid */}
             </Grid>

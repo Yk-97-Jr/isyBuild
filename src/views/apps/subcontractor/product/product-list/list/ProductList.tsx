@@ -20,11 +20,11 @@ const ProductList = () => {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [search, setSearch] = useState<string>("");
-
-
+  const [categoryId, setCategoryId] = useState<string | ''>('');
   const [sorting, setSorting] = React.useState<SortingState>([]);
-
   const debouncedSearch = useDebounce(search, 500);
+
+  const category = categoryId ? categoryId.toString() : undefined;
 
   // Pass parameters to the query hook
   const {data, error, isLoading, isFetching, refetch} = useProductListQuery({
@@ -35,14 +35,15 @@ const ProductList = () => {
 
       ordering: sorting.map(s => `${s.desc ? '-' : ''}${s.id}`).join(',') as any,
 
-      search: debouncedSearch 
+      search: debouncedSearch ,
+      category,
     },
   );
 
   useEffect(() => {
     refetch();
     setPage(1)
-  }, [pageSize, sorting, debouncedSearch, refetch]);
+  }, [pageSize, sorting, debouncedSearch,category, refetch]);
 
 
   useEffect(() => {
@@ -85,6 +86,8 @@ const ProductList = () => {
           setSorting={setSorting}
           sorting={sorting}
           search={search}
+          categoryId={categoryId}
+          setCategoryId={setCategoryId}
         />
       </Grid>
     </Grid>)

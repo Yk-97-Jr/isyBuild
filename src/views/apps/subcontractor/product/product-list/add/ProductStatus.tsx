@@ -2,7 +2,7 @@
 
 // MUI Imports
 
-import React, { useState } from 'react'
+import React from 'react'
 
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
@@ -15,7 +15,7 @@ import type {  UseFormRegister } from 'react-hook-form'
 
 
 
-import SelectMultiple from './SelectMultiple'
+import CategoryDropdownAdd from './CategoryDropdownAdd'
 
 import type { FormValidateProductAddType } from './schemaProductAdd'
 
@@ -25,24 +25,21 @@ type ClientStatusProps = {
 }
 
 const ProductStatus: React.FC<ClientStatusProps> = ({ register }) => {
-  const [isSelectOpen, setIsSelectOpen] = useState(false)
+ 
 
-  // Function to toggle the select menu state
-  const handleSelectToggle = (open: boolean) => {
-    setIsSelectOpen(open)
-  }
+ 
 
   return (
     <Card
       className='mbe-12'
       sx={{
-        height: isSelectOpen ? '500px' : '266px', // Expand when select is open
+        
         transition: 'height 0.3s ease', // Smooth transition of height
         display: 'flex', // Use flex layout
         flexDirection: 'column' // Column layout to stack elements
       }}
     >
-      <CardHeader title='Détails' />
+      <CardHeader title='organisée' />
       <CardContent
         sx={{
           flexGrow: 1, // Make CardContent grow to fill available space
@@ -51,7 +48,7 @@ const ProductStatus: React.FC<ClientStatusProps> = ({ register }) => {
         }}
       >
         <div className='flex flex-grow flex-col'>
-          <SelectMultiple onToggleMenu={handleSelectToggle} register={register} />
+          <CategoryDropdownAdd  register={register} />
           <div style={{ flexGrow: 1 }}></div>
         </div>
       </CardContent>

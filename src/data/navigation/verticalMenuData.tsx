@@ -40,12 +40,12 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Lots',
     href: '/role/lots/list', // Use role as a placeholder
     icon: 'tabler-category',
-    roles: ['admin'], // For both 'client' and 'admin'
+    roles: ['admin','client'], // For both 'client' and 'admin'
     isSection: false,
     children: []
   },
   {
-    label: 'entreprise',
+    label: 'Entreprise',
     href: '/role/subcontractor/list',
     icon: 'tabler-building-community',
     roles: ['admin', 'client'],

@@ -2,7 +2,7 @@
 
 import { useContext } from 'react'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Grid from '@mui/material/Grid'
 
@@ -46,6 +46,8 @@ const CategoryAddPage = () => {
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get('return_to'); 
 
   const onSubmit: SubmitHandler<FormValidateType> = async data => {
     try {
@@ -61,7 +63,16 @@ const CategoryAddPage = () => {
       
       const clientId = response.id;
 
-      router.push(`/${userRole}/product/category/${clientId}/details`);
+      const url=`/${userRole}/product/category/${clientId}/details`
+
+      if (returnTo) {
+        router.push(`${url}?return_to=${returnTo}`);
+      }
+      else{
+        router.push(url);
+      }
+
+      
 
       reset()
     } catch (err: any) {

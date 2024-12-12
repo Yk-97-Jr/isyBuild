@@ -31,7 +31,7 @@ const SubStaffList = () => {
       page,
       pageSize,
 
-      // isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
+      //isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
       
       ordering: sorting
         .map((s) => `${s.desc ? '-' : ''}${s.id}`)

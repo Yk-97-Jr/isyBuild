@@ -46,8 +46,8 @@ const SubcontractorInfo: React.FC<SubcontractorInformationProps> = ({ register, 
           <Grid item xs={12} sm={6}>
             <CustomTextField
               fullWidth
-              label='Numéro de Siren'
-              placeholder='numéro de siren'
+              label='nom de famille'
+              placeholder='nom de famille'
               {...register('last_name')}
               error={!!errors.last_name}
               helperText={errors.last_name?.message}

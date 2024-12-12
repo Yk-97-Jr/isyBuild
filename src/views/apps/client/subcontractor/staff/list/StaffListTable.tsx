@@ -1,7 +1,7 @@
 'use Client'
 
 // React Imports
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 
 import { useParams, useRouter } from 'next/navigation'
 
@@ -12,7 +12,7 @@ import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 
 import MenuItem from '@mui/material/MenuItem'
-
+ 
 // Third-party Imports
 import classnames from 'classnames'
 import { rankItem } from '@tanstack/match-sorter-utils'
@@ -28,12 +28,13 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from '@tanstack/react-table'
-import type { ColumnDef, FilterFn } from '@tanstack/react-table'
+import type { ColumnDef, FilterFn, SortingState } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import Box from '@mui/material/Box'
 
+import type { TextFieldProps } from '@mui/material';
 import { CardHeader, CircularProgress } from '@mui/material'
 
 import StaffDialog from '@components/dialogs/SubcontractorStaff-dialog/'
@@ -50,6 +51,8 @@ import tableStyles from '@core/styles/table.module.css'
 import type { SubcontractorStaffRead } from '@/services/IsyBuildApi'
 
 import { useAuth } from '@/contexts/AuthContext'
+import TableFilters from '@/views/apps/admin/users/list/TableFilters'
+
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -78,6 +81,35 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
+const DebouncedInput = ({
+  value: initialValue,
+  onChange,
+  debounce = 500,
+  ...props
+}: {
+value: string | number
+onChange: (value: string | number) => void
+debounce?: number
+} & Omit<TextFieldProps, 'onChange'>) => {
+// States
+const [value, setValue] = useState(initialValue)
+
+useEffect(() => {
+setValue(initialValue)
+}, [initialValue])
+
+useEffect(() => {
+const timeout = setTimeout(() => {
+onChange(value)
+}, debounce)
+
+return () => clearTimeout(timeout)
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [value])
+
+return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)}/>
+}
+
 // Column Definitions
 const columnHelper = createColumnHelper<SubcontractorStaffTypeWithAction>()
 
@@ -89,7 +121,13 @@ const StaffListTable = ({
   pageSize,
   countRecords,
   isFetching,
-  refetch
+  refetch,
+  setSearch,
+                         search,
+                         setIsActive,
+                         isActive,
+                         setSorting,
+                         sorting
 }: {
   data?: SubcontractorStaffRead[]
   page: number
@@ -99,13 +137,18 @@ const StaffListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
+  setSearch: React.Dispatch<React.SetStateAction<string>>
+  search: string
+  setIsActive: React.Dispatch<React.SetStateAction<string | null>>
+  isActive: string | null
+  sorting: SortingState
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>
 }) => {
   // States
-  const [rowSelection, setRowSelection] = useState({})
+  const [, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
-  const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter()
   const { user } = useAuth() // Get the user from AuthContext
   const userRole = user?.role
@@ -126,7 +169,8 @@ const StaffListTable = ({
 
   const columns = useMemo<ColumnDef<SubcontractorStaffTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('user', {
+      columnHelper.accessor('user.first_name', {
+        id: 'first_name',
         header: 'Enterprise',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
@@ -190,24 +234,26 @@ const StaffListTable = ({
   const table = useReactTable({
     data: filteredData as SubcontractorStaffRead[],
     columns,
+    manualSorting: false, 
+    onSortingChange: setSorting,
     filterFns: {
       fuzzy: fuzzyFilter
     },
     state: {
-      rowSelection,
-      globalFilter
+      
+      sorting
     },
     initialState: {
       pagination: {
         pageSize: pageSize
       }
     },
+    
     enableRowSelection: true, //enable row selection for all rows
     // enableRowSelection: row => row.original.age > 18, // or enable row selection conditionally per row
     globalFilterFn: fuzzyFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -220,7 +266,7 @@ const StaffListTable = ({
     <>
       <Card>
         <CardHeader title='Équipe' className='mlb-4' />
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
+        <TableFilters setIsActive={setIsActive} isActive={isActive}/>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6  gap-4'>
           <CustomTextField
             select
@@ -233,6 +279,14 @@ const StaffListTable = ({
             <MenuItem value='50'>50</MenuItem>
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
+          <DebouncedInput
+              value={search}
+              onChange={value => {
+                setSearch(String(value))
+              }}
+              placeholder='Rechercher un propriétaire'
+              className='max-sm:is-full'
+            />
             <Button
               variant='contained'
               className='max-sm=is-full'
@@ -258,11 +312,12 @@ const StaffListTable = ({
                         {header.isPlaceholder ? null : (
                           <>
                             <div
+                            onClick={header.column.getToggleSortingHandler()}
                               className={classnames({
                                 'flex items-center': header.column.getIsSorted(),
                                 'cursor-pointer select-none': header.column.getCanSort()
                               })}
-                              onClick={header.column.getToggleSortingHandler()}
+                              
                             >
                               {flexRender(header.column.columnDef.header, header.getContext())}
                               {{

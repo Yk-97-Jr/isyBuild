@@ -1,5 +1,5 @@
 'use client'
-
+ 
 // React Imports
 import React, {useEffect, useState, useMemo} from 'react'
 
@@ -259,7 +259,7 @@ const ProjectTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher un projet'
               className='max-sm:is-full'
             />
            

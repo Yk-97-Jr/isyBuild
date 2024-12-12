@@ -6,9 +6,12 @@ import CardMedia from '@mui/material/CardMedia';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { CardHeader, CardContent } from '@mui/material';
+import type { ButtonProps} from '@mui/material';
+import { CardHeader, CardContent, Button } from '@mui/material';
 
 import MediaDialog from '@components/dialogs/media-dialog'; // Import the MediaDialog component
+import OpenDialogOnElementClick from '@/components/dialogs/OpenDialogOnElementClick';
+import ProductImage from '../Productmage';
 
 
 type ProductMediaGridProps = {
@@ -18,9 +21,10 @@ type ProductMediaGridProps = {
   }[];
   refetchProduct: () => void; // Function to refetch product data
   onMediaUploadSuccess: (newMediaId: number) => void; // Callback for new media
+  setOpenAdd: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProduct}) => {
+const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProduct,setOpenAdd}) => {
 
   const [dialogOpen, setDialogOpen] = useState(false); // State to control dialog visibility
   const [selectedMediaId, setSelectedMediaId] = useState<number >(0); // State to store selected media ID
@@ -31,8 +35,15 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
     setLocalMedia(media); // Update local media if media changes
   }, [media]);
 
-  
+  const buttonProps: ButtonProps = {
+    variant: 'tonal',
+    children: 'Ajouter une nouvelle image',
+    size: 'small'
+  }
 
+  const handleAdd = () => {
+    setOpenAdd(true)
+  }
   
 
   const handleOpenDialog = (id: number) => {
@@ -49,10 +60,13 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
           padding: 2,
         }}
       >
-        <CardHeader title="Produit Image" />
+         <CardHeader
+        title="Galerie d'images"
+        action={<OpenDialogOnElementClick element={Button} elementProps={buttonProps} dialog={ProductImage} dialogProps={{ setAddValue: handleAdd }} />}
+      />
         <CardContent>
           <Typography variant="subtitle1" color="text.disabled" textAlign="center">
-            No media available for this product.
+          Aucun média disponible pour ce produit.
           </Typography>
         </CardContent>
       </Card>
@@ -62,16 +76,19 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
   return (
     <>
       <Card>
-        <CardHeader title="Produit Image" />
+        <CardHeader
+          title="Galerie d'images"
+          action={<OpenDialogOnElementClick element={Button} elementProps={buttonProps} dialog={ProductImage} />}
+        />
         <CardContent>
           <Box>
             <Grid container spacing={2}>
               {localMedia.map((item) => (
-                <Grid item xs={12} sm={6} md={3} key={item.id}>
+                <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
                   <Box
                     sx={{
                       display: 'flex',
-                      justifyContent: 'stretch',
+                      justifyContent: 'center',
                       alignItems: 'center',
                       position: 'relative',
                       border: '2px solid #ddd',
@@ -82,8 +99,9 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
                           opacity: 1,
                         },
                       },
-                      width: 200,
-                      height: 200,
+                      width: '100%', // Take full width of the grid item
+                      height: 0,
+                      paddingTop: '100%', // Maintain square aspect ratio
                     }}
                   >
                     <CardMedia
@@ -91,9 +109,12 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
                       image={item.image}
                       alt={`Media ${item.id}`}
                       sx={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
+                        objectFit: 'cover', // Ensures the image covers the container
                       }}
                     />
                     <IconButton
@@ -118,17 +139,19 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
           </Box>
         </CardContent>
       </Card>
-
+  
       {/* Dialog for deleting media */}
       <MediaDialog
         open={dialogOpen}
         setOpen={setDialogOpen}
-        id={selectedMediaId } // Pass the selected media ID
+        id={selectedMediaId} // Pass the selected media ID
         setId={setSelectedMediaId}
         refetch={refetchProduct} // Refetch product data on delete
       />
     </>
   );
+  
+  
 };
 
 export default ProductMediaGrid;

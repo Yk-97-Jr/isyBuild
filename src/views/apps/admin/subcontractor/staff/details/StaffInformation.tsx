@@ -13,6 +13,7 @@ import { Divider, Typography, Switch } from '@mui/material'
 
 import CustomTextField from '@core/components/mui/TextField'
 import type { FormValidateStaffEditType } from './schemaStaffEdit'
+import type { SubcontractorStaffRead } from '@/services/IsyBuildApi'
 
 type StaffInformationProps = {
   register: UseFormRegister<FormValidateStaffEditType> // Register from react-hook-form
@@ -23,9 +24,10 @@ type StaffInformationProps = {
     redirect_uri?: FieldError
     is_active?: FieldError
   }
+  user?:SubcontractorStaffRead
 }
 
-const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors }) => {
+const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors , user}) => {
   return (
     <Card>
       <CardContent>
@@ -71,7 +73,7 @@ const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors })
             <Divider className='mlb-0' />
             <div className='flex items-center justify-between'>
               <Typography>Statut</Typography>
-              <Switch {...register('is_active')} defaultChecked />
+              <Switch {...register('is_active')} defaultChecked={user ? user.user.is_active: false}   />
             </div>
             {errors.is_active && <span>{errors.is_active.message}</span>}
           </Grid>

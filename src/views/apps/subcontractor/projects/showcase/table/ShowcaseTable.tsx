@@ -4,7 +4,7 @@
 import React, {useEffect, useState, useMemo} from 'react'
 
 // MUI Imports
-import {useRouter} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
@@ -139,13 +139,14 @@ const ShowcaseTable = ({
 
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
+  const { id: docId } = useParams()
   const userRole = user?.role
 
 
   const handleEditProject = (id: number) => {
     console.log(id)
     console.log(`/${userRole}/projects/${id}/details`)
-    router.push(`/${userRole}/projects/${id}/details`);
+    router.push(`/${userRole}/projects/${docId}/details/${id}`);
   }
 
 
@@ -258,7 +259,7 @@ const ShowcaseTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher un lot'
               className='max-sm:is-full'
             />
            

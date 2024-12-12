@@ -454,6 +454,16 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.documentDiffusionRequest,
       }),
     }),
+    documentDiffusionDocumentUpdate: build.mutation<
+      DocumentDiffusionDocumentUpdateApiResponse,
+      DocumentDiffusionDocumentUpdateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/documents/${queryArg.documentDiffusionId}/update-document/`,
+        method: "POST",
+        body: queryArg.documentUploadRequest,
+      }),
+    }),
     getFolderDetail: build.query<
       GetFolderDetailApiResponse,
       GetFolderDetailApiArg
@@ -544,6 +554,7 @@ const injectedRtkApi = api.injectEndpoints({
           ordering: queryArg.ordering,
           page: queryArg.page,
           page_size: queryArg.pageSize,
+          search: queryArg.search,
         },
       }),
     }),
@@ -776,6 +787,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/project-lots/${queryArg.projectLotId}/update-status/`,
         method: "PUT",
         body: queryArg.projectLotUpdateRequest,
+      }),
+    }),
+    uploadDevisBySubconstactor: build.mutation<
+      UploadDevisBySubconstactorApiResponse,
+      UploadDevisBySubconstactorApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/project-lots/${queryArg.projectLotId}/upload-devis/`,
+        method: "POST",
+        body: queryArg.documentUploadRequest,
       }),
     }),
     projectLotsUploadDocumentCreate: build.mutation<
@@ -1156,6 +1177,7 @@ const injectedRtkApi = api.injectEndpoints({
           page: queryArg.page,
           page_size: queryArg.pageSize,
           phone_number: queryArg.phoneNumber,
+          search: queryArg.search,
           siren_number: queryArg.sirenNumber,
         },
       }),
@@ -1254,6 +1276,7 @@ const injectedRtkApi = api.injectEndpoints({
           created_by: queryArg.createdBy,
           email: queryArg.email,
           first_name: queryArg.firstName,
+          is_active: queryArg.isActive,
           last_name: queryArg.lastName,
           ordering: queryArg.ordering,
           page: queryArg.page,
@@ -1848,6 +1871,13 @@ export type DocumentDiffusionCreateApiResponse =
 export type DocumentDiffusionCreateApiArg = {
   documentDiffusionRequest: DocumentDiffusionRequest;
 };
+export type DocumentDiffusionDocumentUpdateApiResponse = /** status 200  */ {
+  [key: string]: any;
+};
+export type DocumentDiffusionDocumentUpdateApiArg = {
+  documentDiffusionId: number;
+  documentUploadRequest: DocumentUploadRequest;
+};
 export type GetFolderDetailApiResponse = /** status 200  */ FolderRead;
 export type GetFolderDetailApiArg = {
   folderId: number;
@@ -1949,6 +1979,9 @@ export type LotsRetrieveApiArg = {
 
   /** Number of results per page */
   pageSize?: number;
+
+  /** Search by code, name,description  */
+  search?: string;
 };
 export type LotsRetrieve2ApiResponse = /** status 200  */ LotRead;
 export type LotsRetrieve2ApiArg = {
@@ -2139,6 +2172,13 @@ export type ProjectLotsUpdateStatusUpdateApiResponse =
 export type ProjectLotsUpdateStatusUpdateApiArg = {
   projectLotId: number;
   projectLotUpdateRequest: ProjectLotUpdateRequest;
+};
+export type UploadDevisBySubconstactorApiResponse = /** status 200  */ {
+  [key: string]: any;
+};
+export type UploadDevisBySubconstactorApiArg = {
+  projectLotId: number;
+  documentUploadRequest: DocumentUploadRequest;
 };
 export type ProjectLotsUploadDocumentCreateApiResponse = /** status 201  */ {
   [key: string]: any;
@@ -2572,6 +2612,9 @@ export type SubcontractorsRetrieveApiArg = {
   /** Filter by phone number (contains match) */
   phoneNumber?: string;
 
+  /** Search by first name, last name, or email */
+  search?: string;
+
   /** Filter by SIREN number (contains match) */
   sirenNumber?: string;
 };
@@ -2672,6 +2715,9 @@ export type GetSubcontractorStaffListApiArg = {
 
   /** Filter by first name (contains match) */
   firstName?: string;
+
+  /** Filter by active status (True or False) */
+  isActive?: boolean;
 
   /** Filter by last name (contains match) */
   lastName?: string;
@@ -3187,11 +3233,13 @@ export type RoleEnum =
 export type DocumentDiffusionConfig = {
   type: Type474Enum;
   role: RoleEnum;
+  project: number | null;
 };
 export type DocumentDiffusionConfigRead = {
   id: number;
   type: Type474Enum;
   role: RoleEnum;
+  project: number | null;
 };
 export type PaginatedDocumentDiffusionConfig = {
   count: number;
@@ -3208,6 +3256,7 @@ export type PaginatedDocumentDiffusionConfigRead = {
 export type DocumentDiffusionConfigRequest = {
   type: Type474Enum;
   role: RoleEnum;
+  project: number | null;
 };
 export type Folder = {
   name: string;
@@ -4139,6 +4188,7 @@ export const {
   useDocumentDiffusionConfigDeleteMutation,
   useDocumentDiffusionConfigCreateMutation,
   useDocumentDiffusionCreateMutation,
+  useDocumentDiffusionDocumentUpdateMutation,
   useGetFolderDetailQuery,
   useIntervenantRolesRetrieveQuery,
   useLocalisationsListQuery,
@@ -4174,6 +4224,7 @@ export const {
   useProjectLotsSubcontractorsRetrieve2Query,
   useProjectLotsSubcontractorsAssignCreateMutation,
   useProjectLotsUpdateStatusUpdateMutation,
+  useUploadDevisBySubconstactorMutation,
   useProjectLotsUploadDocumentCreateMutation,
   useProjectLotsCreateCreateMutation,
   useProjectLotsDocumentsDeleteDestroyMutation,

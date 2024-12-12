@@ -13,7 +13,7 @@ interface DeleteProps {
 }
 
 const DeleteCompanyContent = ({ handleClose, handleCloseWithoutRefresh, id }: DeleteProps) => {
-  const [deleteCompany, { isLoading, isSuccess }] = useSubcontractorsDeleteDestroyMutation()
+  const [deleteCompany, { isLoading,  }] = useSubcontractorsDeleteDestroyMutation()
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
   const handleDelete = async () => {
@@ -21,10 +21,10 @@ const DeleteCompanyContent = ({ handleClose, handleCloseWithoutRefresh, id }: De
       await deleteCompany({ subcontractorId: id }).unwrap() // Passez l'identifiant de l'utilisateur à la mutation
       handleClose()
 
-      if (isSuccess) {
+      
         setOpenSnackBar(true)
-        setInfoAlert({ severity: 'success', message: 'Utilisateur subcontractor avec succès' })
-      }
+        setInfoAlert({ severity: 'success', message: 'Utilisateur supprimé subcontractor avec succès' })
+     
     } catch (error) {
       console.error('Échec de la suppression de subcontractor :', error)
       setOpenSnackBar(true)

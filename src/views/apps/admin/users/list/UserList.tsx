@@ -79,11 +79,11 @@ const UserList = () => {
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
-          setSearch={setSearch}
           setIsActive={setIsActive}
           isActive={isActive}
           setSorting={setSorting}
           sorting={sorting}
+          setSearch={setSearch}
           search={search}
         />
       </Grid>

@@ -269,7 +269,7 @@ const CategoryTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher un Catégorie'
               className='max-sm:is-full'
             />
             <Button

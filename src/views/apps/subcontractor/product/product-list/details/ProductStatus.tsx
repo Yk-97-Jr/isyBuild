@@ -38,7 +38,7 @@ const ProductStatus: React.FC<ClientStatusProps> = ({ register, productData }) =
       className='mbe-12'
       
     >
-      <CardHeader title='Catégorie' />
+      <CardHeader title='organisée' />
       <CardContent
        
       >

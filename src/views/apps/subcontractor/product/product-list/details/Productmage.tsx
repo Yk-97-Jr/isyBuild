@@ -1,40 +1,26 @@
-'use client'
+'use client';
 
-// React Imports
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react';
 
-import { useParams } from 'next/navigation'
+import { useParams } from 'next/navigation';
 
-// MUI Imports
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import Typography from '@mui/material/Typography'
-import { styled } from '@mui/material/styles'
+import { Card, CardHeader, CardContent, Button, IconButton, List, ListItem, Typography, CircularProgress, Dialog } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { useDropzone } from 'react-dropzone';
 
-import { useDropzone } from 'react-dropzone'
+import CustomAvatar from '@core/components/mui/Avatar';
+import AppReactDropzone from '@/libs/styles/AppReactDropzone';
+import DialogCloseButton from '@/components/dialogs/DialogCloseButton';
 
-import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
-import type { SnackBarContextType } from '@/types/apps/snackbarType'
+import { SnackBarContext } from '@/contexts/SnackBarContextProvider';
+import { useProductDetailQuery, useProductMediaCreateMutation } from '@/services/IsyBuildApi';
+import type { SnackBarContextType } from '@/types/apps/snackbarType';
+import type { ProductMediaRequest } from '@/services/IsyBuildApi';
 
-// Third-party Imports
-
-
-// Component Imports
-import CustomAvatar from '@core/components/mui/Avatar'
-
-// Styled Component Imports
-import AppReactDropzone from '@/libs/styles/AppReactDropzone'
-
-// API Hooks Imports
-import { useProductMediaCreateMutation } from '@/services/IsyBuildApi'
-
-// Types
-import type { ProductMediaRequest } from '@/services/IsyBuildApi'
+interface AddProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
 
 // Styled Dropzone Component
 const Dropzone = styled(AppReactDropzone)(({ theme }) => ({
@@ -48,147 +34,151 @@ const Dropzone = styled(AppReactDropzone)(({ theme }) => ({
       fontWeight: theme.typography.body1.fontWeight,
     },
   },
-}))
+}));
 
-const ProductImage = ({refetchProduct}:{refetchProduct: () => void;}) => {
-  const params = useParams()
-  const id = typeof params.id === 'string' ? params.id : '' // Ensure `id` is a string
+const ProductImage = ({ open, setOpen }: AddProps) => {
+  const params = useParams();
+  const id = typeof params.id === 'string' ? params.id : ''; // Ensure `id` is a string
+  const [file, setFile] = useState<File | null>(null);
+  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType;
 
-  // States
-  const [file, setFile] = useState<File | null>(null)
-  const [, setImageUrl] = useState<string | null>(null)
- 
-  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
+  const [productMediaCreate, { isLoading }] = useProductMediaCreateMutation();
+  const { refetch: refetchProduct } = useProductDetailQuery({ productId: +id });
 
-  // API Mutation
-  const [productMediaCreate, { isLoading}] = useProductMediaCreateMutation()
-  
-  // Hooks for Dropzone
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
-        setFile(acceptedFiles[0]) // Only keep the first file
+        setFile(acceptedFiles[0]); // Only keep the first file
       }
     },
-  })
+  });
 
   const renderFilePreview = (file: File) => {
     if (file.type.startsWith('image')) {
-      return <img width={38} height={38} alt={file.name} src={URL.createObjectURL(file)} />
+      return <img width={38} height={38} alt={file.name} src={URL.createObjectURL(file)} />;
     } else {
-      return <i className="tabler-file-description" />
+      return <i className="tabler-file-description" />;
     }
-  }
+  };
 
-  const handleRemoveFile = () => {
-    setFile(null)
-  }
+  const handleClose = () => {
+    setFile(null);
+    setOpen(false);
+
+    if (refetchProduct) {
+      refetchProduct();
+    }
+  };
 
   const handleUpload = async () => {
     if (!file) {
-      console.error('No file selected.')
+      setOpenSnackBar(true);
+      setInfoAlert({ severity: 'error', message: 'No file selected.' });
       
-return
+return;
     }
 
     if (!id) {
-      console.error('Product ID is missing from the URL.')
+      setOpenSnackBar(true);
+      setInfoAlert({ severity: 'error', message: 'Product ID is missing.' });
       
-return
+return;
     }
 
-    const formData = new FormData()
+    const formData = new FormData();
 
-    formData.append('image', file)
-    formData.append('product', id)
+    formData.append('image', file);
+    formData.append('product', id);
 
     try {
-      
-
-      const response = await productMediaCreate({
+      await productMediaCreate({
         productMediaRequest: formData as unknown as ProductMediaRequest,
-      }).unwrap()
+      }).unwrap();
 
-      if (response?.media.at(-1)?.image) {
-        setImageUrl(URL.createObjectURL(file))
-        setOpenSnackBar(true)
-        setInfoAlert({ severity: 'success', message: 'uploading image successfully!' })
-        refetchProduct();
-      }
-      
-    } catch ( error: any ) {
-      console.error('Error uploading image:', error)
-
-
-
-      setOpenSnackBar(true)
+      setOpenSnackBar(true);
+      setInfoAlert({ severity: 'success', message: 'Image uploaded successfully!' });
+      handleClose();
+    } catch (error: any) {
+      setOpenSnackBar(true);
       setInfoAlert({
         severity: 'error',
-        message: error.response?.data?.message || 'Error uploading image:'
-      })
-    } finally {
-      
+        message: error.response?.data?.message || 'Error uploading image.',
+      });
     }
-  }
+  };
 
   return (
-    <Dropzone>
-      <Card>
-        <CardHeader
-          title="produit  Image"
-          sx={{ '& .MuiCardHeader-action': { alignSelf: 'center' } }}
-        />
-        <CardContent>
-          <div {...getRootProps({ className: 'dropzone' })}>
-            <input {...getInputProps()} />
-            <div className="flex items-center flex-col gap-2 text-center">
-              <CustomAvatar variant="rounded" skin="light" color="secondary">
-                <i className="tabler-upload" />
-              </CustomAvatar>
-              <Typography variant="h4">Faites glisser et déposez votre image ici</Typography>
-              <Typography color="text.disabled">ou</Typography>
-              <Button variant="tonal" size="small">
-              Parcourir le image
-              </Button>
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      maxWidth="md"
+      scroll="body"
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+      sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
+    >
+      <DialogCloseButton onClick={() => setOpen(false)} disableRipple>
+        <i className="tabler-x" />
+      </DialogCloseButton>
+      <Dropzone>
+        <Card>
+          <CardHeader
+            title="Produit Image"
+            sx={{ '& .MuiCardHeader-action': { alignSelf: 'center' } }}
+          />
+          <CardContent>
+            <div {...getRootProps({ className: 'dropzone' })}>
+              <input {...getInputProps()} />
+              <div className="flex items-center flex-col gap-2 text-center">
+                <CustomAvatar variant="rounded" skin="light" color="secondary">
+                  <i className="tabler-upload" />
+                </CustomAvatar>
+                <Typography variant="h4">Faites glisser et déposez votre image ici</Typography>
+                <Typography color="text.disabled">ou</Typography>
+                <Button variant="tonal" size="small">
+                  Parcourir le image
+                </Button>
+              </div>
             </div>
-          </div>
-          {file ? (
-            <List>
-              <ListItem key={file.name} className="pis-4 plb-3">
-                <div className="file-details">
-                  <div className="file-preview">{renderFilePreview(file)}</div>
-                  <div>
-                    <Typography className="file-name font-medium" color="text.primary">
-                      {file.name}
-                    </Typography>
-                    <Typography className="file-size" variant="body2">
-                      {Math.round(file.size / 100) / 10 > 1000
-                        ? `${(Math.round(file.size / 100) / 10000).toFixed(1)} mb`
-                        : `${(Math.round(file.size / 100) / 10).toFixed(1)} kb`}
-                    </Typography>
-                  </div>
-                </div>
-                <IconButton onClick={handleRemoveFile}>
-                  <i className="tabler-x text-xl" />
-                </IconButton>
-              </ListItem>
-            </List>
-          ) : null}
-          <div className="buttons mbe-3">
             {file && (
-              <Button variant="contained" onClick={handleUpload} disabled={isLoading}>
-                {isLoading ? 'Uploading...' : 'Upload File'}
-              </Button>
+              <List>
+                <ListItem key={file.name} className="pis-4 plb-3">
+                  <div className="file-details">
+                    <div className="file-preview">{renderFilePreview(file)}</div>
+                    <div>
+                      <Typography className="file-name font-medium" color="text.primary">
+                        {file.name}
+                      </Typography>
+                      <Typography className="file-size" variant="body2">
+                        {Math.round(file.size / 100) / 10 > 1000
+                          ? `${(Math.round(file.size / 100) / 10000).toFixed(1)} mb`
+                          : `${(Math.round(file.size / 100) / 10).toFixed(1)} kb`}
+                      </Typography>
+                    </div>
+                  </div>
+                  <IconButton onClick={() => setFile(null)}>
+                    <i className="tabler-x text-xl" />
+                  </IconButton>
+                </ListItem>
+              </List>
             )}
-          </div>
- 
+            {file && (
+              <div className="buttons mbe-3">
+                <div className="flex justify-end gap-4">
+                  <Button onClick={() => setOpen(false)} variant="tonal" color="secondary">
+                    Annuler
+                  </Button>
+                  <Button variant="contained" onClick={handleUpload} disabled={isLoading}>
+                    {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Ajouter'}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </Dropzone>
+    </Dialog>
+  );
+};
 
-
-        </CardContent>
-      </Card>
-    </Dropzone>
-  )
-}
-
-export default ProductImage 
-
+export default ProductImage;

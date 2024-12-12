@@ -4,17 +4,19 @@ import { Card, CardHeader, CardContent, Divider, Typography, Switch } from '@mui
 import type {FieldError, UseFormRegister} from "react-hook-form";
 
 import type {FormValidateUserEditType} from "./shemaUserEdit";
+import type { UserRead } from '@/services/IsyBuildApi';
 
 
 type UserStatusProps = {
   register: UseFormRegister<FormValidateUserEditType>; // Adjust the type as necessary
   errors: {
     is_active?: FieldError;
-
   };
+  
+  user?:UserRead
 };
 
-const UserStatus : React.FC<UserStatusProps> = ({register, errors})  => {
+const UserStatus : React.FC<UserStatusProps> = ({register, errors, user})  => {
   return (
     <Card>
       <CardHeader title='Détails' />
@@ -24,7 +26,7 @@ const UserStatus : React.FC<UserStatusProps> = ({register, errors})  => {
           <Typography>Statut</Typography>
           <Switch
             {...register('is_active')}
-            defaultChecked
+            defaultChecked={user ? user.is_active: false}
           />
         </div>
         {errors.is_active && <span>{errors.is_active.message}</span>}

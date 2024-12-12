@@ -45,7 +45,7 @@ const SubcontractorEdit = () => {
  
   const { id } = useParams() // Get subcontractorId from route parameters
 
-  const { data: subcontractorData, isLoading: isLoadingQuery } = useSubcontractorsRetrieve2Query({
+  const { data: subcontractorData, isLoading: isLoadingQuery, refetch } = useSubcontractorsRetrieve2Query({
     subcontractorId: +id
   })
 
@@ -99,6 +99,7 @@ const SubcontractorEdit = () => {
 
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'entreprise modifié avec succès' })
+      refetch()
 
       // Optionally, redirect after successful submission
     } catch (err: any) {
