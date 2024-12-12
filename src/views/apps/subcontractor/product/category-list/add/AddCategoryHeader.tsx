@@ -1,4 +1,7 @@
-import { useRouter } from 'next/navigation'
+
+import { useSearchParams, useRouter } from 'next/navigation';
+
+
 
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -10,9 +13,23 @@ const CategoryAddHeader = ({ onSubmit, isLoading }: { onSubmit: () => void; isLo
   const router = useRouter()
   const { user } = useAuth()
   const userRole = user?.role
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get('return_to'); 
 
+  
+
+
+  
   const handleDiscard = () => {
-    router.push(`/${userRole}/product/list`)     
+    
+    console.log(returnTo);
+    
+
+    if (returnTo) {
+      router.push(`/${returnTo}`); // Redirect to the "returnTo" URL
+    } else {
+      router.push(`/${userRole}/product/list`); // Default fallback URL
+    }   
   }
 
   return (

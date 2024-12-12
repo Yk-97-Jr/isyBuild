@@ -39,7 +39,7 @@ const ProductStatus: React.FC<ClientStatusProps> = ({ register }) => {
         flexDirection: 'column' // Column layout to stack elements
       }}
     >
-      <CardHeader title='Détails' />
+      <CardHeader title='organisée' />
       <CardContent
         sx={{
           flexGrow: 1, // Make CardContent grow to fill available space

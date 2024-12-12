@@ -201,22 +201,71 @@ const SubcontractorTable = ({
         )
       }),
       
-      columnHelper.accessor('clients.name', {
-        header: 'client',
-        cell: ({ row }) => {
-          const clientName = row.original.clients?.at(-1)?.name || 'Pas de client disponible';
+      
 
+      columnHelper.accessor('clients.name', {
+        header: 'Client',
+        cell: ({ row }) => {
+          const clients = row.original.clients || [];
+          const clientNames = clients.map(client => client.name || 'Nom du client indisponible');
+      
+          if (clients.length === 0) {
+            return <Typography color="text.secondary">Aucun client disponible</Typography>;
+          }
+      
+          // Function to group names into lines based on total character count (26 max per line)
+          const groupNamesIntoLines = (names: string[], maxLength: number = 26) => {
+            const lines: string[][] = [];
+            let currentLine: string[] = [];
+            let currentLength = 0;
+      
+            names.forEach(name => {
+              const nameLength = name.length;
+      
+              // Check if adding this name would exceed the maxLength
+              if (currentLength + nameLength <= maxLength) {
+                currentLine.push(name);
+                currentLength += nameLength + 1; // +1 for the space between names
+              } else {
+                // If it doesn't fit, push the current line to lines and start a new line
+                lines.push(currentLine);
+                currentLine = [name];
+                currentLength = nameLength + 1; // +1 for the space
+              }
+            });
+      
+            // Push the last line if it has content
+            if (currentLine.length > 0) {
+              lines.push(currentLine);
+            }
+      
+            return lines;
+          };
+      
+          // Group client names into lines
+          const groupedClientNames = groupNamesIntoLines(clientNames);
+      
           return (
-            <div className="flex items-center gap-0">
-              <div className="flex flex-col">
-                <Typography color="text.primary" className="font-medium">
-                  {clientName}
-                </Typography>
-              </div>
+            <div>
+              {groupedClientNames.map((line, lineIndex) => (
+                <div key={lineIndex} className="flex gap-2 flex-wrap">
+                  {line.map((clientName, nameIndex) => (
+                    <Chip
+                      key={nameIndex}
+                      label={clientName}
+                      color="primary"
+                      size="small"
+                      className="text-sm"
+                    />
+                  ))}
+                </div>
+              ))}
             </div>
           );
         },
       }),
+      
+      
 
       columnHelper.accessor('created_by.id', {
         header: 'Créé Par',

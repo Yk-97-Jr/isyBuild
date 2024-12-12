@@ -1,4 +1,8 @@
+"use client"
 import React, { useEffect, useState } from 'react';
+
+import { useParams, useRouter } from 'next/navigation'
+
 
 // MUI Imports
 import MenuItem from '@mui/material/MenuItem';
@@ -12,6 +16,7 @@ import type { CategoryRead } from '@/services/IsyBuildApi';
 import { useCategoriesListQuery } from '@/services/IsyBuildApi';
 import type { FormValidateProductAddType } from './schemaProductAdd';
 import CustomIconButton from '@/@core/components/mui/IconButton';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -52,12 +57,29 @@ const CategoryDropdownAdd = ({
     refetch();
   }, [refetch]);
 
+  const router = useRouter();
+  const { } = useParams()
+  const { user } = useAuth()
+  const userRole = user?.role
+  
+
+  const handleRedirect = () => {
+    // Get the current URL
+    
+
+    // Construct the new URL with the query parameter
+    const newUrl = `/${userRole}/product/category/add?return_to=${userRole}/product/add`;
+
+    // Redirect to the new URL
+    router.push(newUrl);
+  };
+
   return (
     <div className="flex items-end gap-4">
       <CustomTextField
         select
         fullWidth
-        label="Category"
+        label="Catégorie"
         defaultValue="" // No pre-selected category for add
         {...register('category')} // Integrates with react-hook-form
         SelectProps={{
@@ -71,7 +93,7 @@ const CategoryDropdownAdd = ({
         ))}
         {!data?.results?.length && <MenuItem disabled>Loading categories...</MenuItem>}
       </CustomTextField>
-      <CustomIconButton variant="tonal" color="primary" className="min-is-fit">
+      <CustomIconButton variant="tonal" color="primary" className="min-is-fit" onClick={handleRedirect}>
         <i className="tabler-plus" />
       </CustomIconButton>
     </div>

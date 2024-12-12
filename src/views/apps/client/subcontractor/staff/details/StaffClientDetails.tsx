@@ -4,6 +4,7 @@ import React, { useContext, useEffect } from 'react'
 
 import { useParams } from 'next/navigation'
 
+
 import Grid from '@mui/material/Grid'
 import type { SubmitHandler } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
@@ -23,11 +24,13 @@ import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import useHandleBack from '@/hooks/useHandleBack'
 
 import type { FormValidateStaffEditType } from './schemaStaffEdit'
-import StaffEditHeader from '@views/apps/client/subcontractor/staff/details/StaffEditHeader'
-import StaffCreatedBy from '@views/apps/client/subcontractor/staff/details/StaffCreatedBy'
-import { schemaStaffEdit } from './schemaStaffEdit'
 
-import StaffInformation from '@views/apps/client/subcontractor/staff/details/StaffInformation'
+import { schemaStaffEdit } from './schemaStaffEdit'
+import StaffCreatedBy from './StaffCreatedBy'
+import StaffInformation from './StaffInformation'
+import StaffEditHeader from './StaffEditHeader'
+
+
 
 const StaffCLientDetails = () => {
   const {
@@ -39,9 +42,11 @@ const StaffCLientDetails = () => {
     resolver: yupResolver(schemaStaffEdit)
   })
 
-  const { staffId } = useParams() // Get clientId from route parameters
+  const { staffId } = useParams()
 
-  const { data: subcontractorStaffData, isLoading: isLoadingQuery,refetch } = useSubcontractorsStaffRetrieveQuery({
+
+
+  const { data: subcontractorStaffData, isLoading: isLoadingQuery, refetch } = useSubcontractorsStaffRetrieveQuery({
     subcontractorStaffId: +staffId
   })
 
@@ -77,6 +82,7 @@ const StaffCLientDetails = () => {
       setOpenSnackBar(true)
       setInfoAlert({ severity: 'success', message: 'staff Modifié avec succès' })
       refetch()
+     
     } catch (err: any) {
       console.error('Failed to modify staff:', err)
       setOpenSnackBar(true)
@@ -110,7 +116,7 @@ const StaffCLientDetails = () => {
         <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <StaffInformation register={register} errors={errors} subcontractorStaffData={subcontractorStaffData}/>
+              <StaffInformation register={register} errors={errors} user={subcontractorStaffData} />
             </Grid>
           </Grid>
         </Grid>

@@ -35,7 +35,7 @@ const TableLotsFilters = ({
 
   return (
     <CardContent>
-      <Grid container spacing={6}>
+      <Grid >
         
           <CustomTextField
             select

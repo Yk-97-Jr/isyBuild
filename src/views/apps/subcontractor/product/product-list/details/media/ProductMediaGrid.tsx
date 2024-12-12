@@ -37,7 +37,7 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
 
   const buttonProps: ButtonProps = {
     variant: 'tonal',
-    children: 'Add New file',
+    children: 'Ajouter une nouvelle image',
     size: 'small'
   }
 
@@ -61,12 +61,12 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
         }}
       >
          <CardHeader
-        title='Address Book'
+        title="Galerie d'images"
         action={<OpenDialogOnElementClick element={Button} elementProps={buttonProps} dialog={ProductImage} dialogProps={{ setAddValue: handleAdd }} />}
       />
         <CardContent>
           <Typography variant="subtitle1" color="text.disabled" textAlign="center">
-            No media available for this product.
+          Aucun média disponible pour ce produit.
           </Typography>
         </CardContent>
       </Card>
@@ -77,7 +77,7 @@ const ProductMediaGrid: React.FC<ProductMediaGridProps> = ({ media, refetchProdu
     <>
       <Card>
         <CardHeader
-          title="Produit Image"
+          title="Galerie d'images"
           action={<OpenDialogOnElementClick element={Button} elementProps={buttonProps} dialog={ProductImage} />}
         />
         <CardContent>

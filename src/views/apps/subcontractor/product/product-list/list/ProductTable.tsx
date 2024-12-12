@@ -280,7 +280,7 @@ const ProductTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher un produit'
               className='max-sm:is-full'
             />
             <Button

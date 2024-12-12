@@ -31,7 +31,7 @@ const ProjectList = () => {
       page,
       pageSize,
 
-      //isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
+
 
        ordering: sorting
         .map((s) => `${s.desc ? '-' : ''}${s.id}`)
@@ -44,12 +44,12 @@ const ProjectList = () => {
   useEffect(() => {
     refetch();
     setPage(1)
-  }, [pageSize, sorting, debouncedSearch, refetch]);
+  }, [pageSize, sorting, debouncedSearch]);
 
 
   useEffect(() => {
     refetch();
-  }, [ refetch]);
+  }, [ page, refetch]);
 
 
   if (isLoading)

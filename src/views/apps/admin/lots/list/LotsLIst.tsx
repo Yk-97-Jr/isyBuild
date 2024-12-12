@@ -32,7 +32,7 @@ const LotsList = () => {
 
   useEffect(() => {
     refetch()
-  }, [page, pageSize, clientIds,debouncedSearch,ordering, refetch])
+  }, [page, pageSize, clientIds,debouncedSearch,ordering, ])
 
   if (isLoading)
     return (

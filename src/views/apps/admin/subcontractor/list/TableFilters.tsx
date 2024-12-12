@@ -16,7 +16,7 @@ const TableFilters = ({setIsActive, isActive}: {
 
   return (
     <CardContent>
-      <Grid container spacing={6}>
+      <Grid >
         
           <CustomTextField
             select

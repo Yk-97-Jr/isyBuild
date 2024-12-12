@@ -259,7 +259,7 @@ const ShowcaseTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher un lot'
               className='max-sm:is-full'
             />
            

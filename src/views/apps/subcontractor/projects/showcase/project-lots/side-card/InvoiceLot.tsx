@@ -22,7 +22,7 @@ import type { DocumentRead } from "@/services/IsyBuildApi";
 
 // Type imports for form handling
 type Props = {
-  projectLotSubcontractorData: DocumentRead | undefined; // Adjust the type as necessary
+  projectLotDevisData: DocumentRead | undefined; // Adjust the type as necessary
   ids:number
   setOpenAdd: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
   setOpenDelete: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
@@ -34,7 +34,7 @@ type Props = {
 };
 
 const InvoiceLot: React.FC<Props> = ({
-                                             projectLotSubcontractorData,
+                                             projectLotDevisData,
                                              ids,
                                              setOpenAdd,
                                              setId,
@@ -93,7 +93,7 @@ const InvoiceLot: React.FC<Props> = ({
 
   return (
     <Card>
-      {projectLotSubcontractorData ? (
+      {projectLotDevisData ? (
         <div>
           <CardHeader title='Devis' action={
             <OptionMenu
@@ -111,14 +111,14 @@ const InvoiceLot: React.FC<Props> = ({
                   text: 'Historique',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleHistory(projectLotSubcontractorData?.id)
+                    onClick: () => handleHistory(projectLotDevisData?.id)
                   }
                 },
                 {
                   text: 'Supprimer',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleDelete(projectLotSubcontractorData.id)
+                    onClick: () => handleDelete(projectLotDevisData.id)
                   }
                 }
               ]}
@@ -134,13 +134,13 @@ const InvoiceLot: React.FC<Props> = ({
                     <div>
                       {/* Second Icon Button */}
                       <IconButton
-                        onClick={() => openOrDownloadFile(projectLotSubcontractorData?.latest_version.file_url)}>
+                        onClick={() => openOrDownloadFile(projectLotDevisData?.latest_version.file_url)}>
                         <i className='tabler-download text-textSecondary'/>
                       </IconButton>
                     </div>
                   }
                 >
-                  <ListItemText primary={`${projectLotSubcontractorData?.name ?? 'Devis'}`}/>
+                  <ListItemText primary={`${projectLotDevisData?.name ?? 'Devis'}`}/>
                 </ListItem>
 
               </List>

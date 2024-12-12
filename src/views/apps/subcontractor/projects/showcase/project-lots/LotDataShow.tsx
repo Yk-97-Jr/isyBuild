@@ -60,7 +60,7 @@ const LotDataShow = () => {
           <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
           <Grid item xs={12}>
-            <LotsList data={data} error={error} isLoading={isLoading} isFetching={isFetching} refetch={refetch}/>
+            <LotsList data={data} error={error} isLoading={isLoading} isFetching={isFetching} refetch={ refetch}/>
             </Grid>
           </Grid>
         </Grid>
@@ -70,7 +70,7 @@ const LotDataShow = () => {
             <AboutLot LotData={data}  />   
             </Grid>
             <Grid item xs={12}>
-            <InvoiceLot  projectLotSubcontractorData={data?.folder?.documents.at(-1)} setOpenAdd={setOpenAdd}
+            <InvoiceLot  projectLotDevisData={undefined} setOpenAdd={setOpenAdd}
                               setId={setId} setOpenDelete={setOpenDelete} setOpenModify={setOpenModify}
                               setOpenHistory={setOpenHistory} ids={+docId}/>
             </Grid> 

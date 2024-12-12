@@ -24,10 +24,10 @@ type StaffInformationProps = {
     redirect_uri?: FieldError
     is_active?: FieldError
   }
-  subcontractorStaffData?:SubcontractorStaffRead
+  user?:SubcontractorStaffRead
 }
 
-const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors,subcontractorStaffData }) => {
+const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors , user}) => {
   return (
     <Card>
       <CardContent>
@@ -60,7 +60,7 @@ const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors,su
           <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='E-mail '
+              label='E-mail'
               placeholder='email@example.com'
               {...register('email')} // Register the email field
               error={!!errors.email} // Error handling
@@ -73,7 +73,7 @@ const StaffInformation: React.FC<StaffInformationProps> = ({ register, errors,su
             <Divider className='mlb-0' />
             <div className='flex items-center justify-between'>
               <Typography>Statut</Typography>
-              <Switch {...register('is_active')} defaultChecked={subcontractorStaffData ? subcontractorStaffData.user.is_active: false} />
+              <Switch {...register('is_active')} defaultChecked={user ? user.user.is_active: false}   />
             </div>
             {errors.is_active && <span>{errors.is_active.message}</span>}
           </Grid>

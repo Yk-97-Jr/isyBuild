@@ -4,7 +4,7 @@
 
 import React from 'react'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
@@ -24,11 +24,23 @@ const CategoryEditsHeader: React.FC<CategoryAddHeaderProps> = ({ onSubmit, isLoa
   const router = useRouter()
 const { user } = useAuth()
 const userRole = user?.role
+const searchParams = useSearchParams();
+const returnTo = searchParams.get('return_to'); 
+
+
+
+
 
 const handleDiscard = () => {
-  console.log(`/${userRole}/product/list`);
   
-  router.push(`/${userRole}/product/list`) 
+  console.log(returnTo);
+  
+
+  if (returnTo) {
+    router.push(`/${returnTo}`); // Redirect to the "returnTo" URL
+  } else {
+    router.push(`/${userRole}/product/list`); // Default fallback URL
+  }   
 }
 
   return (

@@ -40,18 +40,20 @@ const LotsList = ({data, error, isLoading, isFetching, refetch}:{data?:ProjectLo
   
 
   useEffect(() => {
-
-    if (data) {
-      
-     
-      setPage(1)
+    // Only call refetch when data is available
+    if (isFetching) {
+      refetch();
+      setPage(1);
     }
-  }, [pageSize, data, refetch]);
+  }, [pageSize,  isFetching, ]);
 
 
   useEffect(() => {
-    refetch();
-  }, [ refetch]);
+    if (isFetching) {
+      
+      refetch();
+    }
+  }, [page,isFetching, refetch]);
 
 
   if (isLoading)

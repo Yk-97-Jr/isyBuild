@@ -51,7 +51,7 @@ const StaffList = () => {
   useEffect(() => {
     refetch()
     setPage(1)
-  }, [pageSize, refetch, sorting, isActive, debouncedSearch])
+  }, [pageSize,  sorting, isActive, debouncedSearch])
 
   useEffect(() => {
     refetch()

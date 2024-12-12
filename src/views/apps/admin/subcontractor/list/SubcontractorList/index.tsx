@@ -41,11 +41,11 @@ const SubcontractorList = () => {
     useEffect(() => {
       refetch();
       setPage(1)
-    }, [pageSize, sorting, isActive,debouncedSearch,clientIds, refetch]);
+    }, [pageSize, sorting, isActive,debouncedSearch,clientIds, ]);
 
   useEffect(() => {
     refetch()
-  }, [page, pageSize, refetch])
+  }, [page, pageSize, ])
 
   if (isLoading)
     return (
