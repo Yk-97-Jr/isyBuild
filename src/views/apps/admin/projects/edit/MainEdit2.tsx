@@ -13,7 +13,6 @@ import EditInformation from './EditInformation'
 
 import EditAddress from './EditAddress'
 
-import Details from './Details'
 
 import CreatedBy from './CreatedBy'
 
@@ -237,6 +236,7 @@ function MainEdit2() {
               <Team />
             </div>
             <div className='sm:w-2/5 flex flex-col gap-5'>
+              <HandleIntervenants />
               <NotificationFrequency
                 notificationFrequency={notificationFrequency}
                 handleFrequency={handleFrequency}
@@ -250,7 +250,7 @@ function MainEdit2() {
                 isLoading={isLoading}
               />
 
-              <HandleIntervenants />
+
             </div>
           </div>
         </div>

@@ -80,6 +80,7 @@ const IntervenantInformation: React.FC<Props> = ({register, errors, intervenantD
               {...register("email")}
               error={!!errors.email}
               helperText={errors.email?.message}
+              disabled={true}
             />
           </Grid>
 
