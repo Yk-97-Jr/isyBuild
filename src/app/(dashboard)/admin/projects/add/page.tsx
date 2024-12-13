@@ -14,6 +14,7 @@ import Location from '@/views/apps/client/projects/Add/Location'
 import AddressInfo from '@/views/apps/client/projects/Add/AddressInfo'
 import Details from '@/views/apps/client/projects/Add/Details'
 
+
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
 
 import type { SnackBarContextType } from '@/types/apps/snackbarType'
@@ -51,6 +52,8 @@ function Page() {
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+ 
 
   const validateForm = (
     name: string,
@@ -180,6 +183,7 @@ function Page() {
     }
   }
 
+ 
   return (
     <div className=''>
       <div className='flex sm:flex-row flex-col gap-5 justify-between py-4'>
@@ -237,6 +241,7 @@ function Page() {
             errors={errors}
           />
           <Details client={client} setClient={setClient} errors={errors} />
+          
         </div>
       </div>
     </div>

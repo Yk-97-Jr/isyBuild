@@ -5,7 +5,6 @@ import Button from '@mui/material/Button'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // Type Imports
-import type { ChildrenType } from '@core/types'
 
 // Context Imports
 import { IntersectionProvider } from '@/contexts/intersectionContext'
@@ -24,11 +23,11 @@ import '@/app/globals.css'
 
 // Generated Icon CSS Imports
 import '@assets/iconify-icons/generated-icons.css'
+import type { ChildrenType } from '@/@menu/types'
 
 export const metadata = {
   title: 'Isybuild',
-  description:
-    'Isybuild'
+  description: 'Isybuild'
 }
 
 const Layout = ({ children }: ChildrenType) => {

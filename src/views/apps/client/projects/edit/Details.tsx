@@ -13,8 +13,8 @@ import TextAlign from '@tiptap/extension-text-align'
 
 import Underline from '@tiptap/extension-underline'
 
-
 import type { ProjectRead } from '@/services/IsyBuildApi'
+import Chip from '@/@core/components/mui/Chip'
 
 interface DetialsProps {
   projectState: ProjectRead
@@ -27,7 +27,7 @@ function Details({ projectState, isLoading }: DetialsProps) {
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: 'Write something here...'
+        placeholder: ''
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph']
@@ -49,7 +49,7 @@ function Details({ projectState, isLoading }: DetialsProps) {
     <Card>
       <CardHeader title='Détails De Projet' />
       <CardContent className='flex flex-col gap-3'>
-        <Typography variant='h6' className='mt-4 ' fontWeight='normal'>
+        <Typography variant='h6' fontWeight='normal'>
           <div className=' flex gap-1'>
             <strong>Client:</strong>
             {projectState.client.name}
@@ -57,11 +57,17 @@ function Details({ projectState, isLoading }: DetialsProps) {
         </Typography>
         <>
           <Typography variant='h6' fontWeight='normal'>
-            <div className='flex gap-1'>
+            <div className='flex items-center  gap-1 '>
               <strong>Status:</strong>
-              {projectState.status}
+              <Chip
+                variant='tonal'
+                label={projectState.status ? 'pending' : 'Inactive'} // TODO check the back-end to see all the status and add theme here mokhttar or ask saad
+                color={projectState.status ? 'warning' : 'secondary'}
+                className=' scale-90'
+              />
             </div>
           </Typography>
+
           {/* <Typography variant='h6' fontWeight='normal'>
             <div className='flex gap-2'>
               <strong>Niveau de Risque:</strong>
@@ -80,9 +86,10 @@ function Details({ projectState, isLoading }: DetialsProps) {
               />
             </div>
           </div> */}
+
         </>
-        <div className='mt-2'>
-          <Typography>Note:</Typography>
+        <div className=' flex flex-col gap-2'>
+          <Typography> Note:</Typography>
           <Card className='p-0 border shadow-none'>
             <CardContent className='p-0'>
               <EditorContent editor={editor} className='bs-[135px] overflow-y-auto flex ' placeholder='Description' />

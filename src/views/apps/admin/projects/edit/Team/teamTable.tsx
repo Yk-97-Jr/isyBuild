@@ -10,8 +10,6 @@ import Button from '@mui/material/Button'
 
 import Typography from '@mui/material/Typography'
 
-import Chip from '@mui/material/Chip'
-
 import IconButton from '@mui/material/IconButton'
 
 import type { TextFieldProps } from '@mui/material/TextField'
@@ -27,6 +25,7 @@ import classnames from 'classnames'
 
 import { rankItem } from '@tanstack/match-sorter-utils'
 
+// import { Status109Enum } from '@/services/IsyBuildApi'
 
 import {
   createColumnHelper,
@@ -48,21 +47,17 @@ import type { RankingInfo } from '@tanstack/match-sorter-utils'
 // Custom Components
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-import OptionMenu from '@core/components/option-menu'
-
 import CustomTextField from '@core/components/mui/TextField'
 
-import ProjectDialog from './ProjectDialog'
+import TeamDialogue from './teamDialogue'
 
 // Styles
 import tableStyles from '@core/styles/table.module.css'
 
 // Types
-
-import type { ProjectRead } from '@/services/IsyBuildApi'
+import { useRemoveProjectStaffByIdMutation, type ProjectStaffRead } from '@/services/IsyBuildApi'
 
 // Context
-
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -74,7 +69,7 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ClientTypeWithAction = ProjectRead & {
+type ClientTypeWithAction = ProjectStaffRead & {
   action?: string
 }
 
@@ -115,7 +110,7 @@ const DebouncedInput = ({
 
 const columnHelper = createColumnHelper<ClientTypeWithAction>()
 
-const ProjectListTable = ({
+const TeamTable = ({
   data,
   page,
   setPage,
@@ -127,11 +122,11 @@ const ProjectListTable = ({
   handleEdit,
   handleDelete,
   status,
-  setStatus,
   searchValue,
-  setSearchValue
+  setSearchValue,
+  client_staf_project
 }: {
-  data?: ProjectRead[]
+  data?: ProjectStaffRead[]
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
   pageSize: number
@@ -143,104 +138,119 @@ const ProjectListTable = ({
   handleDelete: any
   setTableRows: any
   status: any
-  setStatus: any,
-  searchValue:any,
-  setSearchValue:any
+  searchValue: any
+  setSearchValue: any
+  client_staf_project: any
 }) => {
   const [rowSelection, setRowSelection] = useState({})
-  const [id, setId] = useState(0)
+
   const [open, setOpen] = useState(false)
+
   const [filteredData] = useState(data)
+
+  console.log(filteredData)
   const [globalFilter, setGlobalFilter] = useState('')
 
+  const [id, setId] = useState<number | undefined>(undefined)
+
+  console.log(client_staf_project)
+
+  const handleAdd = () => {
+    setOpen(true)
+  }
+
+  const [DeleteTrigger] = useRemoveProjectStaffByIdMutation()
+
+  const hanldeDelete = async (id: number) => {
+
+    try {
+
+      const response = await DeleteTrigger({ projectStaffId: id }).unwrap()
+
+      window.location.reload()
+
+      console.log(response)
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
-
     console.log(status)
-
   }, [status])
 
-
   const columns = useMemo<ColumnDef<ClientTypeWithAction, any>[]>(
-
     () => [
-      columnHelper.accessor('code', {
-        header: 'Code',
+
+
+      // columnHelper.accessor('id', {
+      //   header: 'User',
+      //   cell: ({ row }) => (
+      //     <div className='flex items-center gap-4'>
+      //       <div className='flex flex-col'>
+      //         <Typography color='text.primary' className='font-medium'>
+      //           {`${row.original.id}`}
+      //         </Typography>
+      //       </div>
+      //     </div>
+      //   )
+      // }),
+
+      columnHelper.accessor('staff.user.first_name', {
+        header: 'User',
         cell: ({ row }) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.code}`}
+                {`${row.original.staff.user?.first_name || 'First Name'} ${row.original.staff.user?.last_name || 'Last Name'}`}
               </Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('name', {
-        header: 'Name',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name}`}
-              </Typography>
-            </div>
-          </div>
-        )
+
+      // columnHelper.accessor('created_by', {
+      //   header: 'Created By',
+      //   cell: ({ row }) => (
+      //     <div className='flex items-center gap-4'>
+      //       <div className='flex flex-col'>
+      //         <Typography color='text.primary' className='font-medium'>
+      //           {/* problem in the back end it does not return the created_by object it has been returned as null */}
+      //           {/* `${row.original.created_by?.id} */}
+      //           back end returns Null
+      //         </Typography>
+      //       </div>
+      //     </div>
+      //   )
+      // }),
+
+      columnHelper.accessor('role', {
+        header: 'Role',
+        cell: ({ row }) => {
+          return (
+            <Typography color='text.primary' className='font-medium'>
+              {row.original.role}
+            </Typography>
+          )
+        }
       }),
-      columnHelper.accessor('client.address.country', {
-        header: 'Address',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original.address?.country || 'N/A'}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('status', {
-        header: 'status',
-        cell: ({ row }) => (
-          <Chip
-            variant='tonal'
-            label={row.original.status ? 'pending' : 'completed'}
-            color={row.original.status ? 'warning' : 'secondary'}
-          />
-        )
-      }),
-      columnHelper.accessor('client.created_at', {
-        header: `Date de Creation`,
-        cell: ({ row }) => (
-          <Typography>
-            {row.original.client?.created_at
-              ? new Date(row.original.client.created_at).toLocaleDateString()
-              : 'Date not available'}
-          </Typography>
-        )
+
+      columnHelper.accessor('created_at', {
+        header: 'time',
+        cell: ({ row }) => {
+          const formattedDate = new Date(row.original.created_at).toLocaleString()
+
+          return <Typography>{formattedDate}</Typography>
+        }
       }),
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDelete(row.original.id)}>
+            <IconButton onClick={() => hanldeDelete(row.original.id)}>
               <i className='tabler-trash text-textSecondary' />
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEdit(row.original.id)
-                  }
-                }
-              ]}
-            />
           </div>
         ),
         enableSorting: false
@@ -250,7 +260,7 @@ const ProjectListTable = ({
   )
 
   const table = useReactTable({
-    data: filteredData as ProjectRead[],
+    data: filteredData as ProjectStaffRead[], // find what data  to use here
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -281,48 +291,30 @@ const ProjectListTable = ({
     <>
       <Card>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
-          <div className='flex gap-4 w-1/2 '>
-            <div>
-              <CustomTextField
-                select
-                value={table.getState().pagination.pageSize}
-                onChange={e => setPageSize(Number(e.target.value))}
-                className='max-sm:is-full sm:is-[70px]'
-              >
-                <MenuItem value='10'>10</MenuItem>
-                <MenuItem value='25'>25</MenuItem>
-                <MenuItem value='50'>50</MenuItem>
-              </CustomTextField>
-            </div>
-            <div className='w-1/2 flex gap-2'>
-              <CustomTextField
-                select
-                fullWidth
-                id='select-role'
-                value={status}
-                onChange={e => setStatus(e.target.value)}
-                SelectProps={{ displayEmpty: true }}
-              >
-                <MenuItem value=''>Select Status</MenuItem>
-                <MenuItem value='pending'>pending</MenuItem>
-                <MenuItem value='on_hold'>on_hold</MenuItem>
-                <MenuItem value='in_progress'>in_progress</MenuItem>
-                <MenuItem value='draft'>draft</MenuItem>
-                <MenuItem value='completed'>completed</MenuItem>
-                <MenuItem value='canceled'>canceled</MenuItem>
-              </CustomTextField>
-            </div>
-          </div>
+          <CustomTextField
+            select
+            value={table.getState().pagination.pageSize}
+            onChange={e => setPageSize(Number(e.target.value))}
+            className='max-sm:is-full sm:is-[70px]'
+          >
+            <MenuItem value='10'>10</MenuItem>
+            <MenuItem value='25'>25</MenuItem>
+            <MenuItem value='50'>50</MenuItem>
+          </CustomTextField>
 
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
               value={searchValue ?? ''}
               onChange={value => setSearchValue(String(value))}
-              placeholder={`chercher un Projet`}
+              placeholder={`Search for staff`}
               className='max-sm:is-full'
-
             />
-            <Button variant='contained' className='max-sm=is-full' startIcon={<i className='tabler-plus' />} href='add'>
+            <Button
+              variant='contained'
+              className='max-sm=is-full'
+              startIcon={<i className='tabler-plus' />}
+              onClick={handleAdd}
+            >
               Ajouter Projet
             </Button>
           </div>
@@ -398,9 +390,16 @@ const ProjectListTable = ({
           }}
         />
       </Card>
-      <ProjectDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch} />
+      <TeamDialogue
+        open={open}
+        setOpen={setOpen}
+        id={id}
+        setId={setId}
+        refetch={refetch}
+        client_staf_project={client_staf_project}
+      />
     </>
   )
 }
 
-export default ProjectListTable
+export default TeamTable
