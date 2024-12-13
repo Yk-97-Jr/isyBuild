@@ -5,32 +5,49 @@ import React, {useEffect, useState} from 'react'
 
 import {useParams} from "next/navigation";
 
+import type {SortingState} from '@tanstack/react-table';
 import Grid from '@mui/material/Grid'
 
 import {CircularProgress} from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import {useClientsStaffRetrieve3Query} from '@/services/IsyBuildApi'
-import UserClientListTable from "./UserClientListTable";
+import {useDebounce} from "@uidotdev/usehooks";
+
+import { useClientsStaffRetrieve3Query} from '@/services/IsyBuildApi'
+import UserClientListTable from "@views/apps/admin/clients/details/users/list/UserClientListTable";
 
 const UserClientList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const [search, setSearch] = useState<string>("");
+  const [isActive, setIsActive] = useState<string | null>(null);
+
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const debouncedSearch = useDebounce(search, 500);
   const {id} = useParams(); // Get clientId from route parameters
 
 
   // Pass parameters to the query hook
   const {data, error, isLoading, isFetching, refetch} = useClientsStaffRetrieve3Query({
-    page, pageSize,
-    clientId: +id
-  })
+      page,
+      pageSize,
+      clientId: +id,
+
+      // isActive: isActive === 'true' ? true : isActive === 'false' ? false : undefined,
+      ordering: sorting
+        .map((s) => `${s.desc ? '-' : ''}${s.id}`)
+        .join(',') as any,
+      search: debouncedSearch
+    },
+  );
 
   useEffect(() => {
     refetch();
     setPage(1)
-  }, [pageSize]);
+  }, [pageSize, sorting, isActive, debouncedSearch]);
 
 
   useEffect(() => {
@@ -55,18 +72,8 @@ const UserClientList = () => {
   const countRecords = data?.count
 
 
-  return isFetching ? (
-    <UserClientListTable
-      pageSize={pageSize}
-      setPageSize={setPageSize}
-      page={page}
-      setPage={setPage}
-      data={users}
-      countRecords={countRecords}
-      isFetching={isFetching}
-      refetch={refetch}
-    />
-  ) : (
+  return (
+
     <Grid container spacing={6}>
       <Grid item xs={12}>
         <UserClientListTable
@@ -78,10 +85,15 @@ const UserClientList = () => {
           countRecords={countRecords}
           isFetching={isFetching}
           refetch={refetch}
+          setIsActive={setIsActive}
+          isActive={isActive}
+          setSorting={setSorting}
+          sorting={sorting}
+          setSearch={setSearch}
+          search={search}
         />
       </Grid>
-    </Grid>
-  )
+    </Grid>)
 }
 
 export default UserClientList
