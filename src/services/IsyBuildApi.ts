@@ -470,6 +470,28 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/folders/${queryArg.folderId}/` }),
     }),
+    listProjectIntervenantProject: build.query<
+      ListProjectIntervenantProjectApiResponse,
+      ListProjectIntervenantProjectApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/intervenant/projects/`,
+        params: {
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
+        },
+      }),
+    }),
+    getIntervenantProjectDetail: build.query<
+      GetIntervenantProjectDetailApiResponse,
+      GetIntervenantProjectDetailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/intervenant/projects/${queryArg.projectId}/`,
+      }),
+    }),
     intervenantRolesRetrieve: build.query<
       IntervenantRolesRetrieveApiResponse,
       IntervenantRolesRetrieveApiArg
@@ -748,6 +770,14 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/project-lots/${queryArg.projectLotId}/delete/`,
         method: "DELETE",
+      }),
+    }),
+    projectLotsSubcontractorDevisRetrieve: build.query<
+      ProjectLotsSubcontractorDevisRetrieveApiResponse,
+      ProjectLotsSubcontractorDevisRetrieveApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/project-lots/${queryArg.projectLotId}/subcontractor/devis/`,
       }),
     }),
     projectLotsSubcontractorsRetrieve2: build.query<
@@ -1882,6 +1912,35 @@ export type GetFolderDetailApiResponse = /** status 200  */ FolderRead;
 export type GetFolderDetailApiArg = {
   folderId: number;
 };
+export type ListProjectIntervenantProjectApiResponse =
+  /** status 200  */ PaginatedProjectIntervenantRead;
+export type ListProjectIntervenantProjectApiArg = {
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | "-code"
+    | "-description"
+    | "-id"
+    | "-name"
+    | "code"
+    | "description"
+    | "id"
+    | "name";
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
+
+  /** Search by code, name,description ,client name */
+  search?: string;
+};
+export type GetIntervenantProjectDetailApiResponse =
+  /** status 200  */ ProjectIntervenantRead;
+export type GetIntervenantProjectDetailApiArg = {
+  projectId: number;
+};
 export type IntervenantRolesRetrieveApiResponse =
   /** status 200 Available roles for Intervenants */ {
     [key: string]: any;
@@ -2112,6 +2171,11 @@ export type ProjectLotsDeleteDestroyApiResponse = /** status 204  */ {
   [key: string]: any;
 };
 export type ProjectLotsDeleteDestroyApiArg = {
+  projectLotId: number;
+};
+export type ProjectLotsSubcontractorDevisRetrieveApiResponse =
+  /** status 200  */ DocumentRead;
+export type ProjectLotsSubcontractorDevisRetrieveApiArg = {
   projectLotId: number;
 };
 export type ProjectLotsSubcontractorsRetrieve2ApiResponse =
@@ -3266,6 +3330,51 @@ export type FolderRead = {
   name: string;
   documents: DocumentRead[];
 };
+export type ProjectIntervenant = {
+  code: string;
+  name: string;
+  description?: string;
+};
+export type ClientSimple = {
+  name: string;
+  siren_number: string;
+  contact_email: string;
+  phone_number: string;
+};
+export type ClientSimpleRead = {
+  id: number;
+  name: string;
+  siren_number: string;
+  contact_email: string;
+  phone_number: string;
+};
+export type MapCoordinate = {
+  latitude: string;
+  longitude: string;
+};
+export type ProjectIntervenantRead = {
+  id: number;
+  code: string;
+  name: string;
+  description?: string;
+  client: ClientSimpleRead;
+  map_coordinate: MapCoordinate;
+  address: AddressRead;
+  created_at: string;
+  updated_at: string;
+};
+export type PaginatedProjectIntervenant = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectIntervenant[];
+};
+export type PaginatedProjectIntervenantRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectIntervenantRead[];
+};
 export type Localisation = {
   name: string;
 };
@@ -3413,19 +3522,6 @@ export type ProjectLot = {
 export type ProjectSimple = {
   name: string;
 };
-export type ClientSimple = {
-  name: string;
-  siren_number: string;
-  contact_email: string;
-  phone_number: string;
-};
-export type ClientSimpleRead = {
-  id: number;
-  name: string;
-  siren_number: string;
-  contact_email: string;
-  phone_number: string;
-};
 export type ProjectSimpleRead = {
   id: number;
   name: string;
@@ -3552,10 +3648,6 @@ export type Project = {
   notification_frequency?: number;
   max_notifications?: number;
 };
-export type MapCoordinate = {
-  latitude: string;
-  longitude: string;
-};
 export type ProjectRead = {
   id: number;
   code: string;
@@ -3624,37 +3716,6 @@ export type ProjectStaffAssignRequest = {
   staff_id: number;
   role: string;
   supervisor_id?: number | null;
-};
-export type ProjectIntervenant = {};
-export type Intervenant = {
-  role: RoleEnum;
-};
-export type IntervenantRead = {
-  id: number;
-  user: UserRead;
-  role: RoleEnum;
-  created_by: CreatedByRead;
-  created_at: string;
-  updated_at: string;
-};
-export type ProjectIntervenantRead = {
-  id: number;
-  intervenant: IntervenantRead;
-  created_by: CreatedByRead;
-  created_at: string;
-  updated_at: string;
-};
-export type PaginatedProjectIntervenant = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: ProjectIntervenant[];
-};
-export type PaginatedProjectIntervenantRead = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: ProjectIntervenantRead[];
 };
 export type IntervenantCreateRequest = {
   user: UserCreateRequest;
@@ -3913,16 +3974,17 @@ export type ProjectSubcontractor = {
   code: string;
   name: string;
   description?: string;
+  manager?: number | null;
 };
 export type ProjectSubcontractorRead = {
   id: number;
   code: string;
   name: string;
   description?: string;
-  client: ClientRead;
+  client: ClientSimpleRead;
   map_coordinate: MapCoordinate;
   address: AddressRead;
-  manager: ClientStaffRead;
+  manager?: number | null;
   created_at: string;
   updated_at: string;
 };
@@ -4190,6 +4252,8 @@ export const {
   useDocumentDiffusionCreateMutation,
   useDocumentDiffusionDocumentUpdateMutation,
   useGetFolderDetailQuery,
+  useListProjectIntervenantProjectQuery,
+  useGetIntervenantProjectDetailQuery,
   useIntervenantRolesRetrieveQuery,
   useLocalisationsListQuery,
   useLocalisationDetailQuery,
@@ -4221,6 +4285,7 @@ export const {
   useProductMediaCreateMutation,
   useProjectLotsRetrieveQuery,
   useProjectLotsDeleteDestroyMutation,
+  useProjectLotsSubcontractorDevisRetrieveQuery,
   useProjectLotsSubcontractorsRetrieve2Query,
   useProjectLotsSubcontractorsAssignCreateMutation,
   useProjectLotsUpdateStatusUpdateMutation,

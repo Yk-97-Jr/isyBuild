@@ -308,7 +308,7 @@ const SubStaffTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher '
               className='max-sm:is-full'
             />
             <Button

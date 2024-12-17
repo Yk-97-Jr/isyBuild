@@ -15,7 +15,7 @@ import {
 import DialogCloseButton from "@components/dialogs/DialogCloseButton";
 
 
-import CustomTextField from "@core/components/mui/TextField";
+
 import AddDevisUpload
   from "./AddDevisUpload";
 import type {
@@ -23,6 +23,7 @@ import type {
 import {
   schemaFileUpload
 } from "./AddDevisSchema";
+import CustomTextField from '@/@core/components/mui/TextField';
 
 interface AddProps {
   open: boolean;
@@ -30,13 +31,13 @@ interface AddProps {
   refetch?: () => void;
 }
 
-const AddDevisSub = ({open, setOpen, refetch}: AddProps) => {
+const AddDevisSub = ({open,setOpen, refetch}: AddProps) => {
     const {register, handleSubmit, formState: {errors}} = useForm<FormValidateFileUploadType>({
       resolver: yupResolver(schemaFileUpload),
     });
 
     const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
-    const [createDevisSubLotProject, {isLoading}] = useUploadDevisBySubconstactorMutation();
+    const [uploadDevisBySub, {isLoading}] = useUploadDevisBySubconstactorMutation();
     const {docId} = useParams();
     const [files, setFiles] = useState<File[]>([])
 
@@ -60,7 +61,7 @@ const AddDevisSub = ({open, setOpen, refetch}: AddProps) => {
     const onSubmit: SubmitHandler<FormValidateFileUploadType> = async (data) => {
 
       try {
-        console.log("its ======",files)
+  
 
         // Create a FormData object to hold the avatar file
         const formDataToSend = new FormData();
@@ -84,11 +85,11 @@ const AddDevisSub = ({open, setOpen, refetch}: AddProps) => {
 
         // Now send the FormData ( need to disable eslint here cause we have a picutre to pass ( surpass the eslint error )
 
-console.log(docId);
 
-        const respones = await createDevisSubLotProject(
+
+        const respones = await uploadDevisBySub(
           {
-            projectLotId: +76,
+            projectLotId: +docId,
 
             // @ts-expect-error
             documentUploadRequest: formDataToSend
@@ -104,6 +105,8 @@ console.log(docId);
           ? JSON.stringify((error as { data?: unknown }).data)
           : 'Une erreur inattendue est survenue.';
 
+      
+        
         setOpenSnackBar(true);
         setInfoAlert({severity: 'error', message});
       }
@@ -122,8 +125,8 @@ console.log(docId);
             Ajouter un Devis
           </DialogTitle>
           <DialogActions className="flex flex-col justify-end pbs-0 sm:pbe-16 sm:pli-16 max-sm:gap-2" sx={{gap: 2}}>
-            <Grid container spacing={12}>
-              <Grid item xs={12} md={6}>
+            <Grid container spacing={12}> 
+            <Grid item xs={12}>
                 <Grid container spacing={6}>
 
                   <Grid item xs={12}>
@@ -140,7 +143,7 @@ console.log(docId);
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12}>
                 <Grid container spacing={6}>
                   <Grid item xs={12}>
                     <AddDevisUpload files={files} setFiles={setFiles}/>

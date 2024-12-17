@@ -5,6 +5,8 @@ import React, {useEffect, useState} from 'react'
 
 
 
+import { useParams } from 'next/navigation';
+
 import type {SortingState} from '@tanstack/react-table';
 import Grid from '@mui/material/Grid'
 
@@ -15,19 +17,16 @@ import Box from '@mui/material/Box'
 
 
 import LotTable from './LotTable'
-import type { ProjectLotRead } from '@/services/IsyBuildApi';
+import { useProjectLotsRetrieveQuery, } from '@/services/IsyBuildApi';
 
 
-const LotsList = ({data, error, isLoading, isFetching, refetch}:{data?:ProjectLotRead 
-  error:any
-  isLoading:boolean
-  isFetching:boolean
-  refetch:() => void
-}) => {
+const LotsList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [search, setSearch] = useState<string>("");
+
+  const { docId } = useParams() 
 
   
 
@@ -35,25 +34,22 @@ const LotsList = ({data, error, isLoading, isFetching, refetch}:{data?:ProjectLo
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   
+  const {data, error, isLoading, isFetching, refetch} = useProjectLotsRetrieveQuery({
+    projectLotId:+docId,
+  })
 
   // Pass parameters to the query hook
   
 
   useEffect(() => {
-    // Only call refetch when data is available
-    if (isFetching) {
-      refetch();
-      setPage(1);
-    }
-  }, [pageSize,  isFetching, ]);
+    refetch();
+    setPage(1)
+  }, [pageSize, ]);
 
 
   useEffect(() => {
-    if (isFetching) {
-      
-      refetch();
-    }
-  }, [page,isFetching, refetch]);
+    refetch();
+  }, [ page, refetch]);
 
 
   if (isLoading)
@@ -70,6 +66,9 @@ const LotsList = ({data, error, isLoading, isFetching, refetch}:{data?:ProjectLo
       </div>
     )
   const project = data?.folder?.documents || null
+  
+  console.log(project);
+  
   
 
 

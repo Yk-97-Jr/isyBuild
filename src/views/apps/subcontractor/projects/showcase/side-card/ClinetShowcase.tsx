@@ -43,14 +43,14 @@ const ClinetShowcase: React.FC<ClinetShowcaseProps> = ({ clinetShowcaseData }) =
         {clinetShowcaseData ? (
             <div className='flex items-center gap-3'>
           {getAvatar({
-              avatar: clinetShowcaseData?.client.created_by?.avatar ?? '/images/avatars/1.png',
-              email: clinetShowcaseData?.client.created_by.email ?? ''
+              avatar: clinetShowcaseData?.client ?? '/images/avatars/1.png',
+              email: clinetShowcaseData?.client?.contact_email ?? ''
             })}
           <div className='flex flex-col'>
             <Typography color='text.primary' className='font-medium'>
-              {clinetShowcaseData?.client.created_by.first_name} {clinetShowcaseData?.client.created_by.last_name}
+              {clinetShowcaseData?.client.name} 
             </Typography>
-              <Typography>{clinetShowcaseData?.client.created_by.email}</Typography>
+              <Typography>{clinetShowcaseData?.client.contact_email}</Typography>
           </div>
         </div>
            

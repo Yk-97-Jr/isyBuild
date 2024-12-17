@@ -1912,6 +1912,75 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /intervenant/projects/:
+    get:
+      operationId: list_project_intervenant_project
+      description: Retrieve a list of all Projects with pagination.
+      summary: List all Project
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -code
+          - -description
+          - -id
+          - -name
+          - code
+          - description
+          - id
+          - name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by code, name,description ,client name
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectIntervenant'
+          description: ''
+  /intervenant/projects/{project_id}/:
+    get:
+      operationId: get_intervenant_project_detail
+      description: Fetches detailed information about an project member by their unique
+        identifier.
+      summary: Retrieve project Details
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIntervenant'
+          description: ''
   /intervenant/roles/:
     get:
       operationId: intervenant_roles_retrieve
@@ -3037,6 +3106,37 @@ paths:
                 description: Unspecified response body
           description: ''
         '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /project-lots/{project_lot_id}/subcontractor/devis/:
+    get:
+      operationId: project_lots_subcontractor_devis_retrieve
+      description: Fetch detailed information about a specific 'devis' associated
+        with a project lot. This API is restricted to subcontractor access only.
+      summary: Retrieve  devis by  Project Lot  ID
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+        '404':
           content:
             application/json:
               schema:
@@ -6539,37 +6639,6 @@ components:
         * `Failed` - Failed
         * `read` - Read
         * `unread` - unread
-    Intervenant:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        user:
-          allOf:
-          - $ref: '#/components/schemas/User'
-          readOnly: true
-        role:
-          $ref: '#/components/schemas/RoleEnum'
-        created_by:
-          allOf:
-          - $ref: '#/components/schemas/CreatedBy'
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - created_at
-      - created_by
-      - id
-      - role
-      - updated_at
-      - user
     IntervenantCreateRequest:
       type: object
       properties:
@@ -7551,13 +7620,25 @@ components:
         id:
           type: integer
           readOnly: true
-        intervenant:
+        code:
+          type: string
+          maxLength: 50
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        client:
           allOf:
-          - $ref: '#/components/schemas/Intervenant'
+          - $ref: '#/components/schemas/ClientSimple'
           readOnly: true
-        created_by:
+        map_coordinate:
           allOf:
-          - $ref: '#/components/schemas/CreatedBy'
+          - $ref: '#/components/schemas/MapCoordinate'
+          readOnly: true
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
           readOnly: true
         created_at:
           type: string
@@ -7568,10 +7649,13 @@ components:
           format: date-time
           readOnly: true
       required:
+      - address
+      - client
+      - code
       - created_at
-      - created_by
       - id
-      - intervenant
+      - map_coordinate
+      - name
       - updated_at
     ProjectLot:
       type: object
@@ -7876,7 +7960,7 @@ components:
           type: string
         client:
           allOf:
-          - $ref: '#/components/schemas/Client'
+          - $ref: '#/components/schemas/ClientSimple'
           readOnly: true
         map_coordinate:
           allOf:
@@ -7887,9 +7971,8 @@ components:
           - $ref: '#/components/schemas/Address'
           readOnly: true
         manager:
-          allOf:
-          - $ref: '#/components/schemas/ClientStaff'
-          readOnly: true
+          type: integer
+          nullable: true
         created_at:
           type: string
           format: date-time
@@ -7904,7 +7987,6 @@ components:
       - code
       - created_at
       - id
-      - manager
       - map_coordinate
       - name
       - updated_at

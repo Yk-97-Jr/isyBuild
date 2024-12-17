@@ -273,10 +273,10 @@ const SubcontractorTable = ({
           <div className='flex items-center gap-0'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
+                {`${row.original.created_by?.first_name} ${row.original.created_by?.last_name}`}
               </Typography>
               <Typography color='text.primary' className='font-extralight'>
-                {`${row.original.created_by.email} `}
+                {`${row.original.created_by?.email} `}
               </Typography>
             </div>
           </div>
@@ -395,7 +395,7 @@ const SubcontractorTable = ({
             <DebouncedInput
               value={search}
               onChange={value => setSearch(String(value))}
-              placeholder='Rechercher un company'
+              placeholder='Rechercher'
               className='max-sm:is-full'
             />
             <Button
