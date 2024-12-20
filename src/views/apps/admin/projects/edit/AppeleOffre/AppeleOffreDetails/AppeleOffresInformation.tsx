@@ -85,7 +85,7 @@ const AppeleOffresInformation: React.FC<Props> = ({projectLotData}) => {
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={12}>
-                <Typography className='font-medium' color='text.primary'>Status:
+                <Typography className='font-medium' color='text.primary'>Status::::
                   {
                     <Chip sx={{marginLeft: 1}} variant="tonal" label={label}
                           color={color as any}/>

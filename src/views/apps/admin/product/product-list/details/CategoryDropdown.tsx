@@ -43,7 +43,7 @@ const CategoryDropdown = ({
   const [page, setPage] = useState(1);
 
   const [categories, setCategories] = useState<CategoryRead[]>([]);
-  const { data, refetch } = useCategoriesListQuery({ page:1, pageSize:100 });
+  const { data, refetch } = useCategoriesListQuery({ page:1, pageSize:500 });
 
   const observer = useRef<IntersectionObserver | null>(null);
 
