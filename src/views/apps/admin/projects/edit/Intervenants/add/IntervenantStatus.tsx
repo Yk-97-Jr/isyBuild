@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardHeader, CardContent, Divider, Typography, Switch } from '@mui/material';
 import type {FieldError, UseFormRegister} from "react-hook-form";
 
-import type {FormValidateIntervenantAddType} from "@views/apps/admin/projects/edit/intervenants/add/schemaIntervenantAdd";
+import type {FormValidateIntervenantAddType} from "@views/apps/admin/projects/edit/Intervenants/add/schemaIntervenantAdd";
 
 type UserStatusProps = {
   register: UseFormRegister<FormValidateIntervenantAddType>; // Adjust the type as necessary

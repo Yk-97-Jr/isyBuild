@@ -46,7 +46,7 @@ import CustomTextField from '@core/components/mui/TextField'
 import tableStyles from '@core/styles/table.module.css'
 import {useAuth} from "@/contexts/AuthContext";
 import type {ProjectIntervenantRead} from "@/services/IsyBuildApi";
-import TableFilters from "@views/apps/admin/projects/edit/intervenants/list/TableFilters";
+import TableFilters from "@views/apps/admin/projects/edit/Intervenants/list/TableFilters";
 import IntervenantDialog from "@components/dialogs/intervenant-dialog";
 
 
@@ -192,7 +192,8 @@ const IntervenantsListTable = ({
             </div>
           </div>
         )
-      }), columnHelper.accessor('intervenant.role', {
+      }),
+      columnHelper.accessor('intervenant.role', {
         header: `Role`,
         cell: ({row}) => {
           const role = row.original.intervenant.role;

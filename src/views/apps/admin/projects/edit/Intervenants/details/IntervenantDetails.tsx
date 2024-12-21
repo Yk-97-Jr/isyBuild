@@ -20,16 +20,16 @@ import {SnackBarContext} from "@/contexts/SnackBarContextProvider";
 import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 import useHandleBack from "@/hooks/useHandleBack";
-import IntervenantEditHeader from "@views/apps/admin/projects/edit/intervenants/details/IntervenantEditHeader";
-import IntervenantInformation from "@views/apps/admin/projects/edit/intervenants/details/IntervenantInformation";
-import IntervenantStatus from "@views/apps/admin/projects/edit/intervenants/details/IntervenantStatus";
-import IntervenantCreatedBy from "@views/apps/admin/projects/edit/intervenants/details/IntervenantCreatedBy";
+import IntervenantEditHeader from "@views/apps/admin/projects/edit/Intervenants/details/IntervenantEditHeader";
+import IntervenantInformation from "@views/apps/admin/projects/edit/Intervenants/details/IntervenantInformation";
+import IntervenantStatus from "@views/apps/admin/projects/edit/Intervenants/details/IntervenantStatus";
+import IntervenantCreatedBy from "@views/apps/admin/projects/edit/Intervenants/details/IntervenantCreatedBy";
 import type {
   FormValidateIntervenantEditType
-} from "@views/apps/admin/projects/edit/intervenants/details/schemaIntervenantEdit";
+} from "@views/apps/admin/projects/edit/Intervenants/details/schemaIntervenantEdit";
 import {
   schemaIntervenantEdit
-} from "@views/apps/admin/projects/edit/intervenants/details/schemaIntervenantEdit";
+} from "@views/apps/admin/projects/edit/Intervenants/details/schemaIntervenantEdit";
 
 
 const IntervenantDetails = () => {

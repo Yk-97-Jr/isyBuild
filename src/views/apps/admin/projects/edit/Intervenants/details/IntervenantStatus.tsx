@@ -6,7 +6,7 @@ import type {FieldError, UseFormRegister} from "react-hook-form";
 import type {ProjectIntervenantRead} from "@/services/IsyBuildApi";
 import type {
   FormValidateIntervenantEditType
-} from "@views/apps/admin/projects/edit/intervenants/details/schemaIntervenantEdit";
+} from "@views/apps/admin/projects/edit/Intervenants/details/schemaIntervenantEdit";
 
 type UserStatusProps = {
   register: UseFormRegister<FormValidateIntervenantEditType>; // Adjust the type as necessary

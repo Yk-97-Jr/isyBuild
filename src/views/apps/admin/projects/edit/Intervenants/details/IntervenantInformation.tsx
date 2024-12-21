@@ -16,7 +16,7 @@ import type {UseFormRegister, FieldError} from "react-hook-form";
 import CustomTextField from "@core/components/mui/TextField";
 import type {
   FormValidateIntervenantAddType
-} from "@views/apps/admin/projects/edit/intervenants/add/schemaIntervenantAdd";
+} from "@views/apps/admin/projects/edit/Intervenants/add/schemaIntervenantAdd";
 import type {ProjectIntervenantRead} from "@/services/IsyBuildApi";
 import { useIntervenantRolesRetrieveQuery} from "@/services/IsyBuildApi";
 

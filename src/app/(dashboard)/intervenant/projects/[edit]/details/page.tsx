@@ -1,12 +1,11 @@
 import React from 'react'
 
-import ProjectTable from "@views/apps/admin/projects/list/ProjectList";
-
+import Tabs from '@/views/apps/admin/projects/edit/Tabs'
 
 function page() {
   return (
     <div>
-      <ProjectTable />
+      <Tabs />
     </div>
   )
 }

@@ -9,6 +9,14 @@ import type {SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 
+import type {
+  FormValidateIntervenantAddType
+} from "@views/apps/admin/projects/edit/Intervenants/add/schemaIntervenantAdd";
+
+import {
+  schemaIntervenantAdd
+} from "@views/apps/admin/projects/edit/Intervenants/add/schemaIntervenantAdd";
+
 import {
   useProjectIntervenantCreateMutation
 } from "@/services/IsyBuildApi";
@@ -17,15 +25,9 @@ import type {SnackBarContextType} from "@/types/apps/snackbarType";
 
 import {useAuth} from "@/contexts/AuthContext";
 import useHandleBack from "@/hooks/useHandleBack";
-import IntervenantStatus from "@views/apps/admin/projects/edit/intervenants/add/IntervenantStatus";
-import IntervenantInformation from "@views/apps/admin/projects/edit/intervenants/add/IntervenantInformation";
-import IntervenantAddHeader from "@views/apps/admin/projects/edit/intervenants/add/IntervenantAddHeader";
-import type {
-  FormValidateIntervenantAddType
-} from "@views/apps/admin/projects/edit/intervenants/add/schemaIntervenantAdd";
-import {
-  schemaIntervenantAdd
-} from "@views/apps/admin/projects/edit/intervenants/add/schemaIntervenantAdd";
+import IntervenantStatus from "@views/apps/admin/projects/edit/Intervenants/add/IntervenantStatus";
+import IntervenantInformation from "@views/apps/admin/projects/edit/Intervenants/add/IntervenantInformation";
+import IntervenantAddHeader from "@views/apps/admin/projects/edit/Intervenants/add/IntervenantAddHeader";
 
 
 const IntervenantAdd = () => {
