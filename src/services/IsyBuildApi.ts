@@ -379,12 +379,30 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/document_diffusions/${queryArg.documentDiffusionId}/`,
       }),
     }),
+    documentDiffusionCommentsList: build.query<
+      DocumentDiffusionCommentsListApiResponse,
+      DocumentDiffusionCommentsListApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/comments-list/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
+    }),
     documentDiffusionDelete: build.mutation<
       DocumentDiffusionDeleteApiResponse,
       DocumentDiffusionDeleteApiArg
     >({
       query: (queryArg) => ({
         url: `/document_diffusions/${queryArg.documentDiffusionId}/delete/`,
+        method: "DELETE",
+      }),
+    }),
+    documentDiffusionDocumentDelete: build.mutation<
+      DocumentDiffusionDocumentDeleteApiResponse,
+      DocumentDiffusionDocumentDeleteApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/delete-document/`,
         method: "DELETE",
       }),
     }),
@@ -395,7 +413,17 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/document_diffusions/${queryArg.documentDiffusionId}/update/`,
         method: "PUT",
-        body: queryArg.documentDiffusionRequest,
+        body: queryArg.documentDiffusionUpdateRequest,
+      }),
+    }),
+    diffusionIntervenantCommentCreate: build.mutation<
+      DiffusionIntervenantCommentCreateApiResponse,
+      DiffusionIntervenantCommentCreateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/update-status/`,
+        method: "POST",
+        body: queryArg.diffusionIntervenantCommentCreateRequest,
       }),
     }),
     documentDiffusionUpload: build.mutation<
@@ -451,17 +479,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/document_diffusions/create/`,
         method: "POST",
-        body: queryArg.documentDiffusionRequest,
-      }),
-    }),
-    documentDiffusionDocumentUpdate: build.mutation<
-      DocumentDiffusionDocumentUpdateApiResponse,
-      DocumentDiffusionDocumentUpdateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/document_diffusions/documents/${queryArg.documentDiffusionId}/update-document/`,
-        method: "POST",
-        body: queryArg.documentUploadRequest,
+        body: queryArg.documentDiffusionCreateRequest,
       }),
     }),
     getFolderDetail: build.query<
@@ -469,6 +487,28 @@ const injectedRtkApi = api.injectEndpoints({
       GetFolderDetailApiArg
     >({
       query: (queryArg) => ({ url: `/folders/${queryArg.folderId}/` }),
+    }),
+    listProjectIntervenantProject: build.query<
+      ListProjectIntervenantProjectApiResponse,
+      ListProjectIntervenantProjectApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/intervenant/projects/`,
+        params: {
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
+        },
+      }),
+    }),
+    getIntervenantProjectDetail: build.query<
+      GetIntervenantProjectDetailApiResponse,
+      GetIntervenantProjectDetailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/intervenant/projects/${queryArg.projectId}/`,
+      }),
     }),
     intervenantRolesRetrieve: build.query<
       IntervenantRolesRetrieveApiResponse,
@@ -750,6 +790,14 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    projectLotsSubcontractorDevisRetrieve: build.query<
+      ProjectLotsSubcontractorDevisRetrieveApiResponse,
+      ProjectLotsSubcontractorDevisRetrieveApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/project-lots/${queryArg.projectLotId}/subcontractor/devis/`,
+      }),
+    }),
     projectLotsSubcontractorsRetrieve2: build.query<
       ProjectLotsSubcontractorsRetrieve2ApiResponse,
       ProjectLotsSubcontractorsRetrieve2ApiArg
@@ -1003,6 +1051,20 @@ const injectedRtkApi = api.injectEndpoints({
           page_size: queryArg.pageSize,
           search: queryArg.search,
           status: queryArg.status,
+        },
+      }),
+    }),
+    listSuiviAdministrativeIntervenant: build.query<
+      ListSuiviAdministrativeIntervenantApiResponse,
+      ListSuiviAdministrativeIntervenantApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/projects/${queryArg.projectId}/suivi-administrative/intervenant/`,
+        params: {
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
         },
       }),
     }),
@@ -1340,6 +1402,14 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/suivi-administrative/${queryArg.suiviAdministrativeId}/`,
       }),
     }),
+    retrieveSuiviAdministrativeDetailIntervenant: build.query<
+      RetrieveSuiviAdministrativeDetailIntervenantApiResponse,
+      RetrieveSuiviAdministrativeDetailIntervenantApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/suivi-administrative/${queryArg.suiviAdministrativeId}/intervenant/`,
+      }),
+    }),
     listSuiviAdministrativeStepComments: build.query<
       ListSuiviAdministrativeStepCommentsApiResponse,
       ListSuiviAdministrativeStepCommentsApiArg
@@ -1347,6 +1417,16 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/suivi-administrative/steps/${queryArg.stepId}/comments/`,
         params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
+    }),
+    uploadSuiviAdministrativeStepDocument: build.mutation<
+      UploadSuiviAdministrativeStepDocumentApiResponse,
+      UploadSuiviAdministrativeStepDocumentApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/suivi-administrative/steps/${queryArg.stepId}/documents/upload/`,
+        method: "POST",
+        body: queryArg.documentUploadRequest,
       }),
     }),
     updateSuiviAdministrativeStep: build.mutation<
@@ -1367,6 +1447,25 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/suivi-administrative/steps/comments/`,
         method: "POST",
         body: queryArg.suiviAdministrativeStepCommentCreateRequest,
+      }),
+    }),
+    deleteSuiviAdministrativeStepDocument: build.mutation<
+      DeleteSuiviAdministrativeStepDocumentApiResponse,
+      DeleteSuiviAdministrativeStepDocumentApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/suivi-administrative/steps/documents/${queryArg.stepDocumentId}/delete/`,
+        method: "DELETE",
+      }),
+    }),
+    updateSuiviAdministrativeStepDocument: build.mutation<
+      UpdateSuiviAdministrativeStepDocumentApiResponse,
+      UpdateSuiviAdministrativeStepDocumentApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/suivi-administrative/steps/documents/${queryArg.stepDocumentId}/update/`,
+        method: "PUT",
+        body: queryArg.documentUploadRequest,
       }),
     }),
     tokenRefreshCreate: build.mutation<
@@ -1825,15 +1924,38 @@ export type DocumentDiffusionDetailApiResponse =
 export type DocumentDiffusionDetailApiArg = {
   documentDiffusionId: number;
 };
+export type DocumentDiffusionCommentsListApiResponse =
+  /** status 200  */ PaginatedDocumentDiffusionConfigRead;
+export type DocumentDiffusionCommentsListApiArg = {
+  documentDiffusionId: number;
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
+};
 export type DocumentDiffusionDeleteApiResponse = /** status 204  */ any;
 export type DocumentDiffusionDeleteApiArg = {
+  documentDiffusionId: number;
+};
+export type DocumentDiffusionDocumentDeleteApiResponse = /** status 204  */ {
+  [key: string]: any;
+};
+export type DocumentDiffusionDocumentDeleteApiArg = {
   documentDiffusionId: number;
 };
 export type DocumentDiffusionUpdateApiResponse =
   /** status 200  */ DocumentDiffusionRead;
 export type DocumentDiffusionUpdateApiArg = {
   documentDiffusionId: number;
-  documentDiffusionRequest: DocumentDiffusionRequest;
+  documentDiffusionUpdateRequest: DocumentDiffusionUpdateRequest;
+};
+export type DiffusionIntervenantCommentCreateApiResponse =
+  /** status 201 Comment created successfully. */ DiffusionIntervenantCommentRead;
+export type DiffusionIntervenantCommentCreateApiArg = {
+  documentDiffusionId: number;
+  diffusionIntervenantCommentCreateRequest: DiffusionIntervenantCommentCreateRequest;
 };
 export type DocumentDiffusionUploadApiResponse = /** status 201  */ {
   [key: string]: any;
@@ -1869,18 +1991,40 @@ export type DocumentDiffusionConfigCreateApiArg = {
 export type DocumentDiffusionCreateApiResponse =
   /** status 201  */ DocumentDiffusionRead;
 export type DocumentDiffusionCreateApiArg = {
-  documentDiffusionRequest: DocumentDiffusionRequest;
-};
-export type DocumentDiffusionDocumentUpdateApiResponse = /** status 200  */ {
-  [key: string]: any;
-};
-export type DocumentDiffusionDocumentUpdateApiArg = {
-  documentDiffusionId: number;
-  documentUploadRequest: DocumentUploadRequest;
+  documentDiffusionCreateRequest: DocumentDiffusionCreateRequest;
 };
 export type GetFolderDetailApiResponse = /** status 200  */ FolderRead;
 export type GetFolderDetailApiArg = {
   folderId: number;
+};
+export type ListProjectIntervenantProjectApiResponse =
+  /** status 200  */ PaginatedProjectIntervenantRead;
+export type ListProjectIntervenantProjectApiArg = {
+
+  /** Comma-separated fields to order by (e.g., 'name', '-date_joined') */
+  ordering?:
+    | "-code"
+    | "-description"
+    | "-id"
+    | "-name"
+    | "code"
+    | "description"
+    | "id"
+    | "name";
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
+
+  /** Search by code, name,description ,client name */
+  search?: string;
+};
+export type GetIntervenantProjectDetailApiResponse =
+  /** status 200  */ ProjectIntervenantRead;
+export type GetIntervenantProjectDetailApiArg = {
+  projectId: number;
 };
 export type IntervenantRolesRetrieveApiResponse =
   /** status 200 Available roles for Intervenants */ {
@@ -2112,6 +2256,11 @@ export type ProjectLotsDeleteDestroyApiResponse = /** status 204  */ {
   [key: string]: any;
 };
 export type ProjectLotsDeleteDestroyApiArg = {
+  projectLotId: number;
+};
+export type ProjectLotsSubcontractorDevisRetrieveApiResponse =
+  /** status 200  */ DocumentRead;
+export type ProjectLotsSubcontractorDevisRetrieveApiArg = {
   projectLotId: number;
 };
 export type ProjectLotsSubcontractorsRetrieve2ApiResponse =
@@ -2450,6 +2599,33 @@ export type ListSuiviAdministrativeApiArg = {
   /** Filter by status */
   status?: "completed" | "in_progress" | "not_started";
 };
+export type ListSuiviAdministrativeIntervenantApiResponse =
+  /** status 200  */ PaginatedSuiviAdministrativeIntervenantRead;
+export type ListSuiviAdministrativeIntervenantApiArg = {
+
+  /** Order results by fields (e.g., 'lot__name', '-created_at') */
+  ordering?:
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-project_lot__lot__name"
+    | "-status"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "project_lot__lot__name"
+    | "status";
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
+  projectId: number;
+
+  /** Search by administrative status or related intervenant */
+  search?: string;
+};
 export type ProjectsTemplatesListApiResponse =
   /** status 200  */ ProjectEmailTemplateRead[];
 export type ProjectsTemplatesListApiArg = {
@@ -2782,6 +2958,11 @@ export type RetrieveSuiviAdministrativeDetailApiResponse =
 export type RetrieveSuiviAdministrativeDetailApiArg = {
   suiviAdministrativeId: number;
 };
+export type RetrieveSuiviAdministrativeDetailIntervenantApiResponse =
+  /** status 200  */ SuiviAdministrativeIntervenantRead;
+export type RetrieveSuiviAdministrativeDetailIntervenantApiArg = {
+  suiviAdministrativeId: number;
+};
 export type ListSuiviAdministrativeStepCommentsApiResponse =
   /** status 200  */ PaginatedSuiviAdministrativeStepCommentRead;
 export type ListSuiviAdministrativeStepCommentsApiArg = {
@@ -2793,6 +2974,12 @@ export type ListSuiviAdministrativeStepCommentsApiArg = {
   pageSize?: number;
   stepId: number;
 };
+export type UploadSuiviAdministrativeStepDocumentApiResponse =
+  /** status 200  */ StepDocumentRead;
+export type UploadSuiviAdministrativeStepDocumentApiArg = {
+  stepId: number;
+  documentUploadRequest: DocumentUploadRequest;
+};
 export type UpdateSuiviAdministrativeStepApiResponse = unknown;
 export type UpdateSuiviAdministrativeStepApiArg = {
   stepId: number;
@@ -2802,6 +2989,16 @@ export type AddSuiviAdministrativeStepCommentApiResponse =
   /** status 201 Comment created successfully. */ SuiviAdministrativeStepCommentRead;
 export type AddSuiviAdministrativeStepCommentApiArg = {
   suiviAdministrativeStepCommentCreateRequest: SuiviAdministrativeStepCommentCreateRequest;
+};
+export type DeleteSuiviAdministrativeStepDocumentApiResponse = unknown;
+export type DeleteSuiviAdministrativeStepDocumentApiArg = {
+  stepDocumentId: number;
+};
+export type UpdateSuiviAdministrativeStepDocumentApiResponse =
+  /** status 200  */ StepDocumentRead;
+export type UpdateSuiviAdministrativeStepDocumentApiArg = {
+  stepDocumentId: number;
+  documentUploadRequest: DocumentUploadRequest;
 };
 export type TokenRefreshCreateApiResponse = /** status 200  */ {
   [key: string]: any;
@@ -3171,26 +3368,92 @@ export type Type474Enum =
   | "note_de_calcul"
   | "fiche_question"
   | "autre";
+export type Localisation = {
+  name: string;
+};
+export type LocalisationRead = {
+  id: number;
+  name: string;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
+export type Status109Enum =
+  | "pending"
+  | "in_progress"
+  | "review"
+  | "completed"
+  | "canceled";
+export type ProjectLot = {
+  status?: Status109Enum;
+  notes?: string;
+};
+export type ProjectSimple = {
+  name: string;
+};
+export type ClientSimple = {
+  name: string;
+  siren_number: string;
+  contact_email: string;
+  phone_number: string;
+};
+export type ClientSimpleRead = {
+  id: number;
+  name: string;
+  siren_number: string;
+  contact_email: string;
+  phone_number: string;
+};
+export type ProjectSimpleRead = {
+  id: number;
+  name: string;
+  client: ClientSimpleRead;
+};
+export type LotSimple = {
+  name: string;
+};
+export type LotSimpleRead = {
+  id: number;
+  name: string;
+};
+export type Folder = {
+  name: string;
+};
+export type FolderRead = {
+  id: number;
+  name: string;
+  documents: DocumentRead[];
+};
+export type ProjectLotRead = {
+  id: number;
+  project: ProjectSimpleRead;
+  lot: LotSimpleRead;
+  status?: Status109Enum;
+  folder: FolderRead;
+  notes?: string;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type DocumentDiffusion = {
   title: string;
-  phase?: PhaseEnum;
+  phase: PhaseEnum;
   diffusion_date?: string | null;
   indice?: string | null;
-  type?: Type474Enum;
-  localisation: number;
-  project_lot: number;
-  document?: number | null;
+  type: Type474Enum;
+  localisation: Localisation;
+  project_lot: ProjectLot;
 };
 export type DocumentDiffusionRead = {
   id: number;
   title: string;
-  phase?: PhaseEnum;
+  phase: PhaseEnum;
   diffusion_date?: string | null;
   indice?: string | null;
-  type?: Type474Enum;
-  localisation: number;
-  project_lot: number;
-  document?: number | null;
+  type: Type474Enum;
+  localisation: LocalisationRead;
+  project_lot: ProjectLotRead;
+  document: DocumentRead;
   created_by: CreatedByRead;
   created_at: string;
   updated_at: string;
@@ -3206,22 +3469,6 @@ export type PaginatedDocumentDiffusionRead = {
   next: string | null;
   previous: string | null;
   results: DocumentDiffusionRead[];
-};
-export type DocumentDiffusionRequest = {
-  title: string;
-  phase?: PhaseEnum;
-  diffusion_date?: string | null;
-  indice?: string | null;
-  type?: Type474Enum;
-  localisation: number;
-  project_lot: number;
-  document?: number | null;
-};
-export type DocumentUploadRequest = {
-  name?: string;
-  file: Blob;
-  tags?: string;
-  notes?: string;
 };
 export type RoleEnum =
   | "Architecte"
@@ -3253,28 +3500,88 @@ export type PaginatedDocumentDiffusionConfigRead = {
   previous: string | null;
   results: DocumentDiffusionConfigRead[];
 };
+export type DocumentDiffusionUpdateRequest = {
+  title: string;
+  phase: PhaseEnum;
+  localisation: number;
+};
+export type Status7C6Enum = "valid" | "invalid" | "not_validated_yet";
+export type BlankEnum = "";
+export type NullEnum = null;
+export type DiffusionIntervenantComment = {
+  comment?: string | null;
+  status?: (Status7C6Enum | BlankEnum | NullEnum) | null;
+  created_by?: number | null;
+};
+export type DiffusionIntervenantCommentRead = {
+  id: number;
+  comment?: string | null;
+  document: DocumentRead;
+  status?: (Status7C6Enum | BlankEnum | NullEnum) | null;
+  created_by?: number | null;
+  created_at: string;
+};
+export type DiffusionIntervenantCommentCreateRequest = {
+
+  /** ID of the document diffusion to comment on. */
+  document_diffusion_id: number;
+
+  /** Text content of the comment. */
+  comment: string;
+
+  /** The file to be uploaded. */
+  document_file?: Blob;
+  status?: Status7C6Enum;
+};
+export type DocumentUploadRequest = {
+  name?: string;
+  file: Blob;
+  tags?: string;
+  notes?: string;
+};
 export type DocumentDiffusionConfigRequest = {
   type: Type474Enum;
   role: RoleEnum;
   project: number | null;
 };
-export type Folder = {
-  name: string;
+export type DocumentDiffusionCreateRequest = {
+  title: string;
+  phase: PhaseEnum;
+  type: Type474Enum;
+  localisation: number;
+  project_lot: number;
 };
-export type FolderRead = {
+export type ProjectIntervenant = {
+  code: string;
+  name: string;
+  description?: string;
+};
+export type MapCoordinate = {
+  latitude: string;
+  longitude: string;
+};
+export type ProjectIntervenantRead = {
   id: number;
+  code: string;
   name: string;
-  documents: DocumentRead[];
-};
-export type Localisation = {
-  name: string;
-};
-export type LocalisationRead = {
-  id: number;
-  name: string;
-  created_by: CreatedByRead;
+  description?: string;
+  client: ClientSimpleRead;
+  map_coordinate: MapCoordinate;
+  address: AddressRead;
   created_at: string;
   updated_at: string;
+};
+export type PaginatedProjectIntervenant = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectIntervenant[];
+};
+export type PaginatedProjectIntervenantRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: ProjectIntervenantRead[];
 };
 export type PaginatedLocalisation = {
   count: number;
@@ -3400,55 +3707,6 @@ export type ProductMediaRequest = {
   image: Blob;
   product: number;
 };
-export type Status109Enum =
-  | "pending"
-  | "in_progress"
-  | "review"
-  | "completed"
-  | "canceled";
-export type ProjectLot = {
-  status?: Status109Enum;
-  notes?: string;
-};
-export type ProjectSimple = {
-  name: string;
-};
-export type ClientSimple = {
-  name: string;
-  siren_number: string;
-  contact_email: string;
-  phone_number: string;
-};
-export type ClientSimpleRead = {
-  id: number;
-  name: string;
-  siren_number: string;
-  contact_email: string;
-  phone_number: string;
-};
-export type ProjectSimpleRead = {
-  id: number;
-  name: string;
-  client: ClientSimpleRead;
-};
-export type LotSimple = {
-  name: string;
-};
-export type LotSimpleRead = {
-  id: number;
-  name: string;
-};
-export type ProjectLotRead = {
-  id: number;
-  project: ProjectSimpleRead;
-  lot: LotSimpleRead;
-  status?: Status109Enum;
-  folder: FolderRead;
-  notes?: string;
-  created_by: CreatedByRead;
-  created_at: string;
-  updated_at: string;
-};
 export type Status841Enum =
   | "pending"
   | "in_progress"
@@ -3552,10 +3810,6 @@ export type Project = {
   notification_frequency?: number;
   max_notifications?: number;
 };
-export type MapCoordinate = {
-  latitude: string;
-  longitude: string;
-};
 export type ProjectRead = {
   id: number;
   code: string;
@@ -3624,37 +3878,6 @@ export type ProjectStaffAssignRequest = {
   staff_id: number;
   role: string;
   supervisor_id?: number | null;
-};
-export type ProjectIntervenant = {};
-export type Intervenant = {
-  role: RoleEnum;
-};
-export type IntervenantRead = {
-  id: number;
-  user: UserRead;
-  role: RoleEnum;
-  created_by: CreatedByRead;
-  created_at: string;
-  updated_at: string;
-};
-export type ProjectIntervenantRead = {
-  id: number;
-  intervenant: IntervenantRead;
-  created_by: CreatedByRead;
-  created_at: string;
-  updated_at: string;
-};
-export type PaginatedProjectIntervenant = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: ProjectIntervenant[];
-};
-export type PaginatedProjectIntervenantRead = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: ProjectIntervenantRead[];
 };
 export type IntervenantCreateRequest = {
   user: UserCreateRequest;
@@ -3745,9 +3968,28 @@ export type SuiviAdministrativeStep = {
     * `temporarily_done` - Temporarily Done */
   status?: Status3BfEnum;
 };
+export type StepDocument = {
+
+  /** Whether the document is valid for this step. */
+  is_valid?: boolean;
+
+  /** If True, this document cannot be updated or deleted in the current step. */
+  protected?: boolean;
+};
+export type StepDocumentRead = {
+  id: number;
+  document: DocumentRead;
+
+  /** Whether the document is valid for this step. */
+  is_valid?: boolean;
+
+  /** If True, this document cannot be updated or deleted in the current step. */
+  protected?: boolean;
+};
 export type SuiviAdministrativeStepRead = {
   id: number;
   step_name: string;
+  step_documents: StepDocumentRead[];
   order?: number;
 
   /** Number of days before or after the project start date. */
@@ -3796,6 +4038,24 @@ export type PaginatedSuiviAdministrativeRead = {
   next: string | null;
   previous: string | null;
   results: SuiviAdministrativeRead[];
+};
+export type SuiviAdministrativeIntervenant = {};
+export type SuiviAdministrativeIntervenantRead = {
+  id: number;
+  project_lot: ProjectLotSimpleRead;
+  steps: string;
+};
+export type PaginatedSuiviAdministrativeIntervenant = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: SuiviAdministrativeIntervenant[];
+};
+export type PaginatedSuiviAdministrativeIntervenantRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: SuiviAdministrativeIntervenantRead[];
 };
 export type TemplateTypeEnum =
   | "upload_devis"
@@ -3913,16 +4173,17 @@ export type ProjectSubcontractor = {
   code: string;
   name: string;
   description?: string;
+  manager?: number | null;
 };
 export type ProjectSubcontractorRead = {
   id: number;
   code: string;
   name: string;
   description?: string;
-  client: ClientRead;
+  client: ClientSimpleRead;
   map_coordinate: MapCoordinate;
   address: AddressRead;
-  manager: ClientStaffRead;
+  manager?: number | null;
   created_at: string;
   updated_at: string;
 };
@@ -4030,8 +4291,6 @@ export type SubcontractorUpdateRequest = {
   is_active?: boolean;
   lots_ids?: number[] | null;
 };
-export type BlankEnum = "";
-export type NullEnum = null;
 export type SuiviAdministrativeStepComment = {
 
   /** The content of the comment. */
@@ -4180,16 +4439,20 @@ export const {
   useGetDocumentHistoryQuery,
   useDocumentDiffusionsListQuery,
   useDocumentDiffusionDetailQuery,
+  useDocumentDiffusionCommentsListQuery,
   useDocumentDiffusionDeleteMutation,
+  useDocumentDiffusionDocumentDeleteMutation,
   useDocumentDiffusionUpdateMutation,
+  useDiffusionIntervenantCommentCreateMutation,
   useDocumentDiffusionUploadMutation,
   useDocumentDiffusionConfigListQuery,
   useDocumentDiffusionConfigDetailQuery,
   useDocumentDiffusionConfigDeleteMutation,
   useDocumentDiffusionConfigCreateMutation,
   useDocumentDiffusionCreateMutation,
-  useDocumentDiffusionDocumentUpdateMutation,
   useGetFolderDetailQuery,
+  useListProjectIntervenantProjectQuery,
+  useGetIntervenantProjectDetailQuery,
   useIntervenantRolesRetrieveQuery,
   useLocalisationsListQuery,
   useLocalisationDetailQuery,
@@ -4221,6 +4484,7 @@ export const {
   useProductMediaCreateMutation,
   useProjectLotsRetrieveQuery,
   useProjectLotsDeleteDestroyMutation,
+  useProjectLotsSubcontractorDevisRetrieveQuery,
   useProjectLotsSubcontractorsRetrieve2Query,
   useProjectLotsSubcontractorsAssignCreateMutation,
   useProjectLotsUpdateStatusUpdateMutation,
@@ -4244,6 +4508,7 @@ export const {
   useProjectsStaffReorderUpdateMutation,
   useGetProjectStaffTreeQuery,
   useListSuiviAdministrativeQuery,
+  useListSuiviAdministrativeIntervenantQuery,
   useProjectsTemplatesListQuery,
   useProjectsCreateCreateMutation,
   useProjectsDeleteDestroyMutation,
@@ -4276,9 +4541,13 @@ export const {
   useCreateSubcontractorBySubcontractorUserMutation,
   useSubcontractorsUpdateUpdateMutation,
   useRetrieveSuiviAdministrativeDetailQuery,
+  useRetrieveSuiviAdministrativeDetailIntervenantQuery,
   useListSuiviAdministrativeStepCommentsQuery,
+  useUploadSuiviAdministrativeStepDocumentMutation,
   useUpdateSuiviAdministrativeStepMutation,
   useAddSuiviAdministrativeStepCommentMutation,
+  useDeleteSuiviAdministrativeStepDocumentMutation,
+  useUpdateSuiviAdministrativeStepDocumentMutation,
   useTokenRefreshCreateMutation,
   useUserChangePasswordCreateMutation,
   useUserConfirmEmailChangeCreateMutation,

@@ -48,13 +48,13 @@ const SubcontractorCreatedBy: React.FC<SubcontractorEditProps> = ({ subcontracto
         <div className='flex items-center gap-3'>
           {getAvatar({
             avatar: subcontractorData?.created_by?.avatar ?? '/images/avatars/1.png',
-            email: subcontractorData?.created_by.email ?? ''
+            email: subcontractorData?.created_by?.email ?? ''
           })}
           <div className='flex flex-col'>
             <Typography color='text.primary' className='font-medium'>
-              {subcontractorData?.created_by.first_name} {subcontractorData?.created_by.last_name}
+              {subcontractorData?.created_by?.first_name} {subcontractorData?.created_by?.last_name}
             </Typography>
-              <Typography>{subcontractorData?.created_by.email}</Typography>
+              <Typography>{subcontractorData?.created_by?.email}</Typography>
           </div>
         </div>
         <div className='flex flex-col gap-1'>

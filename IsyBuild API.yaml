@@ -1548,6 +1548,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentDiffusion'
           description: ''
+  /document_diffusions/{document_diffusion_id}/comments-list/:
+    get:
+      operationId: document_diffusion_comments_list
+      description: Retrieve a list of all the document diffusion comments with pagination.
+      summary: List all the document diffusion comments.
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentDiffusionConfig'
+          description: ''
   /document_diffusions/{document_diffusion_id}/delete/:
     delete:
       operationId: document_diffusion_delete
@@ -1582,6 +1614,47 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
+  /document_diffusions/{document_diffusion_id}/delete-document/:
+    delete:
+      operationId: document_diffusion_document_delete
+      description: Delete the document and all its associated versions by providing
+        the document ID.
+      summary: Delete a document of a document diffusion
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /document_diffusions/{document_diffusion_id}/update/:
     put:
       operationId: document_diffusion_update
@@ -1599,13 +1672,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionRequest'
+              $ref: '#/components/schemas/DocumentDiffusionUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionRequest'
+              $ref: '#/components/schemas/DocumentDiffusionUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionRequest'
+              $ref: '#/components/schemas/DocumentDiffusionUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1632,6 +1705,40 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /document_diffusions/{document_diffusion_id}/update-status/:
+    post:
+      operationId: diffusion_intervenant_comment_create
+      description: Add a comment to a specific Document Diffusion, with an optional
+        document upload.
+      summary: Add a comment to a Document Diffusion
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DiffusionIntervenantCommentCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DiffusionIntervenantCommentCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiffusionIntervenantComment'
+          description: Comment created successfully.
+        '400':
+          description: Validation error.
   /document_diffusions/{document_diffusion_id}/upload-document/:
     post:
       operationId: document_diffusion_upload
@@ -1801,13 +1908,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionRequest'
+              $ref: '#/components/schemas/DocumentDiffusionCreateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionRequest'
+              $ref: '#/components/schemas/DocumentDiffusionCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionRequest'
+              $ref: '#/components/schemas/DocumentDiffusionCreateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -1817,45 +1924,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DocumentDiffusion'
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
-  /document_diffusions/documents/{document_diffusion_id}/update-document/:
-    post:
-      operationId: document_diffusion_document_update
-      description: Upload a new version for an existing document and make it the latest
-        version.
-      summary: Update a document by adding a new version
-      parameters:
-      - in: path
-        name: document_diffusion_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Document Diffusion Management
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/DocumentUploadRequest'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
           description: ''
         '400':
           content:
@@ -1911,6 +1979,75 @@ paths:
                 type: object
                 additionalProperties: {}
                 description: Unspecified response body
+          description: ''
+  /intervenant/projects/:
+    get:
+      operationId: list_project_intervenant_project
+      description: Retrieve a list of all Projects with pagination.
+      summary: List all Project
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -code
+          - -description
+          - -id
+          - -name
+          - code
+          - description
+          - id
+          - name
+        description: Comma-separated fields to order by (e.g., 'name', '-date_joined')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by code, name,description ,client name
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProjectIntervenant'
+          description: ''
+  /intervenant/projects/{project_id}/:
+    get:
+      operationId: get_intervenant_project_detail
+      description: Fetches detailed information about an project member by their unique
+        identifier.
+      summary: Retrieve project Details
+      parameters:
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Project Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectIntervenant'
           description: ''
   /intervenant/roles/:
     get:
@@ -3044,6 +3181,37 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /project-lots/{project_lot_id}/subcontractor/devis/:
+    get:
+      operationId: project_lots_subcontractor_devis_retrieve
+      description: Fetch detailed information about a specific 'devis' associated
+        with a project lot. This API is restricted to subcontractor access only.
+      summary: Retrieve  devis by  Project Lot  ID
+      parameters:
+      - in: path
+        name: project_lot_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Appel d'offre Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /project-lots/{project_lot_id}/subcontractors/:
     get:
       operationId: project_lots_subcontractors_retrieve_2
@@ -4130,6 +4298,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedSuiviAdministrative'
+          description: ''
+  /projects/{project_id}/suivi-administrative/intervenant/:
+    get:
+      operationId: list_suivi_administrative_intervenant
+      description: Retrieve a list of Suivi Administrative processes with steps filtered
+        for the logged-in intervenant.
+      summary: List administrative processes assigned to the intervenant
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -project_lot__lot__name
+          - -status
+          - created_at
+          - created_by__email
+          - id
+          - project_lot__lot__name
+          - status
+        description: Order results by fields (e.g., 'lot__name', '-created_at')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by administrative status or related intervenant
+      tags:
+      - Suivi Administrative Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSuiviAdministrativeIntervenant'
           description: ''
   /projects/{project_id}/templates/:
     get:
@@ -5370,6 +5592,33 @@ paths:
           description: ''
         '404':
           description: Suivi Administrative record not found.
+  /suivi-administrative/{suivi_administrative_id}/intervenant/:
+    get:
+      operationId: retrieve_suivi_administrative_detail_intervenant
+      description: Fetches detailed information about a specific Suivi Administrative
+        record by ID, filtering steps assigned to the intervenant.
+      summary: Retrieve details of a specific Suivi Administrative record for an intervenant
+      parameters:
+      - in: path
+        name: suivi_administrative_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuiviAdministrativeIntervenant'
+          description: ''
+        '404':
+          description: Suivi Administrative record not found.
+        '403':
+          description: You are not authorized.
   /suivi-administrative/steps/{step_id}/comments/:
     get:
       operationId: list_suivi_administrative_step_comments
@@ -5403,6 +5652,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedSuiviAdministrativeStepComment'
           description: ''
+  /suivi-administrative/steps/{step_id}/documents/upload/:
+    post:
+      operationId: upload_suivi_administrative_step_document
+      description: Allows users to upload a single document to a specific Suivi Administrative
+        Step.
+      summary: Upload a document to a Suivi Administrative Step
+      parameters:
+      - in: path
+        name: step_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StepDocument'
+          description: ''
+        '400':
+          description: Validation error.
+        '404':
+          description: Step not found.
   /suivi-administrative/steps/{step_id}/update/:
     patch:
       operationId: update_suivi_administrative_step
@@ -5457,6 +5739,62 @@ paths:
           description: Comment created successfully.
         '400':
           description: Validation error.
+  /suivi-administrative/steps/documents/{step_document_id}/delete/:
+    delete:
+      operationId: delete_suivi_administrative_step_document
+      description: Allows users to delete a specific document by document ID from
+        a Suivi Administrative Step.
+      summary: Delete a document from a Suivi Administrative Step
+      parameters:
+      - in: path
+        name: step_document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Document deleted successfully.
+        '404':
+          description: Document not found.
+        '400':
+          description: Validation error.
+  /suivi-administrative/steps/documents/{step_document_id}/update/:
+    put:
+      operationId: update_suivi_administrative_step_document
+      description: Allows users to update a document for a specific Suivi Administrative
+        Step by document ID.
+      summary: Update a document in a Suivi Administrative Step
+      parameters:
+      - in: path
+        name: step_document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StepDocument'
+          description: ''
+        '400':
+          description: Validation error.
+        '404':
+          description: Document not found.
   /token_refresh/:
     post:
       operationId: token_refresh_create
@@ -6244,6 +6582,55 @@ components:
           maxLength: 30
       required:
       - email
+    DiffusionIntervenantComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        comment:
+          type: string
+          nullable: true
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          readOnly: true
+        status:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/Status7c6Enum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        created_by:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - document
+      - id
+    DiffusionIntervenantCommentCreateRequest:
+      type: object
+      properties:
+        document_diffusion_id:
+          type: integer
+          description: ID of the document diffusion to comment on.
+        comment:
+          type: string
+          minLength: 1
+          description: Text content of the comment.
+        document_file:
+          type: string
+          format: binary
+          description: The file to be uploaded.
+        status:
+          $ref: '#/components/schemas/Status7c6Enum'
+      required:
+      - comment
+      - document_diffusion_id
     Document:
       type: object
       properties:
@@ -6287,12 +6674,13 @@ components:
         type:
           $ref: '#/components/schemas/Type474Enum'
         localisation:
-          type: integer
+          $ref: '#/components/schemas/Localisation'
         project_lot:
-          type: integer
+          $ref: '#/components/schemas/ProjectLot'
         document:
-          type: integer
-          nullable: true
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          readOnly: true
         created_by:
           allOf:
           - $ref: '#/components/schemas/CreatedBy'
@@ -6308,10 +6696,13 @@ components:
       required:
       - created_at
       - created_by
+      - document
       - id
       - localisation
+      - phase
       - project_lot
       - title
+      - type
       - updated_at
     DocumentDiffusionConfig:
       type: object
@@ -6345,7 +6736,7 @@ components:
       - project
       - role
       - type
-    DocumentDiffusionRequest:
+    DocumentDiffusionCreateRequest:
       type: object
       properties:
         title:
@@ -6354,26 +6745,32 @@ components:
           maxLength: 255
         phase:
           $ref: '#/components/schemas/PhaseEnum'
-        diffusion_date:
-          type: string
-          format: date
-          nullable: true
-        indice:
-          type: string
-          nullable: true
-          maxLength: 100
         type:
           $ref: '#/components/schemas/Type474Enum'
         localisation:
           type: integer
         project_lot:
           type: integer
-        document:
-          type: integer
-          nullable: true
       required:
       - localisation
+      - phase
       - project_lot
+      - title
+      - type
+    DocumentDiffusionUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        phase:
+          $ref: '#/components/schemas/PhaseEnum'
+        localisation:
+          type: integer
+      required:
+      - localisation
+      - phase
       - title
     DocumentUploadRequest:
       type: object
@@ -6539,37 +6936,6 @@ components:
         * `Failed` - Failed
         * `read` - Read
         * `unread` - unread
-    Intervenant:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        user:
-          allOf:
-          - $ref: '#/components/schemas/User'
-          readOnly: true
-        role:
-          $ref: '#/components/schemas/RoleEnum'
-        created_by:
-          allOf:
-          - $ref: '#/components/schemas/CreatedBy'
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - created_at
-      - created_by
-      - id
-      - role
-      - updated_at
-      - user
     IntervenantCreateRequest:
       type: object
       properties:
@@ -7158,6 +7524,28 @@ components:
       - next
       - previous
       - results
+    PaginatedSuiviAdministrativeIntervenant:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SuiviAdministrativeIntervenant'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PaginatedSuiviAdministrativeStepComment:
       type: object
       properties:
@@ -7551,13 +7939,25 @@ components:
         id:
           type: integer
           readOnly: true
-        intervenant:
+        code:
+          type: string
+          maxLength: 50
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        client:
           allOf:
-          - $ref: '#/components/schemas/Intervenant'
+          - $ref: '#/components/schemas/ClientSimple'
           readOnly: true
-        created_by:
+        map_coordinate:
           allOf:
-          - $ref: '#/components/schemas/CreatedBy'
+          - $ref: '#/components/schemas/MapCoordinate'
+          readOnly: true
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
           readOnly: true
         created_at:
           type: string
@@ -7568,10 +7968,13 @@ components:
           format: date-time
           readOnly: true
       required:
+      - address
+      - client
+      - code
       - created_at
-      - created_by
       - id
-      - intervenant
+      - map_coordinate
+      - name
       - updated_at
     ProjectLot:
       type: object
@@ -7876,7 +8279,7 @@ components:
           type: string
         client:
           allOf:
-          - $ref: '#/components/schemas/Client'
+          - $ref: '#/components/schemas/ClientSimple'
           readOnly: true
         map_coordinate:
           allOf:
@@ -7887,9 +8290,8 @@ components:
           - $ref: '#/components/schemas/Address'
           readOnly: true
         manager:
-          allOf:
-          - $ref: '#/components/schemas/ClientStaff'
-          readOnly: true
+          type: integer
+          nullable: true
         created_at:
           type: string
           format: date-time
@@ -7904,7 +8306,6 @@ components:
       - code
       - created_at
       - id
-      - manager
       - map_coordinate
       - name
       - updated_at
@@ -8044,6 +8445,16 @@ components:
         * `canceled` - Canceled
         * `rejected` - Rejected
         * `temporarily_done` - Temporarily Done
+    Status7c6Enum:
+      enum:
+      - valid
+      - invalid
+      - not_validated_yet
+      type: string
+      description: |-
+        * `valid` - Valid
+        * `invalid` - Invalid
+        * `not_validated_yet` - Not Validated Yet
     Status841Enum:
       enum:
       - pending
@@ -8058,6 +8469,26 @@ components:
         * `completed` - Completed
         * `not_responding` - Not Responding
         * `canceled` - Canceled
+    StepDocument:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          readOnly: true
+        is_valid:
+          type: boolean
+          description: Whether the document is valid for this step.
+        protected:
+          type: boolean
+          description: If True, this document cannot be updated or deleted in the
+            current step.
+      required:
+      - document
+      - id
     Subcontractor:
       type: object
       properties:
@@ -8337,6 +8768,24 @@ components:
       - project_lot
       - steps
       - updated_at
+    SuiviAdministrativeIntervenant:
+      type: object
+      description: Serializer for the overall suivi administrative process.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project_lot:
+          allOf:
+          - $ref: '#/components/schemas/ProjectLotSimple'
+          readOnly: true
+        steps:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - project_lot
+      - steps
     SuiviAdministrativeStatusEnum:
       enum:
       - not_started
@@ -8356,6 +8805,11 @@ components:
         step_name:
           type: string
           maxLength: 255
+        step_documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/StepDocument'
+          readOnly: true
         order:
           type: integer
           maximum: 2147483647
@@ -8408,6 +8862,7 @@ components:
       - created_by
       - id
       - nbr_of_days
+      - step_documents
       - step_name
       - updated_at
     SuiviAdministrativeStepComment:

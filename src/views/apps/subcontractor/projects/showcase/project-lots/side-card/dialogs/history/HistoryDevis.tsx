@@ -15,7 +15,7 @@ import {CircularProgress, Dialog, DialogActions, DialogTitle} from "@mui/materia
 import {useGetDocumentHistoryQuery} from "@/services/IsyBuildApi";
 import DialogCloseButton from "@components/dialogs/DialogCloseButton";
 import FolderInnerListTable
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/detail/Devis/dialogs/history/FolderInnerListTable";
+  from "./FolderInnerListTable";
 
 
 interface Props {

@@ -14,42 +14,46 @@ import type {
   DocumentRead
 } from '@/services/IsyBuildApi';
 import {
-  useProjectLotsSubcontractorsDocumentsUploadDevisCreateMutation,
+  useUploadDevisBySubconstactorMutation,
 } from '@/services/IsyBuildApi';
 import DialogCloseButton from "@components/dialogs/DialogCloseButton";
 import {
-  schemaFileUpload
-} from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/add/AddFileSchema";
+   schemaFileUpload 
+} from "../add/AddDevisSchema";
 import type {
   FormValidateFileUploadType
-} from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/add/AddFileSchema";
-import CustomTextField from "@core/components/mui/TextField";
-import AddFileUpload
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreFolder/dialogs/add/AddFileUpload";
+} from "../add/AddDevisSchema";
 
+import AddDevisUpload
+  from "../add/AddDevisUpload";
+import CustomTextField from '@/@core/components/mui/TextField';
+ 
 interface AddProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  refetch?: () => void;
+  refetch: () => void;
   id: number | undefined;
   data: DocumentRead | undefined
 }
 
 const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
     const {register, handleSubmit, setValue, formState: {errors}} = useForm<FormValidateFileUploadType>({
-      resolver: yupResolver(schemaFileUpload),
+      resolver: yupResolver( schemaFileUpload ),
     });
 
     const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
-    const [updateDocument, {isLoading}] = useProjectLotsSubcontractorsDocumentsUploadDevisCreateMutation();
+    const [updateDocument, {isLoading}] = useUploadDevisBySubconstactorMutation();
     const [files, setFiles] = useState<File[]>([])
 
     useEffect(() => {
       if (data ) {
-        setValue('name', data.name ?? '');
+        setValue('name', data.name || 'no name');
         setValue('tags', data.tags ?? '');
-        setValue('notes', data.latest_version.notes ?? '');
+        setValue('notes', data.latest_version?.notes ?? '');
+        
       }
+
+   
 
     }, [data, setValue]);
 
@@ -57,11 +61,6 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
       setFiles([])
       setOpen(false);
 
-      if (refetch) {
-        refetch()
-      }
-
-      ;
     };
 
     const handleCloseWithoutRefresh = () => {
@@ -88,6 +87,7 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
         // Conditionally append other form fields if they are provided
         if (data.name) {
           formDataToSend.append('name', data.name);
+          refetch()
         }
 
         if (data.tags) {
@@ -100,7 +100,7 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
 
         // Send the FormData with a valid projectLotSubcontractorId
         await updateDocument({
-          projectLotSubcontractorId: +id,
+          projectLotId: +id,
 
           // @ts-expect-error
           documentUploadRequest: formDataToSend
@@ -109,6 +109,7 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
         // Handle successful submission
         handleClose();
         setOpenSnackBar(true);
+       
         setInfoAlert({severity: 'success', message: 'Fichier ajouté avec succès'});
       } catch (error) {
         // Handle errors, e.g., missing ID or file
@@ -116,7 +117,9 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
           ? JSON.stringify((error as { data?: unknown }).data)
           : error instanceof Error
             ? error.message
-            : 'Une erreur inattendue est survenue.';
+            : 'Une erreur inattendue est survenuessssssssss.';
+
+            console.log(message);
 
         setOpenSnackBar(true);
         setInfoAlert({severity: 'error', message});
@@ -142,7 +145,7 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
 
           <DialogActions className="flex flex-col justify-end pbs-0 sm:pbe-16 sm:pli-16 max-sm:gap-2" sx={{gap: 2}}>
             <Grid container spacing={12}>
-              <Grid item xs={12} md={6}>
+            <Grid item xs={12} >
                 <Grid container spacing={6}>
                   <Grid item xs={12}>
                     <CustomTextField
@@ -158,10 +161,10 @@ const ModifyDevis = ({open, setOpen, refetch, id, data}: AddProps) => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} >
                 <Grid container spacing={6}>
                   <Grid item xs={12}>
-                    <AddFileUpload files={files} setFiles={setFiles}/>
+                    <AddDevisUpload files={files} setFiles={setFiles}/>
                   </Grid>
                 </Grid>
               </Grid>

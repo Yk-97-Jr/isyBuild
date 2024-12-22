@@ -259,7 +259,7 @@ const ProjectTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un projet'
+              placeholder='Rechercher'
               className='max-sm:is-full'
             />
            

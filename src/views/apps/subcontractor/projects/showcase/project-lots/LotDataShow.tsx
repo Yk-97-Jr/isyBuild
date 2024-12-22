@@ -15,7 +15,7 @@ import { CardHeader, CircularProgress } from '@mui/material'
 
 
 
-import { useProjectLotsRetrieveQuery } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
+import { useProjectLotsRetrieveQuery, useProjectLotsSubcontractorDevisRetrieveQuery } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
 
 import LotsList from './table/LotsList';
 import AboutLot from './side-card/AboutLot';
@@ -40,9 +40,11 @@ const LotDataShow = () => {
   const [id, setId] = useState<number>();
 
 
-  const {data, error, isLoading, isFetching, refetch} = useProjectLotsRetrieveQuery({
+  const {data, isLoading, } = useProjectLotsRetrieveQuery({
     projectLotId:+docId,
   })
+
+  const {data: projectLotDevisData, refetch} = useProjectLotsSubcontractorDevisRetrieveQuery({projectLotId:+docId})
 
   if (isLoading)
     return (
@@ -60,7 +62,7 @@ const LotDataShow = () => {
           <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
           <Grid item xs={12}>
-            <LotsList data={data} error={error} isLoading={isLoading} isFetching={isFetching} refetch={ refetch}/>
+            <LotsList/>
             </Grid>
           </Grid>
         </Grid>
@@ -70,9 +72,9 @@ const LotDataShow = () => {
             <AboutLot LotData={data}  />   
             </Grid>
             <Grid item xs={12}>
-            <InvoiceLot  projectLotDevisData={undefined} setOpenAdd={setOpenAdd}
+            <InvoiceLot  projectLotDevisData={projectLotDevisData} setOpenAdd={setOpenAdd}
                               setId={setId} setOpenDelete={setOpenDelete} setOpenModify={setOpenModify}
-                              setOpenHistory={setOpenHistory} ids={+docId}/>
+                              setOpenHistory={setOpenHistory} refetch={refetch}/>
             </Grid> 
           </Grid>
         </Grid>
@@ -92,7 +94,7 @@ const LotDataShow = () => {
         setOpen={setOpenModify}
         refetch={refetch}
         id={id}
-        data={data?.folder?.documents.at(-1)}
+        data={projectLotDevisData}
       />
       <HistoryDevis
         open={openHistory}

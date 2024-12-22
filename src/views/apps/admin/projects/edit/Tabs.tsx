@@ -7,6 +7,7 @@ import MainEdit2 from './MainEdit2'
 
 import Tabilation from './Tabilation'
 import AppeleOffre from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreList/AppeleOffre";
+import DocDiffList from './documentDiffusions/list/DocDiffList';
 import GestionAdministrativeList
   from "@views/apps/client/projects/edit/GestionAdministartive/GestionAdministrativeList/GestionAdministrativeList";
 
@@ -14,8 +15,8 @@ import GestionAdministrativeList
 const tabContentList: { [key: string]: ReactElement } = {
   'Informations Generales': <MainEdit2/>,
   'Appelle Offre': <AppeleOffre/>,
-  'Gestion Administartive': <GestionAdministrativeList/>
-
+  'Gestion Administartive': <GestionAdministrativeList/>,
+  'diffusions de documents': <DocDiffList />
 }
 
 

@@ -3,6 +3,8 @@
 // MUI Imports
 import React from "react";
 
+import { useParams } from "next/navigation";
+
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -16,31 +18,31 @@ import IconButton from '@mui/material/IconButton';
 
 import {Button} from "@mui/material";
 
-
+import type {DocumentRead} from "@/services/IsyBuildApi";
 import OptionMenu from "@core/components/option-menu";
-import type { DocumentRead } from "@/services/IsyBuildApi";
+
 
 // Type imports for form handling
 type Props = {
-  projectLotDevisData: DocumentRead | undefined; // Adjust the type as necessary
-  ids:number
+  projectLotDevisData: DocumentRead  | undefined// Adjust the type as necessary
   setOpenAdd: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
   setOpenDelete: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
   setOpenModify: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenHistory: React.Dispatch<React.SetStateAction<boolean>>;
   setId: React.Dispatch<React.SetStateAction<number | undefined>>; // This will be used to control a boolean state
+  refetch: () => void;
 
 
 };
 
 const InvoiceLot: React.FC<Props> = ({
                                              projectLotDevisData,
-                                             ids,
                                              setOpenAdd,
                                              setId,
                                              setOpenDelete,
                                              setOpenModify,
-                                             setOpenHistory
+                                             setOpenHistory,
+                                             refetch
 
                                            }) => {
 
@@ -56,17 +58,21 @@ const InvoiceLot: React.FC<Props> = ({
   const handleHistory = (id: number) => {
     setOpenHistory(true)
     setId(id)
-
+    console.log("kkkkkkk",projectLotDevisData)
 
   }
 
   const handleEdit = (id: number) => {
     setOpenModify(true)
     setId(id)
-
-    console.log(id)
+    refetch()
+    console.log("id=", id);
+    
+    console.log(projectLotDevisData)
 
   }
+
+  const { docId}= useParams()
 
 
   const openOrDownloadFile = (fileUrl: string) => {
@@ -93,7 +99,7 @@ const InvoiceLot: React.FC<Props> = ({
 
   return (
     <Card>
-      {projectLotDevisData ? (
+      {projectLotDevisData && projectLotDevisData.id? (
         <div>
           <CardHeader title='Devis' action={
             <OptionMenu
@@ -104,7 +110,7 @@ const InvoiceLot: React.FC<Props> = ({
                   text: 'Modifier',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleEdit(ids)
+                    onClick: () => handleEdit(+docId)
                   }
                 },
                 {
@@ -118,7 +124,7 @@ const InvoiceLot: React.FC<Props> = ({
                   text: 'Supprimer',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleDelete(projectLotDevisData.id)
+                    onClick: () => handleDelete(projectLotDevisData?.id)
                   }
                 }
               ]}
@@ -140,7 +146,7 @@ const InvoiceLot: React.FC<Props> = ({
                     </div>
                   }
                 >
-                  <ListItemText primary={`${projectLotDevisData?.name ?? 'Devis'}`}/>
+                  <ListItemText primary={`${projectLotDevisData?.name || 'Devis Name'}`}/>
                 </ListItem>
 
               </List>
