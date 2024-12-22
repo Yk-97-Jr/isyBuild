@@ -1655,6 +1655,39 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /document_diffusions/{document_diffusion_id}/diffuse/:
+    post:
+      operationId: document_diffusion_diffuse
+      description: Diffuses a document diffusion.
+      summary: Diffuse document diffusion to intervenants
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiffusionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DiffusionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DiffusionRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDiffusion'
+          description: ''
   /document_diffusions/{document_diffusion_id}/update/:
     put:
       operationId: document_diffusion_update
@@ -1778,22 +1811,17 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
-  /document_diffusions/configs/:
+  /document_diffusions/{project_id}/configs/:
     get:
-      operationId: document_diffusion_config_list
-      description: Retrieve a list of all the document diffusion configs with pagination.
-      summary: List all the document diffusion configs.
+      operationId: document_diffusion_config_by_project_list
+      description: Retrieve a list of all the document diffusion configs of a project.
+      summary: List all the document diffusion configs by project id.
       parameters:
-      - in: query
-        name: page
+      - in: path
+        name: project_id
         schema:
           type: integer
-        description: Page number of the results to fetch
-      - in: query
-        name: page_size
-        schema:
-          type: integer
-        description: Number of results per page
+        required: true
       tags:
       - Document Diffusion Management
       security:
@@ -1803,7 +1831,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedDocumentDiffusionConfig'
+                $ref: '#/components/schemas/DocumentDiffusionConfig'
           description: ''
   /document_diffusions/configs/{document_diffusion_config_id}/:
     get:
@@ -1828,12 +1856,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentDiffusionConfig'
           description: ''
-  /document_diffusions/configs/{document_diffusion_config_id}/delete/:
-    delete:
-      operationId: document_diffusion_config_delete
-      description: Deletes a Document Diffusion Config by ID. Requires administrative
-        privileges.
-      summary: Delete Document Diffusion Config
+  /document_diffusions/configs/{document_diffusion_config_id}/update/:
+    put:
+      operationId: document_diffusion_config_update
+      description: Updates informations for an existing document diffusion config.
+      summary: Update document diffusion config
       parameters:
       - in: path
         name: document_diffusion_config_id
@@ -1842,55 +1869,36 @@ paths:
         required: true
       tags:
       - Document Diffusion Management
-      security:
-      - jwtAuth: []
-      responses:
-        '204':
-          content:
-            application/json:
-              schema:
-                description: Document Diffusion Config deleted successfully.
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                description: Document Diffusion Config not found.
-          description: ''
-        '403':
-          content:
-            application/json:
-              schema:
-                description: Permission denied.
-          description: ''
-  /document_diffusions/configs/create/:
-    post:
-      operationId: document_diffusion_config_create
-      description: Create a new document diffusion config.
-      tags:
-      - Document Diffusion Management
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionConfigRequest'
+              $ref: '#/components/schemas/DocumentDiffusionConfigUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionConfigRequest'
+              $ref: '#/components/schemas/DocumentDiffusionConfigUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/DocumentDiffusionConfigRequest'
+              $ref: '#/components/schemas/DocumentDiffusionConfigUpdateRequest'
         required: true
       security:
       - jwtAuth: []
       responses:
-        '201':
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DocumentDiffusionConfig'
           description: ''
         '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
           content:
             application/json:
               schema:
@@ -1933,6 +1941,340 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /finance-enterprises/{finance_enterprise_id}/:
+    get:
+      operationId: retrieve_finance_enterprise_by_id
+      description: Fetch detailed information about a specific FinanceEnterprise record.
+      summary: Retrieve FinanceEnterprise details by ID
+      parameters:
+      - in: path
+        name: finance_enterprise_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceEnterprise'
+          description: FinanceEnterprise details retrieved successfully.
+        '404':
+          description: FinanceEnterprise record not found.
+        '403':
+          description: You do not have permission to access this resource.
+  /finance-enterprises/{finance_enterprise_id}/finance-situations/:
+    get:
+      operationId: list_finance_situations
+      description: Fetch a paginated list of FinanceSituation entries associated with
+        a specific FinanceEnterprise. Each situation represents a financial transaction
+        or progress entry for the given enterprise.
+      summary: Retrieve Finance Situations by FinanceEnterprise ID
+      parameters:
+      - in: path
+        name: finance_enterprise_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFinanceSituation'
+          description: ''
+        '404':
+          description: FinanceEnterprise or FinanceSituations not found.
+  /finance-enterprises/{finance_enterprise_id}/travail-supplementaires/:
+    get:
+      operationId: list_travail_supplementaire
+      description: Fetch a list of Travail Supplémentaire entries associated with
+        a specific FinanceEnterprise.
+      summary: Retrieve Travail Supplémentaire by FinanceEnterprise ID
+      parameters:
+      - in: path
+        name: finance_enterprise_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTravailSupplementaire'
+          description: ''
+        '404':
+          description: FinanceEnterprise or Travail Supplémentaire not found.
+  /finance-enterprises/{finance_enterprise_id}/update/:
+    patch:
+      operationId: update_finance_enterprise
+      description: Update specified fields in a FinanceEnterprise instance.
+      summary: Update FinanceEnterprise fields
+      parameters:
+      - in: path
+        name: finance_enterprise_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFinanceEnterpriseUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFinanceEnterpriseUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFinanceEnterpriseUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceEnterprise'
+          description: FinanceEnterprise updated successfully.
+        '404':
+          description: FinanceEnterprise not found.
+        '400':
+          description: Validation error.
+  /finance-situations/{situation_id}:
+    get:
+      operationId: retrieve_finance_situation
+      description: Get the details of a specific FinanceSituation by ID.
+      summary: Retrieve Finance Situation Detail
+      parameters:
+      - in: path
+        name: situation_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceSituation'
+          description: ''
+  /finance-situations/{situation_id}/delete/:
+    delete:
+      operationId: delete_finance_situation
+      description: Delete a specific FinanceSituation by ID.
+      summary: Delete a Finance Situation
+      parameters:
+      - in: path
+        name: situation_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Deleted successfully.
+  /finance-situations/{situation_id}/update/:
+    patch:
+      operationId: update_finance_situation
+      description: Update an existing FinanceSituation by ID.
+      summary: Update a Finance Situation
+      parameters:
+      - in: path
+        name: situation_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFinanceSituationUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFinanceSituationUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFinanceSituationUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceSituation'
+          description: ''
+  /finance-situations/create:
+    post:
+      operationId: create_finance_situation
+      description: Create a new FinanceSituation for a specific FinanceEnterprise.
+      summary: Create a Finance Situation
+      tags:
+      - Finance Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FinanceSituationCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FinanceSituationCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FinanceSituationCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FinanceSituation'
+          description: ''
+  /finance/{finance_id}/:
+    get:
+      operationId: retrieve_finance_by_id
+      description: Fetch detailed information about a specific Finance record.
+      summary: Retrieve finance details by ID
+      parameters:
+      - in: path
+        name: finance_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Finance'
+          description: Finance details retrieved successfully.
+        '404':
+          description: Finance record not found.
+        '403':
+          description: You do not have permission to access this resource.
+  /finance/{project_id}:
+    get:
+      operationId: list_project_lot_finance
+      description: Retrieve finance details grouped by project lots, with pagination.
+      summary: List project lot finances
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -id
+          - -project_lot__lot__name
+          - -total_cie
+          - -total_contract
+          - -total_final_amount
+          - -total_markets_plus_ts
+          - -total_prorata
+          - -total_retention_guarantee
+          - -total_ts_choix
+          - -total_ts_tma
+          - -total_ts_travaux
+          - -updated_at
+          - created_at
+          - created_by__email
+          - id
+          - project_lot__lot__name
+          - total_cie
+          - total_contract
+          - total_final_amount
+          - total_markets_plus_ts
+          - total_prorata
+          - total_retention_guarantee
+          - total_ts_choix
+          - total_ts_tma
+          - total_ts_travaux
+          - updated_at
+        description: Order results by fields (e.g., 'created_at', '-lot_name')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by project lot name
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFinance'
+          description: ''
+        '403':
+          description: You do not have permission to access this resource.
   /folders/{folder_id}/:
     get:
       operationId: get_folder_detail
@@ -2024,7 +2366,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedProjectIntervenant'
+                $ref: '#/components/schemas/PaginatedProjectForIntervenant'
           description: ''
   /intervenant/projects/{project_id}/:
     get:
@@ -2047,7 +2389,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectIntervenant'
+                $ref: '#/components/schemas/ProjectForIntervenant'
           description: ''
   /intervenant/roles/:
     get:
@@ -5619,6 +5961,31 @@ paths:
           description: Suivi Administrative record not found.
         '403':
           description: You are not authorized.
+  /suivi-administrative/steps/{step_id}:
+    get:
+      operationId: retrieve_suivi_administrative_step_detail
+      description: Fetches detailed information about a specific Suivi Administrative
+        Step record by ID.
+      summary: Retrieve details of a specific Suivi Administrative Step record
+      parameters:
+      - in: path
+        name: step_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuiviAdministrativeStep'
+          description: ''
+        '404':
+          description: Suivi Administrative record not found.
   /suivi-administrative/steps/{step_id}/comments/:
     get:
       operationId: list_suivi_administrative_step_comments
@@ -5838,6 +6205,96 @@ paths:
                     detail: Token is invalid or expired
                   description: Invalid or expired token
           description: ''
+  /travail-supplementaires/{ts_id}/delete/:
+    delete:
+      operationId: delete_travail_supplementaire
+      description: Deletes a specific Travail Supplémentaire entry.
+      summary: Delete a Travail Supplémentaire by ID
+      parameters:
+      - in: path
+        name: ts_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: Travail Supplémentaire deleted successfully.
+        '404':
+          description: Travail Supplémentaire not found.
+  /travail-supplementaires/{ts_id}/update/:
+    patch:
+      operationId: update_travail_supplementaire
+      description: Update the amount field of a specific Travail Supplémentaire entry.
+      summary: Update amount for a Travail Supplémentaire
+      parameters:
+      - in: path
+        name: ts_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTravailSupplementaireUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTravailSupplementaireUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTravailSupplementaireUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravailSupplementaire'
+          description: Travail Supplémentaire updated successfully.
+        '404':
+          description: Travail Supplémentaire not found.
+        '400':
+          description: Invalid input.
+  /travail-supplementaires/create:
+    post:
+      operationId: create_travail_supplementaire
+      description: Add a new Travail Supplémentaire entry associated with a specific
+        FinanceEnterprise.
+      summary: Create Travail Supplémentaire for a FinanceEnterprise
+      tags:
+      - Finance Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravailSupplementaireCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TravailSupplementaireCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TravailSupplementaireCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravailSupplementaire'
+          description: Travail Supplémentaire created successfully.
+        '404':
+          description: FinanceEnterprise not found.
+        '400':
+          description: Invalid input.
   /user/change-password/:
     post:
       operationId: user_change_password_create
@@ -6582,6 +7039,30 @@ components:
           maxLength: 30
       required:
       - email
+    DgdStatusEnum:
+      enum:
+      - regle
+      - valide
+      - valide_bloque_jp
+      - etabli_non_signe_ets
+      - en_attente_moex
+      - en_attente_levee_reserves
+      - valide_a_zero
+      - signe_par_ets_attente_jp
+      - refuse_par_amo
+      - abandon
+      type: string
+      description: |-
+        * `regle` - Réglé
+        * `valide` - Validé
+        * `valide_bloque_jp` - Validé bloqué par JP courvoyeur
+        * `etabli_non_signe_ets` - Établi non signé ETS
+        * `en_attente_moex` - En attente Moex
+        * `en_attente_levee_reserves` - En attente levée de réserves
+        * `valide_a_zero` - Validé à zéro
+        * `signe_par_ets_attente_jp` - Signé par ETS attente JP
+        * `refuse_par_amo` - Refusé par AMO
+        * `abandon` - Abandon
     DiffusionIntervenantComment:
       type: object
       properties:
@@ -6615,9 +7096,8 @@ components:
     DiffusionIntervenantCommentCreateRequest:
       type: object
       properties:
-        document_diffusion_id:
+        diffusion_intervenant_id:
           type: integer
-          description: ID of the document diffusion to comment on.
         comment:
           type: string
           minLength: 1
@@ -6630,7 +7110,12 @@ components:
           $ref: '#/components/schemas/Status7c6Enum'
       required:
       - comment
-      - document_diffusion_id
+      - diffusion_intervenant_id
+    DiffusionRequest:
+      type: object
+      properties:
+        indice:
+          type: integer
     Document:
       type: object
       properties:
@@ -6712,29 +7197,28 @@ components:
           readOnly: true
         type:
           $ref: '#/components/schemas/Type474Enum'
-        role:
-          $ref: '#/components/schemas/RoleEnum'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RolesEnum'
         project:
-          type: integer
-          nullable: true
+          $ref: '#/components/schemas/Project'
       required:
       - id
       - project
-      - role
+      - roles
       - type
-    DocumentDiffusionConfigRequest:
+    DocumentDiffusionConfigUpdateRequest:
       type: object
       properties:
         type:
           $ref: '#/components/schemas/Type474Enum'
-        role:
-          $ref: '#/components/schemas/RoleEnum'
-        project:
-          type: integer
-          nullable: true
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RolesEnum'
       required:
-      - project
-      - role
+      - roles
       - type
     DocumentDiffusionCreateRequest:
       type: object
@@ -6869,6 +7353,212 @@ components:
       - body_template
       - name
       - subject_template
+    Finance:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        project_lot:
+          allOf:
+          - $ref: '#/components/schemas/ProjectLotSimple'
+          readOnly: true
+        total_contract:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_prorata:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_ts_travaux:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_ts_choix:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_ts_tma:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_markets_plus_ts:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_cie:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_retention_guarantee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_final_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        finance_enterprises:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinanceEnterprise'
+        payment_cumulated:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        payment_cumulated_percentage:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+      required:
+      - finance_enterprises
+      - id
+      - project_lot
+    FinanceEnterprise:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subcontractor:
+          allOf:
+          - $ref: '#/components/schemas/SubcontractorSimple'
+          readOnly: true
+        total_contract:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        prorata:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_ts_travaux:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Total Travail Supplémentaire Travaux
+        total_ts_choix:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Total Travail Supplémentaire Choix
+        total_ts_tma:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Total Travail Supplémentaire TMA
+        markets_plus_ts:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Marchés + Travail Supplémentaire
+        cie:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        retention_guarantee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        final_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        payment_cumulated:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        payment_cumulated_percentage:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        caution:
+          type: string
+          maxLength: 255
+        dgd_status:
+          nullable: true
+          description: |-
+            Status of the DGD for the finance enterprise
+
+            * `regle` - Réglé
+            * `valide` - Validé
+            * `valide_bloque_jp` - Validé bloqué par JP courvoyeur
+            * `etabli_non_signe_ets` - Établi non signé ETS
+            * `en_attente_moex` - En attente Moex
+            * `en_attente_levee_reserves` - En attente levée de réserves
+            * `valide_a_zero` - Validé à zéro
+            * `signe_par_ets_attente_jp` - Signé par ETS attente JP
+            * `refuse_par_amo` - Refusé par AMO
+            * `abandon` - Abandon
+          oneOf:
+          - $ref: '#/components/schemas/DgdStatusEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+      required:
+      - id
+      - subcontractor
+      - total_contract
+    FinanceEnterpriseSimple:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subcontractor:
+          allOf:
+          - $ref: '#/components/schemas/SubcontractorSimple'
+          readOnly: true
+      required:
+      - id
+      - subcontractor
+    FinanceSituation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        finance_enterprise:
+          allOf:
+          - $ref: '#/components/schemas/FinanceEnterpriseSimple'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - finance_enterprise
+      - id
+      - updated_at
+    FinanceSituationCreateRequest:
+      type: object
+      properties:
+        finance_enterprise_id:
+          type: integer
+          writeOnly: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+      required:
+      - finance_enterprise_id
     Folder:
       type: object
       properties:
@@ -6936,6 +7626,37 @@ components:
         * `Failed` - Failed
         * `read` - Read
         * `unread` - unread
+    Intervenant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - role
+      - updated_at
+      - user
     IntervenantCreateRequest:
       type: object
       properties:
@@ -7216,6 +7937,50 @@ components:
       - next
       - previous
       - results
+    PaginatedFinance:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Finance'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedFinanceSituation:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/FinanceSituation'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PaginatedInAppNotification:
       type: object
       properties:
@@ -7343,6 +8108,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Project'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedProjectForIntervenant:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectForIntervenant'
       required:
       - count
       - next
@@ -7568,6 +8355,28 @@ components:
       - next
       - previous
       - results
+    PaginatedTravailSupplementaire:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TravailSupplementaire'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PasswordResetRequestRequest:
       type: object
       properties:
@@ -7593,6 +8402,43 @@ components:
         is_active:
           type: boolean
           title: Active
+    PatchedFinanceEnterpriseUpdateRequest:
+      type: object
+      properties:
+        total_contract:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        total_ts_choix:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Total Travail Supplémentaire Choix
+        total_ts_tma:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Total Travail Supplémentaire TMA
+        cie:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        retention_guarantee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        caution:
+          type: string
+          maxLength: 255
+        dgd_status:
+          $ref: '#/components/schemas/DgdStatusEnum'
+    PatchedFinanceSituationUpdateRequest:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
     PatchedSubcontractorStaffUpdateRequest:
       type: object
       properties:
@@ -7618,6 +8464,14 @@ components:
           type: integer
           minimum: 1
           description: Number of days, must be a positive integer.
+    PatchedTravailSupplementaireUpdateRequest:
+      type: object
+      description: Serializer for updating the amount of a Travail Supplémentaire.
+      properties:
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
     PatchedUserProfileUpdateRequest:
       type: object
       properties:
@@ -7933,7 +8787,7 @@ components:
           $ref: '#/components/schemas/EmailTemplateUpdateRequest'
       required:
       - email_template
-    ProjectIntervenant:
+    ProjectForIntervenant:
       type: object
       properties:
         id:
@@ -7975,6 +8829,34 @@ components:
       - id
       - map_coordinate
       - name
+      - updated_at
+    ProjectIntervenant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        intervenant:
+          allOf:
+          - $ref: '#/components/schemas/Intervenant'
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - created_by
+      - id
+      - intervenant
       - updated_at
     ProjectLot:
       type: object
@@ -8097,6 +8979,11 @@ components:
           type: string
           format: date-time
           readOnly: true
+        total_contract:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: Total contract amount for the subcontractor
       required:
       - created_at
       - created_by
@@ -8126,6 +9013,11 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/Status841Enum'
+        total_contract:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: Total contract amount for the subcontractor
     ProjectLotUpdateRequest:
       type: object
       properties:
@@ -8360,6 +9252,22 @@ components:
         * `high` - High
         * `critical` - Critical
     RoleEnum:
+      enum:
+      - Architecte
+      - Bureau de contrôle
+      - Bureau d'étude technique
+      - Coordonnateur sécurité et protection de la santé
+      - Assistance maîtrise d’ouvrage hygiène et environnement
+      - Client
+      type: string
+      description: |-
+        * `Architecte` - Architecte
+        * `Bureau de contrôle` - Bureau de contrôle
+        * `Bureau d'étude technique` - Bureau d'étude technique
+        * `Coordonnateur sécurité et protection de la santé` - Coordonnateur sécurité et protection de la santé
+        * `Assistance maîtrise d’ouvrage hygiène et environnement` - Assistance maîtrise d’ouvrage hygiène et environnement
+        * `Client` - Client
+    RolesEnum:
       enum:
       - Architecte
       - Bureau de contrôle
@@ -8975,6 +9883,55 @@ components:
           minLength: 1
       required:
       - refresh
+    TravailSupplementaire:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        finance_enterprise:
+          allOf:
+          - $ref: '#/components/schemas/FinanceEnterpriseSimple'
+          readOnly: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/CreatedBy'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - amount
+      - created_at
+      - created_by
+      - finance_enterprise
+      - id
+      - updated_at
+    TravailSupplementaireCreateRequest:
+      type: object
+      properties:
+        finance_enterprise_id:
+          type: integer
+          writeOnly: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+      required:
+      - amount
+      - finance_enterprise_id
     Type474Enum:
       enum:
       - plan_technique
