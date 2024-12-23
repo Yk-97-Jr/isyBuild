@@ -1,5 +1,7 @@
 import React, {useState} from 'react'
 
+import {useParams, useRouter} from "next/navigation";
+
 import {
   Card,
   CardContent,
@@ -8,7 +10,6 @@ import {
   Stack,
   CardHeader,
   Box,
-  IconButton
 } from '@mui/material'
 
 
@@ -16,6 +17,8 @@ import {Status3BfMapping} from "@/utils/statusEnums";
 import {getStatusProps} from "@/utils/statusHelper";
 import type {Status3BfEnum, SuiviAdministrativeStepRead} from "@/services/IsyBuildApi";
 import {formatDate} from "@/utils/formatDate";
+import OptionMenu from "@core/components/option-menu";
+import {useAuth} from "@/contexts/AuthContext";
 
 
 const StepCard: React.FC<{
@@ -23,11 +26,19 @@ const StepCard: React.FC<{
   setOpenAdd: (open: boolean) => void,
   setStep: (step: SuiviAdministrativeStepRead) => void,
   openAdd: boolean,
+
 }> = ({step, setStep, setOpenAdd, openAdd}) => {
 
   const [status] = useState<keyof typeof Status3BfMapping>(
     step?.status || "not_started"
   );
+
+  const router = useRouter();
+
+  const {user} = useAuth();  // Get the user from AuthContext
+  const userRole = user?.role
+  const {edit: projectId} = useParams();  // Renamed the route parameter variable
+  const {id: gestionAdministrativeId} = useParams();  // Renamed the route parameter variable
 
 
   //
@@ -39,6 +50,12 @@ const StepCard: React.FC<{
   const handleToggle = () => {
     setOpenAdd(!openAdd); // Toggle state
     setStep(step)
+  };
+
+  const handleToggleFolder = () => {
+    if (step) {
+      router.push(`/${userRole}/projects/${projectId}/details/gestionAdministrative/${gestionAdministrativeId}/steps/${step.id}`);
+    }
   };
 
   const {
@@ -69,9 +86,28 @@ const StepCard: React.FC<{
           <Box display="flex" alignItems="center" gap={2}>
             <Chip sx={{marginLeft: 1}} variant="tonal" label={label}
                   color={color as any}/>
-            <IconButton onClick={handleToggle} size="small" sx={{mr: 1}}>
-              <i className='tabler-dots-vertical text-textSecondary'/>
-            </IconButton>
+            <OptionMenu
+              iconButtonProps={{size: 'medium'}}
+              iconClassName='text-textSecondary'
+              options={[
+                {
+                  text: 'Details',
+                  icon: 'tabler-edit',
+                  menuItemProps: {
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: handleToggle
+                  }
+                },
+                {
+                  text: 'Documents',
+                  icon: 'tabler-folders',
+                  menuItemProps: {
+                    className: 'flex items-center gap-2 text-textSecondary',
+                    onClick: handleToggleFolder
+                  }
+                }
+              ]}
+            />
 
           </Box>
         }

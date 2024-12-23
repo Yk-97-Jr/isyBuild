@@ -406,6 +406,16 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    documentDiffusionDiffuse: build.mutation<
+      DocumentDiffusionDiffuseApiResponse,
+      DocumentDiffusionDiffuseApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/diffuse/`,
+        method: "POST",
+        body: queryArg.diffusionRequest,
+      }),
+    }),
     documentDiffusionUpdate: build.mutation<
       DocumentDiffusionUpdateApiResponse,
       DocumentDiffusionUpdateApiArg
@@ -436,13 +446,12 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.documentUploadRequest,
       }),
     }),
-    documentDiffusionConfigList: build.query<
-      DocumentDiffusionConfigListApiResponse,
-      DocumentDiffusionConfigListApiArg
+    documentDiffusionConfigByProjectList: build.query<
+      DocumentDiffusionConfigByProjectListApiResponse,
+      DocumentDiffusionConfigByProjectListApiArg
     >({
       query: (queryArg) => ({
-        url: `/document_diffusions/configs/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize },
+        url: `/document_diffusions/${queryArg.projectId}/configs/`,
       }),
     }),
     documentDiffusionConfigDetail: build.query<
@@ -453,23 +462,14 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/document_diffusions/configs/${queryArg.documentDiffusionConfigId}/`,
       }),
     }),
-    documentDiffusionConfigDelete: build.mutation<
-      DocumentDiffusionConfigDeleteApiResponse,
-      DocumentDiffusionConfigDeleteApiArg
+    documentDiffusionConfigUpdate: build.mutation<
+      DocumentDiffusionConfigUpdateApiResponse,
+      DocumentDiffusionConfigUpdateApiArg
     >({
       query: (queryArg) => ({
-        url: `/document_diffusions/configs/${queryArg.documentDiffusionConfigId}/delete/`,
-        method: "DELETE",
-      }),
-    }),
-    documentDiffusionConfigCreate: build.mutation<
-      DocumentDiffusionConfigCreateApiResponse,
-      DocumentDiffusionConfigCreateApiArg
-    >({
-      query: (queryArg) => ({
-        url: `/document_diffusions/configs/create/`,
-        method: "POST",
-        body: queryArg.documentDiffusionConfigRequest,
+        url: `/document_diffusions/configs/${queryArg.documentDiffusionConfigId}/update/`,
+        method: "PUT",
+        body: queryArg.documentDiffusionConfigUpdateRequest,
       }),
     }),
     documentDiffusionCreate: build.mutation<
@@ -480,6 +480,99 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/document_diffusions/create/`,
         method: "POST",
         body: queryArg.documentDiffusionCreateRequest,
+      }),
+    }),
+    retrieveFinanceEnterpriseById: build.query<
+      RetrieveFinanceEnterpriseByIdApiResponse,
+      RetrieveFinanceEnterpriseByIdApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance-enterprises/${queryArg.financeEnterpriseId}/`,
+      }),
+    }),
+    listFinanceSituations: build.query<
+      ListFinanceSituationsApiResponse,
+      ListFinanceSituationsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance-enterprises/${queryArg.financeEnterpriseId}/finance-situations/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
+    }),
+    listTravailSupplementaire: build.query<
+      ListTravailSupplementaireApiResponse,
+      ListTravailSupplementaireApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance-enterprises/${queryArg.financeEnterpriseId}/travail-supplementaires/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
+    }),
+    updateFinanceEnterprise: build.mutation<
+      UpdateFinanceEnterpriseApiResponse,
+      UpdateFinanceEnterpriseApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance-enterprises/${queryArg.financeEnterpriseId}/update/`,
+        method: "PATCH",
+        body: queryArg.patchedFinanceEnterpriseUpdateRequest,
+      }),
+    }),
+    retrieveFinanceSituation: build.query<
+      RetrieveFinanceSituationApiResponse,
+      RetrieveFinanceSituationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance-situations/${queryArg.situationId}`,
+      }),
+    }),
+    deleteFinanceSituation: build.mutation<
+      DeleteFinanceSituationApiResponse,
+      DeleteFinanceSituationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance-situations/${queryArg.situationId}/delete/`,
+        method: "DELETE",
+      }),
+    }),
+    updateFinanceSituation: build.mutation<
+      UpdateFinanceSituationApiResponse,
+      UpdateFinanceSituationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance-situations/${queryArg.situationId}/update/`,
+        method: "PATCH",
+        body: queryArg.patchedFinanceSituationUpdateRequest,
+      }),
+    }),
+    createFinanceSituation: build.mutation<
+      CreateFinanceSituationApiResponse,
+      CreateFinanceSituationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance-situations/create`,
+        method: "POST",
+        body: queryArg.financeSituationCreateRequest,
+      }),
+    }),
+    retrieveFinanceById: build.query<
+      RetrieveFinanceByIdApiResponse,
+      RetrieveFinanceByIdApiArg
+    >({
+      query: (queryArg) => ({ url: `/finance/${queryArg.financeId}/` }),
+    }),
+    listProjectLotFinance: build.query<
+      ListProjectLotFinanceApiResponse,
+      ListProjectLotFinanceApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/finance/${queryArg.projectId}`,
+        params: {
+          ordering: queryArg.ordering,
+          page: queryArg.page,
+          page_size: queryArg.pageSize,
+          search: queryArg.search,
+        },
       }),
     }),
     getFolderDetail: build.query<
@@ -1410,6 +1503,14 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/suivi-administrative/${queryArg.suiviAdministrativeId}/intervenant/`,
       }),
     }),
+    retrieveSuiviAdministrativeStepDetail: build.query<
+      RetrieveSuiviAdministrativeStepDetailApiResponse,
+      RetrieveSuiviAdministrativeStepDetailApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/suivi-administrative/steps/${queryArg.stepId}`,
+      }),
+    }),
     listSuiviAdministrativeStepComments: build.query<
       ListSuiviAdministrativeStepCommentsApiResponse,
       ListSuiviAdministrativeStepCommentsApiArg
@@ -1476,6 +1577,35 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/token_refresh/`,
         method: "POST",
         body: queryArg.tokenRefreshRequest,
+      }),
+    }),
+    deleteTravailSupplementaire: build.mutation<
+      DeleteTravailSupplementaireApiResponse,
+      DeleteTravailSupplementaireApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/travail-supplementaires/${queryArg.tsId}/delete/`,
+        method: "DELETE",
+      }),
+    }),
+    updateTravailSupplementaire: build.mutation<
+      UpdateTravailSupplementaireApiResponse,
+      UpdateTravailSupplementaireApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/travail-supplementaires/${queryArg.tsId}/update/`,
+        method: "PATCH",
+        body: queryArg.patchedTravailSupplementaireUpdateRequest,
+      }),
+    }),
+    createTravailSupplementaire: build.mutation<
+      CreateTravailSupplementaireApiResponse,
+      CreateTravailSupplementaireApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/travail-supplementaires/create`,
+        method: "POST",
+        body: queryArg.travailSupplementaireCreateRequest,
       }),
     }),
     userChangePasswordCreate: build.mutation<
@@ -1945,6 +2075,12 @@ export type DocumentDiffusionDocumentDeleteApiResponse = /** status 204  */ {
 export type DocumentDiffusionDocumentDeleteApiArg = {
   documentDiffusionId: number;
 };
+export type DocumentDiffusionDiffuseApiResponse =
+  /** status 200  */ DocumentDiffusionRead;
+export type DocumentDiffusionDiffuseApiArg = {
+  documentDiffusionId: number;
+  diffusionRequest: DiffusionRequest;
+};
 export type DocumentDiffusionUpdateApiResponse =
   /** status 200  */ DocumentDiffusionRead;
 export type DocumentDiffusionUpdateApiArg = {
@@ -1964,9 +2100,36 @@ export type DocumentDiffusionUploadApiArg = {
   documentDiffusionId: number;
   documentUploadRequest: DocumentUploadRequest;
 };
-export type DocumentDiffusionConfigListApiResponse =
-  /** status 200  */ PaginatedDocumentDiffusionConfigRead;
-export type DocumentDiffusionConfigListApiArg = {
+export type DocumentDiffusionConfigByProjectListApiResponse =
+  /** status 200  */ DocumentDiffusionConfigRead;
+export type DocumentDiffusionConfigByProjectListApiArg = {
+  projectId: number;
+};
+export type DocumentDiffusionConfigDetailApiResponse =
+  /** status 200  */ DocumentDiffusionConfigRead;
+export type DocumentDiffusionConfigDetailApiArg = {
+  documentDiffusionConfigId: number;
+};
+export type DocumentDiffusionConfigUpdateApiResponse =
+  /** status 200  */ DocumentDiffusionConfigRead;
+export type DocumentDiffusionConfigUpdateApiArg = {
+  documentDiffusionConfigId: number;
+  documentDiffusionConfigUpdateRequest: DocumentDiffusionConfigUpdateRequest;
+};
+export type DocumentDiffusionCreateApiResponse =
+  /** status 201  */ DocumentDiffusionRead;
+export type DocumentDiffusionCreateApiArg = {
+  documentDiffusionCreateRequest: DocumentDiffusionCreateRequest;
+};
+export type RetrieveFinanceEnterpriseByIdApiResponse =
+  /** status 200 FinanceEnterprise details retrieved successfully. */ FinanceEnterpriseRead;
+export type RetrieveFinanceEnterpriseByIdApiArg = {
+  financeEnterpriseId: number;
+};
+export type ListFinanceSituationsApiResponse =
+  /** status 200  */ PaginatedFinanceSituationRead;
+export type ListFinanceSituationsApiArg = {
+  financeEnterpriseId: number;
 
   /** Page number of the results to fetch */
   page?: number;
@@ -1974,24 +2137,92 @@ export type DocumentDiffusionConfigListApiArg = {
   /** Number of results per page */
   pageSize?: number;
 };
-export type DocumentDiffusionConfigDetailApiResponse =
-  /** status 200  */ DocumentDiffusionConfigRead;
-export type DocumentDiffusionConfigDetailApiArg = {
-  documentDiffusionConfigId: number;
+export type ListTravailSupplementaireApiResponse =
+  /** status 200  */ PaginatedTravailSupplementaireRead;
+export type ListTravailSupplementaireApiArg = {
+  financeEnterpriseId: number;
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
 };
-export type DocumentDiffusionConfigDeleteApiResponse = /** status 204  */ any;
-export type DocumentDiffusionConfigDeleteApiArg = {
-  documentDiffusionConfigId: number;
+export type UpdateFinanceEnterpriseApiResponse =
+  /** status 200 FinanceEnterprise updated successfully. */ FinanceEnterpriseRead;
+export type UpdateFinanceEnterpriseApiArg = {
+  financeEnterpriseId: number;
+  patchedFinanceEnterpriseUpdateRequest: PatchedFinanceEnterpriseUpdateRequest;
 };
-export type DocumentDiffusionConfigCreateApiResponse =
-  /** status 201  */ DocumentDiffusionConfigRead;
-export type DocumentDiffusionConfigCreateApiArg = {
-  documentDiffusionConfigRequest: DocumentDiffusionConfigRequest;
+export type RetrieveFinanceSituationApiResponse =
+  /** status 200  */ FinanceSituationRead;
+export type RetrieveFinanceSituationApiArg = {
+  situationId: number;
 };
-export type DocumentDiffusionCreateApiResponse =
-  /** status 201  */ DocumentDiffusionRead;
-export type DocumentDiffusionCreateApiArg = {
-  documentDiffusionCreateRequest: DocumentDiffusionCreateRequest;
+export type DeleteFinanceSituationApiResponse = unknown;
+export type DeleteFinanceSituationApiArg = {
+  situationId: number;
+};
+export type UpdateFinanceSituationApiResponse =
+  /** status 200  */ FinanceSituationRead;
+export type UpdateFinanceSituationApiArg = {
+  situationId: number;
+  patchedFinanceSituationUpdateRequest: PatchedFinanceSituationUpdateRequest;
+};
+export type CreateFinanceSituationApiResponse =
+  /** status 201  */ FinanceSituationRead;
+export type CreateFinanceSituationApiArg = {
+  financeSituationCreateRequest: FinanceSituationCreateRequestWrite;
+};
+export type RetrieveFinanceByIdApiResponse =
+  /** status 200 Finance details retrieved successfully. */ FinanceRead;
+export type RetrieveFinanceByIdApiArg = {
+  financeId: number;
+};
+export type ListProjectLotFinanceApiResponse =
+  /** status 200  */ PaginatedFinanceRead;
+export type ListProjectLotFinanceApiArg = {
+
+  /** Order results by fields (e.g., 'created_at', '-lot_name') */
+  ordering?:
+    | "-created_at"
+    | "-created_by__email"
+    | "-id"
+    | "-project_lot__lot__name"
+    | "-total_cie"
+    | "-total_contract"
+    | "-total_final_amount"
+    | "-total_markets_plus_ts"
+    | "-total_prorata"
+    | "-total_retention_guarantee"
+    | "-total_ts_choix"
+    | "-total_ts_tma"
+    | "-total_ts_travaux"
+    | "-updated_at"
+    | "created_at"
+    | "created_by__email"
+    | "id"
+    | "project_lot__lot__name"
+    | "total_cie"
+    | "total_contract"
+    | "total_final_amount"
+    | "total_markets_plus_ts"
+    | "total_prorata"
+    | "total_retention_guarantee"
+    | "total_ts_choix"
+    | "total_ts_tma"
+    | "total_ts_travaux"
+    | "updated_at";
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
+  projectId: number;
+
+  /** Search by project lot name */
+  search?: string;
 };
 export type GetFolderDetailApiResponse = /** status 200  */ FolderRead;
 export type GetFolderDetailApiArg = {
@@ -2963,6 +3194,11 @@ export type RetrieveSuiviAdministrativeDetailIntervenantApiResponse =
 export type RetrieveSuiviAdministrativeDetailIntervenantApiArg = {
   suiviAdministrativeId: number;
 };
+export type RetrieveSuiviAdministrativeStepDetailApiResponse =
+  /** status 200  */ SuiviAdministrativeStepRead;
+export type RetrieveSuiviAdministrativeStepDetailApiArg = {
+  stepId: number;
+};
 export type ListSuiviAdministrativeStepCommentsApiResponse =
   /** status 200  */ PaginatedSuiviAdministrativeStepCommentRead;
 export type ListSuiviAdministrativeStepCommentsApiArg = {
@@ -3005,6 +3241,21 @@ export type TokenRefreshCreateApiResponse = /** status 200  */ {
 };
 export type TokenRefreshCreateApiArg = {
   tokenRefreshRequest: TokenRefreshRequest;
+};
+export type DeleteTravailSupplementaireApiResponse = unknown;
+export type DeleteTravailSupplementaireApiArg = {
+  tsId: number;
+};
+export type UpdateTravailSupplementaireApiResponse =
+  /** status 200 Travail Supplémentaire updated successfully. */ TravailSupplementaireRead;
+export type UpdateTravailSupplementaireApiArg = {
+  tsId: number;
+  patchedTravailSupplementaireUpdateRequest: PatchedTravailSupplementaireUpdateRequest;
+};
+export type CreateTravailSupplementaireApiResponse =
+  /** status 201 Travail Supplémentaire created successfully. */ TravailSupplementaireRead;
+export type CreateTravailSupplementaireApiArg = {
+  travailSupplementaireCreateRequest: TravailSupplementaireCreateRequestWrite;
 };
 export type UserChangePasswordCreateApiResponse = /** status 200  */ {
   [key: string]: any;
@@ -3470,23 +3721,73 @@ export type PaginatedDocumentDiffusionRead = {
   previous: string | null;
   results: DocumentDiffusionRead[];
 };
-export type RoleEnum =
+export type RolesEnum =
   | "Architecte"
   | "Bureau de contr\u00F4le"
   | "Bureau d'\u00E9tude technique"
   | "Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9"
   | "Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement"
   | "Client";
+export type ProjectStatusEnum =
+  | "draft"
+  | "pending"
+  | "in_progress"
+  | "completed"
+  | "on_hold"
+  | "canceled";
+export type RiskLevelEnum = "low" | "medium" | "high" | "critical";
+export type Project = {
+  code: string;
+  name: string;
+  description?: string;
+  status?: ProjectStatusEnum;
+  start_date?: string | null;
+  estimated_completion_date?: string | null;
+  percentage_complete?: string;
+  budget?: string;
+  actual_cost?: string;
+  cost_variance?: string;
+  risk_level?: RiskLevelEnum;
+  notification_frequency?: number;
+  max_notifications?: number;
+};
+export type MapCoordinate = {
+  latitude: string;
+  longitude: string;
+};
+export type ProjectRead = {
+  id: number;
+  code: string;
+  name: string;
+  description?: string;
+  client: ClientRead;
+  status?: ProjectStatusEnum;
+  start_date?: string | null;
+  estimated_completion_date?: string | null;
+  map_coordinate: MapCoordinate;
+  percentage_complete?: string;
+  budget?: string;
+  actual_cost?: string;
+  cost_variance?: string;
+  risk_level?: RiskLevelEnum;
+  address: AddressRead;
+  manager: ClientStaffRead;
+  notification_frequency?: number;
+  max_notifications?: number;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type DocumentDiffusionConfig = {
   type: Type474Enum;
-  role: RoleEnum;
-  project: number | null;
+  roles: RolesEnum[];
+  project: Project;
 };
 export type DocumentDiffusionConfigRead = {
   id: number;
   type: Type474Enum;
-  role: RoleEnum;
-  project: number | null;
+  roles: RolesEnum[];
+  project: ProjectRead;
 };
 export type PaginatedDocumentDiffusionConfig = {
   count: number;
@@ -3499,6 +3800,9 @@ export type PaginatedDocumentDiffusionConfigRead = {
   next: string | null;
   previous: string | null;
   results: DocumentDiffusionConfigRead[];
+};
+export type DiffusionRequest = {
+  indice?: number;
 };
 export type DocumentDiffusionUpdateRequest = {
   title: string;
@@ -3522,9 +3826,7 @@ export type DiffusionIntervenantCommentRead = {
   created_at: string;
 };
 export type DiffusionIntervenantCommentCreateRequest = {
-
-  /** ID of the document diffusion to comment on. */
-  document_diffusion_id: number;
+  diffusion_intervenant_id: number;
 
   /** Text content of the comment. */
   comment: string;
@@ -3539,10 +3841,9 @@ export type DocumentUploadRequest = {
   tags?: string;
   notes?: string;
 };
-export type DocumentDiffusionConfigRequest = {
+export type DocumentDiffusionConfigUpdateRequest = {
   type: Type474Enum;
-  role: RoleEnum;
-  project: number | null;
+  roles: RolesEnum[];
 };
 export type DocumentDiffusionCreateRequest = {
   title: string;
@@ -3551,14 +3852,215 @@ export type DocumentDiffusionCreateRequest = {
   localisation: number;
   project_lot: number;
 };
+export type DgdStatusEnum =
+  | "regle"
+  | "valide"
+  | "valide_bloque_jp"
+  | "etabli_non_signe_ets"
+  | "en_attente_moex"
+  | "en_attente_levee_reserves"
+  | "valide_a_zero"
+  | "signe_par_ets_attente_jp"
+  | "refuse_par_amo"
+  | "abandon";
+export type FinanceEnterprise = {
+  total_contract: string;
+  prorata?: string;
+  total_ts_travaux?: string;
+  total_ts_choix?: string;
+  total_ts_tma?: string;
+  markets_plus_ts?: string;
+  cie?: string;
+  retention_guarantee?: string;
+  final_amount?: string;
+  payment_cumulated?: string;
+  payment_cumulated_percentage?: string;
+  caution?: string;
+
+  /** Status of the DGD for the finance enterprise
+
+    * `regle` - Réglé
+    * `valide` - Validé
+    * `valide_bloque_jp` - Validé bloqué par JP courvoyeur
+    * `etabli_non_signe_ets` - Établi non signé ETS
+    * `en_attente_moex` - En attente Moex
+    * `en_attente_levee_reserves` - En attente levée de réserves
+    * `valide_a_zero` - Validé à zéro
+    * `signe_par_ets_attente_jp` - Signé par ETS attente JP
+    * `refuse_par_amo` - Refusé par AMO
+    * `abandon` - Abandon */
+  dgd_status?: (DgdStatusEnum | BlankEnum | NullEnum) | null;
+};
+export type SubcontractorSimple = {
+  name: string;
+  siren_number: string;
+};
+export type SubcontractorSimpleRead = {
+  id: number;
+  name: string;
+  siren_number: string;
+};
+export type FinanceEnterpriseRead = {
+  id: number;
+  subcontractor: SubcontractorSimpleRead;
+  total_contract: string;
+  prorata?: string;
+  total_ts_travaux?: string;
+  total_ts_choix?: string;
+  total_ts_tma?: string;
+  markets_plus_ts?: string;
+  cie?: string;
+  retention_guarantee?: string;
+  final_amount?: string;
+  payment_cumulated?: string;
+  payment_cumulated_percentage?: string;
+  caution?: string;
+
+  /** Status of the DGD for the finance enterprise
+
+    * `regle` - Réglé
+    * `valide` - Validé
+    * `valide_bloque_jp` - Validé bloqué par JP courvoyeur
+    * `etabli_non_signe_ets` - Établi non signé ETS
+    * `en_attente_moex` - En attente Moex
+    * `en_attente_levee_reserves` - En attente levée de réserves
+    * `valide_a_zero` - Validé à zéro
+    * `signe_par_ets_attente_jp` - Signé par ETS attente JP
+    * `refuse_par_amo` - Refusé par AMO
+    * `abandon` - Abandon */
+  dgd_status?: (DgdStatusEnum | BlankEnum | NullEnum) | null;
+};
+export type FinanceSituation = {
+  name?: string;
+  amount?: string;
+};
+export type FinanceEnterpriseSimple = {};
+export type FinanceEnterpriseSimpleRead = {
+  id: number;
+  subcontractor: SubcontractorSimpleRead;
+};
+export type FinanceSituationRead = {
+  id: number;
+  finance_enterprise: FinanceEnterpriseSimpleRead;
+  name?: string;
+  amount?: string;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
+export type PaginatedFinanceSituation = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: FinanceSituation[];
+};
+export type PaginatedFinanceSituationRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: FinanceSituationRead[];
+};
+export type TravailSupplementaire = {
+  name?: string;
+  amount: string;
+};
+export type TravailSupplementaireRead = {
+  id: number;
+  name?: string;
+  finance_enterprise: FinanceEnterpriseSimpleRead;
+  amount: string;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
+export type PaginatedTravailSupplementaire = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: TravailSupplementaire[];
+};
+export type PaginatedTravailSupplementaireRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: TravailSupplementaireRead[];
+};
+export type PatchedFinanceEnterpriseUpdateRequest = {
+  total_contract?: string;
+  total_ts_choix?: string;
+  total_ts_tma?: string;
+  cie?: string;
+  retention_guarantee?: string;
+  caution?: string;
+  dgd_status?: DgdStatusEnum;
+};
+export type PatchedFinanceSituationUpdateRequest = {
+  amount?: string;
+};
+export type FinanceSituationCreateRequest = {
+  amount?: string;
+};
+export type FinanceSituationCreateRequestWrite = {
+  finance_enterprise_id: number;
+  amount?: string;
+};
+export type Finance = {
+  total_contract?: string;
+  total_prorata?: string;
+  total_ts_travaux?: string;
+  total_ts_choix?: string;
+  total_ts_tma?: string;
+  total_markets_plus_ts?: string;
+  total_cie?: string;
+  total_retention_guarantee?: string;
+  total_final_amount?: string;
+  finance_enterprises: FinanceEnterprise[];
+  payment_cumulated?: string;
+  payment_cumulated_percentage?: string;
+};
+export type ProjectLotSimple = {
+  status?: Status109Enum;
+  notes?: string;
+};
+export type ProjectLotSimpleRead = {
+  id: number;
+  project: ProjectSimpleRead;
+  lot: LotSimpleRead;
+  status?: Status109Enum;
+  notes?: string;
+};
+export type FinanceRead = {
+  id: number;
+  project_lot: ProjectLotSimpleRead;
+  total_contract?: string;
+  total_prorata?: string;
+  total_ts_travaux?: string;
+  total_ts_choix?: string;
+  total_ts_tma?: string;
+  total_markets_plus_ts?: string;
+  total_cie?: string;
+  total_retention_guarantee?: string;
+  total_final_amount?: string;
+  finance_enterprises: FinanceEnterpriseRead[];
+  payment_cumulated?: string;
+  payment_cumulated_percentage?: string;
+};
+export type PaginatedFinance = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: Finance[];
+};
+export type PaginatedFinanceRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: FinanceRead[];
+};
 export type ProjectForIntervenant = {
   code: string;
   name: string;
   description?: string;
-};
-export type MapCoordinate = {
-  latitude: string;
-  longitude: string;
 };
 export type ProjectForIntervenantRead = {
   id: number;
@@ -3718,26 +4220,9 @@ export type ProjectLotSubcontractor = {
   notes?: string | null;
   notifications_sent?: number;
   last_notification_date?: string | null;
-};
-export type ProjectLotSimple = {
-  status?: Status109Enum;
-  notes?: string;
-};
-export type ProjectLotSimpleRead = {
-  id: number;
-  project: ProjectSimpleRead;
-  lot: LotSimpleRead;
-  status?: Status109Enum;
-  notes?: string;
-};
-export type SubcontractorSimple = {
-  name: string;
-  siren_number: string;
-};
-export type SubcontractorSimpleRead = {
-  id: number;
-  name: string;
-  siren_number: string;
+
+  /** Total contract amount for the subcontractor */
+  total_contract?: string;
 };
 export type SubcontractorStaffSimple = {};
 export type SubcontractorStaffSimpleRead = {
@@ -3758,6 +4243,9 @@ export type ProjectLotSubcontractorRead = {
   created_by: CreatedByRead;
   created_at: string;
   updated_at: string;
+
+  /** Total contract amount for the subcontractor */
+  total_contract?: string;
 };
 export type PaginatedProjectLotSubcontractor = {
   count: number;
@@ -3786,52 +4274,9 @@ export type ProjectLotCreateRequest = {
 };
 export type ProjectLotSubcontractorUpdateRequest = {
   status?: Status841Enum;
-};
-export type ProjectStatusEnum =
-  | "draft"
-  | "pending"
-  | "in_progress"
-  | "completed"
-  | "on_hold"
-  | "canceled";
-export type RiskLevelEnum = "low" | "medium" | "high" | "critical";
-export type Project = {
-  code: string;
-  name: string;
-  description?: string;
-  status?: ProjectStatusEnum;
-  start_date?: string | null;
-  estimated_completion_date?: string | null;
-  percentage_complete?: string;
-  budget?: string;
-  actual_cost?: string;
-  cost_variance?: string;
-  risk_level?: RiskLevelEnum;
-  notification_frequency?: number;
-  max_notifications?: number;
-};
-export type ProjectRead = {
-  id: number;
-  code: string;
-  name: string;
-  description?: string;
-  client: ClientRead;
-  status?: ProjectStatusEnum;
-  start_date?: string | null;
-  estimated_completion_date?: string | null;
-  map_coordinate: MapCoordinate;
-  percentage_complete?: string;
-  budget?: string;
-  actual_cost?: string;
-  cost_variance?: string;
-  risk_level?: RiskLevelEnum;
-  address: AddressRead;
-  manager: ClientStaffRead;
-  notification_frequency?: number;
-  max_notifications?: number;
-  created_by: CreatedByRead;
-  created_at: string;
-  updated_at: string;
+
+  /** Total contract amount for the subcontractor */
+  total_contract?: string;
 };
 export type PaginatedProject = {
   count: number;
@@ -3880,6 +4325,13 @@ export type ProjectStaffAssignRequest = {
   supervisor_id?: number | null;
 };
 export type ProjectIntervenant = {};
+export type RoleEnum =
+  | "Architecte"
+  | "Bureau de contr\u00F4le"
+  | "Bureau d'\u00E9tude technique"
+  | "Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9"
+  | "Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement"
+  | "Client";
 export type Intervenant = {
   role: RoleEnum;
 };
@@ -4409,6 +4861,16 @@ export type SuiviAdministrativeStepCommentCreateRequest = {
     * `temporarily_done` - Temporarily Done */
   status?: Status3BfEnum;
 };
+export type PatchedTravailSupplementaireUpdateRequest = {
+  amount?: string;
+};
+export type TravailSupplementaireCreateRequest = {
+  amount: string;
+};
+export type TravailSupplementaireCreateRequestWrite = {
+  finance_enterprise_id: number;
+  amount: string;
+};
 export type UserChangePasswordRequest = {
   old_password: string;
   new_password: string;
@@ -4473,14 +4935,24 @@ export const {
   useDocumentDiffusionCommentsListQuery,
   useDocumentDiffusionDeleteMutation,
   useDocumentDiffusionDocumentDeleteMutation,
+  useDocumentDiffusionDiffuseMutation,
   useDocumentDiffusionUpdateMutation,
   useDiffusionIntervenantCommentCreateMutation,
   useDocumentDiffusionUploadMutation,
-  useDocumentDiffusionConfigListQuery,
+  useDocumentDiffusionConfigByProjectListQuery,
   useDocumentDiffusionConfigDetailQuery,
-  useDocumentDiffusionConfigDeleteMutation,
-  useDocumentDiffusionConfigCreateMutation,
+  useDocumentDiffusionConfigUpdateMutation,
   useDocumentDiffusionCreateMutation,
+  useRetrieveFinanceEnterpriseByIdQuery,
+  useListFinanceSituationsQuery,
+  useListTravailSupplementaireQuery,
+  useUpdateFinanceEnterpriseMutation,
+  useRetrieveFinanceSituationQuery,
+  useDeleteFinanceSituationMutation,
+  useUpdateFinanceSituationMutation,
+  useCreateFinanceSituationMutation,
+  useRetrieveFinanceByIdQuery,
+  useListProjectLotFinanceQuery,
   useGetFolderDetailQuery,
   useListProjectIntervenantProjectQuery,
   useGetIntervenantProjectDetailQuery,
@@ -4573,6 +5045,7 @@ export const {
   useSubcontractorsUpdateUpdateMutation,
   useRetrieveSuiviAdministrativeDetailQuery,
   useRetrieveSuiviAdministrativeDetailIntervenantQuery,
+  useRetrieveSuiviAdministrativeStepDetailQuery,
   useListSuiviAdministrativeStepCommentsQuery,
   useUploadSuiviAdministrativeStepDocumentMutation,
   useUpdateSuiviAdministrativeStepMutation,
@@ -4580,6 +5053,9 @@ export const {
   useDeleteSuiviAdministrativeStepDocumentMutation,
   useUpdateSuiviAdministrativeStepDocumentMutation,
   useTokenRefreshCreateMutation,
+  useDeleteTravailSupplementaireMutation,
+  useUpdateTravailSupplementaireMutation,
+  useCreateTravailSupplementaireMutation,
   useUserChangePasswordCreateMutation,
   useUserConfirmEmailChangeCreateMutation,
   useUserProfileRetrieveQuery,
