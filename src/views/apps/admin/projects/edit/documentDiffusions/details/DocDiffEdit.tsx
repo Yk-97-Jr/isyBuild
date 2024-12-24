@@ -108,7 +108,7 @@ const DocDiffEdit: React.FC = () => {
         <Grid item xs={12}>
     <form onSubmit={handleSubmit(onSubmit)}>
           <DocDiffModifyHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating} />
-            </form>
+    </form>
         </Grid>
 
         {/* Main Form */}
