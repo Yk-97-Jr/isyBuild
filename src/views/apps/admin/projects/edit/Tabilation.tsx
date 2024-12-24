@@ -39,10 +39,16 @@ const Tabilation = ({ tabContentList }: { tabContentList: { [key: string]: React
               value='Appelle Offre'
             />
              <Tab
-              label='diffusions de documents'
+              label='Diffusions De Documents'
               icon={<i className='tabler-file-text' />}
               iconPosition='start'
-              value='diffusions de documents'
+              value='Diffusions De Documents'
+            />
+             <Tab
+              label='Finance'
+              icon={<i className='tabler-report-money' />}
+              iconPosition='start'
+              value='Finance'
             />
           </CustomTabList>
         </Grid>

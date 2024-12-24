@@ -13,7 +13,8 @@ import DocDiffList from './documentDiffusions/list/DocDiffList';
 const tabContentList: { [key: string]: ReactElement } = {
   'Informations Generales': <MainEdit2 />,
   'Appelle Offre': <AppeleOffre />,
-  'diffusions de documents': <DocDiffList />
+  'Diffusions De Documents': <DocDiffList />,
+  'Finance': <></>,
 }
 
 
