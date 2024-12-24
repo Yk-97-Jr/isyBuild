@@ -4,11 +4,11 @@
 import React, {useEffect, useState, useMemo} from 'react'
 
 // MUI Imports
-import {useRouter} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 
 import Card from '@mui/material/Card'
 
-import Button from '@mui/material/Button'
+
 import Typography from '@mui/material/Typography'
 
 import IconButton from '@mui/material/IconButton'
@@ -143,19 +143,17 @@ const [rowSelection, setRowSelection] = useState({})
 const router = useRouter();
 const {user} = useAuth();  // Get the user from AuthContext
 const userRole = user?.role
+const {edit} = useParams()
 
 
 const handleEditUser = (id: number) => {
-console.log(id)
-console.log(`/${userRole}/users/${id}/details`)
-router.push(`/${userRole}/users/${id}/details`);
+  console.log(id)
+  console.log(`/${userRole}/projects/${edit}/details/finance/${id}/details`)
+  router.push(`/${userRole}/projects/${edit}/details/finance/${id}/details`);
 }
 
 
-const handleAddUser = () => {
-router.push(`/${userRole}/users/add`);
 
-}
 
 const columns = useMemo<ColumnDef<FinanceReadWithAction, any>[]>(
 () => [
@@ -355,14 +353,6 @@ setSearch(String(value))
 placeholder='Rechercher un utilisateur'
 className='max-sm:is-full'
 />
-<Button
-variant='contained'
-className='max-sm=is-full'
-startIcon={<i className='tabler-plus'/>}
-onClick={handleAddUser}
->
-Ajouter Utilisateur
-</Button>
 </div>
 </div>
 <div className='overflow-x-auto'>
