@@ -58,7 +58,7 @@ const LocationsEdit = () => {
     try {
       await updateLocations({
         localisationId: +id,
-        localisationRequest: {
+        localisationUpdateRequest: {
           name: data.firstName,
         }
       }).unwrap()

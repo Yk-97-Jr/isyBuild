@@ -45,7 +45,7 @@ const LocationsAdd = () => {
   const onSubmit: SubmitHandler<FormValidateType> = async data => {
     try {
       const response = await createLocation({
-        localisationRequest: {
+        localisationCreateRequest: {
           name: data.firstName,
          
         }

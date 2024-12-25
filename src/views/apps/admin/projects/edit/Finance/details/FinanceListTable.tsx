@@ -88,8 +88,8 @@ const FinanceListTable = ({
 
   const handleEditUser = (id: number) => {
     console.log(id)
-    console.log(`/${userRole}/users/${edit}/details/finance/${id}/details`)
-    router.push(`/${userRole}/users/${edit}/details/finance/${id}/details`);
+    console.log(`/${userRole}/projects/${edit}/details/finance/${id}/details`)
+    router.push(`/${userRole}/projects/${edit}/details/finance/${id}/financeEnterprise`);
   }
 
 
