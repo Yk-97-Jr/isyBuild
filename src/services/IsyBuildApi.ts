@@ -484,7 +484,7 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/finance-enterprises/${queryArg.financeEnterpriseId}/finance-situations/`,
-        params: { page: queryArg.page, page_size: queryArg.pageSize },
+        params: { page: queryArg.page },
       }),
     }),
     listTravailSupplementaire: build.query<
@@ -2127,12 +2127,7 @@ export type ListFinanceSituationsApiResponse =
   /** status 200  */ PaginatedFinanceSituationRead;
 export type ListFinanceSituationsApiArg = {
   financeEnterpriseId: number;
-
-  /** Page number of the results to fetch */
-  page?: number;
-
-  /** Number of results per page */
-  pageSize?: number;
+  page: number;
 };
 export type ListTravailSupplementaireApiResponse =
   /** status 200  */ PaginatedTravailSupplementaireRead;
@@ -3862,56 +3857,6 @@ export type RolesEnum =
   | "Coordonnateur s\u00E9curit\u00E9 et protection de la sant\u00E9"
   | "Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement"
   | "Client";
-export type ProjectStatusEnum =
-  | "draft"
-  | "pending"
-  | "in_progress"
-  | "completed"
-  | "on_hold"
-  | "canceled";
-export type RiskLevelEnum = "low" | "medium" | "high" | "critical";
-export type Project = {
-  code: string;
-  name: string;
-  description?: string;
-  status?: ProjectStatusEnum;
-  start_date?: string | null;
-  estimated_completion_date?: string | null;
-  percentage_complete?: string;
-  budget?: string;
-  actual_cost?: string;
-  cost_variance?: string;
-  risk_level?: RiskLevelEnum;
-  notification_frequency?: number;
-  max_notifications?: number;
-};
-export type MapCoordinate = {
-  latitude: string;
-  longitude: string;
-};
-export type ProjectRead = {
-  id: number;
-  code: string;
-  name: string;
-  description?: string;
-  client: ClientRead;
-  status?: ProjectStatusEnum;
-  start_date?: string | null;
-  estimated_completion_date?: string | null;
-  map_coordinate: MapCoordinate;
-  percentage_complete?: string;
-  budget?: string;
-  actual_cost?: string;
-  cost_variance?: string;
-  risk_level?: RiskLevelEnum;
-  address: AddressRead;
-  manager: ClientStaffRead;
-  notification_frequency?: number;
-  max_notifications?: number;
-  created_by: CreatedByRead;
-  created_at: string;
-  updated_at: string;
-};
 export type DocumentDiffusionConfig = {
   type: Type474Enum;
   roles: RolesEnum[];
