@@ -4,7 +4,9 @@
 import React, {useEffect, useState} from 'react'
 
 /* import type {SortingState} from '@tanstack/react-table';
- */import Grid from '@mui/material/Grid'
+ */import { useParams } from 'next/navigation'
+
+import Grid from '@mui/material/Grid'
 
 import {CircularProgress} from '@mui/material'
 
@@ -19,6 +21,7 @@ const DocDiffList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
+  const { edit } = useParams(); 
 
  /*  const [search, setSearch] = useState<string>("");
   const [sorting, setSorting] = React.useState<SortingState>([]); */
@@ -27,6 +30,7 @@ const DocDiffList = () => {
 
   // Pass parameters to the query hook
   const {data, error, isLoading, isFetching, refetch} = useDocumentDiffusionsListQuery({
+    projectId:+edit,
       page,
       pageSize,
 
@@ -34,6 +38,9 @@ const DocDiffList = () => {
       search: debouncedSearch */
     },
   );
+
+  console.log(data);
+  
 
   useEffect(() => {
     refetch();

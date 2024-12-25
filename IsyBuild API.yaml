@@ -1488,17 +1488,17 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
-  /document_diffusions/:
+  /document_diffusions/{diffusion_intervenant_id}/comments-list/:
     get:
-      operationId: document_diffusions_list
-      description: Retrieve a list of all the document diffusions with pagination.
-      summary: List all the document diffusions.
+      operationId: document_diffusion_comments_list
+      description: Retrieve a list of all the document diffusion comments with pagination.
+      summary: List all the document diffusion comments.
       parameters:
-      - in: query
-        name: created_by
+      - in: path
+        name: diffusion_intervenant_id
         schema:
-          type: string
-        description: Filter by creator's email (contains match)
+          type: integer
+        required: true
       - in: query
         name: page
         schema:
@@ -1509,11 +1509,6 @@ paths:
         schema:
           type: integer
         description: Number of results per page
-      - in: query
-        name: title
-        schema:
-          type: string
-        description: Filter by document diffusion title (contains match)
       tags:
       - Document Diffusion Management
       security:
@@ -1523,8 +1518,42 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedDocumentDiffusion'
+                $ref: '#/components/schemas/PaginatedDiffusionIntervenantComment'
           description: ''
+  /document_diffusions/{diffusion_intervenant_id}/comments/create:
+    post:
+      operationId: diffusion_intervenant_comment_create
+      description: Add a comment to a specific Document Diffusion, with an optional
+        document upload.
+      summary: Create a diffusion intervenant comment
+      parameters:
+      - in: path
+        name: diffusion_intervenant_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DiffusionIntervenantCommentCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DiffusionIntervenantCommentCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiffusionIntervenantComment'
+          description: Comment created successfully.
+        '400':
+          description: Validation error.
   /document_diffusions/{document_diffusion_id}/:
     get:
       operationId: document_diffusion_detail
@@ -1547,38 +1576,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DocumentDiffusion'
-          description: ''
-  /document_diffusions/{document_diffusion_id}/comments-list/:
-    get:
-      operationId: document_diffusion_comments_list
-      description: Retrieve a list of all the document diffusion comments with pagination.
-      summary: List all the document diffusion comments.
-      parameters:
-      - in: path
-        name: document_diffusion_id
-        schema:
-          type: integer
-        required: true
-      - in: query
-        name: page
-        schema:
-          type: integer
-        description: Page number of the results to fetch
-      - in: query
-        name: page_size
-        schema:
-          type: integer
-        description: Number of results per page
-      tags:
-      - Document Diffusion Management
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedDocumentDiffusionConfig'
           description: ''
   /document_diffusions/{document_diffusion_id}/delete/:
     delete:
@@ -1613,47 +1610,6 @@ paths:
             application/json:
               schema:
                 description: Permission denied.
-          description: ''
-  /document_diffusions/{document_diffusion_id}/delete-document/:
-    delete:
-      operationId: document_diffusion_document_delete
-      description: Delete the document and all its associated versions by providing
-        the document ID.
-      summary: Delete a document of a document diffusion
-      parameters:
-      - in: path
-        name: document_diffusion_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Document Diffusion Management
-      security:
-      - jwtAuth: []
-      responses:
-        '204':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
-        '404':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
           description: ''
   /document_diffusions/{document_diffusion_id}/diffuse/:
     post:
@@ -1738,80 +1694,7 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
-  /document_diffusions/{document_diffusion_id}/update-status/:
-    post:
-      operationId: diffusion_intervenant_comment_create
-      description: Add a comment to a specific Document Diffusion, with an optional
-        document upload.
-      summary: Add a comment to a Document Diffusion
-      parameters:
-      - in: path
-        name: document_diffusion_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Document Diffusion Management
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/DiffusionIntervenantCommentCreateRequest'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/DiffusionIntervenantCommentCreateRequest'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DiffusionIntervenantComment'
-          description: Comment created successfully.
-        '400':
-          description: Validation error.
-  /document_diffusions/{document_diffusion_id}/upload-document/:
-    post:
-      operationId: document_diffusion_upload
-      description: Upload a file to the folder associated with the given Document
-        Diffusion ID.
-      summary: Upload a document to a Document Diffusion's folder
-      parameters:
-      - in: path
-        name: document_diffusion_id
-        schema:
-          type: integer
-        required: true
-      tags:
-      - Document Diffusion Management
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/DocumentUploadRequest'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
-        '400':
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: {}
-                description: Unspecified response body
-          description: ''
-  /document_diffusions/{project_id}/configs/:
+  /document_diffusions/configs/{project_id}:
     get:
       operationId: document_diffusion_config_by_project_list
       description: Retrieve a list of all the document diffusion configs of a project.
@@ -1833,20 +1716,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentDiffusionConfig'
           description: ''
-  /document_diffusions/configs/{document_diffusion_config_id}/:
-    get:
-      operationId: document_diffusion_config_detail
-      description: Fetches detailed information about a document diffusion config
-        by their ID.
-      summary: Retrieve document diffusion config Details
+  /document_diffusions/configs/{project_id}/bulk-update/:
+    put:
+      operationId: document_diffusion_config_bulk_update
+      description: Atomically updates multiple document diffusion configs for a given
+        project.
+      summary: Bulk update document diffusion configs atomically
       parameters:
       - in: path
-        name: document_diffusion_config_id
+        name: project_id
         schema:
           type: integer
         required: true
       tags:
       - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DocumentDiffusionConfigUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DocumentDiffusionConfigUpdateRequest'
+          multipart/form-data:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DocumentDiffusionConfigUpdateRequest'
+        required: true
       security:
       - jwtAuth: []
       responses:
@@ -1854,19 +1755,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DocumentDiffusionConfig'
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
           description: ''
-  /document_diffusions/configs/{document_diffusion_config_id}/update/:
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /document_diffusions/configs/update/:
     put:
       operationId: document_diffusion_config_update
       description: Updates informations for an existing document diffusion config.
       summary: Update document diffusion config
-      parameters:
-      - in: path
-        name: document_diffusion_config_id
-        schema:
-          type: integer
-        required: true
       tags:
       - Document Diffusion Management
       requestBody:
@@ -1941,6 +1854,86 @@ paths:
                 additionalProperties: {}
                 description: Unspecified response body
           description: ''
+  /document_diffusions/document/{document_diffusion_id}/upload/:
+    post:
+      operationId: document_diffusion_upload
+      description: Upload a file to the folder associated with the given Document
+        Diffusion ID.
+      summary: Upload a document to a Document Diffusion's folder
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DocumentUploadRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+  /document_diffusions/document/{document_id}/delete/:
+    delete:
+      operationId: document_diffusion_document_delete
+      description: Delete the document and all its associated versions by providing
+        the document ID.
+      summary: Delete a document of a document diffusion
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+                description: Unspecified response body
+          description: ''
   /finance-enterprises/{finance_enterprise_id}/:
     get:
       operationId: retrieve_finance_enterprise_by_id
@@ -1984,12 +1977,7 @@ paths:
         name: page
         schema:
           type: integer
-        description: Page number of the results to fetch
-      - in: query
-        name: page_size
-        schema:
-          type: integer
-        description: Number of results per page
+        required: true
       tags:
       - Finance Management
       security:
@@ -2416,24 +2404,21 @@ paths:
       summary: List all the localisations.
       parameters:
       - in: query
-        name: created_by
+        name: client_ids
         schema:
           type: string
-        description: Filter by creator's email (contains match)
-      - in: query
-        name: name
-        schema:
-          type: string
-        description: Filter by localisation name (contains match)
+        description: Filter by Client IDs (comma-separated)
       - in: query
         name: ordering
         schema:
           type: string
           enum:
+          - -client
           - -created_at
           - -created_by__email
           - -id
           - -name
+          - client
           - created_at
           - created_by__email
           - id
@@ -2538,13 +2523,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocalisationRequest'
+              $ref: '#/components/schemas/LocalisationUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/LocalisationRequest'
+              $ref: '#/components/schemas/LocalisationUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/LocalisationRequest'
+              $ref: '#/components/schemas/LocalisationUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -2581,13 +2566,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocalisationRequest'
+              $ref: '#/components/schemas/LocalisationCreateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/LocalisationRequest'
+              $ref: '#/components/schemas/LocalisationCreateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/LocalisationRequest'
+              $ref: '#/components/schemas/LocalisationCreateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -4290,6 +4275,95 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectStaff'
+          description: ''
+  /projects/{project_id}/document_diffusions/:
+    get:
+      operationId: document_diffusions_list
+      description: Retrieve a list of all the document diffusions with pagination.
+      summary: List all the document diffusions.
+      parameters:
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - -created_by__email
+          - -diffusion_date
+          - -id
+          - -indice
+          - -localisation
+          - -phase
+          - -project_lot__lot__name
+          - -title
+          - -type
+          - created_at
+          - created_by__email
+          - diffusion_date
+          - id
+          - indice
+          - localisation
+          - phase
+          - project_lot__lot__name
+          - title
+          - type
+        description: Order results by fields (e.g., 'title', '-created_at')
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      - in: query
+        name: phase
+        schema:
+          type: string
+          enum:
+          - design
+          - execution
+        description: Filter by phase
+      - in: path
+        name: project_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: project_lot_ids
+        schema:
+          type: string
+        description: Filter by Project lot IDs (comma-separated)
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Search by document diffusion title,lot name
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - autre
+          - avis_technique
+          - fiche_question
+          - fiche_technique
+          - note_de_calcul
+          - plan_de_coffrage
+          - plan_technique
+        description: Filter by type
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDocumentDiffusion'
           description: ''
   /projects/{project_id}/intervenants/:
     get:
@@ -6106,6 +6180,31 @@ paths:
           description: Comment created successfully.
         '400':
           description: Validation error.
+  /suivi-administrative/steps/documents/{step_document_id}:
+    get:
+      operationId: retrieve_step_Document_detail
+      description: Fetches detailed information about a specific Step Document record
+        by ID.
+      summary: Retrieve details of a specific Step Document record
+      parameters:
+      - in: path
+        name: step_document_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Suivi Administrative Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StepDocument'
+          description: ''
+        '404':
+          description: Step Document record not found.
   /suivi-administrative/steps/documents/{step_document_id}/delete/:
     delete:
       operationId: delete_suivi_administrative_step_document
@@ -7063,6 +7162,30 @@ components:
         * `signe_par_ets_attente_jp` - Signé par ETS attente JP
         * `refuse_par_amo` - Refusé par AMO
         * `abandon` - Abandon
+    DiffusionIntervenant:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        notifications_sent:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        last_notification_date:
+          type: string
+          format: date-time
+          nullable: true
+        project_intervenant:
+          allOf:
+          - $ref: '#/components/schemas/ProjectIntervenant'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/StatusE51Enum'
+      required:
+      - id
+      - project_intervenant
+      - status
     DiffusionIntervenantComment:
       type: object
       properties:
@@ -7077,11 +7200,7 @@ components:
           - $ref: '#/components/schemas/Document'
           readOnly: true
         status:
-          nullable: true
-          oneOf:
-          - $ref: '#/components/schemas/Status7c6Enum'
-          - $ref: '#/components/schemas/BlankEnum'
-          - $ref: '#/components/schemas/NullEnum'
+          $ref: '#/components/schemas/StatusE51Enum'
         created_by:
           type: integer
           nullable: true
@@ -7093,11 +7212,10 @@ components:
       - created_at
       - document
       - id
-    DiffusionIntervenantCommentCreateRequest:
+      - status
+    DiffusionIntervenantCommentCreateUpdateRequest:
       type: object
       properties:
-        diffusion_intervenant_id:
-          type: integer
         comment:
           type: string
           minLength: 1
@@ -7107,15 +7225,15 @@ components:
           format: binary
           description: The file to be uploaded.
         status:
-          $ref: '#/components/schemas/Status7c6Enum'
+          $ref: '#/components/schemas/StatusE51Enum'
       required:
       - comment
-      - diffusion_intervenant_id
     DiffusionRequest:
       type: object
       properties:
         indice:
-          type: integer
+          type: string
+          minLength: 1
     Document:
       type: object
       properties:
@@ -7148,6 +7266,8 @@ components:
           maxLength: 255
         phase:
           $ref: '#/components/schemas/PhaseEnum'
+        status:
+          $ref: '#/components/schemas/StatusE51Enum'
         diffusion_date:
           type: string
           format: date
@@ -7159,9 +7279,17 @@ components:
         type:
           $ref: '#/components/schemas/Type474Enum'
         localisation:
-          $ref: '#/components/schemas/Localisation'
+          allOf:
+          - $ref: '#/components/schemas/Localisation'
+          readOnly: true
         project_lot:
-          $ref: '#/components/schemas/ProjectLot'
+          allOf:
+          - $ref: '#/components/schemas/ProjectLotSimple'
+          readOnly: true
+        diffusion_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiffusionIntervenant'
         document:
           allOf:
           - $ref: '#/components/schemas/Document'
@@ -7181,11 +7309,13 @@ components:
       required:
       - created_at
       - created_by
+      - diffusion_list
       - document
       - id
       - localisation
       - phase
       - project_lot
+      - status
       - title
       - type
       - updated_at
@@ -7201,25 +7331,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RolesEnum'
-        project:
-          $ref: '#/components/schemas/Project'
       required:
       - id
-      - project
       - roles
       - type
     DocumentDiffusionConfigUpdateRequest:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/Type474Enum'
+        id:
+          type: integer
         roles:
           type: array
           items:
             $ref: '#/components/schemas/RolesEnum'
       required:
+      - id
       - roles
-      - type
     DocumentDiffusionCreateRequest:
       type: object
       properties:
@@ -7686,6 +7813,10 @@ components:
         name:
           type: string
           maxLength: 255
+        client:
+          allOf:
+          - $ref: '#/components/schemas/ClientSimple'
+          readOnly: true
         created_by:
           allOf:
           - $ref: '#/components/schemas/CreatedBy'
@@ -7699,12 +7830,25 @@ components:
           format: date-time
           readOnly: true
       required:
+      - client
       - created_at
       - created_by
       - id
       - name
       - updated_at
-    LocalisationRequest:
+    LocalisationCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        client_id:
+          type: integer
+          nullable: true
+      required:
+      - name
+    LocalisationUpdateRequest:
       type: object
       properties:
         name:
@@ -7893,6 +8037,28 @@ components:
       - next
       - previous
       - results
+    PaginatedDiffusionIntervenantComment:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiffusionIntervenantComment'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PaginatedDocumentDiffusion:
       type: object
       properties:
@@ -7910,28 +8076,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DocumentDiffusion'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    PaginatedDocumentDiffusionConfig:
-      type: object
-      properties:
-        count:
-          type: integer
-        next:
-          type: string
-          format: uri
-          nullable: true
-        previous:
-          type: string
-          format: uri
-          nullable: true
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentDiffusionConfig'
       required:
       - count
       - next
@@ -8840,6 +8984,10 @@ components:
           allOf:
           - $ref: '#/components/schemas/Intervenant'
           readOnly: true
+        config:
+          allOf:
+          - $ref: '#/components/schemas/ProjectIntervenantConfig'
+          readOnly: true
         created_by:
           allOf:
           - $ref: '#/components/schemas/CreatedBy'
@@ -8853,11 +9001,31 @@ components:
           format: date-time
           readOnly: true
       required:
+      - config
       - created_at
       - created_by
       - id
       - intervenant
       - updated_at
+    ProjectIntervenantConfig:
+      type: object
+      properties:
+        diffusion_nbre_of_days:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Number of days after project start for document diffusion response.
+        suivi_nbre_of_days:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Number of days after project start for Suivi Administrative
+            steps.
+        gestion_nbre_of_days:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Number of days after project start for sample management.
     ProjectLot:
       type: object
       properties:
@@ -9353,16 +9521,6 @@ components:
         * `canceled` - Canceled
         * `rejected` - Rejected
         * `temporarily_done` - Temporarily Done
-    Status7c6Enum:
-      enum:
-      - valid
-      - invalid
-      - not_validated_yet
-      type: string
-      description: |-
-        * `valid` - Valid
-        * `invalid` - Invalid
-        * `not_validated_yet` - Not Validated Yet
     Status841Enum:
       enum:
       - pending
@@ -9377,6 +9535,26 @@ components:
         * `completed` - Completed
         * `not_responding` - Not Responding
         * `canceled` - Canceled
+    StatusE51Enum:
+      enum:
+      - favorable
+      - sans_avis
+      - avec_observation
+      - avec_observation_bloquante
+      - refuse
+      - valid
+      - invalid
+      - not_validated_yet
+      type: string
+      description: |-
+        * `favorable` - Favorable
+        * `sans_avis` - Sans avis
+        * `avec_observation` - Avec observation
+        * `avec_observation_bloquante` - Avec observation bloquante
+        * `refuse` - Refusé
+        * `valid` - Valid
+        * `invalid` - Invalid
+        * `not_validated_yet` - Not Validated Yet
     StepDocument:
       type: object
       properties:
@@ -9854,13 +10032,17 @@ components:
       - update_document
       - rappel_client
       - rappel_subcontractor
+      - rappel_client_for_intervenant_document_diffusion
+      - rappel_intervenant_for_document_diffusion
       type: string
       description: |-
         * `upload_devis` - Upload Devis
         * `assign_subcontractor` - Assign Subcontractor
         * `update_document` - Update Document
         * `rappel_client` - Rappel Client
-        * `rappel_subcontractor` - Rappel Subcontractor
+        * `rappel_subcontractor` - Diffusion de Document
+        * `rappel_client_for_intervenant_document_diffusion` - Rappel Client for Intervenant Document Diffusion
+        * `rappel_intervenant_for_document_diffusion` - Rappel Intervenant for Document Diffusion
     TokenObtainPairRequest:
       type: object
       properties:

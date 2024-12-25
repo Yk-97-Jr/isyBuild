@@ -1,6 +1,6 @@
 'use client'; // Keep this label at the top
 
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 
 import { useParams } from 'next/navigation';
 
@@ -18,6 +18,11 @@ import DocDiffInformation from './DocDiffInformation'; // Main Form Component
 import DocDiffTypeAndLot from './DocDiffTypeAndLot'; // Display Component for Type and Lot
 import type { SnackBarContextType } from '@/types/apps/snackbarType';
 import DocDiffCreatedBy from './DocDiffCreatedBy';
+import DocumentDocDiff from './Document/DocumentDocDiff';
+import AddDocumentDocDiff from './Document/dialogs/add/AddDocumentDocDiff';
+import DeleteDocumentDocDiff from './Document/dialogs/delete/DeleteDocumentDocDiff';
+import ModifyDocumentDocDiff from './Document/dialogs/modify/ModifyDocumentDocDiff';
+import HistoryDevis from './Document/dialogs/history/HistoryDevis';
 
 type FormValidateDocDiffUpdateType = {
   title: string;
@@ -38,11 +43,21 @@ const DocDiffEdit: React.FC = () => {
   });
 
   console.log(docDiffData);
+
+  const [openAdd, setOpenAdd] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
+  const [openModify, setOpenModify] = useState(false)
+  const [openHistory, setOpenHistory] = useState(false)
+  const [id, setId] = useState<number>();
+
+  
   const localisation = docDiffData?.localisation as LocalisationRead
+
+  const DocumentDocDiffData = docDiffData?.document
   
   
 
-  const [updateDocDiff, { isLoading: isUpdating }] = useDocumentDiffusionUpdateMutation();
+  const [updateDocDiff, { isLoading: isUpdating },  ] = useDocumentDiffusionUpdateMutation();
   const { data  } = useLocalisationsListQuery({ page: 1, pageSize: 500 });
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
@@ -87,11 +102,13 @@ const DocDiffEdit: React.FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <>
       <Grid container spacing={6}>
         {/* Header */}
         <Grid item xs={12}>
+    <form onSubmit={handleSubmit(onSubmit)}>
           <DocDiffModifyHeader onSubmit={handleSubmit(onSubmit)} isLoading={isUpdating} />
+    </form>
         </Grid>
 
         {/* Main Form */}
@@ -100,8 +117,17 @@ const DocDiffEdit: React.FC = () => {
             <Grid item xs={12}>
               <DocDiffInformation register={register} errors={errors} localisations={localisation} localisation={data?.results} phaseValue={docDiffData?.phase}/>
             </Grid>
+            <Grid item xs={12} >
+        
+            <DocumentDocDiff DocumentDocDiffData={DocumentDocDiffData} setOpenAdd={setOpenAdd}
+                              setId={setId} setOpenDelete={setOpenDelete} setOpenModify={setOpenModify}
+                              setOpenHistory={setOpenHistory}/>
+          
+      </Grid>
           </Grid>
         </Grid>
+
+        
 
         {/* Sidebar */}
         <Grid item xs={12} md={3.5}>
@@ -118,8 +144,32 @@ const DocDiffEdit: React.FC = () => {
             </Grid>
           </Grid>
         </Grid>
+        
       </Grid>
-    </form>
+      <AddDocumentDocDiff
+        open={openAdd}
+        setOpen={setOpenAdd}
+        refetch={refetch}
+        />
+      <DeleteDocumentDocDiff
+        open={openDelete}
+        setOpen={setOpenDelete}
+        refetch={refetch}
+        id={id}
+        />
+      <ModifyDocumentDocDiff
+        open={openModify}
+        setOpen={setOpenModify}
+        refetch={refetch}
+        id={id}
+        data={DocumentDocDiffData}
+      />
+      <HistoryDevis
+        open={openHistory}
+        setOpen={setOpenHistory}
+        id={id}
+      />
+    </>
   );
 };
 
