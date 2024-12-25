@@ -46,7 +46,7 @@ const DeleteDocumentDocDiff = ({open, setOpen, id, refetch}: Props) => {
     try {
       if (id !== undefined) {
         try {
-          await deletedDocumentDocDiff({documentDiffusionId: +id}).unwrap();
+          await deletedDocumentDocDiff({documentId: +id}).unwrap();
           handleClose();
           setOpenSnackBar(true);
           setInfoAlert({severity: 'success', message: 'Fichier supprimé avec succès'});
