@@ -1977,7 +1977,12 @@ paths:
         name: page
         schema:
           type: integer
-        required: true
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
       tags:
       - Finance Management
       security:

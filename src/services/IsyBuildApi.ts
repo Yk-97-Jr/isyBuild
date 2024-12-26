@@ -484,7 +484,7 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({
         url: `/finance-enterprises/${queryArg.financeEnterpriseId}/finance-situations/`,
-        params: { page: queryArg.page },
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
       }),
     }),
     listTravailSupplementaire: build.query<
@@ -2127,7 +2127,12 @@ export type ListFinanceSituationsApiResponse =
   /** status 200  */ PaginatedFinanceSituationRead;
 export type ListFinanceSituationsApiArg = {
   financeEnterpriseId: number;
-  page: number;
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
 };
 export type ListTravailSupplementaireApiResponse =
   /** status 200  */ PaginatedTravailSupplementaireRead;
