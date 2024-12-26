@@ -23,7 +23,7 @@ const FinanceSituationList = () => {
 
 
   // Pass parameters to the query hook
-  const {data, error, isLoading, isFetching, refetch} = useListFinanceSituationsQuery({financeEnterpriseId:+financeId,page, pageSize});
+  const {data, error, isLoading, isFetching, refetch} = useListFinanceSituationsQuery({financeEnterpriseId:+financeId,page});
 
   useEffect(() => {
     refetch();
