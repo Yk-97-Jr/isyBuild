@@ -18,7 +18,7 @@ const tabContentList: { [key: string]: ReactElement } = {
   'Informations Generales': <MainEdit2/>,
   'Appelle Offre': <AppeleOffre/>,
   'Gestion Administartive': <GestionAdministrativeList/>,
-  'diffusions de documents': <DocDiffList />,
+  'Diffusions De Documents': <DocDiffList />,
   'Finance': <FinanceList />,
 }
 
