@@ -1,11 +1,12 @@
 import React from 'react'
 
-import MainProject from '@/views/apps/admin/projects/Add/MainProject'
+import ProjectTable from "@views/apps/admin/projects/list/ProjectList";
+
 
 function page() {
   return (
     <div>
-      <MainProject />
+      <ProjectTable />
     </div>
   )
 }

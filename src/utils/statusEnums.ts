@@ -1,6 +1,12 @@
 // statusEnums.ts
 
-import type {Status109Enum, Status841Enum, SuiviAdministrativeStatusEnum, Status3BfEnum} from "@/services/IsyBuildApi";
+import type {
+  Status109Enum,
+  Status841Enum,
+  SuiviAdministrativeStatusEnum,
+  Status3BfEnum,
+  ProjectStatusEnum
+} from "@/services/IsyBuildApi";
 
 export const Status841Mapping: Record<Status841Enum, {
   label: string,
@@ -46,35 +52,17 @@ export const Status3BfMapping: Record<Status3BfEnum, {
   temporarily_done: {label: 'Temporairement terminé', color: 'success'},
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const ProjectStatusMapping: Record<ProjectStatusEnum, {
+  label: string;
+  color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning';
+}> = {
+  draft: {label: 'Brouillon', color: 'default'},
+  pending: {label: 'En attente', color: 'warning'},
+  in_progress: {label: 'En cours', color: 'primary'},
+  completed: {label: 'Terminé', color: 'success'},
+  on_hold: {label: 'En pause', color: 'secondary'},
+  canceled: {label: 'Annulé', color: 'error'},
+};
 
 
 export type Status900Enum = 'open' | 'closed' | 'under_review';

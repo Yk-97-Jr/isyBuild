@@ -187,14 +187,14 @@ const EditAddress = ({ projectState, errors, setProjectState, isLoading }: addre
             <CustomTextField
               fullWidth
               label='Ville'
-              placeholder='Ville'
+              placeholder='Ville' 
               value={projectState?.address.city || ''}
               onChange={handleVille}
               error={!!errors.ville}
               helperText={errors.ville}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={12}>
             <CustomTextField
               fullWidth
               value={projectState.address.postal_code}

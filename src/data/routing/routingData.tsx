@@ -4,7 +4,7 @@ import type {rountingDataType} from '@/types/menuTypes'
 const rountingData = (): rountingDataType[] => [
   {
     path: 'role/dashboard',
-    roles: ['admin', 'client','subcontractor'],
+    roles: ['admin', 'client', 'subcontractor', 'intervenant'],
   },
   {
     path: 'role/users/list',
@@ -44,31 +44,31 @@ const rountingData = (): rountingDataType[] => [
   },
   {
     path: 'role/subcontractor/list',
-    roles: ['admin','client']
+    roles: ['admin', 'client']
   },
   {
     path: 'role/subcontractor/add',
-    roles: ['admin','client']
+    roles: ['admin', 'client']
   },
   {
     path: 'role/subcontractor/[id]/details',
-    roles: ['admin','client']
+    roles: ['admin', 'client']
   },
   {
     path: 'role/projects/list',
-    roles: ['admin', 'client','subcontractor']
+    roles: ['admin', 'client', 'subcontractor', 'intervenant']
   },
   {
     path: 'role/projects/add',
-    roles: ['admin','client']
+    roles: ['admin', 'client', 'intervenant']
   },
   {
     path: 'role/projects/[edit]/details',
-    roles: ['admin','client','subcontractor']
+    roles: ['admin', 'client', 'subcontractor', 'intervenant']
   },
   {
     path: 'role/projects/[edit]/details/[id]',
-    roles: ['admin','client']
+    roles: ['admin', 'client']
   },
   {
     path: 'role/staff/[id]/details/add',
@@ -101,6 +101,7 @@ const rountingData = (): rountingDataType[] => [
   
   
 ] 
+  
 
 export default rountingData
 

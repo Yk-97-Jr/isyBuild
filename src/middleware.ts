@@ -1,30 +1,29 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-import { verifyToken } from '@/utils/verifyToken'
 import rountingData from '@/data/routing/routingData'
 
 export function middleware(req: NextRequest) {
-  console.log("midlllllllllllllll")
   const { pathname } = req.nextUrl
 
-  // Get the access token from the cookies
-  const token = req.cookies.get('access_token')
+  // // Get the access token from the cookies
+  // const token = req.cookies.get('access_token')
   const userCookie = req.cookies.get('user')
   const user = userCookie ? JSON.parse(userCookie.value) : null
 
-  // If no token is found, redirect to the login page
-  if (!token) {
-    return NextResponse.redirect(new URL('/login', req.url))
-  }
-
-  // Verify and decode the token
-  const decodedToken = verifyToken(token.value)
-
-  // If the token is invalid or expired, redirect to the login page
-  if (!decodedToken) {
-    return NextResponse.redirect(new URL('/login', req.url))
-  }
+  //
+  // // If no token is found, redirect to the login page
+  // if (!token) {
+  //   return NextResponse.redirect(new URL('/login', req.url))
+  // }
+  //
+  // // Verify and decode the token
+  // const decodedToken = verifyToken(token.value)
+  //
+  // // If the token is invalid or expired, redirect to the login page
+  // if (!decodedToken) {
+  //   return NextResponse.redirect(new URL('/login', req.url))
+  // }
 
   // Extract the user's role from the decoded token (replace 'role' with actual token property)
   const userRole = user?.role // Default to 'admin' if no role is available

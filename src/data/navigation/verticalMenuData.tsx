@@ -6,7 +6,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Tableau de bord',
     href: '/role/dashboard',  // Use role as a placeholder
     icon: 'tabler-smart-home',
-    roles: ['admin', 'client','subcontractor'],
+    roles: ['admin', 'client', 'subcontractor'],
     permissions: ['view dashboard'],
     isSection: false,
     children: []
@@ -15,7 +15,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Projects',
     href: '/role/projects/list', // Use role as a placeholder
     icon: 'tabler-clipboard-list',
-    roles: ['admin', 'client','subcontractor'],
+    roles: ['admin', 'client', 'subcontractor', 'intervenant'],
     isSection: false,
     children: []
   },
@@ -40,7 +40,7 @@ const allMenuData = (): VerticalMenuDataType[] => [
     label: 'Lots',
     href: '/role/lots/list', // Use role as a placeholder
     icon: 'tabler-category',
-    roles: ['admin','client'], // For both 'client' and 'admin'
+    roles: ['admin', 'client'], // For both 'client' and 'admin'
     isSection: false,
     children: []
   },

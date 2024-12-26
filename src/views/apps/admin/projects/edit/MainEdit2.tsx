@@ -13,7 +13,6 @@ import EditInformation from './EditInformation'
 
 import EditAddress from './EditAddress'
 
-import Details from './Details'
 
 import CreatedBy from './CreatedBy'
 
@@ -30,6 +29,8 @@ import {
   type ProjectEmailTemplateRead
 } from '@/services/IsyBuildApi'
 import HandleIntervenants from "@views/apps/admin/projects/edit/HandleIntervenants";
+import Team from './Team/Team'
+import NotificationFrequency from '@/views/apps/client/projects/Add/NotificationFrequency'
 
 function MainEdit2() {
   const params = useParams()
@@ -46,7 +47,12 @@ function MainEdit2() {
 
   const [templates, setTemplates] = useState<ProjectEmailTemplateRead[]>()
 
+  const [notificationFrequency, setNotificationFrequency] = useState<number | null>(null)
+
+  const [maxNotification, setMaxNotification] = useState<number | null>(null)
+
   useEffect(() => {
+
     if (ProjectData) {
       setProjectState(ProjectData)
     }
@@ -112,6 +118,7 @@ function MainEdit2() {
       errors.longitude = 'Longitude is required and must be in the range of -90 to 90'
     }
 
+
     return errors
   }
 
@@ -130,7 +137,9 @@ function MainEdit2() {
     map_coordinate: {
       latitude: projectState?.map_coordinate?.latitude || '',
       longitude: projectState?.map_coordinate?.longitude || ''
-    }
+    },
+    max_notifications: maxNotification,
+    notification_frequency: notificationFrequency
   }
 
   const [TriggerUpdate] = useProjectsUpdateUpdateMutation()
@@ -175,6 +184,22 @@ function MainEdit2() {
     }
   }
 
+  const handleFrequency = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+
+    setNotificationFrequency(parseInt(value))
+
+    console.log(notificationFrequency)
+  }
+
+  const handleMaxFrequency = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+
+    setMaxNotification(parseInt(value))
+
+    console.log(maxNotification)
+  }
+
   return (
     <>
       {isLoading ? (
@@ -208,20 +233,24 @@ function MainEdit2() {
                 isLoading={isLoading}
                 errors={errors}
               />
+              <Team />
             </div>
             <div className='sm:w-2/5 flex flex-col gap-5'>
-              <Details
-                projectState={projectState || ({} as ProjectRead)}
-                setProjectState={setProjectState}
-                isLoading={isLoading}
-              />
               <HandleIntervenants />
+              <NotificationFrequency
+                notificationFrequency={notificationFrequency}
+                handleFrequency={handleFrequency}
+                setNotificationFrequency={setNotificationFrequency}
+                handleMaxFrequency={handleMaxFrequency}
+              />
+              <Templates templates={templates || []} templates_loading={templates_loading} />
               <CreatedBy
                 projectState={projectState || ({} as ProjectRead)}
                 setProjectState={setProjectState}
                 isLoading={isLoading}
               />
-              <Templates templates={templates || []} templates_loading={templates_loading}/>
+
+
             </div>
           </div>
         </div>

@@ -28,13 +28,17 @@ import {
   getPaginationRowModel,
   getSortedRowModel
 } from '@tanstack/react-table'
-import type {ColumnDef, FilterFn} from '@tanstack/react-table'
+import type {
+  ColumnDef, FilterFn, SortingState
+} from '@tanstack/react-table'
 import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
 import Box from '@mui/material/Box'
 
 import {CircularProgress} from '@mui/material'
+
+import CardHeader from "@mui/material/CardHeader";
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -48,6 +52,7 @@ import ClientDialog from '@components/dialogs/client-dialog'
 import type {ClientRead} from '@/services/IsyBuildApi'
 
 import {useAuth} from '@/contexts/AuthContext'
+import TableFilters from "@views/apps/admin/clients/list/TableFilters";
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -116,7 +121,13 @@ const ClientListTable = ({
                            pageSize,
                            countRecords,
                            isFetching,
-                           refetch
+                           refetch,
+                           setSearch,
+                           search,
+                           setIsActive,
+                           isActive,
+                           setSorting,
+                           sorting
                          }: {
   data?: ClientRead[]
   page: number
@@ -126,13 +137,17 @@ const ClientListTable = ({
   countRecords?: number
   refetch: () => void
   isFetching: boolean
+  setSearch: React.Dispatch<React.SetStateAction<string>>
+  search: string
+  setIsActive: React.Dispatch<React.SetStateAction<string | null>>
+  isActive: string | null
+  sorting: SortingState
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>>
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [open, setOpen] = useState(false)
-  const [filteredData] = useState(data)
-  const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter()
   const {user} = useAuth() // Get the user from AuthContext
   const userRole = user?.role
@@ -240,18 +255,19 @@ const ClientListTable = ({
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, filteredData]
+    [data]
   )
 
   const table = useReactTable({
-    data: filteredData as ClientRead[],
+    data: data as ClientRead[],
     columns,
+    onSortingChange: setSorting,
     filterFns: {
       fuzzy: fuzzyFilter
     },
     state: {
       rowSelection,
-      globalFilter
+      sorting
     },
     initialState: {
       pagination: {
@@ -263,7 +279,6 @@ const ClientListTable = ({
     globalFilterFn: fuzzyFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -275,8 +290,8 @@ const ClientListTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
-        {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
+        <CardHeader title='Filters' className='pbe-4'/>
+        <TableFilters setIsActive={setIsActive} isActive={isActive}/>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -290,8 +305,10 @@ const ClientListTable = ({
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
+              value={search}
+              onChange={value => {
+                setSearch(String(value))
+              }}
               placeholder='Rechercher un client'
               className='max-sm:is-full'
             />

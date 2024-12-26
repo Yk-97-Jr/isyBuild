@@ -3,7 +3,7 @@
 
 
 import React from 'react'
- 
+
 import { Card,  CardContent, Typography } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 
@@ -39,7 +39,7 @@ const ClinetShowcase: React.FC<ClinetShowcaseProps> = ({ clinetShowcaseData }) =
         <Typography variant='subtitle2' fontWeight='normal'>
         Clients
         </Typography>
-        
+
         {clinetShowcaseData ? (
             <div className='flex items-center gap-3'>
           {getAvatar({
@@ -53,16 +53,16 @@ const ClinetShowcase: React.FC<ClinetShowcaseProps> = ({ clinetShowcaseData }) =
               <Typography>{clinetShowcaseData?.client.contact_email}</Typography>
           </div>
         </div>
-           
-        
-          
-            
+
+
+
+
           ) : (
             <Typography variant='body1' color='text.secondary'>
               Aucune information disponible
             </Typography>
           )}
-        
+
       </CardContent>
     </Card>
   )
