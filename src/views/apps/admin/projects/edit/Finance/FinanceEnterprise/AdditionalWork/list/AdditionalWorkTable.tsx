@@ -3,9 +3,10 @@
 // React Imports
 import React, {useEffect, useState, useMemo} from 'react'
 
-import {useParams, useRouter} from 'next/navigation'
+import {useRouter} from 'next/navigation'
 
 import Card from '@mui/material/Card'
+import type { ButtonProps } from '@mui/material/Button';
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
@@ -47,6 +48,15 @@ import DeleteTsDialog from '@components/dialogs/TSDelete-dialog'
 import type {TravailSupplementaireRead} from '@/services/IsyBuildApi'
 
 import {useAuth} from '@/contexts/AuthContext'
+import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElementClick'
+import TsAddDialog from '../add/TsAddDialog'
+
+
+const buttonProps: ButtonProps = {
+  variant: 'contained',
+  children: 'Ajouter',
+  startIcon: <i className='tabler-plus' />
+}
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -65,6 +75,8 @@ type FinanceTypeWithAction = TravailSupplementaireRead & {
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value)
+
+
 
   // Store the itemRank info
   addMeta({
@@ -134,7 +146,6 @@ const AdditionalWorkTable = ({
   const [globalFilter, setGlobalFilter] = useState('')
   const router = useRouter()
   const {user} = useAuth() // Get the user from AuthContext
-  const {edit} = useParams()
   const userRole = user?.role
 
 
@@ -147,24 +158,11 @@ const AdditionalWorkTable = ({
     setId(id)
   }
 
-  const handleAddFinance = () => {
-    router.push(`/${userRole}/projects/${edit}/details/finance/${id}/travsupp/add`)
-  }
+
 
   const columns = useMemo<ColumnDef<FinanceTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('finance_enterprise.subcontractor.name', {
-        header: 'Nom',
-        cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.finance_enterprise.subcontractor.name}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+      
       columnHelper.accessor('name', {
         header: 'Finance Situation',
         cell: ({row}) => (
@@ -286,14 +284,8 @@ const AdditionalWorkTable = ({
               placeholder='Rechercher'
               className='max-sm:is-full'
             />
-            <Button
-              variant='contained'
-              className='max-sm=is-full'
-              startIcon={<i className='tabler-plus'/>}
-              onClick={handleAddFinance}
-            >
-              Ajouter 
-            </Button>
+                     <OpenFinanceOnElementClick element={Button} elementProps={buttonProps} dialog={TsAddDialog} dialogProps={{ refetch }}/>
+
           </div>
         </div>
         <div className='overflow-x-auto'>

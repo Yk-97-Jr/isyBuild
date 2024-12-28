@@ -27,6 +27,7 @@ type Props = {
   setOpenModify: React.Dispatch<React.SetStateAction<boolean>>;
   setOpenHistory: React.Dispatch<React.SetStateAction<boolean>>;
   setId: React.Dispatch<React.SetStateAction<number | undefined>>; // This will be used to control a boolean state
+  setOpenDiffuse:React.Dispatch<React.SetStateAction<boolean>>;
 
 
 };
@@ -37,7 +38,8 @@ const DocumentDocDiff: React.FC<Props> = ({
                                              setId,
                                              setOpenDelete,
                                              setOpenModify,
-                                             setOpenHistory
+                                             setOpenHistory,
+                                             setOpenDiffuse
 
                                            }) => {
 
@@ -59,6 +61,14 @@ const DocumentDocDiff: React.FC<Props> = ({
 
   const handleEdit = (id: number) => {
     setOpenModify(true)
+    setId(id)
+
+    console.log(id)
+
+  }
+
+  const handleDiffuse = (id: number) => {
+    setOpenDiffuse(true)
     setId(id)
 
     console.log(id)
@@ -98,6 +108,13 @@ const DocumentDocDiff: React.FC<Props> = ({
               iconClassName='text-textSecondary'
               options={[
                 {
+                  text: 'Diffuse',
+                  menuItemProps: {
+                    className: 'flex items-center gap-1 text-textSecondary',
+                    onClick: () => handleDiffuse(DocumentDocDiffData?.id)
+                  }
+                },
+                {
                   text: 'Modifier',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
@@ -117,7 +134,8 @@ const DocumentDocDiff: React.FC<Props> = ({
                     className: 'flex items-center gap-1 text-textSecondary',
                     onClick: () => handleDelete(DocumentDocDiffData?.id)
                   }
-                }
+                },
+               
               ]}
             />
           }/>

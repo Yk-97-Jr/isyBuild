@@ -35,7 +35,7 @@ const DocDiffAdd = () => {
   const {edit} = useParams()
 
   const {data:projectLots} = useProjectsLotsRetrieveQuery({
-    projectId:+72,
+    projectId:+edit,
   })
 
   console.log(edit);

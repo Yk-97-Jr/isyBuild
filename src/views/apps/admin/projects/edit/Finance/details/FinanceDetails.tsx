@@ -11,11 +11,13 @@ import { CircularProgress } from '@mui/material'
 import { useRetrieveFinanceByIdQuery  } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
 import FinanceEarn from './FinanceEarn';
 import FinanceListTable from './FinanceListTable';
+import FinanceDataCard from './FinanceDataCard';
+import FinancePay from './FinancePay';
 
 const FinanceDetails = () => {
   const { financeId } = useParams() // Get subcontractorId from route parameters
 
-  console.log(financeId);
+
   
 
   const { data , isLoading: isLoadingQuery, isFetching } = useRetrieveFinanceByIdQuery({
@@ -49,6 +51,12 @@ const FinanceDetails = () => {
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <FinanceEarn data={data} />
+            </Grid>
+            <Grid item xs={12}>
+            <FinanceDataCard data={data} />
+            </Grid>
+            <Grid item xs={12}>
+            <FinancePay data={data} />
             </Grid>
           </Grid>
         </Grid>

@@ -158,7 +158,7 @@ const handleEditUser = (id: number) => {
 const columns = useMemo<ColumnDef<FinanceReadWithAction, any>[]>(
 () => [
 columnHelper.accessor('project_lot.lot.name', {
-header: 'Nom',
+header: 'LOTS',
 cell: ({row}) => (
 <div className='flex items-center gap-1'>
 <div className='flex flex-col'>
@@ -169,8 +169,20 @@ cell: ({row}) => (
 </div>
 )
 }),
+columnHelper.accessor('total_contract', {
+  header: 'MARCHES',
+  cell: ({row}) => (
+  <div className='flex items-center gap-1'>
+  <div className='flex flex-col'>
+  <Typography color='text.primary' className='font-medium'>
+  {`${row.original.total_contract}`}
+  </Typography>
+  </div>
+  </div>
+  )
+  }),
 columnHelper.accessor('total_prorata', {
-header: 'total_prorata',
+header: 'PRORATA',
 cell: ({row}) => (
 <div className='flex items-center gap-1'>
 <div className='flex flex-col'>
@@ -182,7 +194,7 @@ cell: ({row}) => (
 )
 }),
 columnHelper.accessor('total_ts_travaux', {
-  header: 'total_ts_travaux',
+  header: 'TOTAL TS TRAVAUX',
   cell: ({row}) => (
   <div className='flex items-center gap-1'>
   <div className='flex flex-col'>
@@ -193,20 +205,44 @@ columnHelper.accessor('total_ts_travaux', {
   </div>
   )
   }),
-  columnHelper.accessor('total_contract', {
-    header: 'total_contract',
+  columnHelper.accessor('total_ts_choix', {
+    header: 'TOTAL TS CHOIX',
     cell: ({row}) => (
     <div className='flex items-center gap-1'>
     <div className='flex flex-col'>
     <Typography color='text.primary' className='font-medium'>
-    {`${row.original.total_contract}`}
+    {`${row.original.total_ts_choix}`}
     </Typography>
     </div>
     </div>
     )
     }),
+    columnHelper.accessor('total_ts_tma', {
+      header: 'TOTAL TS TMA',
+      cell: ({row}) => (
+      <div className='flex items-center gap-1'>
+      <div className='flex flex-col'>
+      <Typography color='text.primary' className='font-medium'>
+      {`${row.original.total_ts_tma}`}
+      </Typography>
+      </div>
+      </div>
+      )
+      }),
+      columnHelper.accessor('total_markets_plus_ts', {
+        header: 'MARCHES+TS',
+        cell: ({row}) => (
+        <div className='flex items-center gap-1'>
+        <div className='flex flex-col'>
+        <Typography color='text.primary' className='font-medium'>
+        {`${row.original.total_markets_plus_ts}`}
+        </Typography>
+        </div>
+        </div>
+        )
+        }),
     columnHelper.accessor('total_cie', {
-      header: 'total_cie',
+      header: 'CIE',
       cell: ({row}) => (
       <div className='flex items-center gap-1'>
       <div className='flex flex-col'>
@@ -217,8 +253,21 @@ columnHelper.accessor('total_ts_travaux', {
       </div>
       )
       }),
+      
+      columnHelper.accessor('total_retention_guarantee', {
+        header: 'Retenue de garantie',
+        cell: ({row}) => (
+        <div className='flex items-center gap-1'>
+        <div className='flex flex-col'>
+        <Typography color='text.primary' className='font-medium'>
+        {`${row.original.total_retention_guarantee}`}
+        </Typography>
+        </div>
+        </div>
+        )
+        }),
       columnHelper.accessor('total_final_amount', {
-        header: 'total_final_amount',
+        header: 'MARCHES+TS+CIE-PRORATAT-RG',
         cell: ({row}) => (
         <div className='flex items-center gap-1'>
         <div className='flex flex-col'>
@@ -229,58 +278,31 @@ columnHelper.accessor('total_ts_travaux', {
         </div>
         )
         }),
-        columnHelper.accessor('total_markets_plus_ts', {
-          header: 'total_markets_plus_ts',
+        
+        columnHelper.accessor('payment_cumulated', {
+          header: 'PAIEMENT CUMULE',
           cell: ({row}) => (
           <div className='flex items-center gap-1'>
           <div className='flex flex-col'>
           <Typography color='text.primary' className='font-medium'>
-          {`${row.original.total_markets_plus_ts}`}
+          {`${row.original.payment_cumulated}`}
           </Typography>
           </div>
           </div>
           )
           }),
-          columnHelper.accessor('total_retention_guarantee', {
-            header: 'total_retention_guarantee',
+          columnHelper.accessor('payment_cumulated_percentage', {
+            header: 'PAIEMENT CUMULE%',
             cell: ({row}) => (
             <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
             <Typography color='text.primary' className='font-medium'>
-            {`${row.original.total_retention_guarantee}`}
+            {`${row.original.payment_cumulated_percentage}`}
             </Typography>
             </div>
             </div>
             )
             }),
-            columnHelper.accessor('total_ts_choix', {
-              header: 'total_ts_choix',
-              cell: ({row}) => (
-              <div className='flex items-center gap-1'>
-              <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-              {`${row.original.total_ts_choix}`}
-              </Typography>
-              </div>
-              </div>
-              )
-              }),
-              columnHelper.accessor('total_ts_tma', {
-                header: 'total_ts_tma',
-                cell: ({row}) => (
-                <div className='flex items-center gap-1'>
-                <div className='flex flex-col'>
-                <Typography color='text.primary' className='font-medium'>
-                {`${row.original.total_ts_tma}`}
-                </Typography>
-                </div>
-                </div>
-                )
-                }),
-               
-
-
-
 
 columnHelper.accessor('action', {
 header: 'Action',

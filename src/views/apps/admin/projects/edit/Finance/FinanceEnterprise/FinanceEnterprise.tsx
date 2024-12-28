@@ -8,24 +8,29 @@ import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import { CircularProgress } from '@mui/material'
 
-import { useRetrieveFinanceByIdQuery  } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
+import {  useRetrieveFinanceEnterpriseByIdQuery  } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
 import EnterpriseDetails from './EnterpriseDetails';
 import FinanceSituationlist from './FinanceSituation/list/FinanceSituationlist';
 
 import AdditionalWorkList from './AdditionalWork/list/AdditionalWorkList';
+import FEDataCard from './FEDataCard';
+import Payment from './Payment';
 
 const FinanceEnterprise = () => {
-  const { financeId } = useParams() // Get subcontractorId from route parameters
+  const {   idFe} = useParams() // Get subcontractorId from route parameters
 
-  console.log(financeId);
+  console.log("ide:",idFe) ;
   
 
-  const { data , isLoading: isLoadingQuery,  } = useRetrieveFinanceByIdQuery({
-    financeId: +financeId
-  })
+  
 
 
-  console.log(data);
+ 
+
+
+  
+    const {data,isLoading: isLoadingQuery, } = useRetrieveFinanceEnterpriseByIdQuery({financeEnterpriseId:+idFe});
+      
   
 
   if (isLoadingQuery)
@@ -53,7 +58,13 @@ const FinanceEnterprise = () => {
         <Grid item xs={12} md={3.5}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <EnterpriseDetails  />
+              <EnterpriseDetails />
+            </Grid>
+            <Grid item xs={12}>
+              <FEDataCard  data={data}/>
+            </Grid>
+            <Grid item xs={12}>
+              <Payment  data={data}/>
             </Grid>
           </Grid>
         </Grid>

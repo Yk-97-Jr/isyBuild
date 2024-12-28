@@ -14,7 +14,7 @@ import CustomTextField from '@core/components/mui/TextField';
 
 // Types
 import type { FormValidateDocDiffUpdateType } from './schemaDocDiffEdit';
-import type { PhaseEnum, LocalisationRead } from '@/services/IsyBuildApi';
+import type { PhaseEnum, } from '@/services/IsyBuildApi';
 
 type DocumentDiffusionUpdateProps = {
   register: UseFormRegister<FormValidateDocDiffUpdateType>;
@@ -23,13 +23,12 @@ type DocumentDiffusionUpdateProps = {
     phase?: FieldError;
     localisation?: FieldError;
   };
-  localisations: LocalisationRead; // Adjust this type if necessary
-  localisation?: LocalisationRead[]
+
   phaseValue?: PhaseEnum
 };
 
-const DocDiffInfo: React.FC<DocumentDiffusionUpdateProps> = ({ register, errors, localisations, localisation, phaseValue }) => {
-  console.log(localisations);
+const DocDiffInfo: React.FC<DocumentDiffusionUpdateProps> = ({ register, errors,   phaseValue }) => {
+
 
   return (
     <Card>
@@ -48,26 +47,7 @@ const DocDiffInfo: React.FC<DocumentDiffusionUpdateProps> = ({ register, errors,
             />
           </Grid>
           {/* Title Input */}
-          <Grid item xs={12}>
-          <CustomTextField
-    select
-    fullWidth
-    label="Localisation"
-    defaultValue={localisations?.id }
-    {...register('localisation')}
-    error={!!errors.localisation}
-    helperText={errors.localisation?.message}
-  >
-    <MenuItem value="">
-      <em>Sélectionnez une localisation</em>
-    </MenuItem>
-    {localisation?.map((location) => (
-      <MenuItem key={location.id} value={location.id}>
-        {location.name}
-      </MenuItem>
-    ))}
-  </CustomTextField>
-</Grid>
+
 
 {/* Phase Dropdown */}
 <Grid item xs={12} >

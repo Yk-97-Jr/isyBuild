@@ -30,7 +30,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
 } from '@tanstack/react-table'
-import type {ColumnDef, FilterFn, /* SortingState */} from '@tanstack/react-table'
+import type {ColumnDef, FilterFn,  SortingState } from '@tanstack/react-table'
 import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
@@ -120,10 +120,10 @@ const DocDiffTable = ({
                          isFetching,
                          refetch,
 
-                         /* setSearch,
+                         setSearch,
                          search,
                          setSorting,
-                         sorting */
+                         sorting 
                        }: {
   data?: DocumentDiffusionRead[]
 
@@ -135,10 +135,10 @@ const DocDiffTable = ({
   refetch: () => void
   isFetching: boolean
 
-  /* setSearch: React.Dispatch<React.SetStateAction<string>>
+  setSearch: React.Dispatch<React.SetStateAction<string>>
   search: string
   sorting: SortingState
-  setSorting: React.Dispatch<React.SetStateAction<SortingState>> */
+  setSorting: React.Dispatch<React.SetStateAction<SortingState>> 
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -221,27 +221,54 @@ const DocDiffTable = ({
         )
       }),
 
-      columnHelper.accessor('phase', {
-        header: 'Phase',
+      columnHelper.accessor('status', {
+        header: 'status',
+        cell: ({row}) => (
+          <div className='flex items-center gap-1'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.status}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+
+
+      columnHelper.accessor('document.id', {
+        header: 'document',
         cell: ({ row }) => (
           <div className='flex items-center gap-1'>
             <Chip
-              label={row.original.phase} // Display the phase value
-              color='success' // Customize the chip color
-              variant='outlined' // Optional, for styling
+              label={row.original.document?.id ? ' Existé' : 'Non existé'} // Display appropriate label
+              color={row.original.document?.id ? 'success' : 'error'} // Green for exists, red for not exists
+              variant='tonal' // Optional, for styling
               size='small' // Adjust the size
               sx={{ fontWeight: 'medium' }} // Additional styling
             />
           </div>
         ),
       }),
+      
+      columnHelper.accessor('indice', {
+        header: 'indice',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-1'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.indice}`}
+              </Typography>
+            </div>
+          </div>
+        ),
+      }),
 
-      columnHelper.accessor('created_at', {
-        header: 'Date de Creation',
+      columnHelper.accessor('diffusion_date', {
+        header: 'Date de diffusion',
         cell: ({row}) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
+            {row.original.diffusion_date
+              ? `${new Date(row.original.diffusion_date).toLocaleDateString()} ${new Date(row.original.diffusion_date).toLocaleTimeString()}`
               : 'Date not available'}
           </Typography>
         )
@@ -270,7 +297,7 @@ const DocDiffTable = ({
     data: data as DocumentDiffusionRead[],
     columns,
 
-    /* onSortingChange: setSorting, */
+    onSortingChange: setSorting, 
 
     filterFns: {
       fuzzy: fuzzyFilter
@@ -278,7 +305,7 @@ const DocDiffTable = ({
     state: {
       rowSelection,
       
-     /*  sorting */
+       sorting 
     },
     initialState: {
       pagination: {
@@ -315,10 +342,10 @@ const DocDiffTable = ({
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
-              value={/* search */ ""}
+              value={ search }
               onChange={value => {
-/*                 setSearch(String(value))
- */            console.log(value);
+                setSearch(String(value))
+          
    }}
               placeholder='Rechercher'
               className='placeholder:text-xl max-sm:is-full'
