@@ -14,9 +14,14 @@ import Box from "@mui/material/Box";
 // Util Imports
 import Chip from "@mui/material/Chip";
 
+import {CircularProgress} from "@mui/material";
+
 import type {ProjectLotSubcontractorRead, Status841Enum} from "@/services/IsyBuildApi";
 import {getStatusProps} from "@/utils/statusHelper";
 import {Status841Mapping} from "@/utils/statusEnums";
+import {
+  useUpdateProjectLotSubcontractorStatusMutation
+} from "@/services/IsyBuildApi";
 
 type Props = {
   projectLotSubcontractorData: ProjectLotSubcontractorRead | undefined; // Adjust the type as necessary
@@ -27,11 +32,31 @@ const AproposStatus: React.FC<Props> = ({projectLotSubcontractorData}) => {
     projectLotSubcontractorData?.status || "pending"
   );
 
+  const [updateStatus, {isLoading}] = useUpdateProjectLotSubcontractorStatusMutation()
+
   const [isEditing, setIsEditing] = useState(false);
 
-  const handleStatusChange = (event: SelectChangeEvent<keyof typeof Status841Mapping>) => {
-    setStatus(event.target.value as keyof typeof Status841Mapping);
-    setIsEditing(false); // Close dropdown after selection
+  const handleStatusChange = async (event: SelectChangeEvent<keyof typeof Status841Mapping>) => {
+    try {
+      if (projectLotSubcontractorData) {
+        const response = await updateStatus({
+          projectLotSubcontractorId: projectLotSubcontractorData.id,
+          projectLotSubcontractorUpdateRequest: {
+            status: event.target.value as keyof typeof Status841Mapping,
+          },
+        });
+
+        if (response && response.data && response.data.status) {
+          setStatus(response.data.status);
+        }
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+
+      // Optionally, you can show a user-friendly error message here
+    } finally {
+      setIsEditing(false); // Close dropdown after selection
+    }
   };
 
 
@@ -45,7 +70,7 @@ const AproposStatus: React.FC<Props> = ({projectLotSubcontractorData}) => {
     <Card>
       <CardContent className="flex flex-col gap-6">
         <Typography variant="subtitle2" fontWeight="normal">
-          À Propos Status
+          À Propos Status dzdzd
         </Typography>
         <Grid container spacing={6} className="mbe-6">
           {projectLotSubcontractorData ? (
@@ -55,7 +80,7 @@ const AproposStatus: React.FC<Props> = ({projectLotSubcontractorData}) => {
                   <Typography className="font-medium" color="text.primary" sx={{marginRight: 2}}>
                     Status:
                   </Typography>
-                  {isEditing ? (
+                  {isEditing && !isLoading ? (
                     <Select
                       value={status}
                       onChange={handleStatusChange}
@@ -68,7 +93,7 @@ const AproposStatus: React.FC<Props> = ({projectLotSubcontractorData}) => {
                         </MenuItem>
                       ))}
                     </Select>
-                  ) : (
+                  ) : isLoading ? <CircularProgress sx={{color: 'white'}} size={24}/> : (
                     <Chip sx={{marginLeft: 1}} variant="tonal" label={label}
                           color={color as any}/>
                   )}

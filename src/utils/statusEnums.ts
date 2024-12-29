@@ -12,12 +12,13 @@ export const Status841Mapping: Record<Status841Enum, {
   label: string,
   color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning'
 }> = {
-  pending: {label: 'Pending', color: 'warning'},
-  in_progress: {label: 'In Progress', color: 'primary'},
-  completed: {label: 'Completed', color: 'success'},
-  not_responding: {label: 'Not Responding', color: 'error'},
-  canceled: {label: 'Canceled', color: 'secondary'},
+  pending: {label: 'En attente', color: 'warning'},
+  in_progress: {label: 'En cours', color: 'primary'},
+  completed: {label: 'Terminé', color: 'success'},
+  not_responding: {label: 'Pas de réponse', color: 'error'},
+  canceled: {label: 'Annulé', color: 'secondary'},
 };
+
 
 export const Status109Mapping: Record<Status109Enum, {
   label: string;
