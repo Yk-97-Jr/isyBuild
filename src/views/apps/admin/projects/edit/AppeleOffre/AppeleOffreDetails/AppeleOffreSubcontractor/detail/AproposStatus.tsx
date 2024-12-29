@@ -70,7 +70,7 @@ const AproposStatus: React.FC<Props> = ({projectLotSubcontractorData}) => {
     <Card>
       <CardContent className="flex flex-col gap-6">
         <Typography variant="subtitle2" fontWeight="normal">
-          À Propos Status dzdzd
+          À Propos Status
         </Typography>
         <Grid container spacing={6} className="mbe-6">
           {projectLotSubcontractorData ? (
