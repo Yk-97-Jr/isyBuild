@@ -5,10 +5,8 @@
 import React from 'react'
 
 import { Card,  CardContent, Typography } from '@mui/material'
-import Avatar from '@mui/material/Avatar'
 
 import type { ProjectSubcontractorRead } from '@/services/IsyBuildApi'
-import { getInitials } from '@/utils/getInitials'
 
 type  ClinetShowcaseProps = {
   clinetShowcaseData: ProjectSubcontractorRead | undefined // Adjust the type as necessary
@@ -16,21 +14,21 @@ type  ClinetShowcaseProps = {
 
 
 
-const getAvatar = (params: Pick<any, 'avatar' | 'email'>) => {
-  const { avatar, email } = params
-
-  if (avatar) {
-    return <Avatar src={avatar} />
-  } else {
-    return <Avatar>{getInitials(email as string)}</Avatar>
-  }
-}
-
-
+// const getAvatar = (params: Pick<any, 'avatar' | 'email'>) => {
+//   const { avatar, email } = params
+//
+//   if (avatar) {
+//     return <Avatar src={avatar} />
+//   } else {
+//     return <Avatar>{getInitials(email as string)}</Avatar>
+//   }
+// }
 
 
 
-const ClinetShowcase: React.FC<ClinetShowcaseProps> = ({ clinetShowcaseData }) => {
+
+
+const ClinetShowcase: React.FC<ClinetShowcaseProps> = ({  }) => {
 
 
   return (
@@ -40,28 +38,28 @@ const ClinetShowcase: React.FC<ClinetShowcaseProps> = ({ clinetShowcaseData }) =
         Clients
         </Typography>
 
-        {clinetShowcaseData ? (
-            <div className='flex items-center gap-3'>
-          {getAvatar({
-              avatar: clinetShowcaseData?.client ?? '/images/avatars/1.png',
-              email: clinetShowcaseData?.client?.contact_email ?? ''
-            })}
-          <div className='flex flex-col'>
-            <Typography color='text.primary' className='font-medium'>
-              {clinetShowcaseData?.client.name} 
-            </Typography>
-              <Typography>{clinetShowcaseData?.client.contact_email}</Typography>
-          </div>
-        </div>
+        {/*{clinetShowcaseData ? (*/}
+        {/*    <div className='flex items-center gap-3'>*/}
+        {/*  {getAvatar({*/}
+        {/*      avatar: clinetShowcaseData?.client.created_by?.avatar ?? '/images/avatars/1.png',*/}
+        {/*      email: clinetShowcaseData?.client.created_by.email ?? ''*/}
+        {/*    })}*/}
+        {/*  <div className='flex flex-col'>*/}
+        {/*    <Typography color='text.primary' className='font-medium'>*/}
+        {/*      {clinetShowcaseData?.client.created_by.first_name} {clinetShowcaseData?.client.created_by.last_name}*/}
+        {/*    </Typography>*/}
+        {/*      <Typography>{clinetShowcaseData?.client.created_by.email}</Typography>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
 
 
 
-          ) : (
-            <Typography variant='body1' color='text.secondary'>
-              Aucune information disponible
-            </Typography>
-          )}
+        {/*  ) : (*/}
+        {/*    <Typography variant='body1' color='text.secondary'>*/}
+        {/*      Aucune information disponible*/}
+        {/*    </Typography>*/}
+        {/*  )}*/}
 
       </CardContent>
     </Card>

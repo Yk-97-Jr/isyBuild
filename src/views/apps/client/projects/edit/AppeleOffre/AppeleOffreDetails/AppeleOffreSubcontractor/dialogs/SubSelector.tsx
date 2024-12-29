@@ -24,7 +24,7 @@ export default function SubSelect({selectedSub, setSelectedSub}: LotSelectProps)
 
   // Initialize the query but don't fetch automatically (skip: true)
   const {data, isFetching} = useSubcontractorsRetrieveQuery(
-    {page, pageSize: 10},
+    {page, pageSize: 99},
     {skip: !isDropdownOpen} // Do not fetch initially, only when dropdown opens
   );
 

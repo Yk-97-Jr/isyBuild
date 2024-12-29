@@ -17,9 +17,9 @@ import {
 
 import DialogCloseButton from "@components/dialogs/DialogCloseButton";
 import SubSelect
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/SubSelector";
+  from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/SubSelector";
 import SubStaffSelect
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/SubStaffSelector";
+  from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/SubStaffSelector";
 
 
 interface AddProps {

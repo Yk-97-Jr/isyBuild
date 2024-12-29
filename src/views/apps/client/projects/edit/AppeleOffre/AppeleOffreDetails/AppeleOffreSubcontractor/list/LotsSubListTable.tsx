@@ -49,9 +49,9 @@ import type {ProjectLotSubcontractorRead, Status841Enum} from "@/services/IsyBui
 import {Status841Mapping} from "@/utils/statusEnums";
 import {getStatusProps} from "@/utils/statusHelper";
 import AddLotSub
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/AddLotSub";
+  from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/AddLotSub";
 import DeleteLotSub
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/DeleteLotSub";
+  from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/DeleteLotSub";
 
 
 declare module '@tanstack/table-core' {
@@ -115,11 +115,13 @@ const LotsSubListTable = ({
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
-  const {id: clientId} = useParams();  // Renamed the route parameter variable
+  const {edit: edit} = useParams();  // Renamed the route parameter variable
+  const {id: lotId} = useParams();  // Renamed the route parameter variable
 
 
-  const handleEditUser = (id: number) => {
-    router.push(`/${userRole}/clients/${clientId}/details/${id}`);
+  const handleDetail = (idSub: number) => {
+    router.push(`/${userRole}/projects/${edit}/details/${lotId}/subcontractor/${idSub}`);
+
 
   }
 
@@ -194,7 +196,7 @@ const LotsSubListTable = ({
                   icon: 'tabler-edit',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleEditUser(row.original.id)
+                    onClick: () => handleDetail(row.original.id)
                   }
                 }
 

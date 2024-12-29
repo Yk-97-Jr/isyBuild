@@ -6309,6 +6309,31 @@ paths:
                     detail: Token is invalid or expired
                   description: Invalid or expired token
           description: ''
+  /travail-supplementaires/{ts_id}:
+    get:
+      operationId: retrieve_travail_supplementaire
+      description: Fetch detailed information about a specific Travail Supplémentaire
+        entry.
+      summary: Retrieve Travail Supplémentaire by ID
+      parameters:
+      - in: path
+        name: ts_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Finance Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TravailSupplementaire'
+          description: Travail Supplémentaire retrieved successfully.
+        '404':
+          description: Travail Supplémentaire not found.
   /travail-supplementaires/{ts_id}/delete/:
     delete:
       operationId: delete_travail_supplementaire

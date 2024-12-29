@@ -1591,6 +1591,14 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.tokenRefreshRequest,
       }),
     }),
+    retrieveTravailSupplementaire: build.query<
+      RetrieveTravailSupplementaireApiResponse,
+      RetrieveTravailSupplementaireApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/travail-supplementaires/${queryArg.tsId}`,
+      }),
+    }),
     deleteTravailSupplementaire: build.mutation<
       DeleteTravailSupplementaireApiResponse,
       DeleteTravailSupplementaireApiArg
@@ -3295,6 +3303,11 @@ export type TokenRefreshCreateApiResponse = /** status 200  */ {
 };
 export type TokenRefreshCreateApiArg = {
   tokenRefreshRequest: TokenRefreshRequest;
+};
+export type RetrieveTravailSupplementaireApiResponse =
+  /** status 200 Travail Supplémentaire retrieved successfully. */ TravailSupplementaireRead;
+export type RetrieveTravailSupplementaireApiArg = {
+  tsId: number;
 };
 export type DeleteTravailSupplementaireApiResponse = unknown;
 export type DeleteTravailSupplementaireApiArg = {
@@ -5146,6 +5159,7 @@ export const {
   useDeleteSuiviAdministrativeStepDocumentMutation,
   useUpdateSuiviAdministrativeStepDocumentMutation,
   useTokenRefreshCreateMutation,
+  useRetrieveTravailSupplementaireQuery,
   useDeleteTravailSupplementaireMutation,
   useUpdateTravailSupplementaireMutation,
   useCreateTravailSupplementaireMutation,
