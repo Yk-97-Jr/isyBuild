@@ -3,10 +3,10 @@
 // React Imports
 import React, {useEffect, useState, useMemo} from 'react'
 
-import {useParams, useRouter} from 'next/navigation'
+
 
 import Card from '@mui/material/Card'
-import Button from '@mui/material/Button'
+
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import type {TextFieldProps} from '@mui/material/TextField'
@@ -33,7 +33,8 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 // Type Imports
 import Box from '@mui/material/Box'
 
-import {CircularProgress} from '@mui/material'
+import type {ButtonProps} from '@mui/material';
+import { Button, CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -46,7 +47,19 @@ import FinanceSituationDialog from '@components/dialogs/Finance-situation'
 
 import type {FinanceSituationRead} from '@/services/IsyBuildApi'
 
-import {useAuth} from '@/contexts/AuthContext'
+
+
+import FinanceSituationAddDialog from '../add/FinanceSituationAddDialog'
+
+import EditFinanceSituationContent from '../details/FinanceSituationEditDialog'
+import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElementClick'
+
+
+const buttonProps: ButtonProps = {
+  variant: 'contained',
+  children: 'Ajouter',
+  startIcon: <i className='tabler-plus' />
+}
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -132,39 +145,20 @@ const FinanceSituationTable = ({
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
-  const router = useRouter()
-  const {user} = useAuth() // Get the user from AuthContext
-  const {edit,financeId} =useParams()
-  const userRole = user?.role
 
 
-  const handleEditFinance = (id: number) => {
-    router.push(`/${userRole}/projects/${edit}/details/finance/${financeId}/financeEnterprise/${id}`);
-  }
+
+
 
   const handleDeleteFinance = (id: number) => {
     setOpen(true)
     setId(id)
   }
 
-  const handleAddFinance = () => {
-    router.push(`/${userRole}/projects/${edit}/details/finance/${id}/financeEnterprise/add`);
-  }
 
   const columns = useMemo<ColumnDef<FinanceTypeWithAction, any>[]>(
     () => [
-      columnHelper.accessor('finance_enterprise.subcontractor.name', {
-        header: 'Nom',
-        cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.finance_enterprise.subcontractor.name}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+     
       columnHelper.accessor('name', {
         header: 'Finance Situation',
         cell: ({row}) => (
@@ -218,9 +212,20 @@ const FinanceSituationTable = ({
         header: 'Action',
         cell: ({row}) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleEditFinance(row.original.id)}>
-              <i className='tabler-edit text-textSecondary'/>
-            </IconButton>
+            <OpenFinanceOnElementClick 
+        element={IconButton}
+        elementProps={{
+          onClick: (e:any) => {
+            e.stopPropagation(); // Prevents row selection if table is click-sensitive
+          },
+          children: <i className="tabler-edit text-textSecondary" />, // Icon as button child
+        }}
+        dialog={EditFinanceSituationContent}
+        dialogProps={{ 
+          refetch , // Pass the refetch function here if necessary
+          id: row.original.id,  // Pass the ID from the row data
+        }}
+      />
             <IconButton onClick={() => handleDeleteFinance(row.original.id)}>
               <i className='tabler-trash text-textSecondary'/>
             </IconButton>
@@ -286,14 +291,7 @@ const FinanceSituationTable = ({
               placeholder='Rechercher '
               className='max-sm:is-full'
             />
-            <Button
-              variant='contained'
-              className='max-sm=is-full'
-              startIcon={<i className='tabler-plus'/>}
-              onClick={handleAddFinance}
-            >
-              Ajouter 
-            </Button>
+         <OpenFinanceOnElementClick element={Button} elementProps={buttonProps} dialog={FinanceSituationAddDialog} dialogProps={{ refetch }}/>
           </div>
         </div>
         <div className='overflow-x-auto'>

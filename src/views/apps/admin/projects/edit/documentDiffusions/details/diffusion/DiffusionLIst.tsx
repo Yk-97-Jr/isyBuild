@@ -3,9 +3,8 @@
 // components/LocationsList.js
 import React, {useEffect, useState} from 'react'
 
- import { useParams } from 'next/navigation'
-
-import type {SortingState} from '@tanstack/react-table';
+/* import type {SortingState} from '@tanstack/react-table';
+ */import { useParams } from 'next/navigation'
 
 import Grid from '@mui/material/Grid'
 
@@ -13,30 +12,34 @@ import {CircularProgress} from '@mui/material'
 
 import Box from '@mui/material/Box'
 
-import {useDebounce} from "@uidotdev/usehooks"; 
+/* import {useDebounce} from "@uidotdev/usehooks"; */
 
-import DocDiffTable from './DocDiffTable'
-import {useDocumentDiffusionsListQuery} from '@/services/IsyBuildApi'
+import DiffusionTable from './DiffusionTable'
+import {useDocumentDiffusionDetailQuery, useDocumentDiffusionsListQuery} from '@/services/IsyBuildApi'
 
-const DocDiffList = () => {
+const DiffusionList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
-  const { edit } = useParams(); 
+  const [pageSize, ] = useState(10)
+  const { edit,docDiffId } = useParams(); 
 
- const [search, setSearch] = useState<string>("");
-  const [sorting, setSorting] = React.useState<SortingState>([]); 
+ /*  const [search, setSearch] = useState<string>("");
+  const [sorting, setSorting] = React.useState<SortingState>([]); */
 
-  const debouncedSearch = useDebounce(search, 500); 
+ /*  const debouncedSearch = useDebounce(search, 500); */
 
   // Pass parameters to the query hook
+    const { data: docDiffData,  } = useDocumentDiffusionDetailQuery({
+      documentDiffusionId: +docDiffId,
+    });
+
   const {data, error, isLoading, isFetching, refetch} = useDocumentDiffusionsListQuery({
     projectId:+edit,
       page,
       pageSize,
 
-      ordering: sorting.map((s) => `${s.desc ? '-' : ''}${s.id}`).join(',') as any,
-      search: debouncedSearch 
+     /*  ordering: sorting.map((s) => `${s.desc ? '-' : ''}${s.id}`).join(',') as any,
+      search: debouncedSearch */
     },
   );
 
@@ -46,7 +49,7 @@ const DocDiffList = () => {
   useEffect(() => {
     refetch();
     setPage(1)
-  }, [pageSize, sorting ,   debouncedSearch ]);
+  }, [pageSize, /* sorting */, /*  debouncedSearch */]);
 
 
   useEffect(() => {
@@ -67,31 +70,31 @@ const DocDiffList = () => {
         {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
       </div>
     )
-  const docDiff = data?.results || []
-  const countRecords = data?.count
+  const docDiff = docDiffData?.diffusion_list || []
+
 
 
   return (
 
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <DocDiffTable
+        <DiffusionTable
           pageSize={pageSize}
-          setPageSize={setPageSize}
-          page={page}
-          setPage={setPage}
+        
+      
+    
           data={docDiff}
-          countRecords={countRecords}
+       
           isFetching={isFetching}
-          refetch={refetch}
+      
 
-          setSorting={setSorting}
+          /* setSorting={setSorting}
           sorting={sorting}
           setSearch={setSearch}
-          search={search} 
+          search={search} */
         />
       </Grid>
     </Grid>)
 }
 
-export default DocDiffList
+export default DiffusionList

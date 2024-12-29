@@ -23,6 +23,8 @@ import AddDocumentDocDiff from './Document/dialogs/add/AddDocumentDocDiff';
 import DeleteDocumentDocDiff from './Document/dialogs/delete/DeleteDocumentDocDiff';
 import ModifyDocumentDocDiff from './Document/dialogs/modify/ModifyDocumentDocDiff';
 import HistoryDevis from './Document/dialogs/history/HistoryDevis';
+import DiffusionList from './diffusion/DiffusionLIst';
+import AddDiffuse from './Document/dialogs/diffuse/AddDiffuse';
 
 type FormValidateDocDiffUpdateType = {
   title: string;
@@ -48,6 +50,7 @@ const DocDiffEdit: React.FC = () => {
   const [openDelete, setOpenDelete] = useState(false)
   const [openModify, setOpenModify] = useState(false)
   const [openHistory, setOpenHistory] = useState(false)
+  const [openDiffuse,setOpenDiffuse] = useState(false)
   const [id, setId] = useState<number>();
 
   
@@ -112,20 +115,20 @@ const DocDiffEdit: React.FC = () => {
         </Grid>
 
         {/* Main Form */}
-        <Grid item xs={12} md={8.5}>
-          <Grid container spacing={6}>
-            <Grid item xs={12}>
-              <DocDiffInformation register={register} errors={errors} localisations={localisation} localisation={data?.results} phaseValue={docDiffData?.phase}/>
-            </Grid>
-            <Grid item xs={12} >
+                    <Grid item xs={12} md={8.5}>
+                      <Grid container spacing={6}>
+                        <Grid item xs={12}>
+                           <DocDiffInformation register={register} errors={errors} phaseValue={docDiffData?.phase}/>
+                          </Grid>
+                            <Grid item xs={12} >
         
-            <DocumentDocDiff DocumentDocDiffData={DocumentDocDiffData} setOpenAdd={setOpenAdd}
+                              <DocumentDocDiff DocumentDocDiffData={DocumentDocDiffData} setOpenAdd={setOpenAdd}
                               setId={setId} setOpenDelete={setOpenDelete} setOpenModify={setOpenModify}
-                              setOpenHistory={setOpenHistory}/>
+                              setOpenHistory={setOpenHistory} setOpenDiffuse={setOpenDiffuse}/>
           
-      </Grid>
-          </Grid>
-        </Grid>
+                            </Grid>
+                       </Grid>
+                     </Grid>
 
         
 
@@ -137,6 +140,10 @@ const DocDiffEdit: React.FC = () => {
               <DocDiffTypeAndLot
                 type={docDiffData?.type}
                 lot={docDiffData?.project_lot?.lot.name}
+                date={docDiffData?.diffusion_date}
+                status={docDiffData?.status}
+                indice={docDiffData?.indice}
+                register={register} errors={errors} localisations={localisation} localisation={data?.results}
               />
             </Grid>
             <Grid item xs={12}>
@@ -144,11 +151,26 @@ const DocDiffEdit: React.FC = () => {
             </Grid>
           </Grid>
         </Grid>
+        <Grid item xs={12} >
+          <Grid container spacing={6}>
+          
+            <Grid item xs={12}>
+              <DiffusionList
+              />
+            </Grid>
+          </Grid>
+        </Grid>
         
       </Grid>
+     
       <AddDocumentDocDiff
         open={openAdd}
         setOpen={setOpenAdd}
+        refetch={refetch}
+        />
+         <AddDiffuse
+        open={openDiffuse}
+        setOpen={setOpenDiffuse}
         refetch={refetch}
         />
       <DeleteDocumentDocDiff
@@ -169,6 +191,8 @@ const DocDiffEdit: React.FC = () => {
         setOpen={setOpenHistory}
         id={id}
       />
+
+      
     </>
   );
 };

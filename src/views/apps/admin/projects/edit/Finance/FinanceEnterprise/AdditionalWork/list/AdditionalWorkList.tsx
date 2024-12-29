@@ -19,11 +19,11 @@ const AdditionalWorkList = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  const {financeId} = useParams()
+  const {idFe} = useParams()
 
 
   // Pass parameters to the query hook
-  const {data, error, isLoading, isFetching, refetch} = useListTravailSupplementaireQuery({financeEnterpriseId:+financeId,page, pageSize});
+  const {data, error, isLoading, isFetching, refetch} = useListTravailSupplementaireQuery({financeEnterpriseId:+idFe,page, pageSize});
 
   useEffect(() => {
     refetch();

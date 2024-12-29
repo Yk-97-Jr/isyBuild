@@ -17,14 +17,15 @@ import { useLocalisationCreateMutation } from '@/services/IsyBuildApi'
 import AddLocationsHeader from './AddLocationsHeader'
 import LocationsInfo from './LocationsInfo'
 
+
 const schema = yup
   .object({
     firstName: yup.string().required('Le prénom est obligatoire'),
-    description: yup.string().notRequired()
+    client_id: yup.number().nullable().required('Le client est obligatoire'), // Add client_id validation
   })
   .required()
 
-type FormValidateType = yup.InferType<typeof schema>
+export type FormValidateType = yup.InferType<typeof schema>
 
 const LocationsAdd = () => {
   const {
@@ -47,6 +48,7 @@ const LocationsAdd = () => {
       const response = await createLocation({
         localisationCreateRequest: {
           name: data.firstName,
+          client_id: data.client_id, 
          
         }
       }).unwrap()
@@ -79,8 +81,9 @@ const LocationsAdd = () => {
       <Grid item xs={12} md={22}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
-            <LocationsInfo register={register} errors={errors} />
+            <LocationsInfo register={register} errors={errors}  />
           </Grid>
+
         </Grid>
       </Grid>
     </Grid>

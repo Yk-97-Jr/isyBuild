@@ -11,8 +11,9 @@ import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import '@/libs/styles/tiptapEditor.css'
+import ClientDropdown from './ClientDropdown'
 
-const LocationsInfo = ({ register, errors }: { register: any; errors: any }) => {
+const LocationsInfo = ({ register, errors }: { register: any; errors: any;  }) => {
   return (
     <Card>
       <CardHeader title="Informations de l'emplacement" />
@@ -30,6 +31,9 @@ const LocationsInfo = ({ register, errors }: { register: any; errors: any }) => 
               helperText={errors.firstName?.message}
             />
           </Grid>
+          <Grid item xs={12}>
+  <ClientDropdown register={register} defaultValue={null} />
+</Grid>
         </Grid>
       </CardContent>
     </Card>
