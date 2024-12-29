@@ -49,9 +49,9 @@ import type {ProjectLotSubcontractorRead, Status841Enum} from "@/services/IsyBui
 import {Status841Mapping} from "@/utils/statusEnums";
 import {getStatusProps} from "@/utils/statusHelper";
 import AddLotSub
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/AddLotSub";
+  from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/AddLotSub";
 import DeleteLotSub
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/DeleteLotSub";
+  from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/DeleteLotSub";
 
 
 declare module '@tanstack/table-core' {

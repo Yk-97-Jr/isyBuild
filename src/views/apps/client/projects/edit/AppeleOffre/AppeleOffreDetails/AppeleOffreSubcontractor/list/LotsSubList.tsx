@@ -13,7 +13,7 @@ import Box from '@mui/material/Box'
 
 import {useProjectLotsSubcontractorsRetrieve2Query} from '@/services/IsyBuildApi'
 import LotsSubListTable
-  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/list/LotsSubListTable";
+  from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/list/LotsSubListTable";
 
 const LotsSubList = () => {
   // States for pagination or other parameters
