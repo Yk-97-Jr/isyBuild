@@ -1,30 +1,36 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState,useEffect } from 'react';
 
 import { useParams } from 'next/navigation';
 
-import type { SelectChangeEvent } from '@mui/material';
-import { Button, Chip, CircularProgress, Grid, MenuItem } from '@mui/material';
+import type {
+ SelectChangeEvent } from '@mui/material';
+import {
+  Button,
+  Chip,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Grid,
+  MenuItem } from '@mui/material';
 
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-
-
-import { useDocumentDiffusionConfigBulkUpdateMutation } from '@/services/IsyBuildApi';
+import type { DocumentDiffusionConfigUpdateRequest} from '@/services/IsyBuildApi';
+import { useDocumentDiffusionConfigBulkUpdateMutation, useDocumentDiffusionConfigByProjectListQuery } from '@/services/IsyBuildApi';
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider';
 import type { SnackBarContextType } from '@/types/apps/snackbarType';
 import CustomTextField from '@core/components/mui/TextField';
 
+// Define props
 type AddRolesConfigProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch: () => void;
 };
 
-// Define the RolesEnum
+// Define RolesEnum for role selection
 type RolesEnum =
   | 'Architecte'
   | 'Bureau de contrôle'
@@ -33,7 +39,7 @@ type RolesEnum =
   | 'Assistance maîtrise d’ouvrage hygiène et environnement'
   | 'Client';
 
-// Initialize the roles array
+// Roles available for selection
 const rolesEnum: RolesEnum[] = [
   'Architecte',
   'Bureau de contrôle',
@@ -43,109 +49,48 @@ const rolesEnum: RolesEnum[] = [
   'Client',
 ];
 
-const dataStatic = [
-    {
-      "id": 5,
-      "type": "plan_technique",
-      "roles": [
-        "Architecte",
-        "Client",
-        "Bureau d'étude technique"
-      ]
-    },
-    {
-      "id": 6,
-      "type": "avis_technique",
-      "roles": [
-        "Architecte",
-        "Client",
-        "Bureau d'étude technique"
-      ]
-    },
-    {
-      "id": 7,
-      "type": "fiche_question",
-      "roles": [
-        "Architecte",
-        "Client",
-        "Bureau d'étude technique"
-      ]
-    },
-    {
-      "id": 8,
-      "type": "fiche_technique",
-      "roles": [
-        "Architecte",
-        "Client",
-        "Bureau d'étude technique"
-      ]
-    },
-    {
-      "id": 9,
-      "type": "plan_de_coffrage",
-      "roles": [
-        "Architecte",
-        "Client",
-        "Bureau d'étude technique"
-      ]
-    },
-    {
-      "id": 10,
-      "type": "note_de_calcul",
-      "roles": [
-        "Bureau d'étude technique"
-      ]
-    },
-    {
-      "id": 11,
-      "type": "autre",
-      "roles": [
-        "Architecte"
-      ]
-    }
-  ]
 
-  const handleChange = (event: SelectChangeEvent<string[]>) => {
-    console.log("data",event);
-    
-  }
 
-  
-  const handleDelete = (value: string) => {
-   console.log(value);
-   
-  }
-  
-  const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
-      const [selectedRoles, ] = useState<Record<RolesEnum, RolesEnum[]>>(() =>
-        rolesEnum.reduce((acc, role) => {
-            acc[role] = [];
-            
-            return acc;
-        }, {} as Record<RolesEnum, RolesEnum[]>)
-    );
-    
-    const { projectId } = useParams(); // Assuming projectId is the dynamic parameter
-    const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType;
-    const [availblRole, ] = useState<string[]>(rolesEnum)
+const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
+  // State for role configurations
 
+  const { edit } = useParams(); // Fetch project ID from URL
+  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType;
+
+  // API mutation
   const [updateConfigs, { isLoading }] = useDocumentDiffusionConfigBulkUpdateMutation();
+  const { data: fetchedConfigs, isLoading: isFetching } = useDocumentDiffusionConfigByProjectListQuery({ projectId: +edit});
 
+  const [configs, setConfigs] = useState<{ id: number; type: string; selectedRoles: RolesEnum[] }[]>([]);
+
+  // Close dialog
   const handleClose = () => {
     setOpen(false);
     if (refetch) refetch();
   };
 
+  useEffect(() => {
+    if (Array.isArray(fetchedConfigs)) {
+      setConfigs(
+        fetchedConfigs.map((config: { id: number; type: string; roles: RolesEnum[] }) => ({
+          id: config.id,
+          type: config.type,
+          selectedRoles: config.roles,
+        }))
+      );
+    }
+  }, [fetchedConfigs]);
 
-
+  // Update configurations on Save
   const handleUpdate = async () => {
     try {
-      const body = Object.entries(selectedRoles).map(([key, value]) => ({
-        id: rolesEnum.indexOf(key as RolesEnum) + 1, // Example ID logic
-        roles: value,
+  
+      const body: DocumentDiffusionConfigUpdateRequest[] = configs.map((config) => ({
+        id: config.id,
+        roles: config.selectedRoles as RolesEnum[], // Ensure roles match the RolesEnum type
       }));
 
-      await updateConfigs({ projectId: +projectId, body }).unwrap();
+      await updateConfigs({ projectId: +edit, body }).unwrap();
 
       setOpenSnackBar(true);
       setInfoAlert({ severity: 'success', message: 'Configurations mises à jour avec succès' });
@@ -160,45 +105,69 @@ const dataStatic = [
     }
   };
 
+  // Handle role change
+  const handleChange = (id: number, event: SelectChangeEvent<string[]>) => {
+    // Cast the value to RolesEnum[]
+    const value = (typeof event.target.value === 'string'
+      ? event.target.value.split(',')
+      : event.target.value) as RolesEnum[];
+  
+    // Update the state
+    setConfigs((prev) =>
+      prev.map((config) =>
+        config.id === id ? { ...config, selectedRoles: value } : config
+      )
+    );
+  };
+
+  // Delete role for a specific configuration
+  const handleDelete = (id: number, role: string) => {
+    setConfigs((prev) =>
+      prev.map((config) =>
+        config.id === id
+          ? { ...config, selectedRoles: config.selectedRoles.filter((r) => r !== role) }
+          : config
+      )
+    );
+  };
+
   return (
     <Dialog fullWidth open={open} onClose={handleClose} maxWidth="sm">
       <DialogTitle>Configurer les rôles</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-          {dataStatic.map((cfg) => (
-            <Grid item xs={12} sm={6} key={cfg.id}>
-                <CustomTextField
+          {configs.map((config) => (
+            <Grid item xs={12} sm={6} key={config.id}>
+              <CustomTextField
                 select
                 fullWidth
-                label='Language'
-            value={cfg.roles}
+                label={config.type}
+                value={config.selectedRoles}
                 SelectProps={{
-                  multiple: true, // @ts-ignore
-                  onChange: handleChange,
-                  renderValue: selected => (
-                    <div className='flex flex-wrap gap-2'>
-                      {(selected as string[]).map(value => (
+                  multiple: true,
+                  onChange: (e) => handleChange(config.id, e),
+                  renderValue: (selected) => (
+                    <div className="flex flex-wrap gap-2">
+                      {(selected as string[]).map((value) => (
                         <Chip
                           key={value}
                           clickable
-                          onMouseDown={event => event.stopPropagation()}
-                          size='small'
+                          onMouseDown={(event) => event.stopPropagation()}
+                          size="small"
                           label={value}
-
-                          onDelete={() => handleDelete(value)}
+                          onDelete={() => handleDelete(config.id, value)}
                         />
                       ))}
                     </div>
-                  )
+                  ),
                 }}
               >
-                {availblRole.map(name => (
-                  <MenuItem key={name} value={name}>
-                    {name}
+                {rolesEnum.map((role) => (
+                  <MenuItem key={role} value={role}>
+                    {role}
                   </MenuItem>
                 ))}
               </CustomTextField>
-              
             </Grid>
           ))}
         </Grid>
