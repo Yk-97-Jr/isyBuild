@@ -9,6 +9,7 @@ import React, {useEffect, useState, useMemo} from 'react'
 import {useRouter,useParams} from "next/navigation";
 
 import Card from '@mui/material/Card'
+import type { ButtonProps } from '@mui/material/Button';
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
@@ -48,6 +49,14 @@ import tableStyles from '@core/styles/table.module.css'
 import {useAuth} from "@/contexts/AuthContext";
 import type { DocumentDiffusionRead } from '@/services/IsyBuildApi';
 import DocumentDialog from '@/components/dialogs/doc-diff-dialog';
+import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElementClick';
+import ConfigAddDialog from '../config/ConfigAddDialog';
+
+const buttonProps: ButtonProps = {
+  variant: 'contained',
+  children: 'Ajouter',
+  startIcon: <i className='tabler-plus' />
+}
 
 
 
@@ -349,13 +358,9 @@ const DocDiffTable = ({
    }}
               placeholder='Rechercher'
               className='placeholder:text-xl max-sm:is-full'
-            />
-            <Button
-              variant='contained'
-              className='max-sm=is-full'
-            >
-              configuration
-            </Button>
+            /> 
+                     <OpenFinanceOnElementClick element={Button} elementProps={buttonProps} dialog={ConfigAddDialog} dialogProps={{ refetch }}/>
+
             <Button
               variant='contained'
               className='max-sm=is-full'
