@@ -106,7 +106,7 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
   };
 
   // Handle role change
-  const handleChange = (id: number, event: SelectChangeEvent<string[]>) => {
+  const handleChange = (id: number, event: SelectChangeEvent<unknown>) => {
     // Cast the value to RolesEnum[]
     const value = (typeof event.target.value === 'string'
       ? event.target.value.split(',')
@@ -145,7 +145,7 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
                 value={config.selectedRoles}
                 SelectProps={{
                   multiple: true,
-                  onChange: (e) => handleChange(config.id, e),
+                  onChange: (e) => handleChange(config.id, e ),
                   renderValue: (selected) => (
                     <div className="flex flex-wrap gap-2">
                       {(selected as string[]).map((value) => (
@@ -177,7 +177,7 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
           Annuler
         </Button>
         <Button onClick={handleUpdate} variant="contained" color="primary" disabled={isLoading}>
-          {isLoading ? <CircularProgress size={24} color="inherit" /> : 'Mettre à jour'}
+          {isFetching ? <CircularProgress size={24} color="inherit" /> : 'Mettre à jour'}
         </Button>
       </DialogActions>
     </Dialog>
