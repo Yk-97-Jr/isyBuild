@@ -1,16 +1,14 @@
 'use client'
 
 // React Imports
-import React, {useEffect, useState, useMemo} from 'react'
-
-import {useRouter} from 'next/navigation'
+import React, { useState, useMemo} from 'react'
 
 import Card from '@mui/material/Card'
 import type { ButtonProps } from '@mui/material/Button';
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import type {TextFieldProps} from '@mui/material/TextField'
+
 import MenuItem from '@mui/material/MenuItem'
 
 // Third-party Imports
@@ -47,9 +45,10 @@ import DeleteTsDialog from '@components/dialogs/TSDelete-dialog'
 
 import type {TravailSupplementaireRead} from '@/services/IsyBuildApi'
 
-import {useAuth} from '@/contexts/AuthContext'
+
 import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElementClick'
 import TsAddDialog from '../add/TsAddDialog'
+import EditTsContent from '../details/TsEditDialog';
 
 
 const buttonProps: ButtonProps = {
@@ -87,34 +86,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const DebouncedInput = ({
-                          value: initialValue,
-                          onChange,
-                          debounce = 500,
-                          ...props
-                        }: {
-  value: string | number
-  onChange: (value: string | number) => void
-  debounce?: number
-} & Omit<TextFieldProps, 'onChange'>) => {
-  // States
-  const [value, setValue] = useState(initialValue)
 
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onChange(value)
-    }, debounce)
-
-    return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
-
-  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)}/>
-}
 
 // Column Definitions
 const columnHelper = createColumnHelper<FinanceTypeWithAction>()
@@ -144,14 +116,10 @@ const AdditionalWorkTable = ({
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
-  const router = useRouter()
-  const {user} = useAuth() // Get the user from AuthContext
-  const userRole = user?.role
 
 
-  const handleEditFinance = (id: number) => {
-    router.push(`/${userRole}/clients/${id}/details`);
-  }
+
+
 
   const handleDeleteFinance = (id: number) => {
     setOpen(true)
@@ -187,18 +155,7 @@ const AdditionalWorkTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('finance_enterprise.subcontractor.siren_number', {
-        header: 'Numéro siren',
-        cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.finance_enterprise.subcontractor.siren_number}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+
       
       columnHelper.accessor('created_at', {
         header: 'Date de Creation',
@@ -216,9 +173,22 @@ const AdditionalWorkTable = ({
         header: 'Action',
         cell: ({row}) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleEditFinance(row.original.id)}>
-              <i className='tabler-edit text-textSecondary'/>
-            </IconButton>
+          <OpenFinanceOnElementClick 
+      element={IconButton}
+      elementProps={{
+        onClick: (e:any) => {
+          e.stopPropagation(); // Prevents row selection if table is click-sensitive
+        },
+        children: <i className="tabler-edit text-textSecondary" />, // Icon as button child
+      }}
+      dialog={EditTsContent}
+      dialogProps={{ 
+        refetch , // Pass the refetch function here if necessary
+        id: row.original.id,  // Pass the ID from the row data
+        initialData: row.original.amount
+      }}
+    />
+            
             <IconButton onClick={() => handleDeleteFinance(row.original.id)}>
               <i className='tabler-trash text-textSecondary'/>
             </IconButton>
@@ -278,12 +248,7 @@ const AdditionalWorkTable = ({
             <MenuItem value='50'>50</MenuItem>
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
-            <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
-              placeholder='Rechercher'
-              className='max-sm:is-full'
-            />
+         
                      <OpenFinanceOnElementClick element={Button} elementProps={buttonProps} dialog={TsAddDialog} dialogProps={{ refetch }}/>
 
           </div>

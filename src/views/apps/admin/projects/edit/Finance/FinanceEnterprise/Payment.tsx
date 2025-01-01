@@ -19,20 +19,20 @@ const Payment: React.FC<DocDiffTypeAndLotProps> = ({ data }) => {
     <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
       <div className='flex flex-col'>
         <Typography className='font-medium' variant="body1"  color='text.primary'>
-          {"payment_cumulated"}
+          {"Paiement cumule"}
         </Typography>
       </div>
-      <Typography>{`${data?.payment_cumulated}$`}</Typography>
+      <Typography>{`${data?.payment_cumulated}£`}</Typography>
     </div>
   </div>
   <div className='flex items-center gap-4'>
     <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
       <div className='flex flex-col'>
         <Typography className='font-medium' variant="body1"  color='text.primary'>
-          {"payment_cumulated_percentage"}
+          {"Paiement cumule%"}
         </Typography>
       </div>
-      <Typography>{`${data?.payment_cumulated_percentage}$`}</Typography>
+      <Typography>{`${data?.payment_cumulated_percentage}£`}</Typography>
     </div>
   </div>
       </CardContent>

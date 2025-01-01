@@ -4,7 +4,7 @@
 
 import React from 'react'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
@@ -21,10 +21,20 @@ const LocationsEditHeader: React.FC<LocationEditHeaderProps> = ({ onSubmit, isLo
   const router = useRouter()
   const { user } = useAuth()
   const userRole = user?.role
+  const searchParams = useSearchParams();
+const returnTo = searchParams.get('return_to'); 
 
   const handleDiscard = () => {
-    console.log(`/${userRole}/locations/list`)
-    router.push(`/${userRole}/locations/list`)
+
+    console.log(returnTo);
+    
+    
+
+    if (returnTo) {
+      router.push(`/${returnTo}`); // Redirect to the "returnTo" URL
+    } else {
+      router.push(`/${userRole}/locations/list`); // Default fallback URL
+    }   
   }
 
   return (

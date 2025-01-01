@@ -26,7 +26,7 @@ const FinanceEarn = () => {
   return (
     <Card>
       <CardHeader
-        title={data?.subcontractor.name}
+        title="Informations Paiement"
       />
       <CardContent className='flex flex-col gap-[1.638rem]'>
       <div className='flex items-center gap-4'>
@@ -36,7 +36,7 @@ const FinanceEarn = () => {
                   {"Marches"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_contract}$`}</Typography>
+              <Typography>{`${data?.total_contract}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -46,7 +46,7 @@ const FinanceEarn = () => {
                   {"Prorata"}
                 </Typography>
               </div>
-              <Typography>{`${data?.prorata}$`}</Typography>
+              <Typography>{`${data?.prorata}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -56,7 +56,7 @@ const FinanceEarn = () => {
                   {"Total ts travaux"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_ts_travaux}$`}</Typography>
+              <Typography>{`${data?.total_ts_travaux}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -66,7 +66,7 @@ const FinanceEarn = () => {
                   {"Total ts choix"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_ts_choix}$`}</Typography>
+              <Typography>{`${data?.total_ts_choix}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -76,7 +76,7 @@ const FinanceEarn = () => {
                   {"Total ts tma"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_ts_tma}$`}</Typography>
+              <Typography>{`${data?.total_ts_tma}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -86,7 +86,7 @@ const FinanceEarn = () => {
                   {"Marches+Ts"}
                 </Typography>
               </div>
-              <Typography>{`${data?.markets_plus_ts}$`}</Typography>
+              <Typography>{`${data?.markets_plus_ts}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -96,7 +96,7 @@ const FinanceEarn = () => {
                   {"Cie"}
                 </Typography>
               </div>
-              <Typography>{`${data?.cie}$`}</Typography>
+              <Typography>{`${data?.cie}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -106,7 +106,7 @@ const FinanceEarn = () => {
                   {"Retenue garantie"}
                 </Typography>
               </div>
-              <Typography>{`${data?.retention_guarantee}$`}</Typography>
+              <Typography>{`${data?.retention_guarantee}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -116,7 +116,7 @@ const FinanceEarn = () => {
                   {"Marches+Ts+Cie-Proratat-Rg"}
                 </Typography>
               </div>
-              <Typography>{`${data?.final_amount}$`}</Typography>
+              <Typography>{`${data?.final_amount}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -126,7 +126,7 @@ const FinanceEarn = () => {
                   {"Caution"}
                 </Typography>
               </div>
-              <Typography>{`${data?.caution}$`}</Typography>
+              <Typography>{`${data?.caution}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -136,7 +136,7 @@ const FinanceEarn = () => {
                   {"Dgd"}
                 </Typography>
               </div>
-              <Typography>{`${data?.dgd_status}$`}</Typography>
+              <Typography>{`${data?.dgd_status}£`}</Typography>
             </div>
           </div>
           

@@ -102,7 +102,7 @@ const DocumentDocDiff: React.FC<Props> = ({
     <Card>
       {DocumentDocDiffData?.id ? (
         <div>
-          <CardHeader title='Devis' action={
+          <CardHeader title='Doucument' action={
             <OptionMenu
               iconButtonProps={{size: 'medium'}}
               iconClassName='text-textSecondary'

@@ -54,7 +54,7 @@ import ConfigAddDialog from '../config/ConfigAddDialog';
 
 const buttonProps: ButtonProps = {
   variant: 'contained',
-  children: 'Ajouter',
+  children: 'Configs',
   startIcon: <i className='tabler-plus' />
 }
 

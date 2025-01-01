@@ -2,7 +2,9 @@
 
 import React from 'react';
 
-import { Card, CardHeader, CardContent, Typography, Chip, Box, Grid, MenuItem, Divider } from '@mui/material';
+import { useParams, useRouter } from 'next/navigation';
+
+import { Card, CardHeader, CardContent, Typography, Chip, Box, Grid, MenuItem,  } from '@mui/material';
 
 import type { FieldError, UseFormRegister } from 'react-hook-form';
 
@@ -10,6 +12,7 @@ import CustomTextField from '@/@core/components/mui/TextField';
 import type { FormValidateDocDiffUpdateType } from './schemaDocDiffEdit';
 import type { LocalisationRead } from '@/services/IsyBuildApi';
 import CustomIconButton from '@/@core/components/mui/IconButton';
+import { useAuth } from '@/contexts/AuthContext';
 
 type DocDiffTypeAndLotProps = {
   type?: string; // Document type
@@ -29,74 +32,110 @@ type DocDiffTypeAndLotProps = {
 };
 
 const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, errors, localisations, localisation, type, lot, date,indice,status }) => {
+
+  const router = useRouter();
+  const { edit,docDiffId } = useParams()
+  const { user } = useAuth()
+  const userRole = user?.role
+  
+  const handleRedirect = () => {
+    // Get the current URL
+    
+
+    // Construct the new URL with the query parameter
+    const newUrl = `/${userRole}/locations/add?return_to=${userRole}/projects/${edit}/details/documentDiffusions/${docDiffId}/details`;
+
+    // Redirect to the new URL
+    router.push(newUrl);
+  };
+
   return (
     <Card>
       <CardHeader title="Informations du Document" />
       <CardContent>
       {type && (
-          <div className="mb-4">
+          <div className='flex items-center gap-4'>
+          <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
+            <div className='flex flex-col'>
             <Box display="flex" alignItems="center"className="mb-1">
 
             <Typography variant="body1" mr={2}>
               Type de Document: 
             </Typography>
-              <Chip label={type} color="primary" variant='tonal' />
             </Box>
-            
+            </div>
+              <Chip label={type} color="primary" variant='tonal' />
+            </div>
           </div>
         )}
         {/* Display Project Lot */}
-        <Divider className='mbe-4'/>
+     
         {lot && (
-         <div>
+           <div className='flex items-center gap-4'>
+           <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
+             <div className='flex flex-col'>
          <Box display="flex" alignItems="center"className="mb-1">
            <Typography variant="body1" >
              Lot de Projet:
            </Typography>
+         </Box>
+           </div>
            <Typography variant="subtitle1" ml={2} >
              {lot}
            </Typography>
-         </Box>
+         </div>
        </div>
         )}
-        <Divider className='mbe-4'/>
+    
         {status ? (
-         <div>
+         <div className='flex items-center gap-4'>
+         <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
+           <div className='flex flex-col'>
          <Box display="flex" alignItems="center"className="mb-1">
            <Typography variant="body1" >
            Statut:
            </Typography>
-           <Typography variant="subtitle1" ml={2} >
-             {status}
-           </Typography>
          </Box>
+           </div>
+           <Typography variant="subtitle1" ml={2} >
+             <Chip label={status} color="primary" variant='tonal' />
+           </Typography>
+         </div>
        </div>
         ) : <Typography variant="body1" color="textSecondary">
         Aucune information disponible
       </Typography>}
         {date && (
-         <div>
+         <div className='flex items-center gap-4'>
+         <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
+           <div className='flex flex-col'>
          <Box display="flex" alignItems="center"className="mb-1">
            <Typography variant="body1" >
              Date De Diffusion:
            </Typography>
+         </Box>
+         </div>
            <Typography variant="subtitle1" ml={2} >
              {date}
            </Typography>
-         </Box>
+         </div>
        </div>
         )}
-        <Divider className='mbe-4'/>
+      
         {indice ? (
-         <div>
-         <Box display="flex" alignItems="center"className="mb-1">
+         <div className='flex items-center gap-4'>
+         
+         <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
+           <div className='flex flex-col'>
            <Typography variant="body1" >
            Indice:
            </Typography>
+           </div>
            <Typography variant="subtitle1" ml={2} >
              {indice}
            </Typography>
-         </Box>
+         </div>
+   
        </div>
         ) :
         <Box display="flex" alignItems="center"className="mb-1">
@@ -112,13 +151,13 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, erro
             Aucune information disponible
           </Typography>
         )}
-        <Divider className='mbe-4'/>
-        <Grid container spacing={6} className="mbe-6">
+    
+        <Grid container spacing={6} className="mbe-8">
                    
                  <Grid item xs={12}>
-                 <div className="flex items-end gap-4">
+                 <div className="flex items-end gap-4 mb-8">
 
-          <CustomTextField
+          <CustomTextField 
     select
     fullWidth
     label="Localisation"
@@ -140,6 +179,7 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, erro
         variant="tonal"
         color="primary"
         className="min-is-fit"
+        onClick={handleRedirect}
         
         >
         <i className="tabler-plus" />

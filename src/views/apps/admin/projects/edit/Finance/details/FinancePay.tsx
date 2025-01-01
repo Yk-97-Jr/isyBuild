@@ -22,7 +22,7 @@ const FinancePay: React.FC<DocDiffTypeAndLotProps> = ({ data }) => {
           {"Paiement cumule"}
         </Typography>
       </div>
-      <Typography>{`${data?.payment_cumulated}$`}</Typography>
+      <Typography>{`${data?.payment_cumulated}£`}</Typography>
     </div>
   </div>
   <div className='flex items-center gap-4'>
@@ -32,7 +32,7 @@ const FinancePay: React.FC<DocDiffTypeAndLotProps> = ({ data }) => {
           {"Paiement cumule%"}
         </Typography>
       </div>
-      <Typography>{`${data?.payment_cumulated_percentage}$`}</Typography>
+      <Typography>{`${data?.payment_cumulated_percentage}£`}</Typography>
     </div>
   </div>
       </CardContent>

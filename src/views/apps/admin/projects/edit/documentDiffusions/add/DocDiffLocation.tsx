@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 // MUI Imports
 import MenuItem from '@mui/material/MenuItem';
@@ -67,11 +67,17 @@ const DocDiffLocation = ({
 
   const router = useRouter();
   const { user } = useAuth();
+  const {edit} = useParams();
   const userRole = user?.role;
 
   const handleRedirect = () => {
-    const newUrl = `/${userRole}/docdiff/location/add?return_to=${userRole}/docdiff/add`;
+    // Get the current URL
+    
 
+    // Construct the new URL with the query parameter
+    const newUrl = `/${userRole}/locations/add?return_to=${userRole}/projects/${edit}/details/documentDiffusions/add`;
+
+    // Redirect to the new URL
     router.push(newUrl);
   };
 
