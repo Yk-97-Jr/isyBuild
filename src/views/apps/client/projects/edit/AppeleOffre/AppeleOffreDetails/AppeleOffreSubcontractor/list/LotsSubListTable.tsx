@@ -156,7 +156,7 @@ const LotsSubListTable = ({
         header: `Responsable`,
         cell: ({row}) => (
           <Typography>
-            {row.original.subcontractor_staff.user
+            {row.original.subcontractor_staff
               ? `${row.original.subcontractor_staff.user.first_name} ${row.original.subcontractor_staff.user.last_name}`
               : 'user not available'}
           </Typography>
