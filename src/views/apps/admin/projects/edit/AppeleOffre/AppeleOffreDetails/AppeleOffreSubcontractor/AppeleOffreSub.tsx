@@ -5,7 +5,7 @@ import React from "react";
 
 import type {ProjectLotRead} from "@/services/IsyBuildApi";
 import LotsSubList
-  from "@views/apps/client/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/list/LotsSubList";
+  from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/list/LotsSubList";
 
 
 type Props = {
