@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
@@ -10,9 +10,20 @@ const LocationsAddHeader = ({ onSubmit, isLoading }: { onSubmit: () => void; isL
   const router = useRouter()
   const { user } = useAuth()
   const userRole = user?.role
+  const searchParams = useSearchParams();
+const returnTo = searchParams.get('return_to'); 
 
   const handleDiscard = () => {
-    router.push(`/${userRole}/locations/list`) 
+
+    console.log(returnTo);
+    
+    
+
+    if (returnTo) {
+      router.push(`/${returnTo}`); // Redirect to the "returnTo" URL
+    } else {
+      router.push(`/${userRole}/locations/list`); // Default fallback URL
+    }   
   }
 
   return (

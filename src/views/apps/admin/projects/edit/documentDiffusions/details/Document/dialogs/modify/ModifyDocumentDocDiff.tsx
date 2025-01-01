@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 
 
+import { useParams } from 'next/navigation';
+
 import {Button, DialogActions, CircularProgress, DialogTitle, Dialog, Grid} from '@mui/material';
 import type {SubmitHandler} from "react-hook-form";
 import {useForm} from "react-hook-form";
@@ -26,6 +28,7 @@ import type {
 import CustomTextField from "@core/components/mui/TextField";
 import AddDocumentUpload from "../add/AddDocumentUpload";
 
+
 interface AddProps {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -41,6 +44,7 @@ const ModifyDocumentDocDiff = ({open, setOpen, refetch, id, data}: AddProps) => 
 
     const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType;
     const [updateDocument, {isLoading}] = useDocumentDiffusionUploadMutation();
+    const {docDiffId} = useParams();
     const [files, setFiles] = useState<File[]>([])
 
     useEffect(() => {
@@ -66,6 +70,9 @@ const ModifyDocumentDocDiff = ({open, setOpen, refetch, id, data}: AddProps) => 
     const handleCloseWithoutRefresh = () => {
       setOpen(false);
     };
+
+  
+    
 
     const onSubmit: SubmitHandler<FormValidateDocumentUploadType> = async (data) => {
       try {
@@ -99,7 +106,8 @@ const ModifyDocumentDocDiff = ({open, setOpen, refetch, id, data}: AddProps) => 
 
         // Send the FormData with a valid projectLotSubcontractorId
         await updateDocument({
-          documentDiffusionId: +id,
+          documentDiffusionId: +docDiffId,
+
 
           // @ts-expect-error
           documentUploadRequest: formDataToSend

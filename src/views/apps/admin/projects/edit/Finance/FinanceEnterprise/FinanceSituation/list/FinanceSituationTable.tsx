@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import React, {useEffect, useState, useMemo} from 'react'
+import React, { useState, useMemo} from 'react'
 
 
 
@@ -9,7 +9,7 @@ import Card from '@mui/material/Card'
 
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import type {TextFieldProps} from '@mui/material/TextField'
+
 import MenuItem from '@mui/material/MenuItem'
 
 // Third-party Imports
@@ -88,34 +88,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const DebouncedInput = ({
-                          value: initialValue,
-                          onChange,
-                          debounce = 500,
-                          ...props
-                        }: {
-  value: string | number
-  onChange: (value: string | number) => void
-  debounce?: number
-} & Omit<TextFieldProps, 'onChange'>) => {
-  // States
-  const [value, setValue] = useState(initialValue)
 
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onChange(value)
-    }, debounce)
-
-    return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
-
-  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)}/>
-}
 
 // Column Definitions
 const columnHelper = createColumnHelper<FinanceTypeWithAction>()
@@ -183,18 +156,7 @@ const FinanceSituationTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('finance_enterprise.subcontractor.siren_number', {
-        header: 'Numéro siren',
-        cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.finance_enterprise.subcontractor.siren_number}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+ 
       
       columnHelper.accessor('created_at', {
         header: 'Date de Creation',
@@ -285,12 +247,6 @@ const FinanceSituationTable = ({
             <MenuItem value='50'>50</MenuItem>
           </CustomTextField>
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
-            <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={value => setGlobalFilter(String(value))}
-              placeholder='Rechercher '
-              className='max-sm:is-full'
-            />
          <OpenFinanceOnElementClick element={Button} elementProps={buttonProps} dialog={FinanceSituationAddDialog} dialogProps={{ refetch }}/>
           </div>
         </div>

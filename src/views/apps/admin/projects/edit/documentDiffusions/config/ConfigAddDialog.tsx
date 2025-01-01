@@ -137,7 +137,7 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
       <DialogContent>
         <Grid container spacing={2}>
           {configs.map((config) => (
-            <Grid item xs={12} sm={6} key={config.id}>
+            <Grid item xs={12}  key={config.id}>
               <CustomTextField
                 select
                 fullWidth

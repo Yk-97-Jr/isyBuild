@@ -26,7 +26,7 @@ import type {ColumnDef, FilterFn, /* SortingState */} from '@tanstack/react-tabl
 import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import { CircularProgress} from '@mui/material'
+import { Chip, CircularProgress} from '@mui/material'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
@@ -74,6 +74,35 @@ const DiffusionTable = ({
 
   const columns = useMemo<ColumnDef<LocalisationWithAction, any>[]>(
     () => [
+      columnHelper.accessor('project_intervenant.intervenant.user.id', {
+        header: 'intervenant',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-3'>
+            {getAvatar({ avatar: row.original.project_intervenant.intervenant.user.avatar, customer: row.original.project_intervenant.intervenant.user.first_name })}
+            <div className='flex flex-col'>
+              <Typography
+                color='text.primary'
+                className='font-medium '
+              >
+                {row.original.project_intervenant.intervenant.user.last_name } {row.original.project_intervenant.intervenant.user.first_name}
+              </Typography>
+              <Typography variant='body2'>{row.original.project_intervenant.intervenant.user.email}</Typography>
+            </div>
+          </div>
+        )
+      }),
+      columnHelper.accessor('project_intervenant.intervenant.role', {
+        header: 'role ',
+        cell: ({row}) => (
+          <div className='flex items-center gap-1'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.project_intervenant.intervenant.role}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
       columnHelper.accessor('last_notification_date', {
         header: 'last notification',
         cell: ({row}) => (
@@ -103,42 +132,15 @@ const DiffusionTable = ({
         cell: ({row}) => (
           <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.status}`}
-              </Typography>
+        
+              <Chip label={row.original.status} color="primary" variant='tonal' />
+              
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('project_intervenant.intervenant.role', {
-        header: 'role ',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.project_intervenant.intervenant.role}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('project_intervenant.intervenant.user.id', {
-        header: 'Customers',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
-            {getAvatar({ avatar: row.original.project_intervenant.intervenant.user.avatar, customer: row.original.project_intervenant.intervenant.user.first_name })}
-            <div className='flex flex-col'>
-              <Typography
-                color='text.primary'
-                className='font-medium '
-              >
-                {row.original.project_intervenant.intervenant.user.last_name } {row.original.project_intervenant.intervenant.user.first_name}
-              </Typography>
-              <Typography variant='body2'>{row.original.project_intervenant.intervenant.user.email}</Typography>
-            </div>
-          </div>
-        )
-      }),
+     
+    
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, data]

@@ -67,7 +67,7 @@ const AddDiffuse = ({open, setOpen, refetch}: AddProps) => {
             documentDiffusionId: +docDiffId,
 
             // @ts-expect-error
-            documentUploadRequest: data
+            documentUploadRequest: {indice:data.indice},
           }).unwrap();
 
         handleClose();

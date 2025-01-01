@@ -11,7 +11,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
   return (
     <Card>
       <CardHeader
-        title={data?.project_lot.lot.name}
+        title="Informations de Paiement"
       />
       <CardContent className='flex flex-col gap-[1.638rem]'>
       <div className='flex items-center gap-4'>
@@ -21,7 +21,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Marches"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_contract}$`}</Typography>
+              <Typography>{`${data?.total_contract}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -31,7 +31,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Prorata"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_prorata}$`}</Typography>
+              <Typography>{`${data?.total_prorata}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -41,7 +41,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Total ts travaux"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_ts_travaux}$`}</Typography>
+              <Typography>{`${data?.total_ts_travaux}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -51,7 +51,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Total ts choix"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_ts_choix}$`}</Typography>
+              <Typography>{`${data?.total_ts_choix}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -61,7 +61,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Total ts tma"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_ts_tma}$`}</Typography>
+              <Typography>{`${data?.total_ts_tma}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -71,7 +71,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Marches+Ts"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_markets_plus_ts}$`}</Typography>
+              <Typography>{`${data?.total_markets_plus_ts}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -81,7 +81,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Cie"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_cie}$`}</Typography>
+              <Typography>{`${data?.total_cie}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -91,7 +91,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Retenue garantie"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_retention_guarantee}$`}</Typography>
+              <Typography>{`${data?.total_retention_guarantee}£`}</Typography>
             </div>
           </div>
           <div className='flex items-center gap-4'>
@@ -101,7 +101,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
                   {"Marches+Ts+Cie-Proratat-Rg"}
                 </Typography>
               </div>
-              <Typography>{`${data?.total_final_amount}$`}</Typography>
+              <Typography>{`${data?.total_final_amount}£`}</Typography>
             </div>
           </div>
       </CardContent>
