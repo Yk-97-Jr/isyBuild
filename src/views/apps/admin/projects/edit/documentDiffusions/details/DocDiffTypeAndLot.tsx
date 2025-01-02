@@ -60,7 +60,7 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, erro
             <Box display="flex" alignItems="center"className="mb-1">
 
             <Typography variant="body1" mr={2}>
-              Type de Document: 
+              Type : 
             </Typography>
             </Box>
             </div>
@@ -76,7 +76,7 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, erro
              <div className='flex flex-col'>
          <Box display="flex" alignItems="center"className="mb-1">
            <Typography variant="body1" >
-             Lot de Projet:
+             Lot :
            </Typography>
          </Box>
            </div>

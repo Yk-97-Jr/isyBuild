@@ -51,7 +51,7 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
             <CustomTextField
               select
               fullWidth
-              label="Lot de projet"
+              label="Lot "
               defaultValue=""
               {...register('project_lot')}
               error={!!errors.project_lot}
@@ -69,7 +69,7 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
           </Grid>
 
           {/* Type Dropdown */}
-          <Grid item xs={12} >
+          <Grid item xs={12} sm={6}>
             <CustomTextField
               select
               fullWidth
@@ -91,7 +91,7 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
           </Grid>
 
           {/* Phase Dropdown */}
-          <Grid item xs={12} >
+          <Grid item xs={12} sm={6}>
             <CustomTextField
               select
               fullWidth

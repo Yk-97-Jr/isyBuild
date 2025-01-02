@@ -27,7 +27,7 @@ const SubcontractorAddHeader: React.FC<SubcontractorAddHeaderProps> = ({ onSubmi
     <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
       <div>
         <Typography variant='h4' className='mbe-1'>
-          Ajouter une Entreprise
+          Ajouter une produit
         </Typography>
       </div>
       <div className='flex flex-wrap max-sm:flex-col gap-4'>
@@ -35,7 +35,7 @@ const SubcontractorAddHeader: React.FC<SubcontractorAddHeaderProps> = ({ onSubmi
           Annuler
         </Button>
         <Button variant='contained' onClick={onSubmit} disabled={isLoading}>
-          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Ajouter une Entreprise'}
+          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Ajouter une produit'}
         </Button>
       </div>
     </div>

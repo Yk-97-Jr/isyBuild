@@ -297,7 +297,7 @@ columnHelper.accessor('total_ts_travaux', {
             <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
             <Typography color='text.primary' className='font-medium'>
-            {`${row.original.payment_cumulated_percentage}`}
+            {`${row.original.payment_cumulated_percentage}%`}
             </Typography>
             </div>
             </div>

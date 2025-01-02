@@ -10,7 +10,7 @@ import CardContent from '@mui/material/CardContent'
 
 
 import type { ButtonProps } from '@mui/material';
-import { Button } from '@mui/material'
+import { Button, Divider } from '@mui/material'
 
 
 import { useRetrieveFinanceEnterpriseByIdQuery } from '@/services/IsyBuildApi'
@@ -24,7 +24,7 @@ const ActionButton = ({ refetch }: { refetch: () => void }) => {
   const buttonProps: ButtonProps = {
     variant: 'contained',
     children: 'Modifier',
-    startIcon: <i className='tabler-plus' />
+    startIcon: <i className='tabler-edit' />
   }
 
   return (
@@ -57,6 +57,7 @@ const FinanceEarn = () => {
         <LabeledData label="Marches+Ts" value={`${data?.markets_plus_ts }€`} />
         <LabeledData label="Cie" value={`${data?.cie }€`} />
         <LabeledData label="Retenue garantie" value={`${data?.retention_guarantee }€`} />
+        <Divider/>
         <LabeledData label="Marches+Ts+Cie-Proratat-Rg" value={`${data?.final_amount }€`} />
         <div className='flex justify-center '>
           <ActionButton refetch={refetch} />

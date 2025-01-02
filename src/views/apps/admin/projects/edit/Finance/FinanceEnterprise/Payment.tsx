@@ -17,7 +17,7 @@ const Payment: React.FC<DocDiffTypeAndLotProps> = ({ data }) => {
       <CardHeader title="Paiement " />
       <CardContent className='flex flex-col gap-[1.638rem]'>
       <LabeledData label="Paiement cumule" value={`${data?.payment_cumulated}€`}/>
-      <LabeledData label="Paiement cumule%" value={`${data?.payment_cumulated_percentage }€`} />
+      <LabeledData label="Paiement cumule %" value={`${data?.payment_cumulated_percentage }%`} />
       </CardContent>
     </Card>
   );

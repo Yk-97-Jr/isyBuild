@@ -43,7 +43,7 @@ const AddDiffuse = ({open, setOpen, refetch}: AddProps) => {
       setOpen(false);
 
       if (refetch) {
-        console.log("refetchhhhhhhhhhhhhh")
+       
         refetch()
       }
 
@@ -66,8 +66,8 @@ const AddDiffuse = ({open, setOpen, refetch}: AddProps) => {
           {
             documentDiffusionId: +docDiffId,
 
-            // @ts-expect-error
-            documentUploadRequest: {indice:data.indice},
+            
+            diffusionRequest: {indice:data.indice},
           }).unwrap();
 
         handleClose();

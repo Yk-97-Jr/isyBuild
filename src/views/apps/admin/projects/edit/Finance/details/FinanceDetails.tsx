@@ -50,10 +50,10 @@ const FinanceDetails = () => {
         <Grid item xs={12} md={3.5}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <FinanceEarn data={data} />
+            <FinanceDataCard data={data} />
             </Grid>
             <Grid item xs={12}>
-            <FinanceDataCard data={data} />
+              <FinanceEarn data={data} />
             </Grid>
             <Grid item xs={12}>
             <FinancePay data={data} />

@@ -38,7 +38,7 @@ import { CardHeader, CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-import OptionMenu from '@core/components/option-menu'
+
 import LotsDialog from '@components/dialogs/lot-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
@@ -251,20 +251,9 @@ const LotsListTable = ({
             <IconButton onClick={() => handleDeleteLot(row.original.id)}>
               <i className='tabler-trash  text-textSecondary' />
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2  text-textSecondary',
-                    onClick: () => handleEditLot(row.original.id)
-                  }
-                }
-              ]}
-            />
+            <IconButton onClick={() => handleEditLot(row.original.id)}>
+              <i className='tabler-edit text-textSecondary'/>
+            </IconButton>
           </div>
         ),
         enableSorting: false

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, CardHeader, CardContent, Divider, Typography } from '@mui/material'
+import { Card, CardHeader, CardContent,  Typography } from '@mui/material'
 
 import type { LotRead } from '@/services/IsyBuildApi'
 
@@ -11,10 +11,9 @@ type LotStausProps = {
 const LotsAbout: React.FC<LotStausProps> = ({ lotData }) => {
   return (
     <Card>
-      <CardHeader title='à propos' />
+      <CardHeader title='détails' />
       <CardContent>
         <div className='flex items-center gap-2'>
-          <i className='tabler-user' />
           <div className='flex items-center flex-wrap gap-2'>
             {lotData?.client?.name ? (
               <>
@@ -31,7 +30,7 @@ const LotsAbout: React.FC<LotStausProps> = ({ lotData }) => {
             )}
           </div>
         </div>
-        <Divider className='mlb-2' />
+      
       </CardContent>
     </Card>
   )

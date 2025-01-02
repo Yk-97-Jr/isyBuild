@@ -104,7 +104,7 @@ const DiffusionTable = ({
         )
       }),
       columnHelper.accessor('last_notification_date', {
-        header: 'last notification',
+        header: 'dernière notification',
         cell: ({row}) => (
           <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
@@ -116,7 +116,7 @@ const DiffusionTable = ({
         )
       }),
       columnHelper.accessor('notifications_sent', {
-        header: 'notifications sent ',
+        header: 'notifications envoyées',
         cell: ({row}) => (
           <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
