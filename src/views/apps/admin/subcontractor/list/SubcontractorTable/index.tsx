@@ -39,7 +39,7 @@ import { CardHeader, Chip, CircularProgress, Grid } from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
-import OptionMenu from '@core/components/option-menu'
+
 
 import CustomTextField from '@core/components/mui/TextField'
 
@@ -310,24 +310,17 @@ const SubcontractorTable = ({
             <IconButton onClick={() => handleDeleteCompany(row.original.id)}>
               <i className='tabler-trash text-textSecondary' />
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleEditClient(row.original.id)
-                  }
-                }
-              ]}
-            />
+
+     
+            <IconButton onClick={() => handleEditClient(row.original.id)}>
+              <i className='tabler-edit text-textSecondary'/>
+            </IconButton>
+
           </div>
-        ), 
+        ),
         enableSorting: false
       })
+     
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, filteredData]

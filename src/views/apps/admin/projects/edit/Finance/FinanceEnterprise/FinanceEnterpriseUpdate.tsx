@@ -156,7 +156,7 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
       fullWidth
       open={open}
       onClose={handleClose}
-      maxWidth='xs'
+      maxWidth='md'
       scroll='body'
       sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
     >
@@ -168,8 +168,9 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
       </DialogTitle>
     <form onSubmit={handleSubmit(onSubmit)} >
     <DialogContent className='overflow-visible pbs-0 sm:pli-16'>
-          <Grid container spacing={5}>
-            <Grid item xs={12} >
+          <Grid container spacing={5} className='mbe-6'>
+            <Grid item xs={12}  sm={6}>
+            
       <CustomTextField
         label="Total contract"
         
@@ -177,42 +178,60 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
         error={!!errors.total_contract}
         helperText={errors.total_contract?.message}
         fullWidth
-      /> 
+        /> 
+        </Grid>
+      <Grid item xs={12} sm={6} >
+
        <CustomTextField
         label="Total ts choix"
         {...register('total_ts_choix')}
         error={!!errors.total_ts_choix}
         helperText={errors.total_ts_choix?.message}
         fullWidth
-      /> 
+        /> 
+        </Grid>
+        <Grid item xs={12} sm={6} >
+
        <CustomTextField
         label="Total ts tma"
         {...register('total_ts_tma')}
         error={!!errors.total_ts_tma}
         helperText={errors.total_ts_tma?.message}
         fullWidth
-      /> 
+        /> 
+        </Grid>
+        <Grid item xs={12} sm={6} >
+
        <CustomTextField
         label="CIE"
         {...register('cie')}
         error={!!errors.cie}
         helperText={errors.cie?.message}
         fullWidth
-      /> 
+        /> 
+        </Grid>
+        <Grid item xs={12} sm={6} >
+
        <CustomTextField
         label="Retention guarantee"
         {...register('retention_guarantee')}
         error={!!errors.retention_guarantee}
         helperText={errors.retention_guarantee?.message}
         fullWidth
-      /> 
+        /> 
+        </Grid>
+        <Grid item xs={12} sm={6} >
+
        <CustomTextField
         label="Caution"
         {...register('caution')}
         error={!!errors.caution}
         helperText={errors.caution?.message}
         fullWidth
-      /> 
+        /> 
+        </Grid>
+        <Grid item xs={12}  >
+
                     <CustomTextField
               select
               fullWidth
@@ -221,19 +240,20 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
               {...register('dgd_status')}
               error={!!errors.dgd_status}
               helperText={errors.dgd_status?.message}
-            >
+              >
               <MenuItem value="">
                 <em>Sélectionnez un status</em>
               </MenuItem>
               {Object.entries(DgdStatusMapping).map(([key, {label}]) => (
-                        <MenuItem key={key} value={key}>
+                <MenuItem key={key} value={key}>
                           {label}
                         </MenuItem>
                       ))}
             </CustomTextField>
+                      </Grid>
       
       </Grid>
-      </Grid>
+    
       </DialogContent>
       <DialogActions className='justify-center pbs-0 sm:pbe-16 sm:pli-16'>
         <Button

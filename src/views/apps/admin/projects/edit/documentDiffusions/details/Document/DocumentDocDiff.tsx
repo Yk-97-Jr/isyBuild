@@ -108,7 +108,7 @@ const DocumentDocDiff: React.FC<Props> = ({
               iconClassName='text-textSecondary'
               options={[
                 {
-                  text: 'Diffuse',
+                  text: 'Diffuser',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
                     onClick: () => handleDiffuse(DocumentDocDiffData?.id)
@@ -155,7 +155,7 @@ const DocumentDocDiff: React.FC<Props> = ({
                     </div>
                   }
                 >
-                  <ListItemText primary={`${DocumentDocDiffData?.name ?? 'Devis'}`}/>
+                  <ListItemText primary={`${DocumentDocDiffData?.name ?? 'Doucument'}`}/>
                 </ListItem>
 
               </List>
@@ -164,7 +164,7 @@ const DocumentDocDiff: React.FC<Props> = ({
         </div>
       ) : (
         <div>
-          <CardHeader title='Devis'/>
+          <CardHeader title='Doucument'/>
           <CardContent>
             <Grid container spacing={6} className='mbe-6'>
               <List sx={{width: '100%', bgcolor: 'background.paper'}}>
@@ -181,7 +181,7 @@ const DocumentDocDiff: React.FC<Props> = ({
                     </div>
                   }
                 >
-                  <ListItemText primary={`Ajouter un fichier devis`}/>
+                  <ListItemText primary={`Ajouter un fichier Doucument`}/>
                 </ListItem>
 
               </List>

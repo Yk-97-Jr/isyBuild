@@ -34,7 +34,7 @@ const ProductInfo: React.FC<ProductInformationProps> = ({ register, errors }) =>
         <Grid item xs={12}>
             <CustomTextField
               fullWidth
-              label='produit nom'
+              label='nom'
               placeholder='votre produit nom'
               {...register('productName')} // Registering the field
               error={!!errors.productName}
@@ -58,7 +58,7 @@ const ProductInfo: React.FC<ProductInformationProps> = ({ register, errors }) =>
               variant='outlined'
               multiline
               rows={3}
-              placeholder='Entrez la description de la produit...'
+              placeholder='Entrez la description de le produit...'
               id='textarea-outlined'
                className='mbe-2'
               {...register('description')}

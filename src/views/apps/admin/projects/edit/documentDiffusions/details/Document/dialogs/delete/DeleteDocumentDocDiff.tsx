@@ -89,7 +89,7 @@ const DeleteDocumentDocDiff = ({open, setOpen, id, refetch}: Props) => {
         <i className='tabler-x'/>
       </DialogCloseButton>
       <DialogTitle variant='h4' className='flex flex-col gap-2 text-center sm:pbs-16 sm:pbe-6 sm:pli-16'>
-        Supprimer Devis
+        Supprimer Doucument
       </DialogTitle>
       <DialogActions
         className='flex max-sm:flex-col max-sm:items-center max-sm:gap-2 justify-center pbs-0 sm:pbe-16 sm:pli-16'>

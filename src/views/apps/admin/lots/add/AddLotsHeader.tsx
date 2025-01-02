@@ -25,10 +25,10 @@ const CompanyAddHeader = ({ onSubmit, isLoading }: { onSubmit: () => void; isLoa
         </div>
         <div className='flex flex-wrap max-sm:flex-col gap-4'>
           <Button variant='tonal' color='secondary' onClick={handleDiscard}>
-            Jeter
+          annule
           </Button>
           <Button variant='contained' type='submit' disabled={isLoading}>
-            {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Enregistrer'}
+            {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Ajoute un lot'}
           </Button>
         </div>
       </div>

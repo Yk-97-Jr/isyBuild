@@ -176,6 +176,19 @@ const LocationsTable = ({
         )
       }),
 
+      columnHelper.accessor('client', {
+        header: 'client',
+        cell: ({row}) => (
+          <div className='flex items-center gap-1'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.client}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+
       columnHelper.accessor('created_at', {
         header: 'Date de Creation',
         cell: ({row}) => (

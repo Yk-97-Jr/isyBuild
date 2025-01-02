@@ -35,12 +35,12 @@ const handleDiscard = () => {
     <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
       <div>
         <Typography variant='h4' className='mbe-1'>
-          informations du lotsssss
+          informations du lot
         </Typography>
       </div>
       <div className='flex flex-wrap max-sm:flex-col gap-4'>
         <Button onClick={handleDiscard} variant='tonal' color='secondary'>
-          Jeter
+        annule
         </Button>
         <Button variant='contained' onClick={onSubmit} disabled={isLoading}>
           {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Enregistrer les modifications'}
