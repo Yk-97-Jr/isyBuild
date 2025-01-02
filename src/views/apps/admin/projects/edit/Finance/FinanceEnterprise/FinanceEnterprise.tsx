@@ -15,6 +15,7 @@ import FinanceSituationlist from './FinanceSituation/list/FinanceSituationlist';
 import AdditionalWorkList from './AdditionalWork/list/AdditionalWorkList';
 import FEDataCard from './FEDataCard';
 import Payment from './Payment';
+import { RefetchProvider } from '@/contexts/RefetchContextProvider';
 
 const FinanceEnterprise = () => {
   const {   idFe} = useParams() // Get subcontractorId from route parameters
@@ -25,11 +26,16 @@ const FinanceEnterprise = () => {
   
 
 
+
+
  
 
 
   
-    const {data,isLoading: isLoadingQuery, } = useRetrieveFinanceEnterpriseByIdQuery({financeEnterpriseId:+idFe});
+    const {data,isLoading: isLoadingQuery, refetch} = useRetrieveFinanceEnterpriseByIdQuery({financeEnterpriseId:+idFe});
+
+
+ 
       
   
 
@@ -41,17 +47,16 @@ const FinanceEnterprise = () => {
     )
 
   return (
-   
+    <RefetchProvider refetch={refetch}>
+
       <Grid container spacing={6}>
-        <Grid item xs={12}>
-        </Grid>
         <Grid item xs={12} md={8.5}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <FinanceSituationlist />
             </Grid>
             <Grid item xs={12}>
-              <AdditionalWorkList />
+              <AdditionalWorkList  />
             </Grid>
           </Grid>
         </Grid>
@@ -69,6 +74,7 @@ const FinanceEnterprise = () => {
           </Grid>
         </Grid>
       </Grid>
+    </RefetchProvider>
    
   )
 }

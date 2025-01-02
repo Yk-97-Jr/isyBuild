@@ -18,6 +18,8 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider';
 import type { SnackBarContextType } from '@/types/apps/snackbarType';
 import CustomTextField from '@core/components/mui/TextField'
 import DialogCloseButton from '@/components/dialogs/DialogCloseButton';
+import { useRefetch } from '@/contexts/RefetchContextProvider';
+
 
 
 
@@ -40,12 +42,17 @@ const AddTsContent = ({ open, setOpen,refetch }: AddFinanceSituationContentProps
     resolver: yupResolver(schemaTSAdd),
   });
 
+  const refetchCard = useRefetch(); // Access refetch directly
+
+
   const handleClose = () => {
     setOpen(false)
 
     if (refetch) {
 
         refetch(); // Call refetch when the dialog is closed
+        refetchCard()
+
       }
     
   }

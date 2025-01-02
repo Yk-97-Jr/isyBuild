@@ -133,7 +133,7 @@ const FinanceSituationTable = ({
     () => [
      
       columnHelper.accessor('name', {
-        header: 'Finance Situation',
+        header: 'Nom',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>

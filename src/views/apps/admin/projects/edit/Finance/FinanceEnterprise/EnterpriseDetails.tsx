@@ -1,147 +1,66 @@
+
+
+
 import { useParams } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
-import Typography from '@mui/material/Typography'
-
-import {useRetrieveFinanceEnterpriseByIdQuery } from '@/services/IsyBuildApi'
 
 
+import type { ButtonProps } from '@mui/material';
+import { Button } from '@mui/material'
 
 
+import { useRetrieveFinanceEnterpriseByIdQuery } from '@/services/IsyBuildApi'
+import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElementClick'
+import UpdateFinanceEnterpriseContent from './FinanceEnterpriseUpdate'
+import LabeledData from '@/components/LabledData'
+
+
+
+const ActionButton = ({ refetch }: { refetch: () => void }) => {
+  const buttonProps: ButtonProps = {
+    variant: 'contained',
+    children: 'Modifier',
+    startIcon: <i className='tabler-plus' />
+  }
+
+  return (
+    <OpenFinanceOnElementClick
+      element={Button}
+      elementProps={buttonProps}
+      dialog={UpdateFinanceEnterpriseContent}
+      dialogProps={{ refetch }}
+    />
+  )
+}
 
 const FinanceEarn = () => {
+  const { idFe } = useParams()
+  const { data, refetch } = useRetrieveFinanceEnterpriseByIdQuery({ financeEnterpriseId: +idFe })
 
-    const {idFe} = useParams()
 
-      const {data } = useRetrieveFinanceEnterpriseByIdQuery({financeEnterpriseId:+idFe});
-    
 
-    
+  console.log(data)
 
-  console.log(data);
-  
   return (
     <Card>
-      <CardHeader
-        title="Informations Paiement"
-      />
+      <CardHeader title="Informations Paiement" />
       <CardContent className='flex flex-col gap-[1.638rem]'>
-      <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Marches"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.total_contract}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Prorata"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.prorata}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Total ts travaux"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.total_ts_travaux}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Total ts choix"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.total_ts_choix}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Total ts tma"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.total_ts_tma}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Marches+Ts"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.markets_plus_ts}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Cie"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.cie}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Retenue garantie"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.retention_guarantee}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Marches+Ts+Cie-Proratat-Rg"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.final_amount}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Caution"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.caution}£`}</Typography>
-            </div>
-          </div>
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-              <div className='flex flex-col'>
-                <Typography className='font-medium' color='text.primary'>
-                  {"Dgd"}
-                </Typography>
-              </div>
-              <Typography>{`${data?.dgd_status}£`}</Typography>
-            </div>
-          </div>
-          
-          
-
+        <LabeledData label="Marches" value={`${data?.total_contract }€`} />
+        <LabeledData label="Prorata" value={`${data?.prorata }€`} />
+        <LabeledData label="Total ts travaux" value={`${data?.total_ts_travaux }€`} />
+        <LabeledData label="Total ts choix" value={`${data?.total_ts_choix }€`} />
+        <LabeledData label="Total ts tma" value={`${data?.total_ts_tma }€`} />
+        <LabeledData label="Marches+Ts" value={`${data?.markets_plus_ts }€`} />
+        <LabeledData label="Cie" value={`${data?.cie }€`} />
+        <LabeledData label="Retenue garantie" value={`${data?.retention_guarantee }€`} />
+        <LabeledData label="Marches+Ts+Cie-Proratat-Rg" value={`${data?.final_amount }€`} />
+        <div className='flex justify-center '>
+          <ActionButton refetch={refetch} />
+        </div>
       </CardContent>
     </Card>
   )

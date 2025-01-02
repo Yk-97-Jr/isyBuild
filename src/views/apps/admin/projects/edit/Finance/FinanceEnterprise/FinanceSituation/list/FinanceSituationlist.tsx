@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import FinanceSituationTable from './FinanceSituationTable';
 import {useListFinanceSituationsQuery} from '@/services/IsyBuildApi';
 
+
 const FinanceSituationList = () => {
   // States for pagination or other parameters
   const [page, setPage] = useState(1);
@@ -56,12 +57,12 @@ const FinanceSituationList = () => {
   return (
     isFetching ?
       <FinanceSituationTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} data={clients}
-                       countRecords={countRecords} isFetching={isFetching} refetch={refetch}/>
+                       countRecords={countRecords} isFetching={isFetching} refetch={refetch} />
       :
       <Grid container spacing={6}>
         <Grid item xs={12}>
           <FinanceSituationTable pageSize={pageSize} setPageSize={setPageSize} page={page} setPage={setPage} data={clients}
-                           countRecords={countRecords} isFetching={isFetching} refetch={refetch}/>
+                           countRecords={countRecords} isFetching={isFetching} refetch={refetch} />
         </Grid>
       </Grid>
   )

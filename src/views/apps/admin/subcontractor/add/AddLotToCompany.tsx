@@ -20,6 +20,7 @@ import SelectMultiple from './SelectMultiple'
 
 import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
 
+
 type ClientStatusProps = {
   register: UseFormRegister<FormValidateSubcontractorAddType> // Adjust the type as necessary
   errors: {
@@ -37,7 +38,7 @@ const ClientStatus: React.FC<ClientStatusProps> = ({ register, errors }) => {
 
   return (
     <Card
-      className='mbe-12'
+      className='mbe-4'
       sx={{
         height: isSelectOpen ? '500px' : '266px', // Expand when select is open
         transition: 'height 0.3s ease', // Smooth transition of height
@@ -58,6 +59,7 @@ const ClientStatus: React.FC<ClientStatusProps> = ({ register, errors }) => {
 
           <div style={{ flexGrow: 1 }}></div>
 
+         
           <Divider className='mlb-2' />
           <div className='flex items-center justify-between mbe-6'>
             <Typography>Status</Typography>
