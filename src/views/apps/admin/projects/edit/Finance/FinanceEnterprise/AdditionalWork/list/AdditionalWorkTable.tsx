@@ -51,6 +51,8 @@ import TsAddDialog from '../add/TsAddDialog'
 import EditTsContent from '../details/TsEditDialog';
 
 
+
+
 const buttonProps: ButtonProps = {
   variant: 'contained',
   children: 'Ajouter',
@@ -116,12 +118,14 @@ const AdditionalWorkTable = ({
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
   const [globalFilter, setGlobalFilter] = useState('')
+ 
 
 
 
 
 
   const handleDeleteFinance = (id: number) => {
+    
     setOpen(true)
     setId(id)
   }
@@ -132,7 +136,7 @@ const AdditionalWorkTable = ({
     () => [
       
       columnHelper.accessor('name', {
-        header: 'Finance Situation',
+        header: 'Nom',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
             <div className='flex flex-col'>

@@ -52,7 +52,7 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, erro
   return (
     <Card>
       <CardHeader title="Informations du Document" />
-      <CardContent>
+      <CardContent className='flex flex-col gap-[1.638rem]'>
       {type && (
           <div className='flex items-center gap-4'>
           <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>

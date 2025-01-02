@@ -24,12 +24,13 @@ const TableClient = ({ register, errors }: ClientStatusProps) => {
 
   return (
     <Card className="mbe-12">
-      <CardHeader title="Détails" />
+      <CardHeader title="ajouter client " />
       <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Grid>
           <CustomTextField
             select
             fullWidth
+            label='client'
             id="client-select"
             {...register("client_id")} // Register the client_id field with react-hook-form
             SelectProps={{ displayEmpty: true }}

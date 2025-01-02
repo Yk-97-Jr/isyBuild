@@ -97,7 +97,7 @@ const SubcontractorStatus: React.FC<CombinedComponentProps> = ({
     console.log( "message",subcontractorData?.is_active );
 
     return (
-        <Card className='mbe-12'
+        <Card className='mbe-1'
             sx={{
                 height: isSelectOpen ? '500px' : '266px', 
                 transition: 'height 0.3s ease',

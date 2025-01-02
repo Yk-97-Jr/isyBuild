@@ -1,6 +1,6 @@
 // statusEnums.ts
 
-import type {Status109Enum, Status841Enum, SuiviAdministrativeStatusEnum, Status3BfEnum} from "@/services/IsyBuildApi";
+import type {Status109Enum, Status841Enum, SuiviAdministrativeStatusEnum, Status3BfEnum, DgdStatusEnum} from "@/services/IsyBuildApi";
 
 export const Status841Mapping: Record<Status841Enum, {
   label: string,
@@ -48,31 +48,24 @@ export const Status3BfMapping: Record<Status3BfEnum, {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const DgdStatusMapping: Record<
+  DgdStatusEnum  ,
+  {
+    label: string ;
+    color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning';
+  }
+> = {
+  regle: { label: 'Réglé', color: 'success' },
+  valide: { label: 'Validé', color: 'primary' },
+  valide_bloque_jp: { label: 'Validé Bloqué JP', color: 'warning' },
+  etabli_non_signe_ets: { label: 'Établi Non Signé ETS', color: 'secondary' },
+  en_attente_moex: { label: 'En Attente MOEX', color: 'warning' },
+  en_attente_levee_reserves: { label: 'En Attente Levée Réserves', color: 'warning' },
+  valide_a_zero: { label: 'Validé à Zéro', color: 'error' },
+  signe_par_ets_attente_jp: { label: 'Signé Par ETS Attente JP', color: 'primary' },
+  refuse_par_amo: { label: 'Refusé Par AMO', color: 'error' },
+  abandon: { label: 'Abandonné', color: 'default' },
+};
 
 
 

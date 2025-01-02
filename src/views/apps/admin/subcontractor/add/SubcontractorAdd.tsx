@@ -25,6 +25,7 @@ import type { SnackBarContextType } from '@/types/apps/snackbarType'
 import type { FormValidateSubcontractorAddType } from './SchemaSubcontractorAdd'
 import { schemaSubcontractorAdd } from './SchemaSubcontractorAdd'
 import ClientStatus from '@/views/apps/admin/subcontractor/add/AddLotToCompany'
+import TableClient from './AddClientsToSub';
 
 const SubcontractorAdd = () => {
   const {
@@ -104,6 +105,7 @@ const SubcontractorAdd = () => {
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <ClientStatus register={register} errors={errors} />
+              <TableClient register={register} errors={errors}/>
             </Grid>
           </Grid>
         </Grid>

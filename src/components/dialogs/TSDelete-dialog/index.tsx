@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import DialogCloseButton from '../DialogCloseButton';
 import DeleteTSContent from './DeleteTSContent';
+import { useRefetch } from '@/contexts/RefetchContextProvider';
 
 type TravailSupplementaireDialogProps = {
   open: boolean;
@@ -23,14 +24,20 @@ const DeleteTsDialog: React.FC<TravailSupplementaireDialogProps> = ({
   setId,
   refetch,
 }) => {
+
+  const refetchCard = useRefetch();
+
   const handleClose = () => {
     setOpen(false);
     setId(0);
 
     if (refetch) {
       refetch();
+      refetchCard()
     }
   };
+
+
 
   const handleCloseWithoutRefresh = () => {
     setOpen(false);

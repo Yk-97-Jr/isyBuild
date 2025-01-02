@@ -14,7 +14,7 @@ const FinanceDataCard: React.FC<DocDiffTypeAndLotProps> = ({ data }) => {
   return (
     <Card>
       <CardHeader title="Informations " />
-      <CardContent>
+      <CardContent className='flex flex-col gap-[1.638rem]'>
         {/* Display Project Lot */}
         {data?.project_lot.lot.name && (
          <div>

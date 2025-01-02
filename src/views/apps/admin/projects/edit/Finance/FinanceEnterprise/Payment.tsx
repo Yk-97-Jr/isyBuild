@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Card, CardHeader, CardContent, Typography } from '@mui/material';
+import { Card, CardHeader, CardContent } from '@mui/material';
 
 import type { FinanceEnterpriseRead,  } from '@/services/IsyBuildApi';
+import LabeledData from '@/components/LabledData';
 
 type DocDiffTypeAndLotProps = {
  
@@ -14,27 +15,9 @@ const Payment: React.FC<DocDiffTypeAndLotProps> = ({ data }) => {
   return (
     <Card>
       <CardHeader title="Paiement " />
-      <CardContent>
-      <div className='flex items-center gap-4'>
-    <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-      <div className='flex flex-col'>
-        <Typography className='font-medium' variant="body1"  color='text.primary'>
-          {"Paiement cumule"}
-        </Typography>
-      </div>
-      <Typography>{`${data?.payment_cumulated}£`}</Typography>
-    </div>
-  </div>
-  <div className='flex items-center gap-4'>
-    <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-      <div className='flex flex-col'>
-        <Typography className='font-medium' variant="body1"  color='text.primary'>
-          {"Paiement cumule%"}
-        </Typography>
-      </div>
-      <Typography>{`${data?.payment_cumulated_percentage}£`}</Typography>
-    </div>
-  </div>
+      <CardContent className='flex flex-col gap-[1.638rem]'>
+      <LabeledData label="Paiement cumule" value={`${data?.payment_cumulated}€`}/>
+      <LabeledData label="Paiement cumule%" value={`${data?.payment_cumulated_percentage }€`} />
       </CardContent>
     </Card>
   );
