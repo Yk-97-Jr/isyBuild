@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import DialogCloseButton from '../DialogCloseButton';
 import DeleteSituationContent from "@components/dialogs/Finance-situation/DeleteSituationContent";
+import { useRefetch } from '@/contexts/RefetchContextProvider';
 
 type FinanceSituationDialogProps = {
   open: boolean;
@@ -23,12 +24,16 @@ const FinanceSituationDialog = ({
   setId,
   refetch,
 }: FinanceSituationDialogProps) => {
+    const refetchCard = useRefetch()
+  
+
   const handleClose = () => {
     setOpen(false);
     setId?.(0);
 
     if (refetch) {
       refetch();
+      refetchCard()
     }
   };
 

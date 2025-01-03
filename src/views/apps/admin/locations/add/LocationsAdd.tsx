@@ -2,7 +2,7 @@
 
 import { useContext } from 'react'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Grid from '@mui/material/Grid'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -42,6 +42,8 @@ const LocationsAdd = () => {
   const router = useRouter();
   const { user } = useAuth(); // Obtenez l'utilisateur depuis AuthContext
   const userRole = user?.role
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get('return_to'); 
 
   const onSubmit: SubmitHandler<FormValidateType> = async data => {
     try {
@@ -59,6 +61,13 @@ const LocationsAdd = () => {
       const clientId = response.id;
 
       router.push(`/${userRole}/locations/${clientId}/details`);
+
+      if (returnTo) {
+        router.push(`/${userRole}/locations/${clientId}/details?return_to=${returnTo}`);
+      }
+      else{
+        router.push(`/${userRole}/locations/${clientId}/details`);
+      }
 
       reset()
     } catch (err: any) {

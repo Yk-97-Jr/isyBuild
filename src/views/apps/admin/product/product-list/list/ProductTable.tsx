@@ -192,7 +192,11 @@ const ProductTable = ({
             <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.description} `}
+              {row.original.description 
+            ? `${row.original.description.length > 50
+                ? `${row.original.description.substring(0, 50)}...`
+                : row.original.description}`
+            : 'Aucune description '}
               </Typography>
             </div>
           </div>

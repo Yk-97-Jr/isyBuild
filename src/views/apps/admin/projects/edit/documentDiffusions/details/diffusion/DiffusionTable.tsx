@@ -109,7 +109,10 @@ const DiffusionTable = ({
           <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.last_notification_date}`}
+              
+            {row.original.last_notification_date
+              ? `${new Date(row.original.last_notification_date).toLocaleDateString()} ${new Date(row.original.last_notification_date).toLocaleTimeString()}`
+              : 'Date non disponible'}
               </Typography>
             </div>
           </div>

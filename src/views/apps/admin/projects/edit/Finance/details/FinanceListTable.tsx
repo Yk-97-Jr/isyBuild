@@ -31,12 +31,14 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
 
-import {CircularProgress} from '@mui/material'
+import {Chip, CircularProgress} from '@mui/material'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type {FinanceEnterpriseRead} from '@/services/IsyBuildApi'
+import type { FinanceEnterpriseRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
+import { DgdStatusMapping } from '@/utils/statusEnums';
+
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -84,6 +86,7 @@ const FinanceListTable = ({
   const {user} = useAuth();  // Get the user from AuthContext
   const {edit} = useParams()
   const userRole = user?.role
+  
 
 
   const handleEditUser = (id: number) => {
@@ -258,16 +261,19 @@ const FinanceListTable = ({
                       }),
                       columnHelper.accessor('dgd_status', {
                         header: 'DGD',
-                        cell: ({row}) => (
-                        <div className='flex items-center gap-1'>
-                        <div className='flex flex-col'>
-                        <Typography color='text.primary' className='font-medium'>
-                        {`${row.original.dgd_status}`}
-                        </Typography>
-                        </div>
-                        </div>
-                        )
-                        }),
+                        cell: ({ row }) => {
+                          // Directly derive the status, label, and color
+                          
+                          const status = row.original.dgd_status || "abandon"; // This might be null or undefined
+const { label, color } = DgdStatusMapping[status];
+                      
+                          return (
+                            <div className="flex items-center gap-1">
+                              <Chip label={label} color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"} variant="tonal" />
+                            </div>
+                          );
+                        },
+                      }),
 
       columnHelper.accessor('action', {
         header: 'Action',
