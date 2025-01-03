@@ -220,17 +220,6 @@ const GestionAdministrativeListTable = ({
         }
 
       }),
-      columnHelper.accessor('project_lot.folder.documents', {
-        header: 'DOCUMENT TELECHARGÉ',
-        cell: ({row}) => (
-          <Chip
-            variant='tonal'
-            label={row.original.project_lot.folder && row.original.project_lot.folder.documents.length > 0 ? 'Existé' : 'Non existé'}
-            color={row.original.project_lot.folder && row.original.project_lot.folder.documents.length > 0 ? 'success' : 'error'}
-          />
-
-        )
-      }),
 
       columnHelper.accessor('action', {
         header: 'Action',
