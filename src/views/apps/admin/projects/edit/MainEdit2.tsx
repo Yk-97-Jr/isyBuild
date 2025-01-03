@@ -30,7 +30,7 @@ import {
 } from '@/services/IsyBuildApi'
 import HandleIntervenants from "@views/apps/admin/projects/edit/HandleIntervenants";
 import Team from './Team/Team'
-import NotificationFrequency from '@/views/apps/client/projects/Add/NotificationFrequency'
+import NotificationFrequency from "@views/apps/admin/projects/edit/NotificationFrequency";
 
 function MainEdit2() {
   const params = useParams()

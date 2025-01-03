@@ -1,10 +1,11 @@
 'use client'
 
-import React, { useState, useEffect, useContext } from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 
-import { useParams } from 'next/navigation'
+import {useParams} from 'next/navigation'
 
-import { CircularProgress, Button } from '@mui/material'
+import {CircularProgress, Button} from '@mui/material'
+
 
 import Templates from './Templates'
 
@@ -12,13 +13,12 @@ import EditInformation from './EditInformation'
 
 import EditAddress from './EditAddress'
 
-import Details from './Details'
 
 import CreatedBy from './CreatedBy'
 
-import { SnackBarContext } from '@/contexts/SnackBarContextProvider'
+import {SnackBarContext} from '@/contexts/SnackBarContextProvider'
 
-import type { SnackBarContextType } from '@/types/apps/snackbarType'
+import type {SnackBarContextType} from '@/types/apps/snackbarType'
 
 import {
   useProjectsRetrieve2Query,
@@ -28,6 +28,9 @@ import {
   useProjectsTemplatesListQuery,
   type ProjectEmailTemplateRead
 } from '@/services/IsyBuildApi'
+import HandleIntervenants from "@views/apps/client/projects/edit/HandleIntervenants";
+import Team from './Team/Team'
+import NotificationFrequency from "@views/apps/client/projects/edit/NotificationFrequency";
 
 function MainEdit2() {
   const params = useParams()
@@ -35,19 +38,27 @@ function MainEdit2() {
 
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType
-  const { data: ProjectData, isLoading } = useProjectsRetrieve2Query({ projectId })
+  const {setOpenSnackBar, setInfoAlert} = useContext(SnackBarContext) as SnackBarContextType
+  const {data: ProjectData, isLoading} = useProjectsRetrieve2Query({projectId})
   const [projectState, setProjectState] = useState<ProjectRead>()
 
   //state to store  Email Templates
-  const { data: templates_data, isLoading: templates_loading } = useProjectsTemplatesListQuery({ projectId })
+  const {data: templates_data, isLoading: templates_loading} = useProjectsTemplatesListQuery({projectId})
 
   const [templates, setTemplates] = useState<ProjectEmailTemplateRead[]>()
 
+  const [notificationFrequency, setNotificationFrequency] = useState<number | null>(null)
+
+  const [maxNotification, setMaxNotification] = useState<number | null>(null)
+
   useEffect(() => {
+
     if (ProjectData) {
       setProjectState(ProjectData)
+      setNotificationFrequency(ProjectData.notification_frequency)
+      setMaxNotification(ProjectData.max_notifications)
     }
+
 
     if (templates_data) {
       setTemplates(templates_data)
@@ -110,6 +121,7 @@ function MainEdit2() {
       errors.longitude = 'Longitude is required and must be in the range of -90 to 90'
     }
 
+
     return errors
   }
 
@@ -128,7 +140,9 @@ function MainEdit2() {
     map_coordinate: {
       latitude: projectState?.map_coordinate?.latitude || '',
       longitude: projectState?.map_coordinate?.longitude || ''
-    }
+    },
+    max_notifications: projectState?.max_notifications|| '',
+    notification_frequency: projectState?.notification_frequency|| '',
   }
 
   const [TriggerUpdate] = useProjectsUpdateUpdateMutation()
@@ -159,25 +173,41 @@ function MainEdit2() {
 
     try {
       const projectUpdateRequest = EditedProject
-      const response = await TriggerUpdate({ projectId: projectId, projectUpdateRequest })
+      const response = await TriggerUpdate({projectId: projectId, projectUpdateRequest})
 
       if (response) {
         setOpenSnackBar(true)
-        setInfoAlert({ message: 'The Project has been Edited !!', severity: 'success' })
+        setInfoAlert({message: 'The Project has been Edited !!', severity: 'success'})
         window.location.reload()
       }
     } catch (err) {
       setOpenSnackBar(true)
-      setInfoAlert({ message: `Error Adding the project: ${err}`, severity: 'error' })
+      setInfoAlert({message: `Error Adding the project: ${err}`, severity: 'error'})
       console.error('Error updating the data', err)
     }
+  }
+
+  const handleFrequency = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+
+    setNotificationFrequency(parseInt(value))
+
+    console.log(notificationFrequency)
+  }
+
+  const handleMaxFrequency = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+
+    setMaxNotification(parseInt(value))
+
+    console.log(maxNotification)
   }
 
   return (
     <>
       {isLoading ? (
         <div className='flex justify-center items-center'>
-          <CircularProgress />
+          <CircularProgress/>
         </div>
       ) : (
         <div className='p'>
@@ -206,19 +236,25 @@ function MainEdit2() {
                 isLoading={isLoading}
                 errors={errors}
               />
+              <Team/>
             </div>
             <div className='sm:w-2/5 flex flex-col gap-5'>
-              <Details
-                projectState={projectState || ({} as ProjectRead)}
-                setProjectState={setProjectState}
-                isLoading={isLoading}
+              <HandleIntervenants/>
+              <NotificationFrequency
+                notificationFrequency={notificationFrequency}
+                maxNotification={maxNotification}
+                handleFrequency={handleFrequency}
+                setNotificationFrequency={setNotificationFrequency}
+                handleMaxFrequency={handleMaxFrequency}
               />
+              <Templates templates={templates || []} templates_loading={templates_loading}/>
               <CreatedBy
                 projectState={projectState || ({} as ProjectRead)}
                 setProjectState={setProjectState}
                 isLoading={isLoading}
               />
-              <Templates templates={templates || []} templates_loading={templates_loading} />
+
+
             </div>
           </div>
         </div>
