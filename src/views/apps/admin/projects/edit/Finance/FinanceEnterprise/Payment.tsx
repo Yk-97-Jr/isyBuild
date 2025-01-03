@@ -6,16 +6,18 @@ import type { DgdStatusEnum, FinanceEnterpriseRead,  } from '@/services/IsyBuild
 import LabeledData from '@/components/LabledData';
 import { DgdStatusMapping } from '@/utils/statusEnums';
 import { getStatus } from '@/utils/statusHelper';
+import { ActionButton } from './EnterpriseDetails';
+import UpdatePaymentContent from './PaymentUpdate';
 
 type DocDiffTypeAndLotProps = {
  
   data?:FinanceEnterpriseRead 
- 
+  refetch: () => void
 };
 
 
 
-const Payment: React.FC<DocDiffTypeAndLotProps> = ({ data }) => {
+const Payment: React.FC<DocDiffTypeAndLotProps> = ({ data,refetch }) => {
 
   const [status, setStatus] = useState<keyof typeof DgdStatusMapping>(
               data?.dgd_status || "abandon"
@@ -48,6 +50,9 @@ const Payment: React.FC<DocDiffTypeAndLotProps> = ({ data }) => {
     color: color ,
     variant: 'tonal',
   }}/>
+  <div className='flex justify-center '>
+          <ActionButton refetch={refetch} ContentData={UpdatePaymentContent}/>
+        </div>
       </CardContent>
     </Card>
   );

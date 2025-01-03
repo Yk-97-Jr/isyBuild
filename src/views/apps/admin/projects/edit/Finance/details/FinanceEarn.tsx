@@ -24,7 +24,7 @@ const FinanceEarn = ({ data }: { data?: FinanceRead }) => {
       <LabeledData label="CIE" value={`${data?.total_cie}€`} />
       <LabeledData label="Retenue Garantie" value={`${data?.total_retention_guarantee}€`} />
       <Divider />
-      <LabeledData label="Marches+TS+CIE-Prorata-RG" value={`${data?.total_final_amount}€`} />
+      <LabeledData label="Total" value={`${data?.total_final_amount}€`} />
     </CardContent>
   </Card>
   )

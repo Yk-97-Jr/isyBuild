@@ -200,9 +200,12 @@ const LotsListTable = ({
           <>
             {row.original?.client?.name ? (
              
-              <Chip variant='tonal' label={row.original?.client?.name} color='primary' className='px-2' />
+              <Chip variant='tonal' label={row.original?.client?.name} color='primary' size="small"
+              className="text-sm px-2" />
             ) : (
-              <Chip variant='tonal' label={'Default'} color='secondary' className='px-2' />
+              <Chip variant='tonal' label={'Aucun client disponible'} color='secondary' 
+              size="small"
+              className="text-sm px-2"/>
             )}
           </>
         )

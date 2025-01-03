@@ -13,6 +13,7 @@ import CustomTextField from '@core/components/mui/TextField';
 import type {FormValidateUserEditType} from "./shemaUserEdit";
 
 type UserInformationProps = {
+  isAdding: boolean
   register: UseFormRegister<FormValidateUserEditType>; // Register from react-hook-form
   errors: {
     first_name?: FieldError;
@@ -23,7 +24,10 @@ type UserInformationProps = {
   };
 };
 
-const UserInformation: React.FC<UserInformationProps> = ({register, errors}) => {
+const UserInformation: React.FC<UserInformationProps> = ({register, errors,isAdding}) => {
+
+  console.log("see the bolean",isAdding);
+  
   return (
     <Card>
       <CardHeader title='User Information'/>
@@ -58,7 +62,7 @@ const UserInformation: React.FC<UserInformationProps> = ({register, errors}) => 
             <CustomTextField
               fullWidth
               label='E-mail'
-              disabled
+              disabled={!isAdding}
               placeholder='email@example.com'
               {...register('email')} // Registering the email field from props
               error={!!errors.email} // Error handling

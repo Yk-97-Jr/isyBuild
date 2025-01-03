@@ -77,11 +77,11 @@ const UserOwnerDetails = () => {
           subcontractorOwnerCreateRequest: {
             user: {...data, redirect_uri: appUrl + '/set-password',}
 
-          }
 
+          }
         }).unwrap();
 
-
+        setIsAdding(true);
         console.log('User affected successfully!', response);
         setOpenSnackBar(true);
         setInfoAlert({severity: "success", message: "User Affecté avec succès"});
@@ -92,10 +92,13 @@ const UserOwnerDetails = () => {
           subcontractorOwnerUpdateRequest: {
             user: {...data}
 
+            
           }
-
+          
+          
         }).unwrap();
-
+        
+        setIsAdding(false);
 
         console.log('User affected successfully!', response);
         setOpenSnackBar(true);
@@ -133,7 +136,7 @@ const UserOwnerDetails = () => {
         <Grid item xs={12} md={8}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
-              <UserInformation register={register} errors={errors} />
+              <UserInformation register={register} errors={errors} isAdding={isAdding}/>
             </Grid>
             {/*<Grid item xs={12}>*/}
             {/*  <ClientAdresse register={register} errors={errors}/>*/}

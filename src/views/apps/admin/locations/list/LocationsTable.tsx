@@ -33,7 +33,7 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
 
-import {CircularProgress} from '@mui/material'
+import {Chip, CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -176,16 +176,19 @@ const LocationsTable = ({
         )
       }),
 
-      columnHelper.accessor('client', {
+      columnHelper.accessor('client.name', {
         header: 'client',
         cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.client}`}
-              </Typography>
-            </div>
-          </div>
+          <>
+          {row.original?.client?.name ? (
+           
+            <Chip variant='tonal' label={row.original?.client?.name} color='primary' size="small"
+            className="text-sm px-2" />
+          ) : (
+            <Chip variant='tonal' label={'Aucun client disponible'} color='secondary' size="small"
+            className="text-sm px-2"/>
+          )}
+        </>
         )
       }),
 

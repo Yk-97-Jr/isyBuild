@@ -52,7 +52,7 @@ const FinanceEnterprise = () => {
       <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
       
         <Typography variant='h4' className='mbe-4'>
-            {`Gestion finance ${data?.subcontractor.name}`}
+            {`Gestion finance pour l'Enterprise: ${data?.subcontractor.name}`}
         </Typography>
       </div>
       <Grid container spacing={6}>
@@ -75,7 +75,7 @@ const FinanceEnterprise = () => {
               <FEDataCard  data={data}/>
             </Grid>
             <Grid item xs={12}>
-              <Payment  data={data}/>
+              <Payment  data={data} refetch={refetch}/>
             </Grid>
           </Grid>
         </Grid>
