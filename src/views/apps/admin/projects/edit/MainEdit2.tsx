@@ -55,7 +55,10 @@ function MainEdit2() {
 
     if (ProjectData) {
       setProjectState(ProjectData)
+      setNotificationFrequency(ProjectData.notification_frequency)
+      setMaxNotification(ProjectData.max_notifications)
     }
+
 
     if (templates_data) {
       setTemplates(templates_data)
@@ -138,8 +141,8 @@ function MainEdit2() {
       latitude: projectState?.map_coordinate?.latitude || '',
       longitude: projectState?.map_coordinate?.longitude || ''
     },
-    max_notifications: maxNotification,
-    notification_frequency: notificationFrequency
+    max_notifications: projectState?.max_notifications|| '',
+    notification_frequency: projectState?.notification_frequency|| '',
   }
 
   const [TriggerUpdate] = useProjectsUpdateUpdateMutation()
@@ -233,17 +236,18 @@ function MainEdit2() {
                 isLoading={isLoading}
                 errors={errors}
               />
-              <Team />
+              <Team/>
             </div>
             <div className='sm:w-2/5 flex flex-col gap-5'>
-              <HandleIntervenants />
+              <HandleIntervenants/>
               <NotificationFrequency
                 notificationFrequency={notificationFrequency}
+                maxNotification={maxNotification}
                 handleFrequency={handleFrequency}
                 setNotificationFrequency={setNotificationFrequency}
                 handleMaxFrequency={handleMaxFrequency}
               />
-              <Templates templates={templates || []} templates_loading={templates_loading} />
+              <Templates templates={templates || []} templates_loading={templates_loading}/>
               <CreatedBy
                 projectState={projectState || ({} as ProjectRead)}
                 setProjectState={setProjectState}

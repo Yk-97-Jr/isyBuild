@@ -10,6 +10,8 @@ import CustomTextField from '@/@core/components/mui/TextField'
 //ask saad to move it  (because in created project no feilds for them)
 
 const NotificationFrequency = ({
+  notificationFrequency,
+  maxNotification,
   handleFrequency,
   handleMaxFrequency,
 }: any) => {
@@ -22,6 +24,7 @@ const NotificationFrequency = ({
           fullWidth
           label='Notification Frequency'
           className='mbe-6'
+          value={notificationFrequency}
           onChange={handleFrequency}
 
           //TODO   ask saad about the constraint of the freqency first
@@ -37,6 +40,7 @@ const NotificationFrequency = ({
           label='Max Notification'
           placeholder=''
           className='mbe-6'
+          value={maxNotification}
           onChange={handleMaxFrequency}
 
           // error={!!errors.longitude}
