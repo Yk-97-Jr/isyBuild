@@ -21,7 +21,7 @@ const DocDiffHeader: React.FC<DocDiffAddHeaderProps> = ({ onSubmit, isLoading })
 
 
   const handleDiscard = () => {
-    const redirectUrl = `/${userRole}/projects/${edit}/details`;
+    const redirectUrl = `/${userRole}/projects/${edit}/details?tab=Diffusions%20De%20Documents`;
 
     console.log(redirectUrl);
 
