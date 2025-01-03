@@ -32,7 +32,7 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 // Type Imports
 import Box from '@mui/material/Box'
 
-import {CircularProgress} from '@mui/material'
+import {CardHeader, CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -238,7 +238,7 @@ const AdditionalWorkTable = ({
   return (
     <>
       <Card>
-        {/*<CardHeader title='Filters' className='pbe-4'/>*/}
+        <CardHeader title='Travail Supplémentaire' className='pbe-4'/>
         {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField

@@ -1,25 +1,28 @@
 
 
-import React from 'react';
+import React, {  useState } from 'react';
 
 import { useParams, useRouter } from 'next/navigation';
 
-import { Card, CardHeader, CardContent, Typography, Chip, Box, Grid, MenuItem,  } from '@mui/material';
+import { Card, CardHeader, CardContent, Typography,  Box, Grid, MenuItem,  } from '@mui/material';
 
 import type { FieldError, UseFormRegister } from 'react-hook-form';
 
 import CustomTextField from '@/@core/components/mui/TextField';
 import type { FormValidateDocDiffUpdateType } from './schemaDocDiffEdit';
-import type { LocalisationRead } from '@/services/IsyBuildApi';
+import type { LocalisationRead, StatusE51Enum, Type474Enum } from '@/services/IsyBuildApi';
 import CustomIconButton from '@/@core/components/mui/IconButton';
 import { useAuth } from '@/contexts/AuthContext';
+import LabeledData from '@/components/LabledData';
+import {  getStatus } from '@/utils/statusHelper';
+import { StatusE51Mapping, Type474Mapping } from '@/utils/statusEnums';
 
 type DocDiffTypeAndLotProps = {
-  type?: string; // Document type
+  type: Type474Enum; // Document type
   lot?: string;  // Project lot
   date?:string | null;
   indice?:string | null;
-  status?:string;
+  status?:StatusE51Enum;
    register: UseFormRegister<FormValidateDocDiffUpdateType>;
     errors: {
       title?: FieldError;
@@ -37,7 +40,21 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, erro
   const { edit,docDiffId } = useParams()
   const { user } = useAuth()
   const userRole = user?.role
-  
+
+  const [types, ] = useState<keyof typeof Type474Mapping>(
+                type
+              );
+              
+            const {
+              label,
+              color
+            } = getStatus<Type474Enum >(types, Type474Mapping);
+
+            const {
+              label:labelStatus,
+              color:colorStatus
+            } = getStatus<StatusE51Enum >(status, StatusE51Mapping);
+
   const handleRedirect = () => {
     // Get the current URL
     
@@ -53,104 +70,64 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, erro
     <Card>
       <CardHeader title="Informations du Document" />
       <CardContent className='flex flex-col gap-[1.638rem]'>
-      {type && (
-          <div className='flex items-center gap-4'>
-          <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-            <div className='flex flex-col'>
-            <Box display="flex" alignItems="center"className="mb-1">
-
-            <Typography variant="body1" mr={2}>
-              Type : 
-            </Typography>
-            </Box>
-            </div>
-              <Chip label={type} color="primary" variant='tonal' />
-            </div>
-          </div>
-        )}
-        {/* Display Project Lot */}
-     
-        {lot && (
-           <div className='flex items-center gap-4'>
-           <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-             <div className='flex flex-col'>
-         <Box display="flex" alignItems="center"className="mb-1">
-           <Typography variant="body1" >
-             Lot :
-           </Typography>
-         </Box>
-           </div>
-           <Typography variant="subtitle1" ml={2} >
-             {lot}
-           </Typography>
-         </div>
-       </div>
-        )}
-    
-        {status ? (
-         <div className='flex items-center gap-4'>
-         <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-           <div className='flex flex-col'>
-         <Box display="flex" alignItems="center"className="mb-1">
-           <Typography variant="body1" >
-           Statut:
-           </Typography>
-         </Box>
-           </div>
-           <Typography variant="subtitle1" ml={2} >
-             <Chip label={status} color="primary" variant='tonal' />
-           </Typography>
-         </div>
-       </div>
-        ) : <Typography variant="body1" color="textSecondary">
-        Aucune information disponible
-      </Typography>}
-        {date && (
-         <div className='flex items-center gap-4'>
-         <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-           <div className='flex flex-col'>
-         <Box display="flex" alignItems="center"className="mb-1">
-           <Typography variant="body1" >
-             Date De Diffusion:
-           </Typography>
-         </Box>
-         </div>
-           <Typography variant="subtitle1" ml={2} >
-             {date}
-           </Typography>
-         </div>
-       </div>
-        )}
       
-        {indice ? (
-         <div className='flex items-center gap-4'>
-         
-         <div className='flex flex-wrap justify-between items-center gap-x-4 gap-y-1 is-full'>
-           <div className='flex flex-col'>
-           <Typography variant="body1" >
-           Indice:
-           </Typography>
-           </div>
-           <Typography variant="subtitle1" ml={2} >
-             {indice}
-           </Typography>
-         </div>
-   
-       </div>
-        ) :
-        <Box display="flex" alignItems="center"className="mb-1">
+      {/* Render Type */}
+      {type && (
+        <LabeledData
+          label="Type"
+          chipProps={{ label: label, color: color, variant: 'tonal' }}
+        />
+      )}
 
+      {/* Render Lot */}
+      {lot && (
+        <LabeledData
+          label="Lot"
+          value={lot}
+        />
+      )}
+
+      {/* Render Status */}
+      {status ? (
+        <LabeledData
+          label="Statut"
+          chipProps={{ label: labelStatus, color: colorStatus, variant: 'tonal' }}
+        />
+      ) : (
         <Typography variant="body1" color="textSecondary">
-        Aucune information disponible
-      </Typography>
-        </Box> 
-      }
-        {/* Handle case where no data is available */}
-        {!type && !lot  && (
+          Aucune information disponible
+        </Typography>
+      )}
+
+      {/* Render Date */}
+      {date && (
+        <LabeledData
+          label="Date De Diffusion"
+          value={date}
+        />
+      )}
+
+      {/* Render Indice */}
+      {indice ? (
+        <LabeledData
+          label="Indice"
+          value={indice}
+        />
+      ) : (
+        <Box display="flex" alignItems="center" className="mb-1">
           <Typography variant="body1" color="textSecondary">
             Aucune information disponible
           </Typography>
-        )}
+        </Box>
+      )}
+
+      {/* Handle case where no data is available */}
+      {!type && !lot && (
+        <Typography variant="body1" color="textSecondary">
+          Aucune information disponible
+        </Typography>
+      )}
+    
     
         <Grid container spacing={6} className="mbe-8">
                    

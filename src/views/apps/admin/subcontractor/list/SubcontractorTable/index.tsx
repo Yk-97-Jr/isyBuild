@@ -210,7 +210,14 @@ const SubcontractorTable = ({
           const clientNames = clients.map(client => client.name || 'Nom du client indisponible');
       
           if (clients.length === 0) {
-            return <Typography color="text.secondary">Aucun client disponible</Typography>;
+            return <Chip
+            label="Aucun client disponible"
+            variant='tonal'
+            color="secondary"
+            size="small"
+            className="text-sm"
+          />;
+        
           }
       
           // Function to group names into lines based on total character count (26 max per line)
@@ -253,6 +260,7 @@ const SubcontractorTable = ({
                     <Chip
                       key={nameIndex}
                       label={clientName}
+                      variant='tonal'
                       color="primary"
                       size="small"
                       className="text-sm"

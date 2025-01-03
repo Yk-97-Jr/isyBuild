@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
-import { CircularProgress } from '@mui/material'
+import {  CircularProgress, Typography } from '@mui/material'
 
 import {  useRetrieveFinanceEnterpriseByIdQuery  } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
 import EnterpriseDetails from './EnterpriseDetails';
@@ -48,7 +48,13 @@ const FinanceEnterprise = () => {
 
   return (
     <RefetchProvider refetch={refetch}>
-
+     
+      <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
+      
+        <Typography variant='h4' className='mbe-4'>
+            {`Gestion finance ${data?.subcontractor.name}`}
+        </Typography>
+      </div>
       <Grid container spacing={6}>
         <Grid item xs={12} md={8.5}>
           <Grid container spacing={6}>

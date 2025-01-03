@@ -199,7 +199,8 @@ const LotsListTable = ({
         cell: ({ row }) => (
           <>
             {row.original?.client?.name ? (
-              <span>{row.original?.client?.name}</span>
+             
+              <Chip variant='tonal' label={row.original?.client?.name} color='primary' className='px-2' />
             ) : (
               <Chip variant='tonal' label={'Default'} color='secondary' className='px-2' />
             )}

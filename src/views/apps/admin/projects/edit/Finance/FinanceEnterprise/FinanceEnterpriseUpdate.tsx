@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import { useParams } from 'next/navigation';
 
@@ -29,18 +29,7 @@ type AddFinanceSituationContentProps = {
   
   }
 
-  const dgdStatusEnum = [
-    "regle",
-    "valide",
-    "valide_bloque_jp",
-    "etabli_non_signe_ets",
-    "en_attente_moex",
-    "en_attente_levee_reserves",
-    "valide_a_zero",
-    "signe_par_ets_attente_jp",
-    "refuse_par_amo",
-    "abandon",
-  ] as const;
+ 
   
   const schemaFinanceEnterpriseUpdate = yup.object({
     total_contract: yup
@@ -80,16 +69,37 @@ type AddFinanceSituationContentProps = {
       .nullable(),
     caution:yup.string().notRequired()
       .nullable(),
-    dgd_status: yup
+      dgd_status: yup
       .mixed()
-      .oneOf(dgdStatusEnum, "Le statut DGD doit être une valeur valide")
-      .nullable(),
+      .notRequired()
+      .nullable(), // Explicitly allow null or undefined
   }).required();
 
 const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSituationContentProps) => {
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+
+  const {idFe} = useParams()
+  
+  const {data} = useRetrieveFinanceEnterpriseByIdQuery({financeEnterpriseId:+idFe});
+  
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: async () => {
+      // Wait for data to be fetched and return default values
+      if (!data) return {};
+
+      return {
+        caution: data.caution || '',
+        cie: data.cie || '',
+        dgd_status: data.dgd_status || '',
+        retention_guarantee: data.retention_guarantee || '',
+        total_contract: data.total_contract || '',
+        total_ts_choix: data.total_ts_choix || '',
+        total_ts_tma: data.total_ts_tma || '',
+      };
+    },
     resolver: yupResolver(schemaFinanceEnterpriseUpdate),
   });
+
+ 
 
   const handleClose = () => {
     setOpen(false)
@@ -105,16 +115,13 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
 
   
   
-  const {idFe} = useParams()
-  
-  const {data} = useRetrieveFinanceEnterpriseByIdQuery({financeEnterpriseId:+idFe});
   
   const [updateFinanceEnterprise , { isLoading}] = useUpdateFinanceEnterpriseMutation();
 
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType; 
 
-
+/* 
   useEffect(() => {
     if (data) {
       setValue('caution', data.caution || '');
@@ -125,7 +132,7 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
       setValue("total_ts_choix", data.total_ts_choix|| '')
       setValue("total_ts_tma", data.total_ts_tma|| '')
     }
-  }, [data, setValue]);
+  }, [data, setValue]); */
  
 
   const onSubmit = async (data:any) => {
@@ -236,12 +243,12 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
               select
               fullWidth
               label="DGD "
-              defaultValue=""
+              defaultValue={data?.dgd_status}
               {...register('dgd_status')}
               error={!!errors.dgd_status}
               helperText={errors.dgd_status?.message}
               >
-              <MenuItem value="">
+              <MenuItem >
                 <em>Sélectionnez un status</em>
               </MenuItem>
               {Object.entries(DgdStatusMapping).map(([key, {label}]) => (

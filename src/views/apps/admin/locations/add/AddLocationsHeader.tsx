@@ -15,7 +15,7 @@ const returnTo = searchParams.get('return_to');
 
   const handleDiscard = () => {
 
-    console.log(returnTo);
+  
     
     
 
