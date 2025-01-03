@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+
 import Tabilation from './Tabilation'
 import MainEdit2 from './MainEdit2'
 import AppeleOffre from '@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreList/AppeleOffre'
