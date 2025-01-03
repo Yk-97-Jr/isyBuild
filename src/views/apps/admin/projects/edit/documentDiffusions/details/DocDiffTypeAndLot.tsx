@@ -18,7 +18,7 @@ import {  getStatus } from '@/utils/statusHelper';
 import { StatusE51Mapping, Type474Mapping } from '@/utils/statusEnums';
 
 type DocDiffTypeAndLotProps = {
-  type: Type474Enum; // Document type
+  type?: Type474Enum; // Document type
   lot?: string;  // Project lot
   date?:string | null;
   indice?:string | null;
@@ -42,7 +42,7 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({register, erro
   const userRole = user?.role
 
   const [types, ] = useState<keyof typeof Type474Mapping>(
-                type
+                type || "autre"
               );
               
             const {

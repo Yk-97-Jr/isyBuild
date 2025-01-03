@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Card, CardHeader, CardContent, Typography, Button } from '@mui/material'
 
 import type { SubcontractorRead, ClientRead } from '@/services/IsyBuildApi'
+import LabeledData from '@/components/LabledData'
 
 type ClientStatusProps = {
   subcontractorData: SubcontractorRead | undefined
@@ -21,11 +22,16 @@ const SubcontractorListInfo: React.FC<ClientStatusProps> = ({ subcontractorData 
   return (
     <Card>
       <CardHeader title='Clients' />
-      <CardContent>
+      <CardContent className='flex flex-col gap-[1.638rem]'>
         {clients.length > 0 ? (
           <>
             {displayedClients.map((client: ClientRead) => (
               <div key={client.id} className='mb-4'>
+                      <LabeledData label="Client" value={`${client}`} chipProps={{
+    label: "ssss",
+    color: "primary" ,
+    variant: 'tonal',
+  }}/>
                 <Typography variant='h6'>{client.name}</Typography>
                 <Typography variant='body1'>{client.contact_email}</Typography>
               </div>
