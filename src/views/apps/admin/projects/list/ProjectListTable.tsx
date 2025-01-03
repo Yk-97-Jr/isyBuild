@@ -145,7 +145,6 @@ const ProjectListTable = ({
   setSorting: React.Dispatch<React.SetStateAction<SortingState>>
 }) => {
   // States
-  const {edit} = useParams(); // Get edit parameter from route
   const [rowSelection, setRowSelection] = useState({})
   const [id, setId] = useState(0)
   const [open, setOpen] = useState(false)
@@ -165,7 +164,7 @@ const ProjectListTable = ({
   }
 
   const handleAdd = () => {
-    router.push(`/${userRole}/projects/${edit}/add`);
+    router.push(`/${userRole}/projects/add`);
 
 
   }
