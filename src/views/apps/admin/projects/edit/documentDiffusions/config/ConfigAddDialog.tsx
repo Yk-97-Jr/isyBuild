@@ -7,11 +7,12 @@ import { useParams } from 'next/navigation';
 import type { SelectChangeEvent } from '@mui/material';
 import { Button, Chip, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions, Grid, MenuItem, Typography } from '@mui/material';
 
-import type { DocumentDiffusionConfigUpdateRequest} from '@/services/IsyBuildApi';
+import type { DocumentDiffusionConfigUpdateRequest, RolesEnum} from '@/services/IsyBuildApi';
 import { useDocumentDiffusionConfigBulkUpdateMutation, useDocumentDiffusionConfigByProjectListQuery } from '@/services/IsyBuildApi';
 import { SnackBarContext } from '@/contexts/SnackBarContextProvider';
 import type { SnackBarContextType } from '@/types/apps/snackbarType';
 import CustomTextField from '@core/components/mui/TextField';
+import { RolesMapping, Type474Mapping } from '@/utils/statusEnums';
 
 // Define props
 type AddRolesConfigProps = {
@@ -20,14 +21,6 @@ type AddRolesConfigProps = {
   refetch: () => void;
 };
 
-// Define RolesEnum for role selection
-type RolesEnum =
-  | 'Architecte'
-  | 'Bureau de contrôle'
-  | "Bureau d'étude technique"
-  | 'Coordonnateur sécurité et protection de la santé'
-  | 'Assistance maîtrise d’ouvrage hygiène et environnement'
-  | 'Client';
 
 // Roles available for selection
 const rolesEnum: RolesEnum[] = [
@@ -129,11 +122,12 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
         ) : (
           <Grid container spacing={2}>
             {configs.map((config) => (
+              
               <Grid item xs={12} key={config.id}>
                 <CustomTextField
                   select
                   fullWidth
-                  label={config.type}
+                  label={Type474Mapping[config.type as keyof typeof Type474Mapping].label}
                   value={config.selectedRoles}
                   SelectProps={{
                     multiple: true,
@@ -156,7 +150,7 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
                 >
                   {rolesEnum.map((role) => (
                     <MenuItem key={role} value={role}>
-                      {role}
+                      {RolesMapping[role].label}
                     </MenuItem>
                   ))}
                 </CustomTextField>
