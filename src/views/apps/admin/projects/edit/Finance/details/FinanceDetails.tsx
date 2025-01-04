@@ -40,7 +40,7 @@ const FinanceDetails = () => {
     <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
       
       <Typography variant='h4' className='mbe-4'>
-          {`Gestion finance ${data?.project_lot.lot.name}`}
+          {`Gestion finance pour le Lot: ${data?.project_lot.lot.name}`}
       </Typography>
     </div>
            <Grid container spacing={6}>

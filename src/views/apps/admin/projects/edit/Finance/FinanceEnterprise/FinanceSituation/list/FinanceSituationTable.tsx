@@ -233,7 +233,7 @@ const FinanceSituationTable = ({
   return (
     <>
       <Card>
-        <CardHeader title='Finance enterprise' className='pbe-4'/>
+        <CardHeader title='Situations' className='pbe-4'/>
         {/*<TableFilters setData={setFilteredData} tableData={data.result}/>*/}
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField

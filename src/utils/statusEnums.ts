@@ -9,7 +9,8 @@ import type {
   DgdStatusEnum,
   PhaseEnum, 
   StatusE51Enum, 
-  Type474Enum
+  Type474Enum,
+  RolesEnum
 } from "@/services/IsyBuildApi";
 
 
@@ -94,6 +95,19 @@ export const Status3BfMapping: Record<Status3BfEnum, {
   rejected: {label: 'Rejeté', color: 'error'},
   temporarily_done: {label: 'Temporairement terminé', color: 'success'},
 };
+
+export const RolesMapping: Record<RolesEnum, {
+  label: string,
+  color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning'
+}> = {
+  Architecte: { label: 'Architecte', color: 'primary' },
+  'Bureau de contrôle': { label: 'Bureau de contrôle', color: 'secondary' },
+  "Bureau d'étude technique": { label: "Bureau d'étude technique", color: 'success' },
+  'Coordonnateur sécurité et protection de la santé': { label: 'Coordonnateur sécurité et protection de la santé', color: 'warning' },
+  'Assistance maîtrise d’ouvrage hygiène et environnement': { label: 'Assistance maîtrise d’ouvrage hygiène et environnement', color: 'error' },
+  Client: { label: 'Client', color: 'default' },
+};
+
 export const DgdStatusMapping: Record<
   DgdStatusEnum  ,
   {

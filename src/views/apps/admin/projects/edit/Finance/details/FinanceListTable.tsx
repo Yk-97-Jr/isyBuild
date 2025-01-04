@@ -211,7 +211,7 @@ const FinanceListTable = ({
                 )
                 }),
               columnHelper.accessor('final_amount', {
-                header: 'MARCHES+TS+CIE-PRORATAT-RG',
+                header: 'Total',
                 cell: ({row}) => (
                 <div className='flex items-center gap-1'>
                 <div className='flex flex-col'>

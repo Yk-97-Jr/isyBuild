@@ -15,6 +15,7 @@ import CustomTextField from '@core/components/mui/TextField';
 // Types
 import type { FormValidateDocDiffAddType } from './schemaDocDiffAdd';
 import type { ProjectLotRead } from '@/services/IsyBuildApi';
+import { PhaseStatusMapping, Type474Mapping } from '@/utils/statusEnums';
 
 type DocumentDiffusionInfoProps = {
   register: UseFormRegister<FormValidateDocDiffAddType>;
@@ -80,13 +81,13 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
               helperText={errors.type?.message}
             >
               <MenuItem value="">
-                <em>Sélectionnez un type</em>
-              </MenuItem>
-              {['plan_technique', 'plan_de_coffrage', 'fiche_technique', 'avis_technique', 'note_de_calcul', 'fiche_question', 'autre'].map((type) => (
-                <MenuItem key={type} value={type}>
-                  {type.replaceAll('_',' ')}
-                </MenuItem>
-              ))}
+          <em>Sélectionnez un type</em>
+        </MenuItem>
+        {Object.entries(Type474Mapping).map(([type, { label }]) => (
+          <MenuItem key={type} value={type}>
+            {label}
+          </MenuItem>
+        ))}
             </CustomTextField>
           </Grid>
 
@@ -101,15 +102,15 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
               error={!!errors.phase}
               helperText={errors.phase?.message}
             >
-              <MenuItem value="">
-                <em>Sélectionnez une phase</em>
-              </MenuItem>
-              {['design', 'execution'].map((phase) => (
-                <MenuItem key={phase} value={phase}>
-                  {phase.charAt(0).toUpperCase() + phase.slice(1)}
-                </MenuItem>
-              ))}
-            </CustomTextField>
+           <MenuItem value="">
+          <em>Sélectionnez une phase</em>
+        </MenuItem>
+        {Object.entries(PhaseStatusMapping).map(([phase, { label }]) => (
+          <MenuItem key={phase} value={phase}>
+            {label}
+          </MenuItem>
+        ))}
+      </CustomTextField>
           </Grid>
         </Grid>
       </CardContent>

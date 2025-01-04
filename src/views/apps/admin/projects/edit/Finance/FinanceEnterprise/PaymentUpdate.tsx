@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 import DialogTitle from '@mui/material/DialogTitle'
 
 import Dialog from '@mui/material/Dialog'
-import { Button, CircularProgress, DialogActions, Grid,  } from '@mui/material';
+import { Button, CircularProgress, DialogActions, Grid, MenuItem,  } from '@mui/material';
 import DialogContent from '@mui/material/DialogContent'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,7 +18,7 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider';
 import type { SnackBarContextType } from '@/types/apps/snackbarType';
 import CustomTextField from '@core/components/mui/TextField'
 import DialogCloseButton from '@/components/dialogs/DialogCloseButton';
-
+import { DgdStatusMapping } from '@/utils/statusEnums';
 
 
 
@@ -32,45 +32,16 @@ type AddFinanceSituationContentProps = {
  
   
   const schemaFinanceEnterpriseUpdate = yup.object({
-    total_contract: yup
-      .string()
-      .matches(
-        /^\d+(\.\d{1,2})?$/,
-        "Le total des contrats doit être un nombre valide avec jusqu'à deux décimales"
-      )
+
+    caution:yup.string().notRequired()
       .nullable(),
-    total_ts_choix: yup
-      .string()
-      .matches(
-        /^\d+(\.\d{1,2})?$/,
-        "Le total des ts choix doit être un nombre valide avec jusqu'à deux décimales"
-      )
-      .nullable(),
-    total_ts_tma: yup
-      .string()
-      .matches(
-        /^\d+(\.\d{1,2})?$/,
-        "Le total des ts TMA doit être un nombre valide avec jusqu'à deux décimales"
-      )
-      .nullable(),
-    cie: yup
-      .string()
-      .matches(
-        /^\d+(\.\d{1,2})?$/,
-        "Le CIE doit être un nombre valide avec jusqu'à deux décimales"
-      )
-      .nullable(),
-    retention_guarantee: yup
-      .string()
-      .matches(
-        /^\d+(\.\d{1,2})?$/,
-        "La garantie de rétention doit être un nombre valide avec jusqu'à deux décimales"
-      )
-      .nullable(),
-    
+      dgd_status: yup
+      .mixed()
+      .notRequired()
+      .nullable(), // Explicitly allow null or undefined
   }).required();
 
-const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSituationContentProps) => {
+const UpdatePaymentContent = ({ open, setOpen,refetch }: AddFinanceSituationContentProps) => {
 
   const {idFe} = useParams()
   
@@ -82,13 +53,10 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
       if (!data) return {};
 
       return {
-      
+        caution: data.caution || '',
         cie: data.cie || '',
-     
-        retention_guarantee: data.retention_guarantee || '',
-        total_contract: data.total_contract || '',
-        total_ts_choix: data.total_ts_choix || '',
-        total_ts_tma: data.total_ts_tma || '',
+        dgd_status: data.dgd_status || '',
+        
       };
     },
     resolver: yupResolver(schemaFinanceEnterpriseUpdate),
@@ -171,61 +139,40 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
     <form onSubmit={handleSubmit(onSubmit)} >
     <DialogContent className='overflow-visible pbs-0 sm:pli-16'>
           <Grid container spacing={5} className='mbe-6'>
-            <Grid item xs={12}  sm={6}>
+           
             
-      <CustomTextField
-        label="Total contract"
-        
-        {...register('total_contract')}
-        error={!!errors.total_contract}
-        helperText={errors.total_contract?.message}
-        fullWidth
-        /> 
-        </Grid>
-      <Grid item xs={12} sm={6} >
-
-       <CustomTextField
-        label="Total ts choix"
-        {...register('total_ts_choix')}
-        error={!!errors.total_ts_choix}
-        helperText={errors.total_ts_choix?.message}
-        fullWidth
-        /> 
-        </Grid>
-        <Grid item xs={12} sm={6} >
-
-       <CustomTextField
-        label="Total ts tma"
-        {...register('total_ts_tma')}
-        error={!!errors.total_ts_tma}
-        helperText={errors.total_ts_tma?.message}
-        fullWidth
-        /> 
-        </Grid>
-        <Grid item xs={12} sm={6} >
-
-       <CustomTextField
-        label="CIE"
-        {...register('cie')}
-        error={!!errors.cie}
-        helperText={errors.cie?.message}
-        fullWidth
-        /> 
-        </Grid>
-        <Grid item xs={12} >
-
-       <CustomTextField
-        label="Retention guarantee"
-        {...register('retention_guarantee')}
-        error={!!errors.retention_guarantee}
-        helperText={errors.retention_guarantee?.message}
-        fullWidth
-        /> 
-        </Grid>
       
+        <Grid item xs={12}  >
 
-   
-        
+       <CustomTextField
+        label="Caution"
+        {...register('caution')}
+        error={!!errors.caution}
+        helperText={errors.caution?.message}
+        fullWidth
+        /> 
+        </Grid>
+        <Grid item xs={12}  >
+
+                    <CustomTextField
+              select
+              fullWidth
+              label="DGD "
+              defaultValue={data?.dgd_status}
+              {...register('dgd_status')}
+              error={!!errors.dgd_status}
+              helperText={errors.dgd_status?.message}
+              >
+              <MenuItem >
+                <em>Sélectionnez un status</em>
+              </MenuItem>
+              {Object.entries(DgdStatusMapping).map(([key, {label}]) => (
+                <MenuItem key={key} value={key}>
+                          {label}
+                        </MenuItem>
+                      ))}
+            </CustomTextField>
+                      </Grid>
       
       </Grid>
     
@@ -237,7 +184,7 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
           color="primary"
           disabled={isLoading}
         >
-          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Modify'}
+          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Ajouter'}
         </Button>
         <Button
          onClick={handleClose}
@@ -252,4 +199,4 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
   );
 };
 
-export default UpdateFinanceEnterpriseContent;
+export default UpdatePaymentContent;

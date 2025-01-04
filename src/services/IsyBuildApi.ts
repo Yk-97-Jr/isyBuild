@@ -3878,7 +3878,7 @@ export type RolesEnum =
 export type DocumentDiffusionConfig = {
   type: Type474Enum;
   roles: RolesEnum[];
-};
+}; 
 export type DocumentDiffusionConfigRead = {
   id: number;
   type: Type474Enum;

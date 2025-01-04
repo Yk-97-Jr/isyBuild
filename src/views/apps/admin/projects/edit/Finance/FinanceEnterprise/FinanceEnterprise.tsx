@@ -16,6 +16,7 @@ import AdditionalWorkList from './AdditionalWork/list/AdditionalWorkList';
 import FEDataCard from './FEDataCard';
 import Payment from './Payment';
 import { RefetchProvider } from '@/contexts/RefetchContextProvider';
+import PaymentProgressChart from '../charts/PaymentProgressChart';
 
 const FinanceEnterprise = () => {
   const {   idFe} = useParams() // Get subcontractorId from route parameters
@@ -52,7 +53,7 @@ const FinanceEnterprise = () => {
       <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
       
         <Typography variant='h4' className='mbe-4'>
-            {`Gestion finance ${data?.subcontractor.name}`}
+            {`Gestion finance pour l'Enterprise: ${data?.subcontractor.name}`}
         </Typography>
       </div>
       <Grid container spacing={6}>
@@ -63,6 +64,12 @@ const FinanceEnterprise = () => {
             </Grid>
             <Grid item xs={12}>
               <AdditionalWorkList  />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <PaymentProgressChart data={data} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+            
             </Grid>
           </Grid>
         </Grid>
@@ -75,7 +82,7 @@ const FinanceEnterprise = () => {
               <FEDataCard  data={data}/>
             </Grid>
             <Grid item xs={12}>
-              <Payment  data={data}/>
+              <Payment  data={data} refetch={refetch}/>
             </Grid>
           </Grid>
         </Grid>

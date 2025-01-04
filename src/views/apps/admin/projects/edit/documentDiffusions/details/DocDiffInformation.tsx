@@ -15,6 +15,7 @@ import CustomTextField from '@core/components/mui/TextField';
 // Types
 import type { FormValidateDocDiffUpdateType } from './schemaDocDiffEdit';
 import type { PhaseEnum, } from '@/services/IsyBuildApi';
+import { PhaseStatusMapping } from '@/utils/statusEnums';
 
 type DocumentDiffusionUpdateProps = {
   register: UseFormRegister<FormValidateDocDiffUpdateType>;
@@ -61,12 +62,12 @@ const DocDiffInfo: React.FC<DocumentDiffusionUpdateProps> = ({ register, errors,
     helperText={errors.phase?.message}
   >
     <MenuItem value="">
-      <em>Sélectionnez une phase</em>
-    </MenuItem>
-    {['design', 'execution'].map((phase) => (
-      <MenuItem key={phase} value={phase}>
-        {phase.charAt(0).toUpperCase() + phase.slice(1)}
-      </MenuItem>
+          <em>Sélectionnez une phase</em>
+        </MenuItem>
+        {Object.entries(PhaseStatusMapping).map(([phase, { label }]) => (
+          <MenuItem key={phase} value={phase}>
+            {label}
+          </MenuItem>
     ))}
   </CustomTextField>
           </Grid>
