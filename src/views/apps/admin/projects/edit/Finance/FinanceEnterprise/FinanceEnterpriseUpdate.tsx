@@ -237,7 +237,7 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
           color="primary"
           disabled={isLoading}
         >
-          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Ajouter'}
+          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Modify'}
         </Button>
         <Button
          onClick={handleClose}

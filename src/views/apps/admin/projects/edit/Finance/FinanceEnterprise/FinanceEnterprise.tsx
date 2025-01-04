@@ -16,6 +16,7 @@ import AdditionalWorkList from './AdditionalWork/list/AdditionalWorkList';
 import FEDataCard from './FEDataCard';
 import Payment from './Payment';
 import { RefetchProvider } from '@/contexts/RefetchContextProvider';
+import PaymentProgressChart from '../charts/PaymentProgressChart';
 
 const FinanceEnterprise = () => {
   const {   idFe} = useParams() // Get subcontractorId from route parameters
@@ -63,6 +64,12 @@ const FinanceEnterprise = () => {
             </Grid>
             <Grid item xs={12}>
               <AdditionalWorkList  />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <PaymentProgressChart data={data} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+            
             </Grid>
           </Grid>
         </Grid>
