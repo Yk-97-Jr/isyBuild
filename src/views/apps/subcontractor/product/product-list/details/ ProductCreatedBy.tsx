@@ -1,94 +1,20 @@
 
-
-
-
 import React from 'react'
- 
-import { Card,  CardContent, Typography } from '@mui/material'
-import Avatar from '@mui/material/Avatar'
+
 
 import type { ProductRead } from '@/services/IsyBuildApi'
-import { getInitials } from '@/utils/getInitials'
+
+import CreatedByCard from '@/components/CreatedByCard'
 
 type  ProductCreatedByProps = {
   productData: ProductRead | undefined // Adjust the type as necessary
 }
 
-// Function to format the date
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString)
-
-  return date.toLocaleString('fr-FR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
-}
-
-const getAvatar = (params: Pick<any, 'avatar' | 'email'>) => {
-  const { avatar, email } = params
-
-  if (avatar) {
-    return <Avatar src={avatar} />
-  } else {
-    return <Avatar>{getInitials(email as string)}</Avatar>
-  }
-}
-
-
-
-
-
 const ProductCreatedBy: React.FC<ProductCreatedByProps> = ({ productData }) => {
 
-
   return (
-    <Card>
-      <CardContent className='flex flex-col gap-6'>
-        <Typography variant='subtitle2' fontWeight='normal'>
-          Créé Par
-        </Typography>
-        <div className='flex items-center gap-3'>
-          {getAvatar({
-            avatar: productData?.created_by?.avatar ?? '/images/avatars/1.png',
-            email: productData?.created_by.email ?? ''
-          })}
-          <div className='flex flex-col'>
-            <Typography color='text.primary' className='font-medium'>
-              {productData?.created_by.first_name} {productData?.created_by.last_name}
-            </Typography>
-              <Typography>{productData?.created_by.email}</Typography>
-          </div>
-        </div>
-        <div className='flex flex-col gap-1'>
-          <div className='flex justify-between items-center'>
-            <Typography variant='subtitle2' className='font-medium mlb-2'>
-              Plus de détails
-            </Typography>
-          </div>
-          {productData ? (
-            <>
-              <div className='flex items-center gap-2 mlb-2'>
-                <i className='tabler-clock-hour-4' />
-                <Typography>Créé à:</Typography>
-                <Typography> {formatDate(productData.created_at)}</Typography>
-              </div>
-              <div className='flex items-center gap-2 mlb-2'>
-                <i className='tabler-clock-hour-4' />
-                <Typography>Mis à jour à:</Typography>
-                <Typography> {formatDate(productData.updated_at)}</Typography>
-              </div>
-            </>
-          ) : (
-            <Typography variant='body1' color='text.secondary'>
-              Aucune information disponible
-            </Typography>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+    <CreatedByCard createdBy={productData?.created_by} created_at={productData?.created_at} updated_at={productData?.updated_at}/>
+
   )
 }
 

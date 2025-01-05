@@ -17,7 +17,6 @@ import UserInformation from "@views/apps/client/subcontractor/details/owner/User
 
 import UserStatus from "@views/apps/client/subcontractor/details/owner/UserStatus";
 
-import UserCreatedBy from "@views/apps/client/subcontractor/details/owner/UserCreatedBy";
 
 import UserOwnerEditHeader from "@views/apps/client/subcontractor/details/owner/UserOwnerEditHeader";
 
@@ -145,7 +144,7 @@ const UserOwnerDetails = () => {
               <UserStatus register={register} user={userData} errors={errors}/>
             </Grid>
             <Grid item xs={12}>
-              <UserCreatedBy userData={userData}/>
+ 
             </Grid>
           </Grid>
         </Grid>
