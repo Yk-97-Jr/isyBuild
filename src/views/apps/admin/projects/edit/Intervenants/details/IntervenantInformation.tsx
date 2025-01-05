@@ -95,6 +95,7 @@ const IntervenantInformation: React.FC<Props> = ({register, errors, intervenantD
               defaultValue={intervenantData?.intervenant.role || ""} // Set initial value
               {...register("role")}
               error={!!errors.role}
+              disabled={true}
 
             >
               {isLoading ? (
