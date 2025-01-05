@@ -8,9 +8,7 @@ import { useRouter} from "next/navigation";
 
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
-import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import Chip from '@mui/material/Chip'
 import IconButton from '@mui/material/IconButton'
 import type {TextFieldProps} from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
@@ -45,12 +43,9 @@ import CustomTextField from '@core/components/mui/TextField'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import {useAuth} from "@/contexts/AuthContext";
-import type {ProjectRead,ProjectStatusEnum} from "@/services/IsyBuildApi";
+import type {ProjectForIntervenantRead} from "@/services/IsyBuildApi";
 import TableFilters from "./TableFilters";
 import IntervenantDialog from "@components/dialogs/intervenant-dialog";
-import OptionMenu from "@core/components/option-menu";
-import {getStatusProps} from "@/utils/statusHelper";
-import {ProjectStatusMapping} from "@/utils/statusEnums";
 
 
 declare module '@tanstack/table-core' {
@@ -63,7 +58,7 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ProjectReadWithAction = ProjectRead & {
+type ProjectForIntervenantReadWithAction = ProjectForIntervenantRead & {
   action?: string
 }
 
@@ -110,7 +105,7 @@ const DebouncedInput = ({
 }
 
 // Column Definitions
-const columnHelper = createColumnHelper<ProjectReadWithAction>()
+const columnHelper = createColumnHelper<ProjectForIntervenantReadWithAction>()
 
 const ProjectListTable = ({
                             data,
@@ -128,7 +123,7 @@ const ProjectListTable = ({
                             setSorting,
                             sorting
                           }: {
-  data?: ProjectRead[]
+  data?: ProjectForIntervenantRead[]
 
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -158,18 +153,18 @@ const ProjectListTable = ({
 
   }
 
-  const handleDelete = (id: number) => {
-    setOpen(true)
-    setId(id)
-  }
+  // const handleDelete = (id: number) => {
+  //   setOpen(true)
+  //   setId(id)
+  // }
 
-  const handleAdd = () => {
-    router.push(`/${userRole}/projects/add`);
+  // const handleAdd = () => {
+  //   router.push(`/${userRole}/projects/add`);
+  //
+  //
+  // }
 
-
-  }
-
-  const columns = useMemo<ColumnDef<ProjectReadWithAction, any>[]>(
+  const columns = useMemo<ColumnDef<ProjectForIntervenantReadWithAction, any>[]>(
     () => [
       columnHelper.accessor('code', {
         header: 'Code',
@@ -195,7 +190,7 @@ const ProjectListTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('client.address.country', {
+      columnHelper.accessor('address.country', {
         header: 'Address',
         cell: ({row}) => (
           <div className='flex items-center gap-4'>
@@ -207,25 +202,13 @@ const ProjectListTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('status', {
-        header: 'status',
-        cell: ({row}) => {
-          const {
-            label,
-            color
-          } = getStatusProps<ProjectStatusEnum>(row.original.status, ProjectStatusMapping);
 
-          return <Chip variant="tonal" label={label}
-                       color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"}/>;
-        }
-
-      }),
-      columnHelper.accessor('client.created_at', {
+      columnHelper.accessor('created_at', {
         header: `Date de Creation`,
         cell: ({row}) => (
           <Typography>
-            {row.original.client?.created_at
-              ? new Date(row.original.client.created_at).toLocaleDateString()
+            {row.original.created_at
+              ? new Date(row.original.created_at).toLocaleDateString()
               : 'Date not available'}
           </Typography>
         )
@@ -234,33 +217,36 @@ const ProjectListTable = ({
         header: 'Action',
         cell: ({row}) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDelete(row.original.id)}>
-              <i className='tabler-trash text-textSecondary'/>
+            {/*/!*<IconButton onClick={() => handleDelete(row.original.id)}>*!/*/}
+            {/*/!*  <i className='tabler-trash text-textSecondary'/>*!/*/}
+            {/*/!*</IconButton>*!/*/}
+            {/*<OptionMenu*/}
+            {/*  iconButtonProps={{size: 'medium'}}*/}
+            {/*  iconClassName='text-textSecondary'*/}
+            {/*  options={[*/}
+            {/*    {*/}
+            {/*      text: 'Modifier',*/}
+            {/*      icon: 'tabler-edit',*/}
+            {/*      menuItemProps: {*/}
+            {/*        className: 'flex items-center gap-2 text-textSecondary',*/}
+            {/*        onClick: () => handleEdit(row.original.id)*/}
+            {/*      }*/}
+            {/*    }*/}
+            {/*  ]}*/}
+            {/*/>*/}
+            <IconButton onClick={() => handleEdit(row.original.id)}>
+              <i className='tabler-eye text-textSecondary'/>
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{size: 'medium'}}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEdit(row.original.id)
-                  }
-                }
-              ]}
-            />
           </div>
         ),
         enableSorting: false
       })
     ],
-    [handleDelete, handleEdit]
+    [ handleEdit]
   )
 
   const table = useReactTable({
-    data: data as ProjectRead[],
+    data: data as ProjectForIntervenantRead[],
     columns,
     onSortingChange: setSorting,
     filterFns: {
@@ -314,14 +300,14 @@ const ProjectListTable = ({
               placeholder='Rechercher un Projet'
               className='max-sm:is-full'
             />
-            <Button
-              variant='contained'
-              className='max-sm=is-full'
-              startIcon={<i className='tabler-plus'/>}
-              onClick={handleAdd}
-            >
-              Ajouter un Projet
-            </Button>
+            {/*<Button*/}
+            {/*  variant='contained'*/}
+            {/*  className='max-sm=is-full'*/}
+            {/*  startIcon={<i className='tabler-plus'/>}*/}
+            {/*  onClick={handleAdd}*/}
+            {/*>*/}
+            {/*  Ajouter un Projet*/}
+            {/*</Button>*/}
           </div>
         </div>
         <div className='overflow-x-auto'>

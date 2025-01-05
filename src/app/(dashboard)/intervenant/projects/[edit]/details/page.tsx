@@ -1,6 +1,7 @@
 import React from 'react'
 
-import Tabs from '@/views/apps/admin/projects/edit/Tabs'
+import Tabs from "@views/apps/intervenant/projects/edit/Tabs";
+
 
 function page() {
   return (

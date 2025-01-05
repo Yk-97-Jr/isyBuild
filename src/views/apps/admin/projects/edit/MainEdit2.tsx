@@ -47,9 +47,9 @@ function MainEdit2() {
 
   const [templates, setTemplates] = useState<ProjectEmailTemplateRead[]>()
 
-  const [notificationFrequency, setNotificationFrequency] = useState<number | null>(null)
+  const [notificationFrequency, setNotificationFrequency] = useState<number | undefined>()
 
-  const [maxNotification, setMaxNotification] = useState<number | null>(null)
+  const [maxNotification, setMaxNotification] = useState<number | undefined>()
 
   useEffect(() => {
 
@@ -141,8 +141,12 @@ function MainEdit2() {
       latitude: projectState?.map_coordinate?.latitude || '',
       longitude: projectState?.map_coordinate?.longitude || ''
     },
-    max_notifications: projectState?.max_notifications|| '',
-    notification_frequency: projectState?.notification_frequency|| '',
+    max_notifications: projectState?.max_notifications !== undefined
+      ? +projectState.max_notifications
+      : null,
+    notification_frequency: projectState?.notification_frequency !== undefined
+      ? +projectState.notification_frequency
+      : null,
   }
 
   const [TriggerUpdate] = useProjectsUpdateUpdateMutation()

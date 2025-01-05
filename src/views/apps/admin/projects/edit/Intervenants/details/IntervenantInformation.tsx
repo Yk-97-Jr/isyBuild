@@ -91,7 +91,6 @@ const IntervenantInformation: React.FC<Props> = ({register, errors, intervenantD
               fullWidth
               labelId="role-label"
               id="role-select"
-              disabled={isLoading || !!error} // Disable if roles are loading or there's an error
               defaultValue={intervenantData?.intervenant.role || ""} // Set initial value
               {...register("role")}
               error={!!errors.role}

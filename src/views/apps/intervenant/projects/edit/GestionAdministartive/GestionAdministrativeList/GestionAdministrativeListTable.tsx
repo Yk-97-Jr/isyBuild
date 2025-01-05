@@ -4,14 +4,14 @@
 import React, {useEffect, useState, useMemo} from 'react'
 
 // MUI Imports
-import { useRouter} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader';
-import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
-import IconButton from '@mui/material/IconButton'
+
+// import IconButton from '@mui/material/IconButton'
 import type {TextFieldProps} from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
 
@@ -37,20 +37,22 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 import {CircularProgress} from '@mui/material'
 
+import IconButton from "@mui/material/IconButton";
+
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
+import UserDialog from '@components/dialogs/user-dialog'
 
 import CustomTextField from '@core/components/mui/TextField'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import {useAuth} from "@/contexts/AuthContext";
-import type {ProjectRead,ProjectStatusEnum} from "@/services/IsyBuildApi";
-import TableFilters from "./TableFilters";
-import IntervenantDialog from "@components/dialogs/intervenant-dialog";
-import OptionMenu from "@core/components/option-menu";
+import type {SuiviAdministrativeRead, SuiviAdministrativeStatusEnum} from "@/services/IsyBuildApi";
 import {getStatusProps} from "@/utils/statusHelper";
-import {ProjectStatusMapping} from "@/utils/statusEnums";
+import {SuiviAdministrativeStatusMapping} from "@/utils/statusEnums";
+import TableFilters
+  from "@views/apps/admin/projects/edit/GestionAdministartive/GestionAdministrativeList/TableFilters";
 
 
 declare module '@tanstack/table-core' {
@@ -63,7 +65,7 @@ declare module '@tanstack/table-core' {
   }
 }
 
-type ProjectReadWithAction = ProjectRead & {
+type SuiviAdministrativeReadWithAction = SuiviAdministrativeRead & {
   action?: string
 }
 
@@ -110,25 +112,25 @@ const DebouncedInput = ({
 }
 
 // Column Definitions
-const columnHelper = createColumnHelper<ProjectReadWithAction>()
+const columnHelper = createColumnHelper<SuiviAdministrativeReadWithAction>()
 
-const ProjectListTable = ({
-                            data,
-                            page,
-                            setPage,
-                            setPageSize,
-                            pageSize,
-                            countRecords,
-                            isFetching,
-                            refetch,
-                            setSearch,
-                            search,
-                            setFilter,
-                            filter,
-                            setSorting,
-                            sorting
-                          }: {
-  data?: ProjectRead[]
+const GestionAdministrativeListTable = ({
+                                              data,
+                                              page,
+                                              setPage,
+                                              setPageSize,
+                                              pageSize,
+                                              countRecords,
+                                              isFetching,
+                                              refetch,
+                                              setSearch,
+                                              search,
+                                              setStatus,
+                                              status,
+                                              setSorting,
+                                              sorting
+                                            }: {
+  data?: SuiviAdministrativeRead[]
 
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
@@ -139,8 +141,8 @@ const ProjectListTable = ({
   isFetching: boolean
   setSearch: React.Dispatch<React.SetStateAction<string>>
   search: string
-  setFilter: React.Dispatch<React.SetStateAction<string | null>>
-  filter: string | null
+  setStatus: React.Dispatch<React.SetStateAction<string | undefined>>
+  status: string | undefined
   sorting: SortingState
   setSorting: React.Dispatch<React.SetStateAction<SortingState>>
 }) => {
@@ -151,57 +153,55 @@ const ProjectListTable = ({
   const router = useRouter();
   const {user} = useAuth();  // Get the user from AuthContext
   const userRole = user?.role
+  const {edit: projectId} = useParams();  // Renamed the route parameter variable
 
 
   const handleEdit = (id: number) => {
-    router.push(`/${userRole}/projects/${id}/details/`);
-
+    console.log('helooooooooooooooo')
+    router.push(`/${userRole}/projects/${projectId}/details/gestionAdministrative/${id}`);
   }
 
-  const handleDelete = (id: number) => {
-    setOpen(true)
-    setId(id)
-  }
 
-  const handleAdd = () => {
-    router.push(`/${userRole}/projects/add`);
-
-
-  }
-
-  const columns = useMemo<ColumnDef<ProjectReadWithAction, any>[]>(
+  const columns = useMemo<ColumnDef<SuiviAdministrativeReadWithAction, any>[]>(
     () => [
-      columnHelper.accessor('code', {
-        header: 'Code',
-        cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.code}`}
-              </Typography>
+      columnHelper.accessor('project_lot.lot.name', {
+        header: 'Nom',
+        cell: ({row}) => {
+          const name = row.original.project_lot.lot.name
+
+          // Break the name after 20 characters if it's too long
+          const displayName = name.length > 50 ? name.substring(0, 50) + '\n' + name.substring(50) : name
+
+          return (
+            <div className='flex items-center gap-4 '>
+              <div className='flex flex-col'>
+                <Typography color='text.primary' className='font-medium whitespace-pre-wrap break-words'>
+                  {`${displayName} `}
+                </Typography>
+              </div>
             </div>
-          </div>
+          )
+        }
+      }),
+      columnHelper.accessor('created_at', {
+        header: 'Date de Creation',
+        cell: ({row}) => (
+          <Typography>
+            {row.original.created_at
+              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
+              : 'Date not available'}
+          </Typography>
         )
       }),
-      columnHelper.accessor('name', {
-        header: 'Name',
+      columnHelper.accessor('created_by', {
+        header: 'Creé par',
         cell: ({row}) => (
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-      columnHelper.accessor('client.address.country', {
-        header: 'Address',
-        cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original.address?.country || 'N/A'}
+                {row.original.created_by
+                  ? `${row.original.created_by.first_name} ${row.original.created_by.last_name}`
+                  : 'Données non disponible'}
               </Typography>
             </div>
           </div>
@@ -213,54 +213,32 @@ const ProjectListTable = ({
           const {
             label,
             color
-          } = getStatusProps<ProjectStatusEnum>(row.original.status, ProjectStatusMapping);
+          } = getStatusProps<SuiviAdministrativeStatusEnum>(row.original.status, SuiviAdministrativeStatusMapping);
 
           return <Chip variant="tonal" label={label}
                        color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"}/>;
         }
 
       }),
-      columnHelper.accessor('client.created_at', {
-        header: `Date de Creation`,
-        cell: ({row}) => (
-          <Typography>
-            {row.original.client?.created_at
-              ? new Date(row.original.client.created_at).toLocaleDateString()
-              : 'Date not available'}
-          </Typography>
-        )
-      }),
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({row}) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleDelete(row.original.id)}>
-              <i className='tabler-trash text-textSecondary'/>
+            <IconButton onClick={() => handleEdit(row.original.id)}>
+              <i className='tabler-eye text-textSecondary'/>
             </IconButton>
-            <OptionMenu
-              iconButtonProps={{size: 'medium'}}
-              iconClassName='text-textSecondary'
-              options={[
-                {
-                  text: 'Modifier',
-                  icon: 'tabler-edit',
-                  menuItemProps: {
-                    className: 'flex items-center gap-2 text-textSecondary',
-                    onClick: () => handleEdit(row.original.id)
-                  }
-                }
-              ]}
-            />
+
           </div>
         ),
         enableSorting: false
-      })
+      }),
     ],
-    [handleDelete, handleEdit]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, data]
   )
 
   const table = useReactTable({
-    data: data as ProjectRead[],
+    data: data as SuiviAdministrativeRead[],
     columns,
     onSortingChange: setSorting,
     filterFns: {
@@ -293,7 +271,7 @@ const ProjectListTable = ({
     <>
       <Card>
         <CardHeader title='Filters' className='pbe-4'/>
-        <TableFilters setFilter={setFilter} filter={filter}/>
+        <TableFilters setStatus={setStatus} status={status}/>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
@@ -311,17 +289,9 @@ const ProjectListTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un Projet'
+              placeholder='Rechercher Lot'
               className='max-sm:is-full'
             />
-            <Button
-              variant='contained'
-              className='max-sm=is-full'
-              startIcon={<i className='tabler-plus'/>}
-              onClick={handleAdd}
-            >
-              Ajouter un Projet
-            </Button>
           </div>
         </div>
         <div className='overflow-x-auto'>
@@ -398,7 +368,7 @@ const ProjectListTable = ({
           }}
         />
       </Card>
-      <IntervenantDialog
+      <UserDialog
         open={open}
         setOpen={setOpen}
         id={id}
@@ -409,4 +379,4 @@ const ProjectListTable = ({
   )
 }
 
-export default ProjectListTable
+export default GestionAdministrativeListTable
