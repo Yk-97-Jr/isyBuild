@@ -133,7 +133,7 @@ useEffect(() => {
         <CircularProgress />
       </Box>
     )
-
+    
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={6}>
@@ -171,7 +171,7 @@ useEffect(() => {
               <SubcontractorListInfo subcontractorData={subcontractorData} />
             </Grid>
             <Grid item xs={12}>
-              <SubcontractorCreatedBy subcontractorData={subcontractorData} />
+              <SubcontractorCreatedBy subcontractorData={subcontractorData?.created_by} created_at={subcontractorData?.created_at } updated_at={subcontractorData?.updated_at}/>
             </Grid>
           </Grid>
         </Grid>
