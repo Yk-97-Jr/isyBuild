@@ -63,6 +63,7 @@ import tableStyles from '@core/styles/table.module.css'
 import type {ProjectLotRead} from '@/services/IsyBuildApi'
 import ProjectLotDialog from "@components/dialogs/project-lots-dialog";
 import {useAuth} from "@/contexts/AuthContext";
+import { formatDate } from '@/utils/formatDate';
 
 // Context
 
@@ -185,14 +186,12 @@ const AppeleOffreTable = ({
         }
       }),
       columnHelper.accessor('created_at', {
-        header: 'Date de Creation',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('created_by', {
         header: 'Creé par',

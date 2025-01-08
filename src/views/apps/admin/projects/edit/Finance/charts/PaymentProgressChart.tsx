@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles'
 // Third Party Imports
 import type { ApexOptions } from 'apexcharts'
 
-import type { FinanceEnterpriseRead } from '@/services/IsyBuildApi'
+
 
 // Components Imports
 
@@ -21,13 +21,21 @@ import type { FinanceEnterpriseRead } from '@/services/IsyBuildApi'
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
 
 
+interface PaymentProgressChartProps {
+  
+    final_amount?: string ;
+    payment_cumulated?: string ;
+  
+  labels?: [string, string];
+  colors?: [string, string];
+  title?: string;
+}
 
 
+const PaymentProgressChart: React.FC<PaymentProgressChartProps>  = ({final_amount,payment_cumulated,labels = ['Paid', 'Remaining'],colors = ['var(--primary-color)', 'var(--mui-palette-warning-main)'],title='Paiements: Payé vs Restant'}) => {
 
-const PaymentProgressChart = ({data}:{data:FinanceEnterpriseRead | undefined}) => {
-
-    const total = data?.final_amount ? parseFloat(data.final_amount) : 0;
-  const paid = data?.payment_cumulated ? parseFloat(data.payment_cumulated) : 0;
+    const total = final_amount ? parseFloat(final_amount) : 0;
+  const paid = payment_cumulated ? parseFloat(payment_cumulated) : 0;
  
 
   const paidPercentage = total > 0 ? (paid / total) * 100 : 0;
@@ -40,14 +48,11 @@ const PaymentProgressChart = ({data}:{data:FinanceEnterpriseRead | undefined}) =
   const theme = useTheme()
 
   const options: ApexOptions = {
-    labels: ['Payé', 'Restant'],
+    labels,
     stroke: {
       width: 0
     },
-    colors: [
-      'var(--primary-color)',
-      'var(--mui-palette-warning-main)',
-    ],
+    colors,
     dataLabels: {
       enabled: false,
       formatter:(val)=> Number(val).toFixed(2)
@@ -109,7 +114,7 @@ const PaymentProgressChart = ({data}:{data:FinanceEnterpriseRead | undefined}) =
 
   return (
     <Card className='bs-fit'>
-      <CardHeader title='Paiements: Payé vs Restant'  />
+      <CardHeader title={title}  />
       <CardContent>
         <AppReactApexCharts
           type='donut'

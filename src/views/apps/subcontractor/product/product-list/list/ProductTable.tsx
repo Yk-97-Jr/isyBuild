@@ -46,6 +46,7 @@ import tableStyles from '@core/styles/table.module.css'
 import type {ProductMediaRead, ProductRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
 import TableCategoryFilters from './TableCategoryFilters';
+import { formatDate } from '@/utils/formatDate';
 
 
 declare module '@tanstack/table-core' {
@@ -199,14 +200,12 @@ const ProductTable = ({
         )
       }),
       columnHelper.accessor('created_at', {
-        header: 'Créé à',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('action', {
         header: 'Action',

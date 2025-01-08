@@ -53,6 +53,7 @@ import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElement
 import ConfigAddDialog from '../config/ConfigAddDialog';
 import { getStatusProps } from '@/utils/statusHelper';
 import { PhaseStatusMapping, StatusE51Mapping, Type474Mapping } from '@/utils/statusEnums';
+import { formatDate } from '@/utils/formatDate';
 
 const buttonProps: ButtonProps = {
   variant: 'contained',
@@ -292,15 +293,14 @@ const DocDiffTable = ({
       
       
 
+
       columnHelper.accessor('diffusion_date', {
-        header: 'Date de diffusion',
-        cell: ({row}) => (
+        header: `Date de diffusion`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.diffusion_date
-              ? `${new Date(row.original.diffusion_date).toLocaleDateString()} ${new Date(row.original.diffusion_date).toLocaleTimeString()}`
-              : 'Date non disponible'}
+             {formatDate(row.original.diffusion_date)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('action', {
         header: 'Action',

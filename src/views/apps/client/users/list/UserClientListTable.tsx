@@ -49,6 +49,7 @@ import type {UsersType} from '@/types/apps/usersType'
 import {useAuth} from "@/contexts/AuthContext";
 import type {ClientStaffRead} from "@/services/IsyBuildApi";
 import UserClientDialog from "@components/dialogs/user-client-dialog";
+import { formatDate } from '@/utils/formatDate';
 
 
 declare module '@tanstack/table-core' {
@@ -194,11 +195,11 @@ const UserClientListTable = ({
       }),
       columnHelper.accessor('created_at', {
         header: `Date de Creation`,
-        cell: ({row}) => (
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('created_by.first_name', {
         header: 'Creé par',

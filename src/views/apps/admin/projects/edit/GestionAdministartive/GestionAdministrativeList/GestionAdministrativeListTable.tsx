@@ -53,6 +53,7 @@ import {getStatusProps} from "@/utils/statusHelper";
 import {SuiviAdministrativeStatusMapping} from "@/utils/statusEnums";
 import TableFilters
   from "@views/apps/admin/projects/edit/GestionAdministartive/GestionAdministrativeList/TableFilters";
+import { formatDate } from '@/utils/formatDate';
 
 
 declare module '@tanstack/table-core' {
@@ -184,14 +185,12 @@ const GestionAdministrativeListTable = ({
         }
       }),
       columnHelper.accessor('created_at', {
-        header: 'Date de Creation',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('created_by', {
         header: 'Creé par',

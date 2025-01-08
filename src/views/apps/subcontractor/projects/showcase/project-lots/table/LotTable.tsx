@@ -41,6 +41,7 @@ import TablePaginationComponent from '@components/TablePaginationComponent'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import type {DocumentRead} from '@/services/IsyBuildApi'
+import { formatDate } from '@/utils/formatDate'
 
 
 
@@ -177,15 +178,14 @@ const LotTable = ({
           </Typography>
         )
       }),
+      
       columnHelper.accessor('latest_version.created_at', {
-        header: 'Créé à',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.latest_version.created_at
-              ? `${new Date(row.original.latest_version.created_at).toLocaleDateString()} ${new Date(row.original.latest_version.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.latest_version.created_at)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('action', {
         header: 'Action',

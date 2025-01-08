@@ -23,7 +23,7 @@ import AddDocumentDocDiff from './Document/dialogs/add/AddDocumentDocDiff';
 import DeleteDocumentDocDiff from './Document/dialogs/delete/DeleteDocumentDocDiff';
 import ModifyDocumentDocDiff from './Document/dialogs/modify/ModifyDocumentDocDiff';
 import HistoryDevis from './Document/dialogs/history/HistoryDevis';
-import DiffusionList from './diffusion/DiffusionLIst';
+import DiffusionList from './diffusion/list/DiffusionLIst';
 import AddDiffuse from './Document/dialogs/diffuse/AddDiffuse';
 
 type FormValidateDocDiffUpdateType = {

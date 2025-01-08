@@ -46,6 +46,7 @@ import tableStyles from '@core/styles/table.module.css'
 import {useAuth} from "@/contexts/AuthContext";
 import type { LocalisationRead } from '@/services/IsyBuildApi';
 import LocationDialog from '@/components/dialogs/locations-dialog';
+import { formatDate } from '@/utils/formatDate';
 
 
 
@@ -193,14 +194,12 @@ const LocationsTable = ({
       }),
 
       columnHelper.accessor('created_at', {
-        header: 'Date de Creation',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('created_by.first_name', {
         header: 'Creé par',

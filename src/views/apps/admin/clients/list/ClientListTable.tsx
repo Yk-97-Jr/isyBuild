@@ -52,6 +52,7 @@ import ClientDialog from '@components/dialogs/client-dialog'
 import type {ClientRead} from '@/services/IsyBuildApi'
 
 import {useAuth} from '@/contexts/AuthContext'
+import { formatDate } from '@/utils/formatDate'
 import TableFilters from "@views/apps/admin/clients/list/TableFilters";
 
 declare module '@tanstack/table-core' {
@@ -227,14 +228,12 @@ const ClientListTable = ({
         )
       }),
       columnHelper.accessor('created_at', {
-        header: 'Date de Creation',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
 
 

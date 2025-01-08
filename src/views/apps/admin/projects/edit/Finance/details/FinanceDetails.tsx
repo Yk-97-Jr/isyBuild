@@ -13,6 +13,7 @@ import FinanceEarn from './FinanceEarn';
 import FinanceListTable from './FinanceListTable';
 import FinanceDataCard from './FinanceDataCard';
 import FinancePay from './FinancePay';
+import PaymentProgressChart from '../charts/PaymentProgressChart';
 
 const FinanceDetails = () => {
   const { financeId } = useParams() // Get subcontractorId from route parameters
@@ -50,6 +51,9 @@ const FinanceDetails = () => {
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <FinanceListTable isFetching={isFetching} data={data?.finance_enterprises}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <PaymentProgressChart  final_amount={data?.total_final_amount} payment_cumulated={data?.payment_cumulated} />
             </Grid>
           </Grid>
         </Grid>

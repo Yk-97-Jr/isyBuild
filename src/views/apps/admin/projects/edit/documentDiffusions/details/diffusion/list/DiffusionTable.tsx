@@ -1,16 +1,11 @@
 'use client'
 
 // React Imports
-import React, {useEffect, useState, useMemo} from 'react'
+import React, {useState, useMemo} from 'react'
 
 // MUI Imports
-import {useParams, useRouter} from "next/navigation";
-
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import type {TextFieldProps} from '@mui/material/TextField'
-import MenuItem from '@mui/material/MenuItem'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -27,38 +22,37 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
 } from '@tanstack/react-table'
-import type {ColumnDef, FilterFn, SortingState} from '@tanstack/react-table'
+import type {ColumnDef, FilterFn, /* SortingState */} from '@tanstack/react-table'
 import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
-
-import {CircularProgress} from '@mui/material'
-
-import TablePaginationComponent from '@components/TablePaginationComponent'
-
-
-import CustomTextField from '@core/components/mui/TextField'
+import { Chip, CircularProgress, IconButton} from '@mui/material'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type {ProjectLotRead} from '@/services/IsyBuildApi'
-import {useAuth} from "@/contexts/AuthContext";
-import { formatDate } from '@/utils/formatDate';
+import type { DiffusionIntervenantRead, StatusE51Enum } from '@/services/IsyBuildApi';
+import CustomAvatar from '@/@core/components/mui/Avatar';
+import { getInitials } from '@/utils/getInitials';
+import { getStatusProps } from '@/utils/statusHelper'
+import { StatusE51Mapping } from '@/utils/statusEnums'
 
+import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElementClick'
+import AddCommentContent from '../DocumentDiffusionComments/AddCommentDialog'
+import ListCommentContent from '../CommentList/ListCommentDialog'
+import { formatDate } from '@/utils/formatDate'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
   }
-
   interface FilterMeta {
     itemRank: RankingInfo
   }
 }
-
-type ProjectWithAction = ProjectLotRead & {
+type LocalisationWithAction = DiffusionIntervenantRead & {
   action?: string
 }
+
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -73,150 +67,139 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const DebouncedInput = ({
-                          value: initialValue,
-                          onChange,
-                          debounce = 500,
-                          ...props
-                        }: {
-  value: string | number
-  onChange: (value: string | number) => void
-  debounce?: number
-} & Omit<TextFieldProps, 'onChange'>) => {
-  // States
-  const [value, setValue] = useState(initialValue)
-
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      onChange(value)
-    }, debounce)
-
-    return () => clearTimeout(timeout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
-
-  return <CustomTextField {...props} value={value} onChange={e => setValue(e.target.value)}/>
-}
-
 // Column Definitions
-const columnHelper = createColumnHelper<ProjectWithAction>()
+const columnHelper = createColumnHelper<LocalisationWithAction>()
 
-const ShowcaseTable = ({
-                         data,
-                         page,
-                         setPage,
-                         setPageSize,
+const DiffusionTable = ({
+                         data,                     
                          pageSize,
-                         countRecords,
                          isFetching,
-                         
-                         setSearch,
-                         search,
-                         
-                         setSorting,
-                         sorting
+                         refetch
                        }: {
-  data?: ProjectLotRead[]
-
-  page: number
-  setPage: React.Dispatch<React.SetStateAction<number>>
+  data?: DiffusionIntervenantRead[]
   pageSize: number
-  setPageSize: React.Dispatch<React.SetStateAction<number>>
-  countRecords?: number
-
   isFetching: boolean
-  setSearch: React.Dispatch<React.SetStateAction<string>>
-  search: string
-
-  sorting: SortingState
-  setSorting: React.Dispatch<React.SetStateAction<SortingState>>
+  refetch:() => void
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
 
-  const router = useRouter();
-  const {user} = useAuth();  // Get the user from AuthContext
-  const { id: docId } = useParams()
-  const userRole = user?.role
-
-
-  const handleEditProject = (id: number) => {
-    console.log(id)
-    console.log(`/${userRole}/projects/${id}/details`)
-    router.push(`/${userRole}/projects/${docId}/details/${id}`);
-  }
-
-
-
-  const columns = useMemo<ColumnDef<ProjectWithAction, any>[]>(
+  const columns = useMemo<ColumnDef<LocalisationWithAction, any>[]>(
     () => [
-        columnHelper.accessor('lot.name', {
-            header: `Lots`,
-            cell: ({row}) => (
-                <div className='flex items-center gap-1'>
-                <div className='flex flex-col'>
-                  <Typography color='text.primary' className='font-medium'>
-                    {`${row.original.lot.name} `}
-                  </Typography>
-                </div>
-              </div>
-            )
-          }),
-
-      columnHelper.accessor('project.client.id', {
-        header: `responsable`,
-        cell: ({row}) => (
-            <div className='flex items-center gap-1'>
+      columnHelper.accessor('project_intervenant.intervenant.user.id', {
+        header: 'intervenant',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-3'>
+            {getAvatar({ avatar: row.original.project_intervenant.intervenant.user.avatar, customer: row.original.project_intervenant.intervenant.user.first_name })}
             <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.project.client.name} `}
+              <Typography
+                color='text.primary'
+                className='font-medium '
+              >
+                {row.original.project_intervenant.intervenant.user.last_name } {row.original.project_intervenant.intervenant.user.first_name}
               </Typography>
-              <Typography color='text.secondery' >
-                {`${row.original.project.client.contact_email} `}
-              </Typography>
-              
+              <Typography variant='body2'>{row.original.project_intervenant.intervenant.user.email}</Typography>
             </div>
           </div>
         )
       }),
-      columnHelper.accessor('created_at', {
-        header: `Date de Creation`,
+      columnHelper.accessor('project_intervenant.intervenant.role', {
+        header: 'role ',
+        cell: ({row}) => (
+          <div className='flex items-center gap-1'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.project_intervenant.intervenant.role}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+      
+      columnHelper.accessor('last_notification_date', {
+        header: `dernière notification`,
         cell: ({ row }) => (
           <Typography>
-             {formatDate(row.original.created_at)} 
+             {formatDate(row.original.last_notification_date)} 
           </Typography>
         ),
       }),
+      columnHelper.accessor('notifications_sent', {
+        header: 'notifications envoyées',
+        cell: ({row}) => (
+          <div className='flex items-center gap-1'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.notifications_sent}`}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+      columnHelper.accessor('status', {
+        header: 'status ',
+        
+          cell: ({row}) => {
+                            const {label, color} = getStatusProps<StatusE51Enum>(row.original.status, StatusE51Mapping);
+                  
+                            return <Chip variant="tonal" label={label}
+                                         color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"}
+                                         size='small' 
+                        sx={{ fontWeight: 'small' }} 
+                        />;
+                          }
+        
+      }),
       columnHelper.accessor('action', {
         header: 'Action',
-        cell: ({row}) => (
+        cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton onClick={() => handleEditProject(row.original.id)}>
-              <i className='tabler-eye text-textSecondary'/>
-            </IconButton>
+            <OpenFinanceOnElementClick 
+              element={IconButton}
+              elementProps={{
+                onClick: (e: any) => {
+                  e.stopPropagation(); // Prevent row selection if the table is click-sensitive
+                },
+                children: <i className="tabler-edit text-textSecondary" />, // Icon as button child
+              }}
+              dialog={AddCommentContent} // Replace with your dialog component
+              dialogProps={{ 
+                refetch,
+                id: row.original.id, // Pass the ID from the row data
+              }}
+            />
+            <OpenFinanceOnElementClick 
+              element={IconButton}
+              elementProps={{
+                onClick: (e: any) => {
+                  e.stopPropagation(); // Prevent row selection if the table is click-sensitive
+                },
+                children: <i className="tabler-list text-textSecondary" />, // Icon as button child
+              }}
+              dialog={ListCommentContent} // Replace with your dialog component
+              dialogProps={{ 
+               
+                id: row.original.id, // Pass the ID from the row data
+              }}
+            />
           </div>
         ),
-        enableSorting: false
-      })
+        enableSorting: false, // Disables sorting for this column
+      }),
+    
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, data]
   )
 
   const table = useReactTable({
-    data: data as ProjectLotRead[],
+    data: data as DiffusionIntervenantRead[],
     columns,
-    onSortingChange: setSorting,
     filterFns: {
       fuzzy: fuzzyFilter
     },
     state: {
       rowSelection,
-      sorting
     },
     initialState: {
       pagination: {
@@ -237,33 +220,23 @@ const ShowcaseTable = ({
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
+  const getAvatar = (params: { avatar: any; customer: any; }) => {
+    const { avatar, customer } = params
+
+    if (avatar) {
+      return <CustomAvatar src={avatar} skin='light' size={34} />
+    } else {
+      return (
+        <CustomAvatar skin='light' size={34}>
+          {getInitials(customer as string)}
+        </CustomAvatar>
+      )
+    }
+  }
+
   return (
     <>
       <Card>
-        
-        <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
-          <CustomTextField
-            select
-            value={table.getState().pagination.pageSize}
-            onChange={e => setPageSize(Number(e.target.value))}
-            className='max-sm:is-full sm:is-[70px]'
-          >
-            <MenuItem value='10'>10</MenuItem>
-            <MenuItem value='25'>25</MenuItem>
-            <MenuItem value='50'>50</MenuItem>
-          </CustomTextField>
-          <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
-            <DebouncedInput
-              value={search}
-              onChange={value => {
-                setSearch(String(value))
-              }}
-              placeholder='Rechercher'
-              className='max-sm:is-full'
-            />
-           
-          </div>
-        </div>
         <div className='overflow-x-auto'>
           <table className={tableStyles.table}>
             <thead>
@@ -328,19 +301,10 @@ const ShowcaseTable = ({
           </table>
 
         </div>
-
-        <TablePaginationComponent
-          totalRecords={countRecords}
-          pageSize={pageSize}
-          currentPage={page} // Pass the currentPage directly
-          onPageChange={newPage => {
-            setPage(newPage)
-          }}
-        />
       </Card>
-      
     </>
   )
 }
 
-export default ShowcaseTable
+export default DiffusionTable
+

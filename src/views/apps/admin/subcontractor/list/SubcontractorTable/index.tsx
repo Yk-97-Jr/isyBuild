@@ -54,6 +54,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import TableFilters from '../TableFilters'
 import TableClientFilters from '../TableClientFilters'
 import TableLotsFilters from '../TableLotsFilters'
+import { formatDate } from '@/utils/formatDate'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -293,12 +294,10 @@ const SubcontractorTable = ({
       columnHelper.accessor('created_at', {
         header: `Date de Creation`,
         cell: ({ row }) => (
-          <>
-            <Typography>
-              {row.original.created_at ? new Date(row.original.created_at).toLocaleString() : 'Date not available'}
-            </Typography>
-          </>
-        )
+          <Typography>
+             {formatDate(row.original.created_at)} 
+          </Typography>
+        ),
       }),
       columnHelper.accessor('is_active', {
         header: 'Status',
