@@ -29,7 +29,7 @@ type AddFinanceSituationContentProps = {
 
 
 
-const AddCommentContent = ({ open, setOpen,id }: AddFinanceSituationContentProps) => {
+const AddCommentContent = ({ open,refetch, setOpen,id }: AddFinanceSituationContentProps) => {
 
 
   const handleClose = () => {
@@ -63,7 +63,7 @@ const AddCommentContent = ({ open, setOpen,id }: AddFinanceSituationContentProps
       </Grid>
       </DialogContent>
       <DialogActions className='justify-center pbs-0 sm:pbe-16 sm:pli-16'>
-        <DialogCommentsSection id={id}/>
+        <DialogCommentsSection id={id} refetch={refetch}/>
       </DialogActions>
 </form>
     </Dialog>

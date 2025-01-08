@@ -27,11 +27,11 @@ type FileProp = {
   size: number;
 };
 
-function DialogCommentsSection({id}:{id:number}) {
+function DialogCommentsSection({id, refetch}:{id:number; refetch: () => void}) {
   const [newComment, setNewComment] = useState('');
   const [files, setFiles] = useState<File[]>([]);
   const [newStatus, setNewStatus] = useState('');
-  const [addComment, { isLoading: isAdding,error, }] = useDiffusionIntervenantCommentCreateMutation();
+  const [addComment, { isLoading: isAdding,error}] = useDiffusionIntervenantCommentCreateMutation();
   
 
   const renderFilePreview = (file: FileProp) => {
@@ -119,7 +119,8 @@ function DialogCommentsSection({id}:{id:number}) {
         diffusionIntervenantId: +id, // Replace with the actual ID
         diffusionIntervenantCommentCreateUpdateRequest: formDataToSend as unknown as DiffusionIntervenantCommentCreateUpdateRequest,
       }).unwrap();
-  
+
+      refetch()
       console.log(response);
   
       // Reset form after successful submission

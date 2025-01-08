@@ -29,7 +29,7 @@ const DiffusionList = () => {
  /*  const debouncedSearch = useDebounce(search, 500); */
 
   // Pass parameters to the query hook
-    const { data: docDiffData,  } = useDocumentDiffusionDetailQuery({
+    const { data: docDiffData, refetch:refetchStatus } = useDocumentDiffusionDetailQuery({
       documentDiffusionId: +docDiffId,
     });
 
@@ -82,7 +82,7 @@ const DiffusionList = () => {
           pageSize={pageSize}
         
       
-    
+          refetch={refetchStatus}
           data={docDiff}
        
           isFetching={isFetching}

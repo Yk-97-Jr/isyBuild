@@ -74,10 +74,12 @@ const DiffusionTable = ({
                          data,                     
                          pageSize,
                          isFetching,
+                         refetch
                        }: {
   data?: DiffusionIntervenantRead[]
   pageSize: number
   isFetching: boolean
+  refetch:() => void
 }) => {
   // States
   const [rowSelection, setRowSelection] = useState({})
@@ -162,7 +164,7 @@ const DiffusionTable = ({
               }}
               dialog={AddCommentContent} // Replace with your dialog component
               dialogProps={{ 
-               
+                refetch,
                 id: row.original.id, // Pass the ID from the row data
               }}
             />

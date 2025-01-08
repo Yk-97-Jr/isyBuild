@@ -1,3 +1,5 @@
+import StatisticsCard from "@/views/apps/admin/dashbord/StatisticsCard";
+
 export default function Page() {
-  return <h1>Tableau de board Admin</h1>
+  return <StatisticsCard/>
 }
