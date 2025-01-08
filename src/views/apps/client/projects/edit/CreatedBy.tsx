@@ -1,16 +1,16 @@
-import type {ProjectLotSubcontractorRead} from "@/services/IsyBuildApi";
+import type {ProjectRead} from "@/services/IsyBuildApi";
 import CreatedByCard from '@/components/CreatedByCard'
 
 type Props = {
-  projectLotSubcontractorData: ProjectLotSubcontractorRead | undefined // Adjust the type as necessary
+  projectState: ProjectRead | undefined // Adjust the type as necessary
 }
 
 
-const CreatedBy: React.FC<Props> = ({ projectLotSubcontractorData }) => {
+const CreatedBy: React.FC<Props> = ({ projectState }) => {
   // Vars
 
   return (
-    <CreatedByCard createdBy={projectLotSubcontractorData?.created_by} created_at={projectLotSubcontractorData?.created_at} updated_at={projectLotSubcontractorData?.updated_at}/>
+    <CreatedByCard createdBy={projectState?.created_by} created_at={projectState?.created_at} updated_at={projectState?.updated_at}/>
 
   )
 }

@@ -214,9 +214,8 @@ function MainEdit2() {
                 isLoading={isLoading}
               />
               <CreatedBy
-                projectState={projectState || ({} as ProjectRead)}
-                setProjectState={setProjectState}
-                isLoading={isLoading}
+                projectState={ projectState }
+               
               />
               <Templates templates={templates || []} templates_loading={templates_loading} />
             </div>

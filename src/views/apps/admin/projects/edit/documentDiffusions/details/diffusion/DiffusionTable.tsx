@@ -35,6 +35,7 @@ import CustomAvatar from '@/@core/components/mui/Avatar';
 import { getInitials } from '@/utils/getInitials';
 import { getStatusProps } from '@/utils/statusHelper'
 import { StatusE51Mapping } from '@/utils/statusEnums'
+import { formatDate } from '@/utils/formatDate'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -106,20 +107,14 @@ const DiffusionTable = ({
         )
       }),
       columnHelper.accessor('last_notification_date', {
-        header: 'dernière notification',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-              
-            {row.original.last_notification_date
-              ? `${new Date(row.original.last_notification_date).toLocaleDateString()} ${new Date(row.original.last_notification_date).toLocaleTimeString()}`
-              : 'Date non disponible'}
-              </Typography>
-            </div>
-          </div>
-        )
+        header: `dernière notification`,
+        cell: ({ row }) => (
+          <Typography>
+             {formatDate(row.original.last_notification_date)} 
+          </Typography>
+        ),
       }),
+      
       columnHelper.accessor('notifications_sent', {
         header: 'notifications envoyées',
         cell: ({row}) => (

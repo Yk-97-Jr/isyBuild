@@ -66,7 +66,7 @@ const FinanceEnterprise = () => {
               <AdditionalWorkList  />
             </Grid>
             <Grid item xs={12} md={6}>
-              <PaymentProgressChart data={data} />
+              <PaymentProgressChart  final_amount={data?.final_amount} payment_cumulated={data?.payment_cumulated} />
             </Grid>
             <Grid item xs={12} md={6}>
             
