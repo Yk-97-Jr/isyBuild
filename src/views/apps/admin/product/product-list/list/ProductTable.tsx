@@ -47,6 +47,7 @@ import type {ProductMediaRead, ProductRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
 import TableCategoryFilters from './TableCategoryFilters';
 import { formatDate } from '@/utils/formatDate';
+import UserCard from '@/components/UserCard';
 
 
 declare module '@tanstack/table-core' {
@@ -154,8 +155,6 @@ const ProductTable = ({
 
 
   const handleEditProduct = (id: number) => {
-    console.log(id)
-    console.log(`/${userRole}/product/${id}/details`)
     router.push(`/${userRole}/product/${id}/details`);
   }
 
@@ -187,6 +186,19 @@ const ProductTable = ({
         )
       }),
 
+      columnHelper.accessor('category', {
+        header: 'category',
+        cell: ({row}) => (
+          <div className='flex items-center gap-3'>
+            <div className='flex flex-col items-start'>
+              <Typography color='text.primary' className='font-medium'>
+                {`${row.original.category} `}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+
       columnHelper.accessor('description', {
         header: `Description`,
         cell: ({row}) => (
@@ -211,6 +223,19 @@ const ProductTable = ({
           </Typography>
         ),
       }),
+      columnHelper.accessor("created_by",{
+        header: 'Crée par',
+        cell:({row}) => (
+          <UserCard
+          firstName={row.original.created_by.first_name}
+          lastName={row.original.created_by.last_name}
+          avatar={row.original.created_by.avatar}
+          email={row.original.created_by.email}
+        />
+        )
+      }),
+
+
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({row}) => (
@@ -228,7 +253,7 @@ const ProductTable = ({
       })
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data]
+    [data, data]
   )
 
   const table = useReactTable({
@@ -269,7 +294,7 @@ const ProductTable = ({
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
-            value={table.getState().pagination.pageSize}
+            value={pageSize}
             onChange={e => setPageSize(Number(e.target.value))}
             className='max-sm:is-full sm:is-[70px]'
           >

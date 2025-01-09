@@ -49,6 +49,7 @@ import type {UsersType} from '@/types/apps/usersType'
 import {useAuth} from "@/contexts/AuthContext";
 import TableFilters from "@views/apps/admin/users/list/TableFilters";
 import { formatDate } from '@/utils/formatDate';
+import UserCard from '@/components/UserCard';
 
 
 declare module '@tanstack/table-core' {
@@ -152,8 +153,6 @@ const UserListTable = ({
 
 
   const handleEditUser = (id: number) => {
-    console.log(id)
-    console.log(`/${userRole}/users/${id}/details`)
     router.push(`/${userRole}/users/${id}/details`);
   }
 
@@ -212,15 +211,11 @@ const UserListTable = ({
       columnHelper.accessor('created_by.first_name', {
         header: 'Creé par',
         cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original.created_by
-                  ? `${row.original.created_by.first_name} ${row.original.created_by.last_name}`
-                  : 'Données non disponible'}
-              </Typography>
-            </div>
-          </div>
+          <UserCard
+          firstName={row.original.created_by.first_name}
+          lastName={row.original.created_by.last_name}
+          email={row.original.created_by.email}
+        />
         ),
       }),
       columnHelper.accessor('user.is_active', {
@@ -305,7 +300,7 @@ const UserListTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher un utilisateur'
+              placeholder='Rechercher'
               className='max-sm:is-full'
             />
             <Button

@@ -50,6 +50,7 @@ import {useAuth} from "@/contexts/AuthContext";
 import type {ClientStaffRead} from "@/services/IsyBuildApi";
 import UserClientDialog from "@components/dialogs/user-client-dialog";
 import { formatDate } from '@/utils/formatDate';
+import UserCard from '@/components/UserCard';
 
 
 declare module '@tanstack/table-core' {
@@ -204,15 +205,12 @@ const UserClientListTable = ({
       columnHelper.accessor('created_by.first_name', {
         header: 'Creé par',
         cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original.created_by
-                  ? `${row.original.created_by.first_name} ${row.original.created_by.last_name}`
-                  : 'Données non disponible'}
-              </Typography>
-            </div>
-          </div>
+          <UserCard
+          firstName={row.original.created_by.first_name}
+          lastName={row.original.created_by.last_name}
+          
+          email={row.original.created_by.email}
+        />
         )
       }),
       columnHelper.accessor('user.is_active', {

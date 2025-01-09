@@ -53,6 +53,7 @@ import Chip from '@/@core/components/mui/Chip'
 import { useAuth } from '@/contexts/AuthContext'
 import TableClientFilters from "./TableClientFilters"
 import { formatDate } from '@/utils/formatDate'
+import UserCard from '@/components/UserCard'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -236,17 +237,15 @@ const LotsListTable = ({
         ),
       }),
 
-      columnHelper.accessor('created_by.first_name', {
+      columnHelper.accessor('created_by.id', {
         header: 'Creé par',
         cell: ({ row }) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.created_by.first_name} ${row.original.created_by.last_name}`}
-              </Typography>
-            </div>
-          </div>
-        )
+        <UserCard
+          firstName={row.original.created_by.first_name}
+          lastName={row.original.created_by.last_name}
+          avatar={row.original.created_by.avatar}
+          email={row.original.created_by.email}
+        />)
       }),
 
       columnHelper.accessor('action', {

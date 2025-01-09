@@ -45,6 +45,9 @@ const SubcontractorList = () => {
       setPage(1)
     }, [pageSize, sorting, isActive,debouncedSearch,clientIds,lotIds ]);
 
+   
+    
+
   useEffect(() => {
     refetch()
   }, [page, pageSize, refetch])

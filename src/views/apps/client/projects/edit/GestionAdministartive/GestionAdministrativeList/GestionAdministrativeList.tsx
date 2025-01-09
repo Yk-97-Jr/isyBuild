@@ -52,6 +52,10 @@ const GestionAdministrativeList = () => {
   }, [pageSize, sorting, status, debouncedSearch]);
 
 
+  console.log(data);
+  
+
+
   useEffect(() => {
     refetch();
   }, [page]);

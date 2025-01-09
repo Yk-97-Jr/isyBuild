@@ -9,7 +9,7 @@ import Tabilation from './Tabilation'
 import AppeleOffre from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreList/AppeleOffre";
 import DocDiffList from './documentDiffusions/list/DocDiffList';
 import GestionAdministrativeList
-  from "@views/apps/client/projects/edit/GestionAdministartive/GestionAdministrativeList/GestionAdministrativeList";
+  from "@views/apps/admin/projects/edit/GestionAdministartive/GestionAdministrativeList/GestionAdministrativeList";
 
 import FinanceList from './Finance/list/FinanceList';
 

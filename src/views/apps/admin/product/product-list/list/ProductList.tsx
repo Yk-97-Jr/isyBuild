@@ -43,12 +43,12 @@ const ProductList = () => {
   useEffect(() => {
     refetch();
     setPage(1)
-  }, [pageSize, sorting, debouncedSearch,category, refetch]);
+  }, [pageSize, sorting, debouncedSearch,category]);
 
 
   useEffect(() => {
     refetch();
-  }, [page, refetch]);
+  }, [page, pageSize]);
 
 
   if (isLoading)
@@ -67,6 +67,8 @@ const ProductList = () => {
   const product = data?.results || []
   const countRecords = data?.count
 
+  
+  
 
   return (
 
