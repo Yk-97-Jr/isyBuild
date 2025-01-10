@@ -6,8 +6,50 @@ import type {
   SuiviAdministrativeStatusEnum,
   Status3BfEnum,
   ProjectStatusEnum,
-  DgdStatusEnum
+  DgdStatusEnum,
+  PhaseEnum,
+  StatusE51Enum,
+  Type474Enum,
+  RolesEnum
 } from "@/services/IsyBuildApi";
+
+
+
+export const PhaseStatusMapping: Record<PhaseEnum, {
+  label: string;
+  color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning';
+}> = {
+  design: { label: 'Conception', color: 'warning' },
+  execution: { label: 'Exécution', color: 'primary' },
+};
+
+export const StatusE51Mapping: Record<StatusE51Enum, {
+  label: string;
+  color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning';
+}> = {
+  favorable: { label: 'Favorable', color: 'success' },
+  sans_avis: { label: 'Sans Avis', color: 'default' },
+  avec_observation: { label: 'Avec Observation', color: 'warning' },
+  avec_observation_bloquante: { label: 'Avec Observation Bloquante', color: 'error' },
+  refuse: { label: 'Refusé', color: 'error' },
+  valid: { label: 'Validé', color: 'primary' },
+  invalid: { label: 'Invalide', color: 'error' },
+  not_validated_yet: { label: 'Non Validé', color: 'default' },
+};
+
+
+export const Type474Mapping: Record<Type474Enum, {
+  label: string;
+  color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning';
+}> = {
+  plan_technique: { label: 'Plan Technique', color: 'primary' },
+  plan_de_coffrage: { label: 'Plan de Coffrage', color: 'secondary' },
+  fiche_technique: { label: 'Fiche Technique', color: 'primary' },
+  avis_technique: { label: 'Avis Technique', color: 'success' },
+  note_de_calcul: { label: 'Note de Calcul', color: 'warning' },
+  fiche_question: { label: 'Fiche Question', color: 'warning' },
+  autre: { label: 'Autre', color: 'default' },
+};
 
 export const Status841Mapping: Record<Status841Enum, {
   label: string,
@@ -53,6 +95,19 @@ export const Status3BfMapping: Record<Status3BfEnum, {
   rejected: {label: 'Rejeté', color: 'error'},
   temporarily_done: {label: 'Temporairement terminé', color: 'success'},
 };
+
+export const RolesMapping: Record<RolesEnum, {
+  label: string,
+  color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning'
+}> = {
+  Architecte: { label: 'Architecte', color: 'primary' },
+  'Bureau de contrôle': { label: 'Bureau de contrôle', color: 'secondary' },
+  "Bureau d'étude technique": { label: "Bureau d'étude technique", color: 'success' },
+  'Coordonnateur sécurité et protection de la santé': { label: 'Coordonnateur sécurité et protection de la santé', color: 'warning' },
+  'Assistance maîtrise d’ouvrage hygiène et environnement': { label: 'Assistance maîtrise d’ouvrage hygiène et environnement', color: 'error' },
+  Client: { label: 'Client', color: 'default' },
+};
+
 export const DgdStatusMapping: Record<
   DgdStatusEnum  ,
   {

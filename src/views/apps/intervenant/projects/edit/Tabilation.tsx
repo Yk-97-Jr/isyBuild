@@ -38,12 +38,12 @@ const Tabilation = ({tabContentList}: { tabContentList: { [key: string]: ReactEl
               iconPosition='start'
               value='Gestion Administartive'
               />
-            {/* <Tab*/}
-            {/*  label='Diffusions De Documents'*/}
-            {/*  icon={<i className='tabler-file-text' />}*/}
-            {/*  iconPosition='start'*/}
-            {/*  value='Diffusions De Documents'*/}
-            {/*/>*/}
+             <Tab
+              label='Diffusions De Documents'
+              icon={<i className='tabler-file-text' />}
+              iconPosition='start'
+              value='Diffusions De Documents'
+            />
             {/* <Tab*/}
             {/*  label='Finance'*/}
             {/*  icon={<i className='tabler-report-money' />}*/}

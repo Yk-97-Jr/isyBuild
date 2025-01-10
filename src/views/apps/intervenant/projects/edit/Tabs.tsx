@@ -7,7 +7,7 @@ import MainEdit2 from './MainEdit2'
 
 import Tabilation from './Tabilation'
 
-// import DocDiffList from './documentDiffusions/list/DocDiffList';
+import DocDiffList from './documentDiffusions/list/DocDiffList';
 import GestionAdministrativeList from './GestionAdministartive/GestionAdministrativeList/GestionAdministrativeList';
 
 // import FinanceList from './Finance/list/FinanceList';
@@ -16,6 +16,7 @@ import GestionAdministrativeList from './GestionAdministartive/GestionAdministra
 const tabContentList: { [key: string]: ReactElement } = {
   'Informations Generales': <MainEdit2/>,
   'Gestion Administartive': <GestionAdministrativeList/>,
+  'Diffusions De Documents': <DocDiffList/>,
 
   // 'Diffusions De Documents': <DocDiffList />,
 
