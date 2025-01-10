@@ -6,13 +6,14 @@ import { useParams } from "next/navigation";
 
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 
 import { useRetrieveFinanceByIdQuery  } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
 import FinanceEarn from './FinanceEarn';
 import FinanceListTable from './FinanceListTable';
 import FinanceDataCard from './FinanceDataCard';
 import FinancePay from './FinancePay';
+import PaymentProgressChart from '../charts/PaymentProgressChart';
 
 const FinanceDetails = () => {
   const { financeId } = useParams() // Get subcontractorId from route parameters
@@ -36,14 +37,23 @@ const FinanceDetails = () => {
     )
 
   return (
-   
-      <Grid container spacing={6}>
+   <>
+    <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
+      
+      <Typography variant='h4' className='mbe-4'>
+          {`Gestion finance pour le Lot: ${data?.project_lot.lot.name}`}
+      </Typography>
+    </div>
+           <Grid container spacing={6}>
         <Grid item xs={12}>
         </Grid>
         <Grid item xs={12} md={8.5}>
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <FinanceListTable isFetching={isFetching} data={data?.finance_enterprises}/>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <PaymentProgressChart  final_amount={data?.total_final_amount} payment_cumulated={data?.payment_cumulated} />
             </Grid>
           </Grid>
         </Grid>
@@ -62,6 +72,7 @@ const FinanceDetails = () => {
         </Grid>
       </Grid>
    
+   </>
   )
 }
 

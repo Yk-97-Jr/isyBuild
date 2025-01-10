@@ -8,7 +8,6 @@ export const getStatusProps = <T extends string>(
     return { label: 'Unknown', color: 'default' };
   }
 
-  console.log(status)
 
   return statusMapping[status] || { label: 'Unknown', color: 'default' };
 };

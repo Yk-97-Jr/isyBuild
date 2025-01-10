@@ -51,6 +51,7 @@ import AddLotSub
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/AddLotSub";
 import DeleteLotSub
   from "@views/apps/admin/projects/edit/AppeleOffre/AppeleOffreDetails/AppeleOffreSubcontractor/dialogs/DeleteLotSub";
+import { formatDate } from '@/utils/formatDate';
 
 
 declare module '@tanstack/table-core' {
@@ -169,14 +170,12 @@ const LotsSubListTable = ({
         )
       }),
       columnHelper.accessor('created_at', {
-        header: 'Date de Creation',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
 
       columnHelper.accessor('status', {

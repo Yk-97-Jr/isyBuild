@@ -30,9 +30,12 @@ import { Chip, CircularProgress} from '@mui/material'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import type { DiffusionIntervenantRead } from '@/services/IsyBuildApi';
+import type { DiffusionIntervenantRead, StatusE51Enum } from '@/services/IsyBuildApi';
 import CustomAvatar from '@/@core/components/mui/Avatar';
 import { getInitials } from '@/utils/getInitials';
+import { getStatusProps } from '@/utils/statusHelper'
+import { StatusE51Mapping } from '@/utils/statusEnums'
+import { formatDate } from '@/utils/formatDate'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -104,17 +107,14 @@ const DiffusionTable = ({
         )
       }),
       columnHelper.accessor('last_notification_date', {
-        header: 'dernière notification',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.last_notification_date}`}
-              </Typography>
-            </div>
-          </div>
-        )
+        header: `dernière notification`,
+        cell: ({ row }) => (
+          <Typography>
+             {formatDate(row.original.last_notification_date)} 
+          </Typography>
+        ),
       }),
+      
       columnHelper.accessor('notifications_sent', {
         header: 'notifications envoyées',
         cell: ({row}) => (
@@ -129,15 +129,17 @@ const DiffusionTable = ({
       }),
       columnHelper.accessor('status', {
         header: 'status ',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
         
-              <Chip label={row.original.status} color="primary" variant='tonal' />
-              
-            </div>
-          </div>
-        )
+          cell: ({row}) => {
+                            const {label, color} = getStatusProps<StatusE51Enum>(row.original.status, StatusE51Mapping);
+                  
+                            return <Chip variant="tonal" label={label}
+                                         color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"}
+                                         size='small' 
+                        sx={{ fontWeight: 'small' }} 
+                        />;
+                          }
+        
       }),
      
     

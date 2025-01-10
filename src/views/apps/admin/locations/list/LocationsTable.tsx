@@ -33,7 +33,7 @@ import type {RankingInfo} from '@tanstack/match-sorter-utils'
 
 // Type Imports
 
-import {CircularProgress} from '@mui/material'
+import {Chip, CircularProgress} from '@mui/material'
 
 import TablePaginationComponent from '@components/TablePaginationComponent'
 
@@ -46,6 +46,7 @@ import tableStyles from '@core/styles/table.module.css'
 import {useAuth} from "@/contexts/AuthContext";
 import type { LocalisationRead } from '@/services/IsyBuildApi';
 import LocationDialog from '@/components/dialogs/locations-dialog';
+import { formatDate } from '@/utils/formatDate';
 
 
 
@@ -176,28 +177,29 @@ const LocationsTable = ({
         )
       }),
 
-      columnHelper.accessor('client', {
+      columnHelper.accessor('client.name', {
         header: 'client',
         cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.client}`}
-              </Typography>
-            </div>
-          </div>
+          <>
+          {row.original?.client?.name ? (
+           
+            <Chip variant='tonal' label={row.original?.client?.name} color='primary' size="small"
+            className="text-sm px-2" />
+          ) : (
+            <Chip variant='tonal' label={'Aucun client disponible'} color='secondary' size="small"
+            className="text-sm px-2"/>
+          )}
+        </>
         )
       }),
 
       columnHelper.accessor('created_at', {
-        header: 'Date de Creation',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('created_by.first_name', {
         header: 'Creé par',

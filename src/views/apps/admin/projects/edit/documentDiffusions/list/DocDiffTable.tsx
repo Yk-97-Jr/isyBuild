@@ -47,15 +47,18 @@ import CustomTextField from '@core/components/mui/TextField'
 import tableStyles from '@core/styles/table.module.css'
 
 import {useAuth} from "@/contexts/AuthContext";
-import type { DocumentDiffusionRead } from '@/services/IsyBuildApi';
+import type { DocumentDiffusionRead, PhaseEnum, StatusE51Enum, Type474Enum } from '@/services/IsyBuildApi';
 import DocumentDialog from '@/components/dialogs/doc-diff-dialog';
 import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElementClick';
 import ConfigAddDialog from '../config/ConfigAddDialog';
+import { getStatusProps } from '@/utils/statusHelper';
+import { PhaseStatusMapping, StatusE51Mapping, Type474Mapping } from '@/utils/statusEnums';
+import { formatDate } from '@/utils/formatDate';
 
 const buttonProps: ButtonProps = {
   variant: 'contained',
   children: 'Configs',
-  startIcon: <i className='tabler-plus' />
+  startIcon: <i className='tabler-settings-plus' />
 }
 
 
@@ -204,18 +207,7 @@ const DocDiffTable = ({
         )
       }),
 
-      columnHelper.accessor('type', {
-        header: 'Type ',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.type}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+     
 
       columnHelper.accessor('localisation.name', {
         header: 'emplacements ',
@@ -229,36 +221,6 @@ const DocDiffTable = ({
           </div>
         )
       }),
-
-      columnHelper.accessor('status', {
-        header: 'status',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.status}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
-
-
-      columnHelper.accessor('document.id', {
-        header: 'document',
-        cell: ({ row }) => (
-          <div className='flex items-center gap-1'>
-            <Chip
-              label={row.original.document?.id ? ' Existé' : 'Non existé'} // Display appropriate label
-              color={row.original.document?.id ? 'success' : 'error'} // Green for exists, red for not exists
-              variant='tonal' // Optional, for styling
-              size='small' // Adjust the size
-              sx={{ fontWeight: 'medium' }} // Additional styling
-            />
-          </div>
-        ),
-      }),
-      
       columnHelper.accessor('indice', {
         header: 'indice',
         cell: ({ row }) => (
@@ -272,15 +234,73 @@ const DocDiffTable = ({
         ),
       }),
 
+      columnHelper.accessor('type', {
+        header: 'Type ',
+        cell: ({row}) => {
+          const {label, color} = getStatusProps<Type474Enum>(row.original.type, Type474Mapping);
+
+          return <Chip variant="tonal" label={label}
+                       color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"} size='small' 
+                       sx={{ fontWeight: 'small' }} />;
+        }
+      }),
+
+      columnHelper.accessor('phase', {
+        header: 'Phase',
+        cell: ({ row }) => {
+          // Assuming PhaseEnum and PhaseMapping are already defined
+          const { label, color } = getStatusProps<PhaseEnum>(row.original.phase, PhaseStatusMapping);
+          
+          return (
+            <Chip 
+              variant="tonal" 
+              label={label} 
+              color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"} 
+              size='small' 
+              sx={{ fontWeight: 'small' }} />
+          );
+        },
+      }),
+
+      columnHelper.accessor('status', {
+        header: 'status',
+        cell: ({row}) => {
+                  const {label, color} = getStatusProps<StatusE51Enum>(row.original.status, StatusE51Mapping);
+        
+                  return <Chip variant="tonal" label={label}
+                               color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"}
+                               size='small' 
+              sx={{ fontWeight: 'small' }} 
+              />;
+                }
+      }), 
+
+
+      columnHelper.accessor('document.id', {
+        header: 'document',
+        cell: ({ row }) => (
+          <div className='flex items-center gap-1'>
+            <Chip
+              label={row.original.document?.id ? ' Existé' : 'Non existé'} // Display appropriate label
+              color={row.original.document?.id ? 'success' : 'error'} // Green for exists, red for not exists
+              variant='tonal' // Optional, for styling
+              size='small' // Adjust the size
+              sx={{ fontWeight: 'small' }} // Additional styling
+            />
+          </div>
+        ),
+      }),
+      
+      
+
+
       columnHelper.accessor('diffusion_date', {
-        header: 'Date de diffusion',
-        cell: ({row}) => (
+        header: `Date de diffusion`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.diffusion_date
-              ? `${new Date(row.original.diffusion_date).toLocaleDateString()} ${new Date(row.original.diffusion_date).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.diffusion_date)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('action', {
         header: 'Action',

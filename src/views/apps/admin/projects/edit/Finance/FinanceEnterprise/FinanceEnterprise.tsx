@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
-import { CircularProgress } from '@mui/material'
+import {  CircularProgress, Typography } from '@mui/material'
 
 import {  useRetrieveFinanceEnterpriseByIdQuery  } from '@/services/IsyBuildApi' // Query to fetch Subcontractor data
 import EnterpriseDetails from './EnterpriseDetails';
@@ -16,6 +16,7 @@ import AdditionalWorkList from './AdditionalWork/list/AdditionalWorkList';
 import FEDataCard from './FEDataCard';
 import Payment from './Payment';
 import { RefetchProvider } from '@/contexts/RefetchContextProvider';
+import PaymentProgressChart from '../charts/PaymentProgressChart';
 
 const FinanceEnterprise = () => {
   const {   idFe} = useParams() // Get subcontractorId from route parameters
@@ -48,7 +49,13 @@ const FinanceEnterprise = () => {
 
   return (
     <RefetchProvider refetch={refetch}>
-
+     
+      <div className='flex flex-wrap sm:items-center justify-between max-sm:flex-col gap-6'>
+      
+        <Typography variant='h4' className='mbe-4'>
+            {`Gestion finance pour l'Enterprise: ${data?.subcontractor.name}`}
+        </Typography>
+      </div>
       <Grid container spacing={6}>
         <Grid item xs={12} md={8.5}>
           <Grid container spacing={6}>
@@ -57,6 +64,12 @@ const FinanceEnterprise = () => {
             </Grid>
             <Grid item xs={12}>
               <AdditionalWorkList  />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <PaymentProgressChart  final_amount={data?.final_amount} payment_cumulated={data?.payment_cumulated} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+            
             </Grid>
           </Grid>
         </Grid>
@@ -69,7 +82,7 @@ const FinanceEnterprise = () => {
               <FEDataCard  data={data}/>
             </Grid>
             <Grid item xs={12}>
-              <Payment  data={data}/>
+              <Payment  data={data} refetch={refetch}/>
             </Grid>
           </Grid>
         </Grid>

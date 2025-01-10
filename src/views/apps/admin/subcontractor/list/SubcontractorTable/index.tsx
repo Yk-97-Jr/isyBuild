@@ -54,6 +54,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import TableFilters from '../TableFilters'
 import TableClientFilters from '../TableClientFilters'
 import TableLotsFilters from '../TableLotsFilters'
+import { formatDate } from '@/utils/formatDate'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -210,7 +211,14 @@ const SubcontractorTable = ({
           const clientNames = clients.map(client => client.name || 'Nom du client indisponible');
       
           if (clients.length === 0) {
-            return <Typography color="text.secondary">Aucun client disponible</Typography>;
+            return <Chip
+            label="Aucun client disponible"
+            variant='tonal'
+            color="secondary"
+            size="small"
+            className="text-sm"
+          />;
+        
           }
       
           // Function to group names into lines based on total character count (26 max per line)
@@ -253,6 +261,7 @@ const SubcontractorTable = ({
                     <Chip
                       key={nameIndex}
                       label={clientName}
+                      variant='tonal'
                       color="primary"
                       size="small"
                       className="text-sm"
@@ -285,12 +294,10 @@ const SubcontractorTable = ({
       columnHelper.accessor('created_at', {
         header: `Date de Creation`,
         cell: ({ row }) => (
-          <>
-            <Typography>
-              {row.original.created_at ? new Date(row.original.created_at).toLocaleString() : 'Date not available'}
-            </Typography>
-          </>
-        )
+          <Typography>
+             {formatDate(row.original.created_at)} 
+          </Typography>
+        ),
       }),
       columnHelper.accessor('is_active', {
         header: 'Status',

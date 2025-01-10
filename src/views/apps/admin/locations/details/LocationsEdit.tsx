@@ -27,6 +27,7 @@ import { schemaLocationsEdit } from '@/views/apps/admin/locations/details/schema
 import { useLocalisationDetailQuery, useLocalisationUpdateMutation } from '@/services/IsyBuildApi'
 import LocationsEditHeader from './LocationsEditHeader'
 import LocationsEditInfo from './locationsEditInfo'
+import ClinetCard from './ClientCard'
 
 const LocationsEdit = () => {
   const {
@@ -100,6 +101,9 @@ const LocationsEdit = () => {
           <Grid container spacing={6}>
             <Grid item xs={12}>
               <LocationsCreatedBy locationData={locationData} />
+            </Grid>
+            <Grid item xs={12}>
+              <ClinetCard client={locationData?.client.name} />
             </Grid>
           </Grid>
         </Grid>

@@ -23,7 +23,7 @@ const DocDiffModifyHeader: React.FC<DocDiffModifyHeaderProps> = ({ onSubmit, isL
 
   // Redirect to the document diffusion list on cancel
   const handleDiscard = () => {
-    const redirectUrl = `/${userRole}/projects/${edit}/details`;
+    const redirectUrl = `/${userRole}/projects/${edit}/details?tab=Diffusions%20De%20Documents`;
     
     router.push(redirectUrl);
   };

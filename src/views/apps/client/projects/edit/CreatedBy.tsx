@@ -1,61 +1,17 @@
-import React from 'react'
+import type {ProjectRead} from "@/services/IsyBuildApi";
+import CreatedByCard from '@/components/CreatedByCard'
 
-// import Card from '@mui/material/Card'
-import { Card, CardHeader, CardContent, Divider, Typography ,CircularProgress} from '@mui/material'
-
-
-
-import type{ ProjectRead } from '@/services/IsyBuildApi'
-
-
-
-interface CreatedByProps {
-  projectState: ProjectRead
-  setProjectState: (value: any) => void
-  isLoading: boolean
+type Props = {
+  projectState: ProjectRead | undefined // Adjust the type as necessary
 }
 
-function CreatedBy({ projectState, isLoading }: CreatedByProps) {
-  if (isLoading || !projectState || !projectState.created_by) {
-    return <CircularProgress />
-  }
+
+const CreatedBy: React.FC<Props> = ({ projectState }) => {
+  // Vars
 
   return (
-    <Card>
-      <CardHeader title='Détails De Création' />
-      <CardContent>
-        <Typography variant='subtitle2' className='mt-4' fontWeight='normal'>
-          Créé pare:
-        </Typography>
-        <Divider className='mlb-2' sx={{ height: '1px', width: '50%', marginLeft: '0' }} />
-        <>
-          <Typography variant='h6' fontWeight='bold'>
-            Client Name:{` ${projectState.created_by.first_name}  ${projectState.created_by.last_name}`}
-          </Typography>
-          <Typography variant='h6' className='font-medium' color='text.primary'>
-            Client Email: {projectState.client.contact_email}
-          </Typography>
+    <CreatedByCard createdBy={projectState?.created_by} created_at={projectState?.created_at} updated_at={projectState?.updated_at}/>
 
-          <Typography variant='subtitle2' className='mt-4' fontWeight='normal'>
-            Plus De Détails
-          </Typography>
-          <Divider className='mlb-2' sx={{ height: '1px', width: '50%', marginLeft: '0' }} />
-
-          <div className='flex flex-col gap-2'>
-            <div className='flex items-center flex-wrap gap-x-1.5'>
-              <Typography className='font-medium' color='text.primary'>
-                Créé à: {new Date(projectState.created_at).toLocaleString()}
-              </Typography>
-            </div>
-            <div className='flex items-center flex-wrap gap-x-1.5'>
-              <Typography className='font-medium' color='text.primary'>
-                Mise à jour à: {new Date(projectState.updated_at).toLocaleString()}
-              </Typography>
-            </div>
-          </div>
-        </>
-      </CardContent>
-    </Card>
   )
 }
 

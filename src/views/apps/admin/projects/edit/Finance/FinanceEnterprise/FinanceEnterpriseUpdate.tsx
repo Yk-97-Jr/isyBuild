@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import { useParams } from 'next/navigation';
 
 import DialogTitle from '@mui/material/DialogTitle'
 
 import Dialog from '@mui/material/Dialog'
-import { Button, CircularProgress, DialogActions, Grid, MenuItem,  } from '@mui/material';
+import { Button, CircularProgress, DialogActions, Grid,  } from '@mui/material';
 import DialogContent from '@mui/material/DialogContent'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -18,7 +18,7 @@ import { SnackBarContext } from '@/contexts/SnackBarContextProvider';
 import type { SnackBarContextType } from '@/types/apps/snackbarType';
 import CustomTextField from '@core/components/mui/TextField'
 import DialogCloseButton from '@/components/dialogs/DialogCloseButton';
-import { DgdStatusMapping } from '@/utils/statusEnums';
+
 
 
 
@@ -29,18 +29,7 @@ type AddFinanceSituationContentProps = {
   
   }
 
-  const dgdStatusEnum = [
-    "regle",
-    "valide",
-    "valide_bloque_jp",
-    "etabli_non_signe_ets",
-    "en_attente_moex",
-    "en_attente_levee_reserves",
-    "valide_a_zero",
-    "signe_par_ets_attente_jp",
-    "refuse_par_amo",
-    "abandon",
-  ] as const;
+ 
   
   const schemaFinanceEnterpriseUpdate = yup.object({
     total_contract: yup
@@ -78,18 +67,34 @@ type AddFinanceSituationContentProps = {
         "La garantie de rétention doit être un nombre valide avec jusqu'à deux décimales"
       )
       .nullable(),
-    caution:yup.string().notRequired()
-      .nullable(),
-    dgd_status: yup
-      .mixed()
-      .oneOf(dgdStatusEnum, "Le statut DGD doit être une valeur valide")
-      .nullable(),
+    
   }).required();
 
 const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSituationContentProps) => {
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+
+  const {idFe} = useParams()
+  
+  const {data} = useRetrieveFinanceEnterpriseByIdQuery({financeEnterpriseId:+idFe});
+  
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: async () => {
+      // Wait for data to be fetched and return default values
+      if (!data) return {};
+
+      return {
+      
+        cie: data.cie || '',
+     
+        retention_guarantee: data.retention_guarantee || '',
+        total_contract: data.total_contract || '',
+        total_ts_choix: data.total_ts_choix || '',
+        total_ts_tma: data.total_ts_tma || '',
+      };
+    },
     resolver: yupResolver(schemaFinanceEnterpriseUpdate),
   });
+
+ 
 
   const handleClose = () => {
     setOpen(false)
@@ -105,16 +110,13 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
 
   
   
-  const {idFe} = useParams()
-  
-  const {data} = useRetrieveFinanceEnterpriseByIdQuery({financeEnterpriseId:+idFe});
   
   const [updateFinanceEnterprise , { isLoading}] = useUpdateFinanceEnterpriseMutation();
 
 
   const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType; 
 
-
+/* 
   useEffect(() => {
     if (data) {
       setValue('caution', data.caution || '');
@@ -125,7 +127,7 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
       setValue("total_ts_choix", data.total_ts_choix|| '')
       setValue("total_ts_tma", data.total_ts_tma|| '')
     }
-  }, [data, setValue]);
+  }, [data, setValue]); */
  
 
   const onSubmit = async (data:any) => {
@@ -210,7 +212,7 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
         fullWidth
         /> 
         </Grid>
-        <Grid item xs={12} sm={6} >
+        <Grid item xs={12} >
 
        <CustomTextField
         label="Retention guarantee"
@@ -220,37 +222,10 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
         fullWidth
         /> 
         </Grid>
-        <Grid item xs={12} sm={6} >
+      
 
-       <CustomTextField
-        label="Caution"
-        {...register('caution')}
-        error={!!errors.caution}
-        helperText={errors.caution?.message}
-        fullWidth
-        /> 
-        </Grid>
-        <Grid item xs={12}  >
-
-                    <CustomTextField
-              select
-              fullWidth
-              label="DGD "
-              defaultValue=""
-              {...register('dgd_status')}
-              error={!!errors.dgd_status}
-              helperText={errors.dgd_status?.message}
-              >
-              <MenuItem value="">
-                <em>Sélectionnez un status</em>
-              </MenuItem>
-              {Object.entries(DgdStatusMapping).map(([key, {label}]) => (
-                <MenuItem key={key} value={key}>
-                          {label}
-                        </MenuItem>
-                      ))}
-            </CustomTextField>
-                      </Grid>
+   
+        
       
       </Grid>
     
@@ -262,7 +237,7 @@ const UpdateFinanceEnterpriseContent = ({ open, setOpen,refetch }: AddFinanceSit
           color="primary"
           disabled={isLoading}
         >
-          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Ajouter'}
+          {isLoading ? <CircularProgress sx={{ color: 'white' }} size={24} /> : 'Modify'}
         </Button>
         <Button
          onClick={handleClose}

@@ -18,9 +18,13 @@ import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElement
 import UpdateFinanceEnterpriseContent from './FinanceEnterpriseUpdate'
 import LabeledData from '@/components/LabledData'
 
+type AddFinanceSituationContentProps = {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  refetch: () => void;
+};
 
-
-const ActionButton = ({ refetch }: { refetch: () => void }) => {
+export const  ActionButton = ({ refetch, ContentData }: { refetch: () => void; ContentData:React.ComponentType<AddFinanceSituationContentProps>; }) => {
   const buttonProps: ButtonProps = {
     variant: 'contained',
     children: 'Modifier',
@@ -31,7 +35,7 @@ const ActionButton = ({ refetch }: { refetch: () => void }) => {
     <OpenFinanceOnElementClick
       element={Button}
       elementProps={buttonProps}
-      dialog={UpdateFinanceEnterpriseContent}
+      dialog={ContentData}
       dialogProps={{ refetch }}
     />
   )
@@ -58,9 +62,9 @@ const FinanceEarn = () => {
         <LabeledData label="Cie" value={`${data?.cie }€`} />
         <LabeledData label="Retenue garantie" value={`${data?.retention_guarantee }€`} />
         <Divider/>
-        <LabeledData label="Marches+Ts+Cie-Proratat-Rg" value={`${data?.final_amount }€`} />
+        <LabeledData label="Total" value={`${data?.final_amount }€`} />
         <div className='flex justify-center '>
-          <ActionButton refetch={refetch} />
+          <ActionButton refetch={refetch} ContentData={UpdateFinanceEnterpriseContent}/>
         </div>
       </CardContent>
     </Card>

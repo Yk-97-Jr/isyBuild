@@ -46,6 +46,7 @@ import tableStyles from '@core/styles/table.module.css'
 import type {ProductMediaRead, ProductRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
 import TableCategoryFilters from './TableCategoryFilters';
+import { formatDate } from '@/utils/formatDate';
 
 
 declare module '@tanstack/table-core' {
@@ -192,21 +193,23 @@ const ProductTable = ({
             <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.description} `}
+              {row.original.description 
+            ? `${row.original.description.length > 50
+                ? `${row.original.description.substring(0, 50)}...`
+                : row.original.description}`
+            : 'Aucune description '}
               </Typography>
             </div>
           </div>
         )
       }),
       columnHelper.accessor('created_at', {
-        header: 'Créé à',
-        cell: ({row}) => (
+        header: `Date de Creation`,
+        cell: ({ row }) => (
           <Typography>
-            {row.original.created_at
-              ? `${new Date(row.original.created_at).toLocaleDateString()} ${new Date(row.original.created_at).toLocaleTimeString()}`
-              : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
       columnHelper.accessor('action', {
         header: 'Action',

@@ -28,7 +28,7 @@ const CategoryAddHeader = ({ onSubmit, isLoading }: { onSubmit: () => void; isLo
     if (returnTo) {
       router.push(`/${returnTo}`); // Redirect to the "returnTo" URL
     } else {
-      router.push(`/${userRole}/product/list`); // Default fallback URL
+      router.push(`/${userRole}/product/list?tab=categorylist`); // Default fallback URL
     }   
   }
 

@@ -52,6 +52,7 @@ import Chip from '@/@core/components/mui/Chip'
 
 import { useAuth } from '@/contexts/AuthContext'
 import TableClientFilters from "./TableClientFilters"
+import { formatDate } from '@/utils/formatDate'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -199,9 +200,13 @@ const LotsListTable = ({
         cell: ({ row }) => (
           <>
             {row.original?.client?.name ? (
-              <span>{row.original?.client?.name}</span>
+             
+              <Chip variant='tonal' label={row.original?.client?.name} color='primary' size="small"
+              className="text-sm px-2" />
             ) : (
-              <Chip variant='tonal' label={'Default'} color='secondary' className='px-2' />
+              <Chip variant='tonal' label={'Aucun client disponible'} color='secondary' 
+              size="small"
+              className="text-sm px-2"/>
             )}
           </>
         )
@@ -226,9 +231,9 @@ const LotsListTable = ({
         header: `Date de Creation`,
         cell: ({ row }) => (
           <Typography>
-            {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : 'Date not available'}
+             {formatDate(row.original.created_at)} 
           </Typography>
-        )
+        ),
       }),
 
       columnHelper.accessor('created_by.first_name', {

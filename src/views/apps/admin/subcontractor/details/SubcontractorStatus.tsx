@@ -47,12 +47,13 @@ const SubcontractorStatus: React.FC<CombinedComponentProps> = ({
     selectedLotIds,
     subcontractorData
 }) => {
-    const [isSelectOpen, setIsSelectOpen] = useState(false);
+
     const [page, setPage] = useState(1);
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [lots, setLots] = useState<any[]>([]);
     const { data } = useLotsRetrieveQuery({ page, pageSize: 20 });
     const observer = useRef<IntersectionObserver | null>(null);
+    
 
     useEffect(() => {
         if (selectedLotIds && selectedLotIds.length) {
@@ -94,12 +95,14 @@ const SubcontractorStatus: React.FC<CombinedComponentProps> = ({
         setValue('lots_ids', selectedId); // Ensure the form state is updated
     };
 
-    console.log( "message",subcontractorData?.is_active );
+    const handleDelete = (id: number) => {
+        setSelectedIds((prev) => prev.filter((selectedId) => selectedId !== id));
+        setValue('lots_ids', selectedIds.filter((selectedId) => selectedId !== id)); // Update form state
+      };
 
     return (
         <Card className='mbe-1'
             sx={{
-                height: isSelectOpen ? '500px' : '266px', 
                 transition: 'height 0.3s ease',
                 display: 'flex',
                 flexDirection: 'column'
@@ -111,7 +114,7 @@ const SubcontractorStatus: React.FC<CombinedComponentProps> = ({
                         <CustomTextField
                             select
                             fullWidth
-                            label=''
+                            label='Lot'
                             value={selectedIds} // Use selectedIds here
                             id='lots_ids'
                             {...register('lots_ids')}
@@ -119,15 +122,13 @@ const SubcontractorStatus: React.FC<CombinedComponentProps> = ({
                                 multiple: true,
                                 MenuProps,
                                 onChange: handleChange,
-                                onOpen: () => setIsSelectOpen(true),
-                                onClose: () => setIsSelectOpen(false),
                                 renderValue: (selected) => (
                                     <div className='flex flex-wrap gap-1'>
                                         {(selected as number[]).map((value) => {
                                             const lot = lots.find((lot) => lot.id === value);
 
                                             
-return lot ? <Chip key={value} label={lot.name} size='small' /> : null;
+return lot ? <Chip key={value} clickable label={lot.name} onMouseDown={(event) => event.stopPropagation()} size='small'  onDelete={() => handleDelete(lot.id)}/> : null;
                                         })}
                                     </div>
                                 ),
