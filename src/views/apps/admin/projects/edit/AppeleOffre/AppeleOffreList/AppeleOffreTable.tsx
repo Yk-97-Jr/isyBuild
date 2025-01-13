@@ -193,27 +193,15 @@ const AppeleOffreTable = ({
           </Typography>
         ),
       }),
-      columnHelper.accessor('created_by', {
-        header: 'Creé par',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original.created_by
-                  ? `${row.original.created_by.first_name} ${row.original.created_by.last_name}`
-                  : 'Données non disponible'}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+      
+      
       columnHelper.accessor('status', {
         header: 'status',
         cell: ({row}) => (
           <Chip
-            variant='tonal'
-            label={row.original.status ? row.original.status : 'completed'}
-            color={row.original.status ? 'warning' : 'secondary'}
+          variant='tonal'
+          label={row.original.status ? row.original.status : 'completed'}
+          color={row.original.status ? 'warning' : 'secondary'}
           />
         )
       }),
@@ -221,13 +209,14 @@ const AppeleOffreTable = ({
         header: 'DOCUMENT TELECHARGÉ',
         cell: ({row}) => (
           <Chip
-            variant='tonal'
-            label={row.original.folder && row.original.folder.documents.length > 0 ? 'Existé' : 'Non existé'}
-            color={row.original.folder && row.original.folder.documents.length > 0 ? 'success' : 'error'}
+          variant='tonal'
+          label={row.original.folder && row.original.folder.documents.length > 0 ? 'Existé' : 'Non existé'}
+          color={row.original.folder && row.original.folder.documents.length > 0 ? 'success' : 'error'}
           />
-
+          
         )
       }),
+      
       columnHelper.accessor('action', {
         header: 'Action',
         cell: ({row}) => (

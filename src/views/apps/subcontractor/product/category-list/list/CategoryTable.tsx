@@ -46,6 +46,7 @@ import tableStyles from '@core/styles/table.module.css'
 import type {CategoryRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
 import { formatDate } from '@/utils/formatDate';
+import UserCard from '@/components/UserCard';
 
 
 declare module '@tanstack/table-core' {
@@ -196,6 +197,17 @@ const CategoryTable = ({
              {formatDate(row.original.created_at)} 
           </Typography>
         ),
+      }),
+      columnHelper.accessor('created_by.first_name', {
+        header: 'Creé par',
+        cell: ({row}) => (
+          <UserCard
+          firstName={row.original.created_by.first_name}
+          lastName={row.original.created_by.last_name}
+          avatar={row.original.created_by.avatar}
+          email={row.original.created_by.email}
+        />
+        )
       }),
       columnHelper.accessor('action', {
         header: 'Action',

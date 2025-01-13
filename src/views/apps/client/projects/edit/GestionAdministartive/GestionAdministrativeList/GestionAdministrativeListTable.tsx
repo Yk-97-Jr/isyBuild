@@ -193,20 +193,18 @@ const GestionAdministrativeListTable = ({
           </Typography>
         )
       }),
-      columnHelper.accessor('created_by', {
+
+      /* columnHelper.accessor('created_by.first_name', {
         header: 'Creé par',
         cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original.created_by
-                  ? `${row.original.created_by.first_name} ${row.original.created_by.last_name}`
-                  : 'Données non disponible'}
-              </Typography>
-            </div>
-          </div>
+          <UserCard
+          firstName={row.original.created_by?.first_name}
+          lastName={row.original.created_by?.last_name}
+          avatar={row.original.created_by?.avatar}
+          email={row.original.created_by?.email}
+        />
         )
-      }),
+      }), */
       columnHelper.accessor('status', {
         header: 'status',
         cell: ({row}) => {

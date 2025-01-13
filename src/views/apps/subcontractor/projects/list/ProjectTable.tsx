@@ -44,6 +44,7 @@ import tableStyles from '@core/styles/table.module.css'
 import type {ProjectSubcontractorRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
 import { formatDate } from '@/utils/formatDate';
+import UserCard from '@/components/UserCard';
 
 
 declare module '@tanstack/table-core' {
@@ -166,23 +167,18 @@ const ProjectTable = ({
           </div>
         )
       }),
-
       columnHelper.accessor('client.name', {
         header: `clients`,
         cell: ({row}) => (
-            <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.client.name} `}
-              </Typography>
-              <Typography color='text.secondery' >
-                {`${row.original.client.contact_email} `}
-              </Typography>
-              
-            </div>
-          </div>
+          <UserCard
+          firstName={row.original.client.name}
+          lastName=""
+          
+          email={row.original.client.contact_email}
+        />
         )
       }),
+      
       columnHelper.accessor('created_at', {
         header: `Date de Creation`,
         cell: ({ row }) => (

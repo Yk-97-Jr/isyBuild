@@ -53,6 +53,7 @@ import type {ClientRead} from '@/services/IsyBuildApi'
 
 import {useAuth} from '@/contexts/AuthContext'
 import { formatDate } from '@/utils/formatDate'
+import UserCard from '@/components/UserCard'
 import TableFilters from "@views/apps/admin/clients/list/TableFilters";
 
 declare module '@tanstack/table-core' {
@@ -172,13 +173,12 @@ const ClientListTable = ({
       columnHelper.accessor('name', {
         header: 'Nom',
         cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.name}`}
-              </Typography>
-            </div>
-          </div>
+          <UserCard
+          firstName={row.original.name}
+          lastName=" "
+          
+          email={row.original.contact_email}
+        />
         )
       }),
       columnHelper.accessor('siren_number', {
@@ -193,18 +193,7 @@ const ClientListTable = ({
           </div>
         )
       }),
-      columnHelper.accessor('contact_email', {
-        header: 'Email',
-        cell: ({row}) => (
-          <div className='flex items-center gap-4'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.contact_email}`}
-              </Typography>
-            </div>
-          </div>
-        )
-      }),
+      
       columnHelper.accessor('phone_number', {
         header: 'Numéro de Telephone',
         cell: ({row}) => (

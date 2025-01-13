@@ -31,8 +31,6 @@ import { Chip, CircularProgress, IconButton} from '@mui/material'
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
 import type { DiffusionIntervenantRead, StatusE51Enum } from '@/services/IsyBuildApi';
-import CustomAvatar from '@/@core/components/mui/Avatar';
-import { getInitials } from '@/utils/getInitials';
 import { getStatusProps } from '@/utils/statusHelper'
 import { StatusE51Mapping } from '@/utils/statusEnums'
 
@@ -40,6 +38,7 @@ import OpenFinanceOnElementClick from '@/components/dialogs/OpenFinanceOnElement
 import AddCommentContent from '../DocumentDiffusionComments/AddCommentDialog'
 import ListCommentContent from '../CommentList/ListCommentDialog'
 import { formatDate } from '@/utils/formatDate'
+import UserCard from '@/components/UserCard'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -89,18 +88,12 @@ const DiffusionTable = ({
       columnHelper.accessor('project_intervenant.intervenant.user.id', {
         header: 'intervenant',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3'>
-            {getAvatar({ avatar: row.original.project_intervenant.intervenant.user.avatar, customer: row.original.project_intervenant.intervenant.user.first_name })}
-            <div className='flex flex-col'>
-              <Typography
-                color='text.primary'
-                className='font-medium '
-              >
-                {row.original.project_intervenant.intervenant.user.last_name } {row.original.project_intervenant.intervenant.user.first_name}
-              </Typography>
-              <Typography variant='body2'>{row.original.project_intervenant.intervenant.user.email}</Typography>
-            </div>
-          </div>
+          <UserCard
+          firstName={row.original.project_intervenant.intervenant.user.first_name}
+          lastName={row.original.project_intervenant.intervenant.user.last_name}
+          avatar={row.original.project_intervenant.intervenant.user.avatar}
+          email={row.original.project_intervenant.intervenant.user.email}
+        />
         )
       }),
       columnHelper.accessor('project_intervenant.intervenant.role', {
@@ -220,19 +213,7 @@ const DiffusionTable = ({
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-  const getAvatar = (params: { avatar: any; customer: any; }) => {
-    const { avatar, customer } = params
-
-    if (avatar) {
-      return <CustomAvatar src={avatar} skin='light' size={34} />
-    } else {
-      return (
-        <CustomAvatar skin='light' size={34}>
-          {getInitials(customer as string)}
-        </CustomAvatar>
-      )
-    }
-  }
+ 
 
   return (
     <>

@@ -186,7 +186,7 @@ const LotsSubListTable = ({
           return <Chip variant="tonal" label={label}
                        color={color as "default" | "primary" | "secondary" | "error" | "success" | "warning" | "info"}/>;
         }
-
+        
       }),
       columnHelper.accessor('action', {
         header: 'Action',

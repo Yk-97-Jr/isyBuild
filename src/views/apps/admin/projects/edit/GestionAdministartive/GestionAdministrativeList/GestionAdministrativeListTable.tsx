@@ -56,6 +56,7 @@ import TableFilters
 import { formatDate } from '@/utils/formatDate';
 
 
+
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>
@@ -192,20 +193,20 @@ const GestionAdministrativeListTable = ({
           </Typography>
         ),
       }),
-      columnHelper.accessor('created_by', {
-        header: 'Creé par',
-        cell: ({row}) => (
-          <div className='flex items-center gap-1'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {row.original.created_by
-                  ? `${row.original.created_by.first_name} ${row.original.created_by.last_name}`
-                  : 'Données non disponible'}
-              </Typography>
-            </div>
-          </div>
+
+     /*  columnHelper.accessor("created_by",{
+        header: 'Crée par',
+        cell:({row}) => (
+          <UserCard
+          firstName={row.original.created_by.first_name}
+          lastName={row.original.created_by.last_name}
+          avatar={row.original.created_by.avatar}
+          email={row.original.created_by.email}
+        />
         )
-      }),
+      }), */
+
+
       columnHelper.accessor('status', {
         header: 'status',
         cell: ({row}) => {
@@ -288,7 +289,7 @@ const GestionAdministrativeListTable = ({
               onChange={value => {
                 setSearch(String(value))
               }}
-              placeholder='Rechercher Lot'
+              placeholder='Rechercher '
               className='max-sm:is-full'
             />
           </div>

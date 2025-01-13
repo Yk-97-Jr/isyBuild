@@ -55,6 +55,7 @@ import TableFilters from '@/views/apps/admin/subcontractor/list/TableFilters'
 import TableClientFilters from '@/views/apps/admin/subcontractor/list/TableClientFilters'
 import TableLotsFilters from '@/views/apps/admin/subcontractor/list/TableLotsFilters'
 import { formatDate } from '@/utils/formatDate'
+import UserCard from '@/components/UserCard'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -213,7 +214,7 @@ const SubcontractorTable = ({
                 {`${row.original.phone_number} `}
               </Typography>
               <Typography color='text.primary' className='font-medium'>
-                {`${row.original.clients} `}
+                {`${row.original.clients.at(-1)?.name} `}
               </Typography>
             </div>
           </div>
@@ -234,16 +235,12 @@ const SubcontractorTable = ({
       columnHelper.accessor('created_by.id', {
         header: 'propriétaire',
         cell: ({ row }) => (
-          <div className='flex items-center gap-0'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original?.created_by?.first_name} ${row.original?.created_by?.last_name}`}
-              </Typography>
-              <Typography color='text.primary' className='font-extralight'>
-                {`${row.original.created_by?.email} `}
-              </Typography>
-            </div>
-          </div>
+          <UserCard
+          firstName={row.original?.created_by?.first_name}
+          lastName={row.original?.created_by?.last_name}
+          avatar={row.original?.created_by?.avatar}
+          email={row.original?.created_by?.email}
+        />
         )
       }),
       columnHelper.accessor('created_at', {

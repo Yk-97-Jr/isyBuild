@@ -32,8 +32,7 @@ import {
 import type { ColumnDef, FilterFn, SortingState } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
-// Type Imports
-import Box from '@mui/material/Box'
+
 
 import { CardHeader, Chip, CircularProgress, Grid } from '@mui/material'
 
@@ -55,6 +54,7 @@ import TableFilters from '../TableFilters'
 import TableClientFilters from '../TableClientFilters'
 import TableLotsFilters from '../TableLotsFilters'
 import { formatDate } from '@/utils/formatDate'
+import UserCard from '@/components/UserCard'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -163,7 +163,7 @@ const SubcontractorTable = ({
 
   const [open, setOpen] = useState(false)
   const [filteredData] = useState(data)
-  const [, setGlobalFilter] = useState('')
+
   const router = useRouter()
 
   const { user } = useAuth()
@@ -183,6 +183,8 @@ const SubcontractorTable = ({
     router.push(`/${userRole}/subcontractor/add`)
   }
 
+  
+  
 
   const columns = useMemo<ColumnDef<CompanyTypeWithAction, any>[]>(
     () => [
@@ -279,16 +281,12 @@ const SubcontractorTable = ({
       columnHelper.accessor('created_by.id', {
         header: 'Créé Par',
         cell: ({ row }) => (
-          <div className='flex items-center gap-0'>
-            <div className='flex flex-col'>
-              <Typography color='text.primary' className='font-medium'>
-                {`${row.original.created_by?.first_name} ${row.original.created_by?.last_name}`}
-              </Typography>
-              <Typography color='text.primary' className='font-extralight'>
-                {`${row.original.created_by?.email} `}
-              </Typography>
-            </div>
-          </div>
+          <UserCard
+          firstName={row.original.created_by?.first_name}
+          lastName={row.original.created_by?.last_name}
+          avatar={row.original.created_by?.avatar}
+          email={row.original.created_by?.email}
+        />
         )
       }),
       columnHelper.accessor('created_at', {
@@ -330,7 +328,7 @@ const SubcontractorTable = ({
      
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, filteredData]
+    [data, data]
   )
 
   const table = useReactTable({
@@ -355,7 +353,7 @@ const SubcontractorTable = ({
     globalFilterFn: fuzzyFilter,
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    onGlobalFilterChange: setGlobalFilter,
+
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -366,24 +364,24 @@ const SubcontractorTable = ({
 
   return (
     <>
-      <Card>
-        <CardHeader title='Filters' className='pbe-4'/>
-        <Grid container spacing={6}>
-        <Grid item xs={12} sm={4}>
-        <TableFilters setIsActive={setIsActive} isActive={isActive}/>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-        <TableClientFilters setClientId={setClientId} clientId={clientId}/> 
-        </Grid>
-        <Grid item xs={12} sm={4}>
-        <TableLotsFilters setLotsId={setLotsId} lotsId={lotsId}/> 
-        </Grid>
-        
-        </Grid>
+       <Card>
+  <CardHeader title='Filters' className='pbe-4'/>
+  <Grid container spacing={6}>
+  <Grid item xs={12} sm={4}>
+  <TableFilters setIsActive={setIsActive} isActive={isActive}/>
+  </Grid>
+  <Grid item xs={12} sm={4}>
+  <TableClientFilters setClientId={setClientId} clientId={clientId}/> 
+  </Grid>
+  <Grid item xs={12} sm={4}>
+  <TableLotsFilters setLotsId={setLotsId} lotsId={lotsId}/> 
+  </Grid>
+  
+  </Grid>
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
-            value={table.getState().pagination.pageSize}
+            value={pageSize}
             onChange={e => setPageSize(Number(e.target.value))}
             className='max-sm:is-full sm:is-[70px]'
           >
@@ -394,11 +392,13 @@ const SubcontractorTable = ({
           <div className='flex flex-col sm:flex-row max-sm:is-full items-start sm:items-center gap-4'>
             <DebouncedInput
               value={search}
-              onChange={value => setSearch(String(value))}
+              onChange={value => {
+                setSearch(String(value))
+              }}
               placeholder='Rechercher'
               className='max-sm:is-full'
             />
-            <Button
+              <Button
               variant='contained'
               className='max-sm=is-full'
               startIcon={<i className='tabler-plus' />}
@@ -409,65 +409,68 @@ const SubcontractorTable = ({
           </div>
         </div>
         <div className='overflow-x-auto'>
-          {isFetching ? (
-            <Box display='flex' justifyContent='center' alignItems='center' height='100vh'>
-              <CircularProgress />
-            </Box>
-          ) : (
-            <table className={tableStyles.table}>
-              <thead>
-                {table.getHeaderGroups().map(headerGroup => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map(header => (
-                      <th key={header.id}>
-                        {header.isPlaceholder ? null : (
-                          <>
-                            <div
-                              className={classnames({
-                                'flex items-center': header.column.getIsSorted(),
-                                'cursor-pointer select-none': header.column.getCanSort()
-                              })}
-                              onClick={header.column.getToggleSortingHandler()}
-                            >
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                              {{
-                                asc: <i className='tabler-chevron-up text-xl' />,
-                                desc: <i className='tabler-chevron-down text-xl' />
-                              }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                            </div>
-                          </>
-                        )}
-                      </th>
-                    ))}
-                  </tr>
+          <table className={tableStyles.table}>
+            <thead>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          className={classnames({
+                            'flex items-center': header.column.getIsSorted(),
+                            'cursor-pointer select-none': header.column.getCanSort()
+                          })}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <i className='tabler-chevron-up text-xl'/>,
+                            desc: <i className='tabler-chevron-down text-xl'/>
+                          }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                        </div>
+                      </>
+                    )}
+                  </th>
                 ))}
-              </thead>
-              {table.getFilteredRowModel().rows.length === 0 ? (
-                <tbody>
-                  <tr>
-                    <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                      No data available
-                    </td>
-                  </tr>
-                </tbody>
-              ) : (
-                <tbody>
-                  {table
-                    .getRowModel()
-                    .rows.slice(0, table.getState().pagination.pageSize)
-                    .map(row => {
-                      return (
-                        <tr key={row.id} className={classnames({ selected: row.getIsSelected() })}>
-                          {row.getVisibleCells().map(cell => (
-                            <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                          ))}
-                        </tr>
-                      )
-                    })}
-                </tbody>
-              )}
-            </table>
-          )}
+              </tr>
+            ))}
+            </thead>
+            {isFetching ? (
+              <tbody>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  <CircularProgress/>
+                </td>
+              </tr>
+              </tbody>
+            ) : (table.getFilteredRowModel().rows.length === 0 ? (
+              <tbody>
+              <tr>
+                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                  No data available
+                </td>
+              </tr>
+              </tbody>
+            ) : (
+              <tbody>
+              {table
+                .getRowModel()
+                .rows.slice(0, table.getState().pagination.pageSize)
+                .map(row => {
+                  return (
+                    <tr key={row.id} className={classnames({selected: row.getIsSelected()})}>
+                      {row.getVisibleCells().map(cell => (
+                        <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      ))}
+                    </tr>
+                  )
+                })}
+              </tbody>
+            ))}
+          </table>
+
         </div>
 
         <TablePaginationComponent
@@ -480,8 +483,12 @@ const SubcontractorTable = ({
         />
       </Card>
       <CompanyDialog open={open} setOpen={setOpen} id={id} setId={setId} refetch={refetch} />
+
     </>
   )
 }
+
+
+
 
 export default SubcontractorTable

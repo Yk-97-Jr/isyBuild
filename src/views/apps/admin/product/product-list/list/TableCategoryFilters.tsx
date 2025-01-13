@@ -1,59 +1,112 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
+import CircularProgress from '@mui/material/CircularProgress';
+import Typography from '@mui/material/Typography';
 
 import CustomTextField from '@core/components/mui/TextField';
 import { useCategoriesListQuery } from '@/services/IsyBuildApi';
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MenuProps = {
+    PaperProps: {
+        style: {
+            width: 250,
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+            overflowY: 'auto' as const,
+        },
+        sx: {
+            '::-webkit-scrollbar': { display: 'none' },
+            scrollbarWidth: 'none',
+        },
+    },
+};
+
 const TableCategoryFilters = ({
   setCategoryId,
-  categoryId
+  categoryId,
 }: {
   setCategoryId: React.Dispatch<React.SetStateAction<string | ''>>;
-  categoryId: string | ''
+  categoryId: string | '';
 }) => {
-  const [selectedCategory, setSelectedCategory] = useState<string>(String(categoryId)); // Default to "Toutes les Catégories"
+  const [page, setPage] = useState(1); // Track current page
+  const [categories, setCategories] = useState<any[]>([]); // Store fetched categories
+  const [selectedCategory, setSelectedCategory] = useState<string>(String(categoryId));
+  const observer = useRef<IntersectionObserver | null>(null); // For infinite scrolling
 
   const { data: categoriesData, isLoading, error } = useCategoriesListQuery({
-    page: 1,
-    pageSize: 500,
+    page,
+    pageSize: 10, // Fetch 10 items per page
   });
 
-  // Handle dropdown change
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value; // Get the value of the selected item
+  useEffect(() => {
+    if (categoriesData?.results) {
+      setCategories((prev) => [...prev, ...categoriesData.results]);
+    }
+  }, [categoriesData]);
 
-    setSelectedCategory(value); // Update dropdown state
-    setCategoryId(value === '' ? "" : String(value)); // Update filter
+  const lastCategoryRef = useCallback(
+    (node: HTMLLIElement | null) => {
+      if (isLoading) return;
+
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && categoriesData?.next) {
+          setPage((prevPage) => prevPage + 1); // Load next page
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, categoriesData]
+  );
+
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    
+    setSelectedCategory(value);
+
+    setCategoryId(value === '' ? '' : String(value));
   };
 
   return (
     <CardContent>
       <Grid container spacing={6}>
-      <Grid item xs={12} sm={4}>
-        <CustomTextField
-          select
-          fullWidth
-          id="category-select"
-          value={selectedCategory || ''} // Bind dropdown to state
-          onChange={handleCategoryChange} // Update state on change
-          SelectProps={{ displayEmpty: true }}
-          disabled={isLoading}
-          error={!!error}
-          helperText={error ? 'Erreur lors du chargement des Catégories' : ''}
-        >
-          {/* Default option for all categories */}
-          <MenuItem value=''>Toutes les Catégories</MenuItem>
+        <Grid item xs={12} sm={4}>
+          <CustomTextField
+            select
+            fullWidth
+            id="category-select"
+            value={selectedCategory || ''}
+            onChange={handleCategoryChange}
+            SelectProps={{ MenuProps,
+              displayEmpty:true
+            }}
+            disabled={isLoading}
+            error={!!error}
+            helperText={error ? 'Erreur lors du chargement des Catégories' : ''}
+          >
+            <MenuItem value="">Toutes les Catégories</MenuItem>
 
-          {/* Dynamically load categories */}
-          {categoriesData?.results.map((category) => (
-            <MenuItem key={category.id} value={category.id}>
-              {category.name}
-            </MenuItem>
-          ))}
-        </CustomTextField>
+            {categories.map((category, index) => (
+              <MenuItem
+                key={category.id}
+                value={category.id}
+                ref={index === categories.length - 1 ? lastCategoryRef : null} // Attach ref to the last item
+              >
+                <Typography>{category.name}</Typography>
+              </MenuItem>
+            ))}
+
+            {isLoading && (
+              <MenuItem disabled>
+                <CircularProgress size={24} />
+              </MenuItem>
+            )}
+          </CustomTextField>
         </Grid>
       </Grid>
     </CardContent>

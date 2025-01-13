@@ -46,6 +46,7 @@ import tableStyles from '@core/styles/table.module.css'
 import type {CategoryRead} from '@/services/IsyBuildApi'
 import {useAuth} from "@/contexts/AuthContext";
 import { formatDate } from '@/utils/formatDate';
+import UserCard from '@/components/UserCard';
 
 
 declare module '@tanstack/table-core' {
@@ -177,26 +178,51 @@ const CategoryTable = ({
         )
       }),
 
-      columnHelper.accessor('description', {
-        header: `Description`,
+      columnHelper.accessor('name', {
+        header: 'Nom',
         cell: ({row}) => (
-            <div className='flex items-center gap-1'>
+          <div className='flex items-center gap-1'>
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
-              {row.original.description 
-            ? `${row.original.description.length > 50
-                ? `${row.original.description.substring(0, 50)}...`
-                : row.original.description}`
-            : 'Aucune description '}
+                {`${row.original.name} `}
               </Typography>
             </div>
           </div>
         )
       }),
+
+      columnHelper.accessor('description', {
+        header: `Description`,
+        cell: ({row}) => (
+          <div className='flex items-center gap-1'>
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+              {row.original.description 
+            ? `${row.original.description.length > 50
+              ? `${row.original.description.substring(0, 50)}...`
+              : row.original.description}`
+              : 'Aucune description '}
+              </Typography>
+            </div>
+          </div>
+        )
+      }),
+      columnHelper.accessor("created_by",{
+        header: 'Crée par',
+        cell:({row}) => (
+          <UserCard
+          firstName={row.original.created_by.first_name}
+          lastName={row.original.created_by.last_name}
+          avatar={row.original.created_by.avatar}
+          email={row.original.created_by.email}
+        />
+        )
+      }),
+
       columnHelper.accessor('created_at', {
-        header: `Date de Creation`,
-        cell: ({ row }) => (
-          <Typography>
+      header: `Date de Creation`,
+      cell: ({ row }) => (
+        <Typography>
              {formatDate(row.original.created_at)} 
           </Typography>
         ),
@@ -258,7 +284,7 @@ const CategoryTable = ({
         <div className='flex justify-between flex-col items-start md:flex-row md:items-center p-6 border-bs gap-4'>
           <CustomTextField
             select
-            value={table.getState().pagination.pageSize}
+            value={pageSize}
             onChange={e => setPageSize(Number(e.target.value))}
             className='max-sm:is-full sm:is-[70px]'
           >
