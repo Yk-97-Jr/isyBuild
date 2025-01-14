@@ -19,6 +19,7 @@ type AddRolesConfigProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
   refetch: () => void;
+  selectedIds: number[]
 };
 
 
@@ -32,15 +33,31 @@ const rolesEnum: RolesEnum[] = [
   'Client',
 ];
 
-const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
+const AddRolesConfig = ({
+  open,
+  setOpen,
+  refetch,
+  selectedIds,
+}: AddRolesConfigProps) => {
   const { edit } = useParams(); // Fetch project ID from URL
-  const { setOpenSnackBar, setInfoAlert } = useContext(SnackBarContext) as SnackBarContextType;
 
+  const { setOpenSnackBar, setInfoAlert } = useContext(
+    SnackBarContext,
+  ) as SnackBarContextType;
+
+
+  console.log(selectedIds);
+  
   // API mutation
-  const [updateConfigs, { isLoading }] = useDocumentDiffusionConfigBulkUpdateMutation();
-  const { data: fetchedConfigs, isLoading: isFetching } = useDocumentDiffusionConfigByProjectListQuery({ projectId: +edit });
+  const [updateConfigs, { isLoading }] =
+    useDocumentDiffusionConfigBulkUpdateMutation();
 
-  const [configs, setConfigs] = useState<{ id: number; type: string; selectedRoles: RolesEnum[] }[]>([]);
+  const { data: fetchedConfigs, isLoading: isFetching } =
+    useDocumentDiffusionConfigByProjectListQuery({ projectId: +edit });
+
+  const [configs, setConfigs] = useState<
+    { id: number; type: string; selectedRoles: RolesEnum[] }[]
+  >([]);
 
   // Close dialog
   const handleClose = () => {
@@ -51,11 +68,13 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
   useEffect(() => {
     if (Array.isArray(fetchedConfigs)) {
       setConfigs(
-        fetchedConfigs.map((config: { id: number; type: string; roles: RolesEnum[] }) => ({
-          id: config.id,
-          type: config.type,
-          selectedRoles: config.roles,
-        }))
+        fetchedConfigs.map(
+          (config: { id: number; type: string; roles: RolesEnum[] }) => ({
+            id: config.id,
+            type: config.type,
+            selectedRoles: config.roles,
+          }),
+        ),
       );
     }
   }, [fetchedConfigs]);
@@ -63,36 +82,43 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
   // Update configurations on Save
   const handleUpdate = async () => {
     try {
-      const body: DocumentDiffusionConfigUpdateRequest[] = configs.map((config) => ({
-        id: config.id,
-        roles: config.selectedRoles as RolesEnum[], // Ensure roles match the RolesEnum type
-      }));
+      const body: DocumentDiffusionConfigUpdateRequest[] = configs.map(
+        (config) => ({
+          id: config.id,
+          roles: config.selectedRoles as RolesEnum[], // Ensure roles match the RolesEnum type
+        }),
+      );
 
       await updateConfigs({ projectId: +edit, body }).unwrap();
 
       setOpenSnackBar(true);
-      setInfoAlert({ severity: 'success', message: 'Configurations mises à jour avec succès' });
+      setInfoAlert({
+        severity: "success",
+        message: "Configurations mises à jour avec succès",
+      });
       handleClose();
     } catch (error) {
-      console.error('Failed to update configurations:', error);
+      console.error("Failed to update configurations:", error);
       setOpenSnackBar(true);
       setInfoAlert({
-        severity: 'error',
-        message: 'Échec de la mise à jour des configurations',
+        severity: "error",
+        message: "Échec de la mise à jour des configurations",
       });
     }
   };
 
   // Handle role change
   const handleChange = (id: number, event: SelectChangeEvent<unknown>) => {
-    const value = (typeof event.target.value === 'string'
-      ? event.target.value.split(',')
-      : event.target.value) as RolesEnum[];
+    const value = (
+      typeof event.target.value === "string"
+        ? event.target.value.split(",")
+        : event.target.value
+    ) as RolesEnum[];
 
     setConfigs((prev) =>
       prev.map((config) =>
-        config.id === id ? { ...config, selectedRoles: value } : config
-      )
+        config.id === id ? { ...config, selectedRoles: value } : config,
+      ),
     );
   };
 
@@ -101,9 +127,12 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
     setConfigs((prev) =>
       prev.map((config) =>
         config.id === id
-          ? { ...config, selectedRoles: config.selectedRoles.filter((r) => r !== role) }
-          : config
-      )
+          ? {
+              ...config,
+              selectedRoles: config.selectedRoles.filter((r) => r !== role),
+            }
+          : config,
+      ),
     );
   };
 
@@ -122,12 +151,14 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
         ) : (
           <Grid container spacing={2}>
             {configs.map((config) => (
-              
               <Grid item xs={12} key={config.id}>
                 <CustomTextField
                   select
                   fullWidth
-                  label={Type474Mapping[config.type as keyof typeof Type474Mapping].label}
+                  label={
+                    Type474Mapping[config.type as keyof typeof Type474Mapping]
+                      .label
+                  }
                   value={config.selectedRoles}
                   SelectProps={{
                     multiple: true,
@@ -163,8 +194,17 @@ const AddRolesConfig = ({ open, setOpen, refetch }: AddRolesConfigProps) => {
         <Button onClick={handleClose} color="secondary">
           Annuler
         </Button>
-        <Button onClick={handleUpdate} variant="contained" color="primary" disabled={isLoading  || configs.length === 0}>
-          {isFetching ? <CircularProgress size={24} color="inherit" /> : 'Mettre à jour'}
+        <Button
+          onClick={handleUpdate}
+          variant="contained"
+          color="primary"
+          disabled={isLoading || configs.length === 0}
+        >
+          {isFetching ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            "Mettre à jour"
+          )}
         </Button>
       </DialogActions>
     </Dialog>

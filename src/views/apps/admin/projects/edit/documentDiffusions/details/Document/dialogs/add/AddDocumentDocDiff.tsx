@@ -29,7 +29,7 @@ interface AddProps {
 }
 
 const AddDocumentDocDiff = ({open, setOpen, refetch}: AddProps) => {
-    const {register, handleSubmit, formState: {errors}} = useForm<FormValidateDocumentUploadType>({
+    const {/* register */ handleSubmit,/*  formState: {errors} */} = useForm<FormValidateDocumentUploadType>({
       resolver: yupResolver(schemaDocumentUpload),
     });
 
@@ -37,6 +37,8 @@ const AddDocumentDocDiff = ({open, setOpen, refetch}: AddProps) => {
     const [createuseDocumentDiffusion, {isLoading}] = useDocumentDiffusionUploadMutation();
     const {docDiffId} = useParams();
     const [files, setFiles] = useState<File[]>([])
+      const [indice, setIndice] = useState<string | null>(null);
+    
 
 
     const handleClose = () => {
@@ -118,24 +120,22 @@ const AddDocumentDocDiff = ({open, setOpen, refetch}: AddProps) => {
           </DialogTitle>
           <DialogActions className="flex flex-col justify-end pbs-0 sm:pbe-16 sm:pli-16 max-sm:gap-2" sx={{gap: 2}}>
             <Grid container spacing={12}>
-              <Grid item xs={12} md={6}>
-                <Grid container spacing={6}>
-
-                  <Grid item xs={12}>
-                    <CustomTextField
-                      fullWidth
-                      label='Notes'
-                      placeholder='Notes'
-                      {...register('notes')}
-                      error={!!errors.notes}
-                      helperText={errors.notes?.message}
-                      multiline
-                      rows={4}
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              
+                        <Grid item xs={12}>
+                          <Grid container spacing={6}>
+                            <Grid item xs={12}>
+                              <CustomTextField
+                                fullWidth
+                                label="indice"
+                                placeholder="indice"
+                                value={indice ?? ""}
+                                onChange={(e) => setIndice(e.target.value)}
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+              <Grid item xs={12} >
                 <Grid container spacing={6}>
                   <Grid item xs={12}>
                     <AddDocumentUpload files={files} setFiles={setFiles}/>
@@ -151,7 +151,7 @@ const AddDocumentDocDiff = ({open, setOpen, refetch}: AddProps) => {
                     {isLoading ? <CircularProgress sx={{color: 'white'}} size={24}/> : "Ajouter"}
                   </Button>
                 </div>
-              </Grid>
+              
             </Grid>
           </DialogActions>
         </Dialog>

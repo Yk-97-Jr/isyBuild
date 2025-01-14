@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: IsyBuild API
-  version: 1.0.0
+  version: 0.1.1
   description: API documentation for IsyBuild
 paths:
   /Subcontractors/{subcontractor_id}/owner/delete/:
@@ -1611,11 +1611,43 @@ paths:
               schema:
                 description: Permission denied.
           description: ''
-  /document_diffusions/{document_diffusion_id}/diffuse/:
+  /document_diffusions/{document_diffusion_id}/history/:
+    get:
+      operationId: diffusion_history_list
+      description: Retrieve a list of diffusion history records with pagination.
+      summary: List all diffusion history records.
+      parameters:
+      - in: path
+        name: document_diffusion_id
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number of the results to fetch
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Number of results per page
+      tags:
+      - Document Diffusion Management
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDiffusionHistory'
+          description: A paginated list of diffusion history records.
+  /document_diffusions/{document_diffusion_id}/select-product/:
     post:
-      operationId: document_diffusion_diffuse
-      description: Diffuses a document diffusion.
-      summary: Diffuse document diffusion to intervenants
+      operationId: select_product_for_document_diffusion
+      description: Update the selected product for a given document diffusion.
+      summary: Select Product for Document Diffusion
       parameters:
       - in: path
         name: document_diffusion_id
@@ -1628,13 +1660,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DiffusionRequest'
+              $ref: '#/components/schemas/SelectProductRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/DiffusionRequest'
+              $ref: '#/components/schemas/SelectProductRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/DiffusionRequest'
+              $ref: '#/components/schemas/SelectProductRequest'
+        required: true
       security:
       - jwtAuth: []
       responses:
@@ -1642,7 +1675,21 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DocumentDiffusion'
+                description: Product successfully selected for the document diffusion.
+                example:
+                  message: Product successfully updated.
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                description: Document Diffusion not found.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                description: Invalid product ID.
           description: ''
   /document_diffusions/{document_diffusion_id}/update/:
     put:
@@ -1693,6 +1740,48 @@ paths:
                 type: object
                 additionalProperties: {}
                 description: Unspecified response body
+          description: ''
+  /document_diffusions/bulk_diffuse/:
+    post:
+      operationId: bulk_diffuse_documents
+      description: Bulk diffuse multiple DocumentDiffusions and notify intervenants.
+      summary: Bulk Diffuse Documents
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DiffusionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DiffusionRequest'
+          multipart/form-data:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/DiffusionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                description: Bulk diffusion completed successfully.
+                example:
+                  message: Documents successfully diffused.
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                description: Invalid input data.
           description: ''
   /document_diffusions/configs/{project_id}:
     get:
@@ -1853,6 +1942,34 @@ paths:
                 type: object
                 additionalProperties: {}
                 description: Unspecified response body
+          description: ''
+  /document_diffusions/diffuse/:
+    post:
+      operationId: document_diffusion_diffuse
+      description: Diffuses a document diffusion.
+      summary: Diffuse document diffusion to intervenants
+      tags:
+      - Document Diffusion Management
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiffusionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DiffusionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DiffusionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentDiffusion'
           description: ''
   /document_diffusions/document/{document_diffusion_id}/upload/:
     post:
@@ -4355,6 +4472,7 @@ paths:
           - avis_technique
           - fiche_question
           - fiche_technique
+          - fiche_technique_produit
           - note_de_calcul
           - plan_de_coffrage
           - plan_technique
@@ -7192,6 +7310,45 @@ components:
         * `signe_par_ets_attente_jp` - Signé par ETS attente JP
         * `refuse_par_amo` - Refusé par AMO
         * `abandon` - Abandon
+    DiffusionHistory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        variant:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        document_snapshot:
+          type: string
+          nullable: true
+          description: A JSON snapshot of the document's state at the time of diffusion
+            (for non-FICHE_TECHNIQUE_PRODUIT types).
+        diffusion_date:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date and time when the document diffusion occurred.
+        indice:
+          type: string
+          nullable: true
+          description: The indice of the document at the time of diffusion.
+          maxLength: 100
+        document:
+          allOf:
+          - $ref: '#/components/schemas/Document'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - diffusion_date
+      - document
+      - id
+      - variant
     DiffusionIntervenant:
       type: object
       properties:
@@ -7261,9 +7418,15 @@ components:
     DiffusionRequest:
       type: object
       properties:
+        id:
+          type: integer
+          description: The ID of the DocumentDiffusion.
         indice:
           type: string
-          minLength: 1
+          nullable: true
+          description: The indice for the DocumentDiffusion (optional).
+      required:
+      - id
     Document:
       type: object
       properties:
@@ -7291,11 +7454,33 @@ components:
         id:
           type: integer
           readOnly: true
+        project_lot:
+          allOf:
+          - $ref: '#/components/schemas/ProjectLotSimple'
+          readOnly: true
+        subcontractor:
+          allOf:
+          - $ref: '#/components/schemas/SubcontractorSimple'
+          readOnly: true
         title:
           type: string
           maxLength: 255
         phase:
           $ref: '#/components/schemas/PhaseEnum'
+        selected_product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        current_variant:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        material_marche:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/Type94bEnum'
         status:
           $ref: '#/components/schemas/StatusE51Enum'
         diffusion_date:
@@ -7306,15 +7491,11 @@ components:
           type: string
           nullable: true
           maxLength: 100
-        type:
-          $ref: '#/components/schemas/Type474Enum'
+        presented:
+          type: boolean
         localisation:
           allOf:
           - $ref: '#/components/schemas/Localisation'
-          readOnly: true
-        project_lot:
-          allOf:
-          - $ref: '#/components/schemas/ProjectLotSimple'
           readOnly: true
         diffusion_list:
           type: array
@@ -7339,13 +7520,17 @@ components:
       required:
       - created_at
       - created_by
+      - current_variant
       - diffusion_list
       - document
       - id
       - localisation
+      - material_marche
       - phase
       - project_lot
+      - selected_product
       - status
+      - subcontractor
       - title
       - type
       - updated_at
@@ -7356,7 +7541,7 @@ components:
           type: integer
           readOnly: true
         type:
-          $ref: '#/components/schemas/Type474Enum'
+          $ref: '#/components/schemas/Type94bEnum'
         roles:
           type: array
           items:
@@ -7380,6 +7565,9 @@ components:
     DocumentDiffusionCreateRequest:
       type: object
       properties:
+        project_lot_id:
+          type: integer
+          description: ID of the Project Lot
         title:
           type: string
           minLength: 1
@@ -7387,15 +7575,25 @@ components:
         phase:
           $ref: '#/components/schemas/PhaseEnum'
         type:
-          $ref: '#/components/schemas/Type474Enum'
-        localisation:
+          $ref: '#/components/schemas/Type94bEnum'
+        subcontractor_id:
           type: integer
-        project_lot:
+          description: ID of the Subcontractor
+        localisation_id:
           type: integer
+          nullable: true
+          description: ID of the Localisation
+        material_marche_id:
+          type: integer
+          nullable: true
+          description: ID of the Material proposed
+        current_variant_id:
+          type: integer
+          nullable: true
+          description: ID of the Material proposed
       required:
-      - localisation
       - phase
-      - project_lot
+      - project_lot_id
       - title
       - type
     DocumentDiffusionUpdateRequest:
@@ -7407,10 +7605,23 @@ components:
           maxLength: 255
         phase:
           $ref: '#/components/schemas/PhaseEnum'
-        localisation:
+        presented:
+          type: boolean
+          default: false
+          description: Indicates whether the document diffusion has been presented.
+        localisation_id:
           type: integer
+          nullable: true
+          description: ID of the Localisation
+        material_marche_id:
+          type: integer
+          nullable: true
+          description: ID of the Material proposed
+        current_variant_id:
+          type: integer
+          nullable: true
+          description: ID of the Material proposed
       required:
-      - localisation
       - phase
       - title
     DocumentUploadRequest:
@@ -8062,6 +8273,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ClientStaff'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PaginatedDiffusionHistory:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiffusionHistory'
       required:
       - count
       - next
@@ -8720,7 +8953,9 @@ components:
           nullable: true
           maxLength: 255
         category:
-          type: integer
+          allOf:
+          - $ref: '#/components/schemas/Category'
+          readOnly: true
         technical_sheet:
           type: string
           format: uri
@@ -8803,15 +9038,12 @@ components:
           type: string
           nullable: true
           maxLength: 255
-        category:
-          type: integer
         technical_sheet:
           type: string
           format: uri
           nullable: true
           maxLength: 200
       required:
-      - category
       - name
     Project:
       type: object
@@ -9481,6 +9713,14 @@ components:
         * `Coordonnateur sécurité et protection de la santé` - Coordonnateur sécurité et protection de la santé
         * `Assistance maîtrise d’ouvrage hygiène et environnement` - Assistance maîtrise d’ouvrage hygiène et environnement
         * `Client` - Client
+    SelectProductRequest:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          description: ID of the product to select.
+      required:
+      - product_id
     SetNewPasswordRequest:
       type: object
       properties:
@@ -10144,7 +10384,7 @@ components:
       required:
       - amount
       - finance_enterprise_id
-    Type474Enum:
+    Type94bEnum:
       enum:
       - plan_technique
       - plan_de_coffrage
@@ -10152,6 +10392,7 @@ components:
       - avis_technique
       - note_de_calcul
       - fiche_question
+      - fiche_technique_produit
       - autre
       type: string
       description: |-
@@ -10161,6 +10402,7 @@ components:
         * `avis_technique` - Avis Technique
         * `note_de_calcul` - Note de Calcul
         * `fiche_question` - Fiche Question
+        * `fiche_technique_produit` - Fiche Technique Produit
         * `autre` - Autre
     TypeB5bEnum:
       enum:

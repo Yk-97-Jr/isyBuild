@@ -62,13 +62,12 @@ const AddDiffuse = ({open, setOpen, refetch}: AddProps) => {
        
 
 
-        await createuseDocumentDiffusion(
-          {
-            documentDiffusionId: +docDiffId,
-
-            
-            diffusionRequest: {indice:data.indice},
-          }).unwrap();
+        await createuseDocumentDiffusion({
+          diffusionRequest: {
+            id: +docDiffId,
+            indice: data.indice,
+          },
+        }).unwrap();
 
         handleClose();
         setOpenSnackBar(true);

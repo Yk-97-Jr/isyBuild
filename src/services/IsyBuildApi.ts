@@ -393,14 +393,23 @@ const injectedRtkApi = api.injectEndpoints({
         method: "DELETE",
       }),
     }),
-    documentDiffusionDiffuse: build.mutation<
-      DocumentDiffusionDiffuseApiResponse,
-      DocumentDiffusionDiffuseApiArg
+    diffusionHistoryList: build.query<
+      DiffusionHistoryListApiResponse,
+      DiffusionHistoryListApiArg
     >({
       query: (queryArg) => ({
-        url: `/document_diffusions/${queryArg.documentDiffusionId}/diffuse/`,
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/history/`,
+        params: { page: queryArg.page, page_size: queryArg.pageSize },
+      }),
+    }),
+    selectProductForDocumentDiffusion: build.mutation<
+      SelectProductForDocumentDiffusionApiResponse,
+      SelectProductForDocumentDiffusionApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/${queryArg.documentDiffusionId}/select-product/`,
         method: "POST",
-        body: queryArg.diffusionRequest,
+        body: queryArg.selectProductRequest,
       }),
     }),
     documentDiffusionUpdate: build.mutation<
@@ -411,6 +420,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/document_diffusions/${queryArg.documentDiffusionId}/update/`,
         method: "PUT",
         body: queryArg.documentDiffusionUpdateRequest,
+      }),
+    }),
+    bulkDiffuseDocuments: build.mutation<
+      BulkDiffuseDocumentsApiResponse,
+      BulkDiffuseDocumentsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/bulk_diffuse/`,
+        method: "POST",
+        body: queryArg.body,
       }),
     }),
     documentDiffusionConfigByProjectList: build.query<
@@ -449,6 +468,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/document_diffusions/create/`,
         method: "POST",
         body: queryArg.documentDiffusionCreateRequest,
+      }),
+    }),
+    documentDiffusionDiffuse: build.mutation<
+      DocumentDiffusionDiffuseApiResponse,
+      DocumentDiffusionDiffuseApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/document_diffusions/diffuse/`,
+        method: "POST",
+        body: queryArg.diffusionRequest,
       }),
     }),
     documentDiffusionUpload: build.mutation<
@@ -2079,17 +2108,32 @@ export type DocumentDiffusionDeleteApiResponse = /** status 204  */ any;
 export type DocumentDiffusionDeleteApiArg = {
   documentDiffusionId: number;
 };
-export type DocumentDiffusionDiffuseApiResponse =
-  /** status 200  */ DocumentDiffusionRead;
-export type DocumentDiffusionDiffuseApiArg = {
+export type DiffusionHistoryListApiResponse =
+  /** status 200 A paginated list of diffusion history records. */ PaginatedDiffusionHistoryRead;
+export type DiffusionHistoryListApiArg = {
   documentDiffusionId: number;
-  diffusionRequest: DiffusionRequest;
+
+  /** Page number of the results to fetch */
+  page?: number;
+
+  /** Number of results per page */
+  pageSize?: number;
+};
+export type SelectProductForDocumentDiffusionApiResponse =
+  /** status 200  */ any;
+export type SelectProductForDocumentDiffusionApiArg = {
+  documentDiffusionId: number;
+  selectProductRequest: SelectProductRequest;
 };
 export type DocumentDiffusionUpdateApiResponse =
   /** status 200  */ DocumentDiffusionRead;
 export type DocumentDiffusionUpdateApiArg = {
   documentDiffusionId: number;
   documentDiffusionUpdateRequest: DocumentDiffusionUpdateRequest;
+};
+export type BulkDiffuseDocumentsApiResponse = /** status 200  */ any;
+export type BulkDiffuseDocumentsApiArg = {
+  body: DiffusionRequest[];
 };
 export type DocumentDiffusionConfigByProjectListApiResponse =
   /** status 200  */ DocumentDiffusionConfigRead;
@@ -2112,6 +2156,11 @@ export type DocumentDiffusionCreateApiResponse =
   /** status 201  */ DocumentDiffusionRead;
 export type DocumentDiffusionCreateApiArg = {
   documentDiffusionCreateRequest: DocumentDiffusionCreateRequest;
+};
+export type DocumentDiffusionDiffuseApiResponse =
+  /** status 200  */ DocumentDiffusionRead;
+export type DocumentDiffusionDiffuseApiArg = {
+  diffusionRequest: DiffusionRequest;
 };
 export type DocumentDiffusionUploadApiResponse = /** status 201  */ {
   [key: string]: any;
@@ -2748,6 +2797,7 @@ export type DocumentDiffusionsListApiArg = {
     | "avis_technique"
     | "fiche_question"
     | "fiche_technique"
+    | "fiche_technique_produit"
     | "note_de_calcul"
     | "plan_de_coffrage"
     | "plan_technique";
@@ -3431,7 +3481,6 @@ export type Category = {
 export type Product = {
   name: string;
   description?: string | null;
-  category: number;
   technical_sheet?: string | null;
 };
 export type ProductMedia = {
@@ -3450,7 +3499,7 @@ export type ProductRead = {
   id: number;
   name: string;
   description?: string | null;
-  category: number;
+  category: CategoryRead;
   technical_sheet?: string | null;
   media: ProductMediaRead[];
   created_by: CreatedByRead;
@@ -3721,13 +3770,14 @@ export type DiffusionIntervenantCommentCreateUpdateRequest = {
   status?: StatusE51Enum;
 };
 export type PhaseEnum = "design" | "execution";
-export type Type474Enum =
+export type Type94BEnum =
   | "plan_technique"
   | "plan_de_coffrage"
   | "fiche_technique"
   | "avis_technique"
   | "note_de_calcul"
   | "fiche_question"
+  | "fiche_technique_produit"
   | "autre";
 export type DiffusionIntervenant = {
   notifications_sent?: number;
@@ -3782,13 +3832,24 @@ export type DiffusionIntervenantRead = {
 export type DocumentDiffusion = {
   title: string;
   phase: PhaseEnum;
+  type: Type94BEnum;
   status: StatusE51Enum;
   diffusion_date?: string | null;
   indice?: string | null;
-  type: Type474Enum;
+  presented?: boolean;
   diffusion_list: DiffusionIntervenant[];
 };
-export type Localisation = {
+export type Status109Enum =
+  | "pending"
+  | "in_progress"
+  | "review"
+  | "completed"
+  | "canceled";
+export type ProjectLotSimple = {
+  status?: Status109Enum;
+  notes?: string;
+};
+export type ProjectSimple = {
   name: string;
 };
 export type ClientSimple = {
@@ -3803,27 +3864,6 @@ export type ClientSimpleRead = {
   siren_number: string;
   contact_email: string;
   phone_number: string;
-};
-export type LocalisationRead = {
-  id: number;
-  name: string;
-  client: ClientSimpleRead;
-  created_by: CreatedByRead;
-  created_at: string;
-  updated_at: string;
-};
-export type Status109Enum =
-  | "pending"
-  | "in_progress"
-  | "review"
-  | "completed"
-  | "canceled";
-export type ProjectLotSimple = {
-  status?: Status109Enum;
-  notes?: string;
-};
-export type ProjectSimple = {
-  name: string;
 };
 export type ProjectSimpleRead = {
   id: number;
@@ -3844,29 +3884,110 @@ export type ProjectLotSimpleRead = {
   status?: Status109Enum;
   notes?: string;
 };
+export type SubcontractorSimple = {
+  name: string;
+  siren_number: string;
+};
+export type SubcontractorSimpleRead = {
+  id: number;
+  name: string;
+  siren_number: string;
+};
+export type Localisation = {
+  name: string;
+};
+export type LocalisationRead = {
+  id: number;
+  name: string;
+  client: ClientSimpleRead;
+  created_by: CreatedByRead;
+  created_at: string;
+  updated_at: string;
+};
 export type DocumentDiffusionRead = {
   id: number;
+  project_lot: ProjectLotSimpleRead;
+  subcontractor: SubcontractorSimpleRead;
   title: string;
   phase: PhaseEnum;
+  selected_product: ProductRead;
+  current_variant: ProductRead;
+  material_marche: ProductRead;
+  type: Type94BEnum;
   status: StatusE51Enum;
   diffusion_date?: string | null;
   indice?: string | null;
-  type: Type474Enum;
+  presented?: boolean;
   localisation: LocalisationRead;
-  project_lot: ProjectLotSimpleRead;
   diffusion_list: DiffusionIntervenantRead[];
   document: DocumentRead;
   created_by: CreatedByRead;
   created_at: string;
   updated_at: string;
 };
-export type DiffusionRequest = {
-  indice?: string;
+export type DiffusionHistory = {
+
+  /** A JSON snapshot of the document's state at the time of diffusion (for non-FICHE_TECHNIQUE_PRODUIT types). */
+  document_snapshot?: string | null;
+
+  /** The indice of the document at the time of diffusion. */
+  indice?: string | null;
+};
+export type DiffusionHistoryRead = {
+  id: number;
+  variant: ProductRead;
+
+  /** A JSON snapshot of the document's state at the time of diffusion (for non-FICHE_TECHNIQUE_PRODUIT types). */
+  document_snapshot?: string | null;
+
+  /** The date and time when the document diffusion occurred. */
+  diffusion_date: string;
+
+  /** The indice of the document at the time of diffusion. */
+  indice?: string | null;
+  document: DocumentRead;
+  created_at: string;
+};
+export type PaginatedDiffusionHistory = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: DiffusionHistory[];
+};
+export type PaginatedDiffusionHistoryRead = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: DiffusionHistoryRead[];
+};
+export type SelectProductRequest = {
+
+  /** ID of the product to select. */
+  product_id: number;
 };
 export type DocumentDiffusionUpdateRequest = {
   title: string;
   phase: PhaseEnum;
-  localisation: number;
+
+  /** Indicates whether the document diffusion has been presented. */
+  presented?: boolean;
+
+  /** ID of the Localisation */
+  localisation_id?: number | null;
+
+  /** ID of the Material proposed */
+  material_marche_id?: number | null;
+
+  /** ID of the Material proposed */
+  current_variant_id?: number | null;
+};
+export type DiffusionRequest = {
+
+  /** The ID of the DocumentDiffusion. */
+  id: number;
+
+  /** The indice for the DocumentDiffusion (optional). */
+  indice?: string | null;
 };
 export type RolesEnum =
   | "Architecte"
@@ -3876,12 +3997,12 @@ export type RolesEnum =
   | "Assistance ma\u00EEtrise d\u2019ouvrage hygi\u00E8ne et environnement"
   | "Client";
 export type DocumentDiffusionConfig = {
-  type: Type474Enum;
+  type: Type94BEnum;
   roles: RolesEnum[];
-}; 
+};
 export type DocumentDiffusionConfigRead = {
   id: number;
-  type: Type474Enum;
+  type: Type94BEnum;
   roles: RolesEnum[];
 };
 export type DocumentDiffusionConfigUpdateRequest = {
@@ -3889,11 +4010,24 @@ export type DocumentDiffusionConfigUpdateRequest = {
   roles: RolesEnum[];
 };
 export type DocumentDiffusionCreateRequest = {
+
+  /** ID of the Project Lot */
+  project_lot_id: number;
   title: string;
   phase: PhaseEnum;
-  type: Type474Enum;
-  localisation: number;
-  project_lot: number;
+  type: Type94BEnum;
+
+  /** ID of the Subcontractor */
+  subcontractor_id?: number;
+
+  /** ID of the Localisation */
+  localisation_id?: number | null;
+
+  /** ID of the Material proposed */
+  material_marche_id?: number | null;
+
+  /** ID of the Material proposed */
+  current_variant_id?: number | null;
 };
 export type DocumentUploadRequest = {
   name?: string;
@@ -3941,15 +4075,6 @@ export type FinanceEnterprise = {
     * `refuse_par_amo` - Refusé par AMO
     * `abandon` - Abandon */
   dgd_status?: (DgdStatusEnum | BlankEnum | NullEnum) | null;
-};
-export type SubcontractorSimple = {
-  name: string;
-  siren_number: string;
-};
-export type SubcontractorSimpleRead = {
-  id: number;
-  name: string;
-  siren_number: string;
 };
 export type FinanceEnterpriseRead = {
   id: number;
@@ -4258,7 +4383,6 @@ export type PaginatedProductRead = {
 export type ProductRequest = {
   name: string;
   description?: string | null;
-  category: number;
   technical_sheet?: string | null;
 };
 export type ProductMediaRequest = {
@@ -5039,12 +5163,15 @@ export const {
   useDiffusionIntervenantCommentCreateMutation,
   useDocumentDiffusionDetailQuery,
   useDocumentDiffusionDeleteMutation,
-  useDocumentDiffusionDiffuseMutation,
+  useDiffusionHistoryListQuery,
+  useSelectProductForDocumentDiffusionMutation,
   useDocumentDiffusionUpdateMutation,
+  useBulkDiffuseDocumentsMutation,
   useDocumentDiffusionConfigByProjectListQuery,
   useDocumentDiffusionConfigBulkUpdateMutation,
   useDocumentDiffusionConfigUpdateMutation,
   useDocumentDiffusionCreateMutation,
+  useDocumentDiffusionDiffuseMutation,
   useDocumentDiffusionUploadMutation,
   useDocumentDiffusionDocumentDeleteMutation,
   useRetrieveFinanceEnterpriseByIdQuery,
