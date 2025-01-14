@@ -25,10 +25,10 @@ type Props = {
   setOpenAdd: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
   setOpenDelete: React.Dispatch<React.SetStateAction<boolean>>; // This will be used to control a boolean state
   setOpenModify: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenHistory: React.Dispatch<React.SetStateAction<boolean>>;
+  
   setId: React.Dispatch<React.SetStateAction<number | undefined>>; // This will be used to control a boolean state
-  setOpenDiffuse:React.Dispatch<React.SetStateAction<boolean>>;
-
+/*   setOpenDiffuse:React.Dispatch<React.SetStateAction<boolean>>;
+ */
 
 };
 
@@ -38,8 +38,8 @@ const DocumentDocDiff: React.FC<Props> = ({
                                              setId,
                                              setOpenDelete,
                                              setOpenModify,
-                                             setOpenHistory,
-                                             setOpenDiffuse
+                                            
+                                             /* setOpenDiffuse */
 
                                            }) => {
 
@@ -52,12 +52,7 @@ const DocumentDocDiff: React.FC<Props> = ({
     setId(id)
   }
 
-  const handleHistory = (id: number) => {
-    setOpenHistory(true)
-    setId(id)
 
-
-  }
 
   const handleEdit = (id: number) => {
     setOpenModify(true)
@@ -67,13 +62,13 @@ const DocumentDocDiff: React.FC<Props> = ({
 
   }
 
-  const handleDiffuse = (id: number) => {
+/*   const handleDiffuse = (id: number) => {
     setOpenDiffuse(true)
     setId(id)
 
     console.log(id)
 
-  }
+  } */
 
 
   const openOrDownloadFile = (fileUrl: string) => {
@@ -107,27 +102,16 @@ const DocumentDocDiff: React.FC<Props> = ({
               iconButtonProps={{size: 'medium'}}
               iconClassName='text-textSecondary'
               options={[
+                
                 {
-                  text: 'Diffuser',
-                  menuItemProps: {
-                    className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleDiffuse(DocumentDocDiffData?.id)
-                  }
-                },
-                {
-                  text: 'Modifier',
+                  text: 'Ajouter document',
                   menuItemProps: {
                     className: 'flex items-center gap-1 text-textSecondary',
                     onClick: () => handleEdit(DocumentDocDiffData?.id)
                   }
                 },
-                {
-                  text: 'Historique',
-                  menuItemProps: {
-                    className: 'flex items-center gap-1 text-textSecondary',
-                    onClick: () => handleHistory(DocumentDocDiffData?.id)
-                  }
-                },
+           
+                
                 {
                   text: 'Supprimer',
                   menuItemProps: {

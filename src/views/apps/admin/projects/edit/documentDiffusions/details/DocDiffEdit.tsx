@@ -28,7 +28,7 @@ import DocumentDocDiff from "./Document/DocumentDocDiff";
 import AddDocumentDocDiff from "./Document/dialogs/add/AddDocumentDocDiff";
 import DeleteDocumentDocDiff from "./Document/dialogs/delete/DeleteDocumentDocDiff";
 import ModifyDocumentDocDiff from "./Document/dialogs/modify/ModifyDocumentDocDiff";
-import HistoryDevis from "./Document/dialogs/history/HistoryDevis";
+
 import DiffusionList from "./diffusion/list/DiffusionLIst";
 import AddDiffuse from "./Document/dialogs/diffuse/AddDiffuse";
 import DocDiffProductCard from "./DocDiffProductCard";
@@ -63,7 +63,7 @@ const DocDiffEdit: React.FC = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openModify, setOpenModify] = useState(false);
-  const [openHistory, setOpenHistory] = useState(false);
+
   const [openDiffuse, setOpenDiffuse] = useState(false);
   const [id, setId] = useState<number>();
   const [docType, setDocType] = useState("");
@@ -164,8 +164,8 @@ const DocDiffEdit: React.FC = () => {
                   setId={setId}
                   setOpenDelete={setOpenDelete}
                   setOpenModify={setOpenModify}
-                  setOpenHistory={setOpenHistory}
-                  setOpenDiffuse={setOpenDiffuse}
+                 
+                 /*  setOpenDiffuse={setOpenDiffuse} */
                 />
               </Grid>
             )}
@@ -230,7 +230,7 @@ const DocDiffEdit: React.FC = () => {
         id={id}
         data={DocumentDocDiffData}
       />
-      <HistoryDevis open={openHistory} setOpen={setOpenHistory} id={id} />
+      
     </>
   );
 };

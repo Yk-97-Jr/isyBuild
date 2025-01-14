@@ -38,7 +38,7 @@ interface AddProps {
 }
 
 const ModifyDocumentDocDiff = ({open, setOpen, refetch, id, data}: AddProps) => {
-    const {register, handleSubmit, setValue, formState: {errors}} = useForm<FormValidateDocumentUploadType>({
+    const {/* register, */ handleSubmit, setValue, /* formState: {errors} */} = useForm<FormValidateDocumentUploadType>({
       resolver: yupResolver(schemaDocumentUpload),
     });
 
@@ -46,6 +46,8 @@ const ModifyDocumentDocDiff = ({open, setOpen, refetch, id, data}: AddProps) => 
     const [updateDocument, {isLoading}] = useDocumentDiffusionUploadMutation();
     const {docDiffId} = useParams();
     const [files, setFiles] = useState<File[]>([])
+      const [indice, setIndice] = useState<string | null>(null);
+    
 
     useEffect(() => {
       if (data && data.id) {
@@ -137,60 +139,73 @@ const ModifyDocumentDocDiff = ({open, setOpen, refetch, id, data}: AddProps) => 
           onClose={handleCloseWithoutRefresh}
           maxWidth="md"
           scroll="body"
-          sx={{'& .MuiDialog-paper': {overflow: 'visible'}}}
+          sx={{ "& .MuiDialog-paper": { overflow: "visible" } }}
         >
           <DialogCloseButton onClick={handleCloseWithoutRefresh} disableRipple>
-            <i className="tabler-x"/>
+            <i className="tabler-x" />
           </DialogCloseButton>
 
-          <DialogTitle variant="h4" className="flex flex-col gap-2 text-center sm:pbs-16 sm:pbe-6 sm:pli-16">
-            Modifier un fichier
+          <DialogTitle
+            variant="h4"
+            className="flex flex-col gap-2 text-center sm:pbs-16 sm:pbe-6 sm:pli-16"
+          >
+            Ajouter un fichier Doucument
           </DialogTitle>
 
-          <DialogActions className="flex flex-col justify-end pbs-0 sm:pbe-16 sm:pli-16 max-sm:gap-2" sx={{gap: 2}}>
+          <DialogActions
+            className="flex flex-col justify-end pbs-0 sm:pbe-16 sm:pli-16 max-sm:gap-2"
+            sx={{ gap: 2 }}
+          >
             <Grid container spacing={12}>
-              <Grid item xs={12} md={6}>
-                <Grid container spacing={6}>
-                  <Grid item xs={12}>
-                    <CustomTextField
-                      fullWidth
-                      label="Notes"
-                      placeholder="Notes"
-                      {...register('notes')}
-                      error={!!errors.notes}
-                      helperText={errors.notes?.message}
-                      multiline
-                      rows={4}
-                    />
-                  </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={6}>
+                <Grid item xs={12}>
+                  <CustomTextField
+                    fullWidth
+                    label="indice"
+                    placeholder="indice"
+                    value={indice ?? ""}
+                    onChange={(e) => setIndice(e.target.value)}
+                  />
                 </Grid>
               </Grid>
+            </Grid>
+          </Grid>
               <Grid item xs={12} md={6}>
                 <Grid container spacing={6}>
                   <Grid item xs={12}>
-                    <AddDocumentUpload files={files} setFiles={setFiles}/>
+                    <AddDocumentUpload files={files} setFiles={setFiles} />
                   </Grid>
                 </Grid>
               </Grid>
               <Grid item xs={12} md={12}>
                 <div className="flex justify-end">
-                  <Button onClick={handleCloseWithoutRefresh} variant="tonal" color="secondary"
-                          className="max-sm:mis-0">
+                  <Button
+                    onClick={handleCloseWithoutRefresh}
+                    variant="tonal"
+                    color="secondary"
+                    className="max-sm:mis-0"
+                  >
                     Annuler
                   </Button>
-                  <Button variant="contained" onClick={handleSubmit(onSubmit)} disabled={isLoading}>
-                    {isLoading ? <CircularProgress sx={{color: 'white'}} size={24}/> : 'Ajouter'}
+                  <Button
+                    variant="contained"
+                    onClick={handleSubmit(onSubmit)}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <CircularProgress sx={{ color: "white" }} size={24} />
+                    ) : (
+                      "Ajouter"
+                    )}
                   </Button>
                 </div>
               </Grid>
-            </Grid>
-
+           
           </DialogActions>
         </Dialog>
       </form>
-
-    )
-      ;
+    );
   }
 ;
 
