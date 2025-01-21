@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 import {
   Grid,
@@ -10,39 +10,42 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  IconButton,
-  Box
-} from '@mui/material';
+} from "@mui/material";
 
+import type { DiffusionIntervenantCommentCreateUpdateRequest } from "@/services/IsyBuildApi";
+import { useDiffusionIntervenantCommentCreateMutation } from "@/services/IsyBuildApi";
 
+import { StatusE51Mapping } from "@/utils/statusEnums";
 
-import type { DiffusionIntervenantCommentCreateUpdateRequest} from '@/services/IsyBuildApi';
-import { useDiffusionIntervenantCommentCreateMutation } from '@/services/IsyBuildApi';
-
-import { StatusE51Mapping } from '@/utils/statusEnums';
-
-type FileProp = {
+/* type FileProp = {
   name: string;
   type: string;
   size: number;
-};
+}; */
 
-function DialogCommentsSection({id, refetch}:{id:number; refetch: () => void}) {
-  const [newComment, setNewComment] = useState('');
+function DialogCommentsSection({
+  id,
+  refetch,
+}: {
+  id: number;
+  refetch: () => void;
+}) {
+  const [newComment, setNewComment] = useState("");
   const [files, setFiles] = useState<File[]>([]);
-  const [newStatus, setNewStatus] = useState('');
-  const [addComment, { isLoading: isAdding,error}] = useDiffusionIntervenantCommentCreateMutation();
-  
+  const [newStatus, setNewStatus] = useState("");
 
-  const renderFilePreview = (file: FileProp) => {
+  const [addComment, { isLoading: isAdding, error }] =
+    useDiffusionIntervenantCommentCreateMutation();
+
+  /*   const renderFilePreview = (file: FileProp) => {
     if (file.type.startsWith('image')) {
       return <img width={38} height={38} alt={file.name} src={URL.createObjectURL(file as any)} />;
     } else {
       return <i className="tabler-file-description" />;
     }
-  };
+  }; */
 
-  const fileList = files.map((file: FileProp) => (
+  /*   const fileList = files.map((file: FileProp) => (
     <Box
       key={file.name}
       display="flex"
@@ -69,10 +72,10 @@ function DialogCommentsSection({id, refetch}:{id:number; refetch: () => void}) {
         <i className="tabler-x text-xl" />
       </IconButton>
     </Box>
-  ));
+  )); */
 
   // Handle file upload
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  /*   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
 
     if (fileList) {
@@ -87,59 +90,60 @@ function DialogCommentsSection({id, refetch}:{id:number; refetch: () => void}) {
 
       setFiles([file]);
     }
-  };
+  }; */
 
   // Remove uploaded file
-  const handleRemoveFile = () => {
+  /*   const handleRemoveFile = () => {
     setFiles([]);
-  };
+  }; */
 
   // Handle adding a comment
   const handleAddComment = async () => {
     if (!newComment.trim() && files.length === 0) return;
-  
+
     try {
       const formDataToSend = new FormData();
-  
+
       // Append the required comment field
-      formDataToSend.append('comment', newComment);
-  
+      formDataToSend.append("comment", newComment);
+
       // Append file if exists
       if (files.length > 0) {
-        formDataToSend.append('document_file', files[0]);
+        formDataToSend.append("document_file", files[0]);
       }
-  
+
       // Append status if selected
       if (newStatus) {
-        formDataToSend.append('status', newStatus);
+        formDataToSend.append("status", newStatus);
       }
-  
+
       // Send the comment
       const response = await addComment({
         diffusionIntervenantId: +id, // Replace with the actual ID
-        diffusionIntervenantCommentCreateUpdateRequest: formDataToSend as unknown as DiffusionIntervenantCommentCreateUpdateRequest,
+        diffusionIntervenantCommentCreateUpdateRequest:
+          formDataToSend as unknown as DiffusionIntervenantCommentCreateUpdateRequest,
       }).unwrap();
 
-      refetch()
+      refetch();
       console.log(response);
-  
+
       // Reset form after successful submission
-      setNewComment('');
+      setNewComment("");
       setFiles([]);
-      setNewStatus('');
+      setNewStatus("");
     } catch (error) {
       const message =
-        error && typeof error === 'object' && 'data' in error
+        error && typeof error === "object" && "data" in error
           ? JSON.stringify((error as { data?: unknown }).data)
-          : 'An unexpected error occurred.';
-  
+          : "An unexpected error occurred.";
+
       console.log(message);
     }
   };
 
-   if (error) {
-      return <Typography color="error">Failed to load comments.</Typography>;
-    }
+  if (error) {
+    return <Typography color="error">Failed to load comments.</Typography>;
+  }
 
   return (
     <div>
@@ -157,7 +161,7 @@ function DialogCommentsSection({id, refetch}:{id:number; refetch: () => void}) {
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} >
           <FormControl fullWidth variant="outlined">
             <InputLabel>Change Status</InputLabel>
             <Select
@@ -175,7 +179,7 @@ function DialogCommentsSection({id, refetch}:{id:number; refetch: () => void}) {
           </FormControl>
         </Grid>
 
-        <Grid item xs={12} md={6}>
+        {/* <Grid item xs={12} md={6}>
           {files.length > 0 ? (
             <Box width="100%">{fileList}</Box>
           ) : (
@@ -196,7 +200,7 @@ function DialogCommentsSection({id, refetch}:{id:number; refetch: () => void}) {
               />
             </Button>
           )}
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12}>
           <Button
@@ -207,7 +211,11 @@ function DialogCommentsSection({id, refetch}:{id:number; refetch: () => void}) {
             disabled={isAdding || !newComment.trim()}
             style={{ marginTop: 16 }}
           >
-            {isAdding ? <CircularProgress sx={{ color: 'white' }}  size={24} /> : 'Submit Comment'}
+            {isAdding ? (
+              <CircularProgress sx={{ color: "white" }} size={24} />
+            ) : (
+              "Submit Comment"
+            )}
           </Button>
         </Grid>
       </Grid>

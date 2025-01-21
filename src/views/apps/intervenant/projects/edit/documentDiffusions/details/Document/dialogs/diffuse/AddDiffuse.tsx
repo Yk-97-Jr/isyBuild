@@ -64,10 +64,12 @@ const AddDiffuse = ({open, setOpen, refetch}: AddProps) => {
 
         await createuseDocumentDiffusion(
           {
-            documentDiffusionId: +docDiffId,
+
 
             
-            diffusionRequest: {indice:data.indice},
+            diffusionRequest: {indice:data.indice,
+              id:+docDiffId
+            },
           }).unwrap();
 
         handleClose();

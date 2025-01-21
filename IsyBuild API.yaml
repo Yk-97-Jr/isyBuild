@@ -3410,13 +3410,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductRequest'
+              $ref: '#/components/schemas/ProductCreateOrUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ProductRequest'
+              $ref: '#/components/schemas/ProductCreateOrUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ProductRequest'
+              $ref: '#/components/schemas/ProductCreateOrUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -3453,13 +3453,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductRequest'
+              $ref: '#/components/schemas/ProductCreateOrUpdateRequest'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/ProductRequest'
+              $ref: '#/components/schemas/ProductCreateOrUpdateRequest'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/ProductRequest'
+              $ref: '#/components/schemas/ProductCreateOrUpdateRequest'
         required: true
       security:
       - jwtAuth: []
@@ -8986,6 +8986,27 @@ components:
       - media
       - name
       - updated_at
+    ProductCreateOrUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        technical_sheet:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        category:
+          type: integer
+      required:
+      - category
+      - name
     ProductMedia:
       type: object
       properties:

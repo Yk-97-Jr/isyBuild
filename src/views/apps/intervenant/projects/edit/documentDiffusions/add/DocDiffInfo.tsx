@@ -23,7 +23,7 @@ type DocumentDiffusionInfoProps = {
     phase?: FieldError;
     type?: FieldError;
     localisation?: FieldError;
-    project_lot?: FieldError;
+    project_lot_id?: FieldError;
   };
   projectLots?: ProjectLotRead[]; // Adjust this type if necessary
 };
@@ -53,9 +53,9 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
               fullWidth
               label="Lot "
               defaultValue=""
-              {...register('project_lot')}
-              error={!!errors.project_lot}
-              helperText={errors.project_lot?.message}
+              {...register('project_lot_id')}
+              error={!!errors.project_lot_id}
+              helperText={errors.project_lot_id?.message}
             >
               <MenuItem value="">
                 <em>Sélectionnez un lot</em>

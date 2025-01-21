@@ -43,11 +43,17 @@ const DocDiffLocation = ({
 }: {
   register: UseFormRegister<FormValidateDocDiffAddType>;
   errors: {
-    localisation?: FieldError;
+    localisation_id?: FieldError;
   };
 }) => {
-  const [docDiffLocations, setDocDiffLocations] = useState<{ id: number; name: string }[]>([]);
-  const { data, refetch, isLoading } = useLocalisationsListQuery({ page: 1, pageSize: 500 });
+  const [docDiffLocations, setDocDiffLocations] = useState<
+    { id: number; name: string }[]
+  >([]);
+
+  const { data, refetch, isLoading } = useLocalisationsListQuery({
+    page: 1,
+    pageSize: 500,
+  });
 
   // Update docDiffLocations on data change
   useEffect(() => {
@@ -55,7 +61,7 @@ const DocDiffLocation = ({
       setDocDiffLocations((prev) => [
         ...prev,
         ...data.results.filter(
-          (location) => !prev.some((existing) => existing.id === location.id)
+          (location) => !prev.some((existing) => existing.id === location.id),
         ),
       ]);
     }
@@ -67,12 +73,11 @@ const DocDiffLocation = ({
 
   const router = useRouter();
   const { user } = useAuth();
-  const {edit} = useParams();
+  const { edit } = useParams();
   const userRole = user?.role;
 
   const handleRedirect = () => {
     // Get the current URL
-    
 
     // Construct the new URL with the query parameter
     const newUrl = `/${userRole}/locations/add?return_to=${userRole}/projects/${edit}/details/documentDiffusions/add`;
@@ -83,58 +88,58 @@ const DocDiffLocation = ({
 
   return (
     <Card
-      className='mbe-12'
+      className="mbe-12"
       sx={{
-        
-        transition: 'height 0.3s ease', // Smooth transition of height
-        display: 'flex', // Use flex layout
-        flexDirection: 'column' // Column layout to stack elements
+        transition: "height 0.3s ease", // Smooth transition of height
+        display: "flex", // Use flex layout
+        flexDirection: "column", // Column layout to stack elements
       }}
     >
-      <CardHeader title='Emplacement' />
+      <CardHeader title="Emplacement" />
       <CardContent
         sx={{
           flexGrow: 1, // Make CardContent grow to fill available space
-          display: 'flex', // Flex layout inside CardContent
-          flexDirection: 'column' // Column layout inside CardContent
+          display: "flex", // Flex layout inside CardContent
+          flexDirection: "column", // Column layout inside CardContent
         }}
       >
-        <div className='flex flex-grow flex-col'></div>
-    <div className="flex items-end gap-4">
-      {/* Dropdown for Locations */}
-      <CustomTextField
-        select
-        fullWidth
-        label="Localisation"
-        defaultValue="" // No pre-selected location
-        {...register('localisation')} // Integrates with react-hook-form
-        error={!!errors.localisation}
-        SelectProps={{
-          MenuProps,
-        }}
-      >
-        {docDiffLocations.map((location) => (
-          <MenuItem key={location.id} value={location.id}>
-            <Typography>{location.name}</Typography>
-          </MenuItem>
-        ))}
-        {isLoading && <MenuItem disabled>Chargement des localisations...</MenuItem>}
-        {!data?.results?.length && !isLoading && (
-          <MenuItem disabled>Aucune localisation disponible</MenuItem>
-        )}
-      </CustomTextField>
+        <div className="flex flex-grow flex-col"></div>
+        <div className="flex items-end gap-4">
+          {/* Dropdown for Locations */}
+          <CustomTextField
+            select
+            fullWidth
+            label="Localisation"
+            defaultValue="" // No pre-selected location
+            {...register("localisation_id")} // Integrates with react-hook-form
+            error={!!errors.localisation_id}
+            SelectProps={{
+              MenuProps,
+            }}
+          >
+            {docDiffLocations.map((location) => (
+              <MenuItem key={location.id} value={location.id}>
+                <Typography>{location.name}</Typography>
+              </MenuItem>
+            ))}
+            {isLoading && (
+              <MenuItem disabled>Chargement des localisations...</MenuItem>
+            )}
+            {!data?.results?.length && !isLoading && (
+              <MenuItem disabled>Aucune localisation disponible</MenuItem>
+            )}
+          </CustomTextField>
 
-      {/* Button to Add Location */}
-      <CustomIconButton
-        variant="tonal"
-        color="primary"
-        className="min-is-fit"
-        onClick={handleRedirect}
-      >
-        <i className="tabler-plus" />
-      </CustomIconButton>
-    </div>
-    
+          {/* Button to Add Location */}
+          <CustomIconButton
+            variant="tonal"
+            color="primary"
+            className="min-is-fit"
+            onClick={handleRedirect}
+          >
+            <i className="tabler-plus" />
+          </CustomIconButton>
+        </div>
       </CardContent>
     </Card>
   );

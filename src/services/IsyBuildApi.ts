@@ -844,7 +844,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/products/${queryArg.productId}/update/`,
         method: "PUT",
-        body: queryArg.productRequest,
+        body: queryArg.productCreateOrUpdateRequest,
       }),
     }),
     productCreate: build.mutation<
@@ -854,7 +854,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/products/create/`,
         method: "POST",
-        body: queryArg.productRequest,
+        body: queryArg.productCreateOrUpdateRequest,
       }),
     }),
     productMediaDetail: build.query<
@@ -2514,11 +2514,11 @@ export type ProductDeleteApiArg = {
 export type ProductUpdateApiResponse = /** status 200  */ ProductRead;
 export type ProductUpdateApiArg = {
   productId: number;
-  productRequest: ProductRequest;
+  productCreateOrUpdateRequest: ProductCreateOrUpdateRequest;
 };
 export type ProductCreateApiResponse = /** status 201  */ ProductRead;
 export type ProductCreateApiArg = {
-  productRequest: ProductRequest;
+  productCreateOrUpdateRequest: ProductCreateOrUpdateRequest;
 };
 export type ProductMediaDetailApiResponse = /** status 200  */ ProductMediaRead;
 export type ProductMediaDetailApiArg = {
@@ -4380,15 +4380,16 @@ export type PaginatedProductRead = {
   previous: string | null;
   results: ProductRead[];
 };
-export type ProductRequest = {
+export type ProductCreateOrUpdateRequest = {
   name: string;
   description?: string | null;
   technical_sheet?: string | null;
+  category: number;
 };
 export type ProductMediaRequest = {
   image: Blob;
   product: number;
-}; 
+};
 export type ProjectLot = {
   status?: Status109Enum;
   notes?: string;

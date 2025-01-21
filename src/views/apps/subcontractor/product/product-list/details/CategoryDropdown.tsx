@@ -69,10 +69,10 @@ const CategoryDropdown = ({
   useEffect(() => {
     if (productData?.category) {
       // If the category is not present in the categories, add it
-      const categoryExists = categories.some((cat) => cat.id === productData.category);
+      const categoryExists = categories.some((cat) => cat.id === productData.category.id);
 
       if (!categoryExists && data?.results) {
-        const matchedCategory = data.results.find((cat) => cat.id === productData.category);
+        const matchedCategory = data.results.find((cat) => cat.id === productData.category.id);
 
         if (matchedCategory) {
           setCategories((prev) => [matchedCategory, ...prev]);

@@ -46,7 +46,7 @@ const AddCommentContent = ({ open,refetch, setOpen,id }: AddFinanceSituationCont
       fullWidth
       open={open}
       onClose={handleClose}
-      maxWidth='md'
+      maxWidth='xs'
       scroll='body'
       sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
     >

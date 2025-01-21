@@ -4,7 +4,7 @@ import {Card, CardHeader, CardContent, Typography, Chip, Box,} from '@mui/materi
 
 import IconButton from "@mui/material/IconButton";
 
-import type { StatusE51Enum, Type474Enum,DocumentRead} from '@/services/IsyBuildApi';
+import type { StatusE51Enum, Type94BEnum,DocumentRead} from '@/services/IsyBuildApi';
 import {getStatus, getStatusProps} from "@/utils/statusHelper";
 import { StatusE51Mapping, Type474Mapping} from "@/utils/statusEnums";
 
@@ -44,7 +44,7 @@ const DocDiffTypeAndLotInfo: React.FC<DocDiffTypeAndLotProps> = ({
   const {
     label:labelType,
     color:colorType
-  } = getStatus<Type474Enum>(type as any, Type474Mapping);
+  } = getStatus<Type94BEnum>(type as any, Type474Mapping);
 
 
   const openOrDownloadFile = (fileUrl: string) => {

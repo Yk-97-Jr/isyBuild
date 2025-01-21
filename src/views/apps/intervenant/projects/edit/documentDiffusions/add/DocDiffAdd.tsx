@@ -57,10 +57,10 @@ const DocDiffAdd = () => {
         const response = await createDocDiff({
             documentDiffusionCreateRequest: {
                 title:data.title,
-                localisation:data.localisation,
+                localisation_id:data.localisation_id,
                 phase:data.phase,
                 type:data.type,
-                project_lot:data.project_lot
+                project_lot_id:data.project_lot_id
                 
             }
         }).unwrap()

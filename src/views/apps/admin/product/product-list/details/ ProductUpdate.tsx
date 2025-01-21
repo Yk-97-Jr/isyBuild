@@ -66,7 +66,7 @@ const ProductUpdate = () => {
       setValue('productName', productData.name ?? '')
       setValue('description', productData.description ?? '')
       setValue('technicalSheet', productData.technical_sheet ?? '')
-      setValue('category', productData.category ?? '')
+      setValue('category', productData.category.id ?? '')
     }
   }, [productData, setValue])
 
@@ -74,7 +74,7 @@ const ProductUpdate = () => {
     try {
       await updateProduct({
         productId: +id,
-        productRequest: {
+        productCreateOrUpdateRequest: {
           name: data.productName,
           description: data.description,
           category: data.category,

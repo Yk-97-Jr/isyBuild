@@ -47,7 +47,7 @@ const ProductAdd = () => {
       console.log(data.category)
 
       const response = await createProduct({
-        productRequest: {
+        productCreateOrUpdateRequest: {
           name: data.productName,
           description:data.description,
           category:data.category,
