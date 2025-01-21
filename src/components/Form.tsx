@@ -12,4 +12,4 @@ const FormComponent = (props: Props) => {
   return <form {...rest} onSubmit={onSubmit ? e => onSubmit(e) : e => e.preventDefault()} />
 }
 
-export default FormComponent
+export default FormComponent 

@@ -8,7 +8,7 @@ type LabeledDataProps = {
   value?: string | number; // Optional value if chipProps is used
   chipProps?: {
     label: string;
-    color?: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning';
+    color?: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'info'|'warning';
     variant?: 'filled' | 'outlined' | 'tonal'; // Include 'tonal' for MUI v6+
   };
 };

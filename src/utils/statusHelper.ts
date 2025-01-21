@@ -14,12 +14,34 @@ export const getStatusProps = <T extends string>(
 
 export const getStatus = <T extends string>(
   status: T | undefined,
-  statusMapping: Record<T, { label: string; color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning' }>
-): { label: string; color: 'default' | 'primary' | 'secondary' | 'error' | 'success' | 'warning' } => {
+  statusMapping: Record<
+    T,
+    {
+      label: string;
+      color:
+        | "default"
+        | "primary"
+        | "secondary"
+        | "error"
+        | "success"
+        | "warning"
+        | "info";
+    }
+  >,
+): {
+  label: string;
+  color:
+    | "default"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "success"
+    | "warning"
+    | "info";
+} => {
   if (!status || !statusMapping[status]) {
-    return { label: 'Unknown', color: 'default' };
+    return { label: "Unknown", color: "default" };
   }
 
   return statusMapping[status];
-
 };

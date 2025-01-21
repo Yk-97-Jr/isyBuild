@@ -4,24 +4,24 @@ import React, { useEffect, useState } from "react";
 
 import { useParams, useRouter } from "next/navigation";
 
-// MUI Imports
-import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 
-// Component Imports
-import type { UseFormRegister, FieldError } from "react-hook-form";
-
-import { Card, CardHeader, CardContent } from "@mui/material";
+import type { UseFormRegister, FieldErrors } from "react-hook-form";
 
 import CustomTextField from "@core/components/mui/TextField";
 import CustomIconButton from "@/@core/components/mui/IconButton";
-
-import {
-  useLocalisationsListQuery,
-  useProjectsRetrieve2Query,
-} from "@/services/IsyBuildApi";
 import type { FormValidateDocDiffAddType } from "./schemaDocDiffAdd";
 import { useAuth } from "@/contexts/AuthContext";
+import {
+  useProjectsRetrieve2Query,
+  useLocalisationsListQuery,
+} from "@/services/IsyBuildApi";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -40,14 +40,14 @@ const MenuProps = {
   },
 };
 
-const DocDiffLocation = ({
+interface DocDiffLocationProps {
+  register: UseFormRegister<FormValidateDocDiffAddType>;
+  errors: FieldErrors<FormValidateDocDiffAddType>;
+}
+
+const DocDiffLocation: React.FC<DocDiffLocationProps> = ({
   register,
   errors,
-}: {
-  register: UseFormRegister<FormValidateDocDiffAddType>;
-  errors: {
-    localisation?: FieldError;
-  };
 }) => {
   const params = useParams();
   const projectId = parseInt(params?.edit as string);
@@ -57,13 +57,7 @@ const DocDiffLocation = ({
   >([]);
 
   const { data: ProjectData } = useProjectsRetrieve2Query({ projectId });
-
   const clientIds = ProjectData?.client?.id + "";
-
-  console.log("clientIds", clientIds);
-  console.log("777777777777777777777");
-
-  console.log("projectData", ProjectData);
 
   const { data, refetch, isLoading } = useLocalisationsListQuery({
     page: 1,
@@ -71,9 +65,6 @@ const DocDiffLocation = ({
     clientIds,
   });
 
-  console.log("data", data);
-
-  // Update docDiffLocations on data change
   useEffect(() => {
     if (data?.results) {
       setDocDiffLocations((prev) => [
@@ -87,7 +78,7 @@ const DocDiffLocation = ({
 
   useEffect(() => {
     refetch();
-  }, [refetch]);
+  }, []);
 
   const router = useRouter();
   const { user } = useAuth();
@@ -95,30 +86,22 @@ const DocDiffLocation = ({
   const userRole = user?.role;
 
   const handleRedirect = () => {
-    // Get the current URL
-
-    // Construct the new URL with the query parameter
     const newUrl = `/${userRole}/locations/add?return_to=${userRole}/projects/${edit}/details/documentDiffusions/add`;
 
-    // Redirect to the new URL
     router.push(newUrl);
   };
 
   return (
     <Card
       sx={{
-        transition: "height 0.3s ease", // Smooth transition of height
-        display: "flex", // Use flex layout
-        flexDirection: "column", // Column layout to stack elements
+        transition: "height 0.3s ease",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <CardHeader title="Emplacement" />
       <CardContent
-        sx={{
-          flexGrow: 1, // Make CardContent grow to fill available space
-          display: "flex", // Flex layout inside CardContent
-          flexDirection: "column", // Column layout inside CardContent
-        }}
+        sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
       >
         <div className="flex flex-grow flex-col"></div>
         <div className="flex items-end gap-4">
@@ -127,12 +110,10 @@ const DocDiffLocation = ({
             select
             fullWidth
             label="Localisation"
-            defaultValue="" // No pre-selected location
-            {...register("localisation")} // Integrates with react-hook-form
-            error={!!errors.localisation}
-            SelectProps={{
-              MenuProps,
-            }}
+            defaultValue=""
+            {...register("localisation_id")}
+            error={!!errors.localisation_id}
+            SelectProps={{ MenuProps }}
           >
             {docDiffLocations.map((location) => (
               <MenuItem key={location.id} value={location.id}>

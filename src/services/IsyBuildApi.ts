@@ -4388,7 +4388,7 @@ export type ProductRequest = {
 export type ProductMediaRequest = {
   image: Blob;
   product: number;
-};
+}; 
 export type ProjectLot = {
   status?: Status109Enum;
   notes?: string;

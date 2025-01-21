@@ -18,7 +18,6 @@ import {
 } from "@/services/IsyBuildApi";
 import type { FormValidateDocDiffUpdateType } from "./schemaDocDiffEdit";
 import { schemaDocDiffUpdate } from "./schemaDocDiffEdit";
-
 import DocDiffModifyHeader from "./DocDiffModifyHeader"; // Header Component
 import DocDiffInformation from "./DocDiffInformation"; // Main Form Component
 import DocDiffTypeAndLot from "./DocDiffTypeAndLot"; // Display Component for Type and Lot
@@ -28,10 +27,9 @@ import DocumentDocDiff from "./Document/DocumentDocDiff";
 import AddDocumentDocDiff from "./Document/dialogs/add/AddDocumentDocDiff";
 import DeleteDocumentDocDiff from "./Document/dialogs/delete/DeleteDocumentDocDiff";
 import ModifyDocumentDocDiff from "./Document/dialogs/modify/ModifyDocumentDocDiff";
-
 import DiffusionList from "./diffusion/list/DiffusionLIst";
-import AddDiffuse from "./Document/dialogs/diffuse/AddDiffuse";
 import DocDiffProductCard from "./DocDiffProductCard";
+import ProductDisplay from "./ProductDisplay";
 
 const DocDiffEdit: React.FC = () => {
   const {
@@ -64,7 +62,6 @@ const DocDiffEdit: React.FC = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [openModify, setOpenModify] = useState(false);
 
-  const [openDiffuse, setOpenDiffuse] = useState(false);
   const [id, setId] = useState<number>();
   const [docType, setDocType] = useState("");
 
@@ -98,7 +95,7 @@ const DocDiffEdit: React.FC = () => {
         documentDiffusionUpdateRequest: {
           title: data.title,
           phase: data.phase,
-          localisation_id: data.localisation,
+          localisation_id: data.localisation ?? null,
           material_marche_id: data.material_marche_id ?? null,
           current_variant_id: data.current_variant_id ?? null,
         },
@@ -164,14 +161,26 @@ const DocDiffEdit: React.FC = () => {
                   setId={setId}
                   setOpenDelete={setOpenDelete}
                   setOpenModify={setOpenModify}
-                 
-                 /*  setOpenDiffuse={setOpenDiffuse} */
                 />
               </Grid>
             )}
             <Grid item xs={12}>
               <DiffusionList />
             </Grid>
+            {docType === "fiche_technique_produit" && (
+              <>
+                {docDiffData?.material_marche && (
+                  <Grid item xs={12} md={6}>
+                    <ProductDisplay docDiffData={docDiffData.material_marche} />
+                  </Grid>
+                )}
+                {docDiffData?.current_variant && (
+                  <Grid item xs={12} md={6}>
+                    <ProductDisplay docDiffData={docDiffData.current_variant} />
+                  </Grid>
+                )}
+              </>
+            )}
           </Grid>
         </Grid>
 
@@ -189,6 +198,7 @@ const DocDiffEdit: React.FC = () => {
                 errors={errors}
                 localisations={localisation}
                 localisation={data?.results}
+                refetch={refetch}
               />
             </Grid>
             <Grid item xs={12}>
@@ -212,11 +222,7 @@ const DocDiffEdit: React.FC = () => {
         setOpen={setOpenAdd}
         refetch={refetch}
       />
-      <AddDiffuse
-        open={openDiffuse}
-        setOpen={setOpenDiffuse}
-        refetch={refetch}
-      />
+
       <DeleteDocumentDocDiff
         open={openDelete}
         setOpen={setOpenDelete}
@@ -230,7 +236,6 @@ const DocDiffEdit: React.FC = () => {
         id={id}
         data={DocumentDocDiffData}
       />
-      
     </>
   );
 };

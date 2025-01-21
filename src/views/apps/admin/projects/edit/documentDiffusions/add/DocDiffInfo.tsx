@@ -16,6 +16,7 @@ import CustomTextField from '@core/components/mui/TextField';
 import type { FormValidateDocDiffAddType } from './schemaDocDiffAdd';
 import type { ProjectLotRead } from '@/services/IsyBuildApi';
 import { PhaseStatusMapping, Type474Mapping } from '@/utils/statusEnums';
+import DocDiffSubcontractor from './DocDiffSubcontractor';
 
 type DocumentDiffusionInfoProps = {
   register: UseFormRegister<FormValidateDocDiffAddType>;
@@ -41,12 +42,11 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
               fullWidth
               label="Titre"
               placeholder="Entrez le titre"
-              {...register('title')}
+              {...register("title")}
               error={!!errors.title}
               helperText={errors.title?.message}
             />
           </Grid>
-
           {/* Project Lot Dropdown */}
           <Grid item xs={12} sm={6}>
             <CustomTextField
@@ -54,7 +54,7 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
               fullWidth
               label="Lot "
               defaultValue=""
-              {...register('project_lot')}
+              {...register("project_lot")}
               error={!!errors.project_lot}
               helperText={errors.project_lot?.message}
             >
@@ -68,7 +68,6 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
               ))}
             </CustomTextField>
           </Grid>
-
           {/* Type Dropdown */}
           <Grid item xs={12} sm={6}>
             <CustomTextField
@@ -76,21 +75,20 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
               fullWidth
               label="Type"
               defaultValue=""
-              {...register('type')}
+              {...register("type")}
               error={!!errors.type}
               helperText={errors.type?.message}
             >
               <MenuItem value="">
-          <em>Sélectionnez un type</em>
-        </MenuItem>
-        {Object.entries(Type474Mapping).map(([type, { label }]) => (
-          <MenuItem key={type} value={type}>
-            {label}
-          </MenuItem>
-        ))}
+                <em>Sélectionnez un type</em>
+              </MenuItem>
+              {Object.entries(Type474Mapping).map(([type, { label }]) => (
+                <MenuItem key={type} value={type}>
+                  {label}
+                </MenuItem>
+              ))}
             </CustomTextField>
           </Grid>
-
           {/* Phase Dropdown */}
           <Grid item xs={12} sm={6}>
             <CustomTextField
@@ -98,19 +96,23 @@ const DocDiffInfo: React.FC<DocumentDiffusionInfoProps> = ({ register, errors, p
               fullWidth
               label="Phase"
               defaultValue=""
-              {...register('phase')}
+              {...register("phase")}
               error={!!errors.phase}
               helperText={errors.phase?.message}
             >
-           <MenuItem value="">
-          <em>Sélectionnez une phase</em>
-        </MenuItem>
-        {Object.entries(PhaseStatusMapping).map(([phase, { label }]) => (
-          <MenuItem key={phase} value={phase}>
-            {label}
-          </MenuItem>
-        ))}
-      </CustomTextField>
+              <MenuItem value="">
+                <em>Sélectionnez une phase</em>
+              </MenuItem>
+              {Object.entries(PhaseStatusMapping).map(([phase, { label }]) => (
+                <MenuItem key={phase} value={phase}>
+                  {label}
+                </MenuItem>
+              ))}
+            </CustomTextField>
+          </Grid>
+          <Grid item xs={12} >
+
+          <DocDiffSubcontractor register={register} errors={errors} />
           </Grid>
         </Grid>
       </CardContent>

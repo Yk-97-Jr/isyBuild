@@ -23,6 +23,7 @@ export const PhaseStatusMapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -40,6 +41,7 @@ export const StatusE51Mapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -48,7 +50,7 @@ export const StatusE51Mapping: Record<
   avec_observation: { label: "Avec Observation", color: "warning" },
   avec_observation_bloquante: {
     label: "Avec Observation Bloquante",
-    color: "error",
+    color: "info",
   },
   refuse: { label: "Refusé", color: "error" },
   valid: { label: "Validé", color: "primary" },
@@ -93,6 +95,7 @@ export const Status841Mapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -113,6 +116,7 @@ export const Status109Mapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -133,6 +137,7 @@ export const SuiviAdministrativeStatusMapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -151,6 +156,7 @@ export const Status3BfMapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -173,6 +179,7 @@ export const RolesMapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -203,6 +210,7 @@ export const DgdStatusMapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -234,6 +242,7 @@ export const ProjectStatusMapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
@@ -257,6 +266,7 @@ export const Status900Mapping: Record<
       | "secondary"
       | "error"
       | "success"
+      | "info"
       | "warning";
   }
 > = {
