@@ -1,0 +1,100 @@
+'use client'
+
+// components/LocationsList.js
+import React, {useEffect, useState} from 'react'
+
+/* import type {SortingState} from '@tanstack/react-table';
+ */import { useParams } from 'next/navigation'
+
+import Grid from '@mui/material/Grid'
+
+import {CircularProgress} from '@mui/material'
+
+import Box from '@mui/material/Box'
+
+/* import {useDebounce} from "@uidotdev/usehooks"; */
+
+import DiffusionTable from './DiffusionTable'
+import {useDocumentDiffusionDetailQuery, useDocumentDiffusionsListQuery} from '@/services/IsyBuildApi'
+
+const DiffusionList = () => {
+  // States for pagination or other parameters
+  const [page, setPage] = useState(1)
+  const [pageSize, ] = useState(10)
+  const { edit,docDiffId } = useParams(); 
+
+ /*  const [search, setSearch] = useState<string>("");
+  const [sorting, setSorting] = React.useState<SortingState>([]); */
+
+ /*  const debouncedSearch = useDebounce(search, 500); */
+
+  // Pass parameters to the query hook
+    const { data: docDiffData, refetch:refetchStatus } = useDocumentDiffusionDetailQuery({
+      documentDiffusionId: +docDiffId,
+    });
+
+  const {data, error, isLoading, isFetching, refetch} = useDocumentDiffusionsListQuery({
+    projectId:+edit,
+      page,
+      pageSize,
+
+     /*  ordering: sorting.map((s) => `${s.desc ? '-' : ''}${s.id}`).join(',') as any,
+      search: debouncedSearch */
+    },
+  );
+
+  console.log(data);
+  
+
+  useEffect(() => {
+    refetch();
+    setPage(1)
+  }, [pageSize, /* sorting */, /*  debouncedSearch */]);
+
+
+  useEffect(() => {
+    refetch();
+  }, [page]);
+
+
+  if (isLoading)
+    return (
+      <Box display='flex' justifyContent='center' alignItems='flex-start' height='100vh'>
+        <CircularProgress/>
+      </Box>
+    )
+  if (error)
+    return (
+      <div>
+        Error fetching Locations data:{' '}
+        {error && 'data' in error ? JSON.stringify(error.data) : 'An unexpected error occurred.'}
+      </div>
+    )
+  const docDiff = docDiffData?.diffusion_list || []
+
+
+
+  return (
+
+    <Grid container spacing={6}>
+      <Grid item xs={12}>
+        <DiffusionTable
+          pageSize={pageSize}
+        
+      
+          refetch={refetchStatus}
+          data={docDiff}
+       
+          isFetching={isFetching}
+      
+
+          /* setSorting={setSorting}
+          sorting={sorting}
+          setSearch={setSearch}
+          search={search} */
+        />
+      </Grid>
+    </Grid>)
+}
+
+export default DiffusionList
